@@ -1,0 +1,7 @@
+.alert_component_style {
+    position: absolute;
+    max-width: 300px;
+    right: 10px;
+    bottom: 10px;
+    z-index: 1000;
+}

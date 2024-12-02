@@ -1,0 +1,36 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  -webkit-font-smoothing: subpixel-antialiased;
+  text-rendering: geometricPrecision;
+}
+
+:root {
+  font-family: "Lato", serif !important;
+  line-height: 1.5;
+}
+
+a {
+  text-decoration: inherit;
+}
+
+.App {
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.main {
+  width: 100%;
+  height: 100%;
+  max-width: 1820px;
+  margin: auto;
+  position: relative;
+  overflow: hidden !important;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}

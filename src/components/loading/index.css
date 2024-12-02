@@ -1,0 +1,42 @@
+/** @format */
+
+.loading_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.loader {
+  width: 150px;
+  aspect-ratio: 1;
+  display: grid;
+}
+
+.loader::before,
+.loader::after {
+  content: "";
+  grid-area: 1/1;
+  --c: no-repeat radial-gradient(farthest-side, #36b1da 92%, #5ed1e500);
+  background: var(--c) 50% 0, var(--c) 50% 100%, var(--c) 100% 50%,
+    var(--c) 0 50%;
+  background-size: 36px 36px;
+  animation: l12 1s infinite;
+}
+
+.loader::before {
+  margin: 12px;
+  filter: hue-rotate(45deg);
+  background-size: 24px 24px;
+  animation-timing-function: linear;
+}
+
+@keyframes l12 {
+  100% {
+    transform: rotate(0.5turn);
+  }
+}
