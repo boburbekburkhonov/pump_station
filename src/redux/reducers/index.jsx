@@ -5,6 +5,7 @@ import stations from './stationsReducer'
 import region from './regionReducers'
 import district from './districtReducers'
 import organization from './organizationReducers'
+import aggregates from './aggregateReducer'
 
 export default combineReducers({
   theme,
@@ -12,5 +13,6 @@ export default combineReducers({
   stations,
   region,
   district,
-  organization
+  organization,
+  aggregates
 });

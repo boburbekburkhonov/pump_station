@@ -87,6 +87,13 @@ export const refresh_token = () => async (dispatch) => {
           error: err.response.data.message,
         },
       });
+
+      localStorage.removeItem("login")
+      localStorage.removeItem("code")
+      localStorage.removeItem("access_token")
+      localStorage.removeItem("refresh_token")
+      localStorage.removeItem("roles")
+      window.location.href = '/'
     }
   }
 };
@@ -112,7 +119,6 @@ export const logoutAction = (token) => async (dispatch) => {
         localStorage.removeItem("access_token")
         localStorage.removeItem("refresh_token")
         localStorage.removeItem("roles")
-
       }
     }
   } catch (err) {

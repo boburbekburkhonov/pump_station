@@ -20,22 +20,29 @@
   font-size: 0.8rem;
 }
 
+.link_new_text_style {
+  font-weight: 500;
+  font-size: 16px;
+}
+
 .menu-icon {
   font-size: 20px;
   font-weight: 500;
 }
 
 .custom-sider {
-  max-width: 260px;
+  min-width: 260px !important;
+  width: 260px !important;
 }
 
 .custom-sider.ant-layout-sider-collapsed {
-  max-width: 80px !important;
+  min-width: 80px !important;
 }
 
 .header_controller_component {
   display: flex;
   align-items: center;
+  gap: 1rem;
 }
 
 .switch-container {
@@ -74,7 +81,6 @@
   z-index: 1000;
   font-size: 24px;
 }
-
 
 .switch-container label .ball {
   display: none;

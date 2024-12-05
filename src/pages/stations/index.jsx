@@ -7,8 +7,8 @@ import { Button, Form, Input, Modal, Select, Checkbox, Table } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
-  CloseOutlined,
-  CheckOutlined,
+  PlusSquareOutlined,
+  EyeFilled,
 } from "@ant-design/icons";
 
 import "./index.css";
@@ -24,6 +24,8 @@ import { getByRegionIdData } from "../../redux/actions/districtActions";
 import { getAllOrganizationsData } from "../../redux/actions/organizationActions";
 import { GLOBALTYPES } from "../../redux/actions/globalTypes";
 import { getDataApi } from "../../utils";
+import { createAggregateData } from "../../redux/actions/aggregateActions";
+import { useNavigate } from "react-router-dom";
 
 const initialStationData = {
   name: "",
@@ -37,12 +39,23 @@ const initialStationData = {
   codeElectricalEnergy: "",
 };
 
+const initialAggregate = {
+  name: "",
+  stationId: "",
+  code: "",
+};
+
 const Stations = memo(() => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [stationData, setStationData] = useState(initialStationData);
   const [isUpdating, setIsUpdating] = useState(false);
 
+  const [aggregateModal, setAggregateModal] = useState(false);
+  const [aggregateData, setAggregateData] = useState(initialAggregate);
+  const [aggregateUpdate, setAggregateUpdate] = useState(false);
+
   const { i18n, t } = useTranslation();
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.alert);
   const { colors } = useSelector((state) => state.theme);
@@ -135,35 +148,61 @@ const Stations = memo(() => {
     }
   };
 
-  const openModal = (data = initialStationData, isEdit = false) => {
-    setStationData(data);
-    setIsUpdating(isEdit);
-    setIsModalVisible(true);
+  const openModal = (
+    data = initialStationData,
+    isEdit = false,
+    setSendData,
+    setModalData,
+    setIsUpdateding
+  ) => {
+    setSendData(data);
+    setIsUpdateding(isEdit);
+    setModalData(true);
   };
 
-  const closeModal = () => {
-    setStationData(initialStationData);
-    setIsUpdating(false);
-    setIsModalVisible(false);
+  const closeModal = (data, setSendData, setModalData, setIsUpdateding) => {
+    setSendData(data);
+    setIsUpdateding(false);
+    setModalData(false);
   };
 
-  const handleSubmit = () => {
-    if (!isFormValid(stationData)) {
-      dispatch({
-        type: GLOBALTYPES.ALERT,
-        payload: {
-          error: t("stationsPageData.validInputs"),
-        },
-      });
-      return;
-    }
-    if (isUpdating) {
-      dispatch(updateStationsData(stationData, token, i18n.language));
+  const handleSubmit = (sendData, sendType) => {
+    if (sendType === "stations") {
+      if (!isFormValid(sendData)) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: t("stationsPageData.validInputs"),
+          },
+        });
+        return;
+      }
+
+      if (isUpdating) {
+        dispatch(updateStationsData(sendData, token, i18n.language));
+      } else {
+        dispatch(createStationsData(sendData, token, i18n.language));
+      }
+
+      closeModal(
+        initialStationData,
+        setStationData,
+        setIsModalVisible,
+        setIsUpdating
+      );
     } else {
-      dispatch(createStationsData(stationData, token, i18n.language));
+      if (aggregateUpdate) {
+        dispatch(updateStationsData(sendData, token, i18n.language));
+      } else {
+        dispatch(createAggregateData(sendData, i18n.language, token));
+      }
+      closeModal(
+        initialAggregate,
+        setAggregateData,
+        setAggregateModal,
+        setAggregateUpdate
+      );
     }
-
-    closeModal();
   };
 
   const onClickPhoneNumber = () => {
@@ -173,8 +212,8 @@ const Stations = memo(() => {
     }));
   };
 
-  const handleInputChange = ({ target: { name, value } }) => {
-    setStationData((prev) => ({ ...prev, [name]: value }));
+  const handleInputChange = ({ target: { name, value } }, setSendData) => {
+    setSendData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleCheckboxChange = ({ target: { name, checked } }) => {
@@ -195,20 +234,25 @@ const Stations = memo(() => {
     const districtId = await getRegionIdName(regionId, item.district);
     const organizationId = getIdByName(item.organization, organizations);
 
+    const updatedData = {
+      id: item.key,
+      name: item.name,
+      location: item.location,
+      devicePhoneNum: item.devicePhoneNum,
+      isIntegration: item.isIntegration,
+      haveElectricalEnergy: item.haveElectricalEnergy,
+      codeElectricalEnergy: item.codeElectricalEnergy,
+      regionId,
+      districtId,
+      organizationId,
+    };
+
     openModal(
-      {
-        id: item.id,
-        name: item.name,
-        location: item.location,
-        devicePhoneNum: item.devicePhoneNum,
-        isIntegration: item.isIntegration,
-        haveElectricalEnergy: item.haveElectricalEnergy,
-        codeElectricalEnergy: item.codeElectricalEnergy,
-        regionId,
-        districtId,
-        organizationId,
-      },
-      true
+      updatedData,
+      true,
+      setStationData,
+      setIsModalVisible,
+      setIsUpdating
     );
   };
 
@@ -249,10 +293,20 @@ const Stations = memo(() => {
     },
 
     {
-      title: t("stationsPageData.table6Data"),
-      dataIndex: "codeElectricalEnergy",
-      key: "codeElectricalEnergy",
+      title: t("stationsPageData.table14Data"),
+      dataIndex: "haveElectricalEnergy",
+      key: "haveElectricalEnergy",
       align: "center",
+      render: (_, key) => (
+        <Button
+          type='primary'
+          icon={<EyeFilled />}
+          onClick={() => navigate(`/statetions/${key.key}`)}
+          style={{
+            boxShadow: "none",
+          }}
+        />
+      ),
     },
 
     {
@@ -261,22 +315,55 @@ const Stations = memo(() => {
       key: "haveElectricalEnergy",
       align: "center",
       render: (_, key) => (
-        <div className='status_component'>
-          <span
-            style={{
-              background: key.haveElectricalEnergy
-                ? colors.buttonColor
-                : "#F63522",
-              boxShadow: `0 0 6px 0px ${
-                key.haveElectricalEnergy ? colors.buttonColor : "#F63522"
-              }`,
-            }}></span>
-          <p>
-            {key.haveElectricalEnergy
-              ? t("stationsPageData.tableData1")
-              : t("stationsPageData.tableData2")}
-          </p>
-        </div>
+        <Button
+          type='primary'
+          icon={<PlusSquareOutlined />}
+          onClick={() =>
+            openModal(
+              {
+                name: "",
+                stationId: key.key,
+                code: "",
+              },
+              false,
+              setAggregateData,
+              setAggregateModal,
+              setAggregateUpdate
+            )
+          }
+          style={{
+            boxShadow: "none",
+          }}
+        />
+      ),
+    },
+
+    {
+      title: t("stationsPageData.table13Data"),
+      dataIndex: "id",
+      key: "id",
+      align: "center",
+      render: (_, key) => (
+        <Button
+          type='primary'
+          icon={<PlusSquareOutlined />}
+          onClick={() =>
+            openModal(
+              {
+                name: "",
+                stationId: key.key,
+                code: "",
+              },
+              false,
+              setAggregateData,
+              setAggregateModal,
+              setAggregateUpdate
+            )
+          }
+          style={{
+            boxShadow: "none",
+          }}
+        />
       ),
     },
 
@@ -289,7 +376,7 @@ const Stations = memo(() => {
         <Button
           type='primary'
           icon={<EditOutlined />}
-          onClick={() => handleEditClick(key)}
+          onClick={async () => handleEditClick(key)}
           style={{
             boxShadow: "none",
           }}
@@ -325,7 +412,15 @@ const Stations = memo(() => {
           <div className='stations_header_container'>
             <Button
               type='primary'
-              onClick={() => openModal()}
+              onClick={() =>
+                openModal(
+                  initialStationData,
+                  false,
+                  setStationData,
+                  setIsModalVisible,
+                  setIsUpdating
+                )
+              }
               style={{
                 background: colors.buttonColor,
                 color: colors.textWhite,
@@ -384,18 +479,36 @@ const Stations = memo(() => {
         }
         open={isModalVisible}
         centered
-        onCancel={closeModal}
-        onOk={handleSubmit}
+        onCancel={() =>
+          closeModal(
+            initialStationData,
+            setStationData,
+            setIsModalVisible,
+            setIsUpdating
+          )
+        }
+        onOk={() => handleSubmit(stationData, "stations")}
         confirmLoading={loading}
         footer={[
-          <Button key='back' danger type='primary' onClick={closeModal}>
+          <Button
+            key='back'
+            danger
+            type='primary'
+            onClick={() =>
+              closeModal(
+                initialStationData,
+                setStationData,
+                setIsModalVisible,
+                setIsUpdating
+              )
+            }>
             {t("stationsPageData.cancelButtonModal")}
           </Button>,
 
           <Button
             key='submit'
             type='primary'
-            onClick={handleSubmit}
+            onClick={() => handleSubmit(stationData, "stations")}
             loading={loading}>
             {t("stationsPageData.submitButtonModal")}
           </Button>,
@@ -406,9 +519,9 @@ const Stations = memo(() => {
         className='modal_stations'>
         <div className='modal_body_container'>
           <Form
+            key={stationData.id || "new"}
             className='create_stations_form'
             name='station_form'
-            initialValues={stationData}
             layout='inline'
             requiredMark='optional'
             onFinish={handleSubmit}>
@@ -419,7 +532,7 @@ const Stations = memo(() => {
                 className='stations_inputs'
                 name='name'
                 value={stationData.name}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e, setStationData)}
                 placeholder={t("stationsPageData.stationsInputName")}
                 size='large'
               />
@@ -432,7 +545,7 @@ const Stations = memo(() => {
                 name='location'
                 className='stations_inputs'
                 value={stationData.location}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e, setStationData)}
                 placeholder='40.297929-67.948570'
                 size='large'
               />
@@ -445,7 +558,7 @@ const Stations = memo(() => {
                 name='devicePhoneNum'
                 className='stations_inputs'
                 value={stationData.devicePhoneNum}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e, setStationData)}
                 onClick={onClickPhoneNumber}
                 placeholder='+(998)99-999-99-99'
                 size='large'
@@ -521,7 +634,7 @@ const Stations = memo(() => {
                 size='large'
                 className='stations_inputs'
                 name='codeElectricalEnergy'
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e, setStationData)}
                 placeholder={t("stationsPageData.stationsInputEnergy")}
                 disabled={!stationData.haveElectricalEnergy}
                 value={stationData.codeElectricalEnergy}
@@ -556,6 +669,80 @@ const Stations = memo(() => {
                   </Checkbox>
                 </div>
               </div>
+            </Form.Item>
+          </Form>
+        </div>
+      </Modal>
+
+      <Modal
+        title={t("stationsPageData.aggrigateStations")}
+        open={aggregateModal}
+        centered
+        onCancel={() =>
+          closeModal(
+            initialAggregate,
+            setAggregateData,
+            setAggregateModal,
+            setAggregateUpdate
+          )
+        }
+        onOk={() => handleSubmit(aggregateData, "")}
+        confirmLoading={loading}
+        footer={[
+          <Button
+            key='back'
+            danger
+            type='primary'
+            onClick={() =>
+              closeModal(
+                initialAggregate,
+                setAggregateData,
+                setAggregateModal,
+                setAggregateUpdate
+              )
+            }>
+            {t("stationsPageData.cancelButtonModal")}
+          </Button>,
+
+          <Button
+            key='submit'
+            type='primary'
+            onClick={() => handleSubmit(aggregateData, "")}
+            loading={loading}>
+            {t("stationsPageData.submitButtonModal")}
+          </Button>,
+        ]}
+        style={{
+          color: colors.textColor,
+        }}
+        className='modal_stations'>
+        <div className='modal_body_container'>
+          <Form
+            className='create_stations_form'
+            name='station_form'
+            initialValues={aggregateData}
+            layout='inline'
+            requiredMark='optional'>
+            <Form.Item>
+              <Input
+                size='large'
+                className='stations_inputs'
+                name='name'
+                onChange={(e) => handleInputChange(e, setAggregateData)}
+                placeholder={t("stationsPageData.stationsInputEnergy")}
+                value={aggregateData.name}
+              />
+            </Form.Item>
+
+            <Form.Item>
+              <Input
+                size='large'
+                className='stations_inputs'
+                name='code'
+                onChange={(e) => handleInputChange(e, setAggregateData)}
+                placeholder={t("stationsPageData.stationsInputEnergy")}
+                value={aggregateData.code}
+              />
             </Form.Item>
           </Form>
         </div>

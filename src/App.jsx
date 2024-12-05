@@ -34,6 +34,7 @@ const pageTransition = {
 };
 
 const ConditionalContent = memo(({ isAuthenticated }) => {
+
   return (
     <>
       {isAuthenticated ? (
@@ -43,7 +44,7 @@ const ConditionalContent = memo(({ isAuthenticated }) => {
           exit='out'
           variants={pageVariants}
           transition={pageTransition}>
-          <LayoutComponent children={<Root />} />
+          <LayoutComponent childrenComponent={<Root />} />
         </motion.div>
       ) : (
         <motion.div
