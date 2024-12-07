@@ -18,7 +18,8 @@ export const getAllStationsData = (data, token) => async (dispatch) => {
     });
 
     const res = await getDataApi(
-      `stations/findAll?lang=${data.lang}&page=${data.page}&perPage=${data.perPage}&search=${data.search}&regionId=${data.regionId}&organizationId=${data.organizationId}&status=${data.status}`, token
+      `stations/findAll?lang=${data.lang}&page=${data.page}&perPage=${data.perPage}&search=${data.search}&regionId=${data.regionId}&organizationId=${data.organizationId}&status=${data.status}`,
+      token
     );
 
     dispatch({
@@ -40,7 +41,7 @@ export const getAllStationsData = (data, token) => async (dispatch) => {
           error: "Network Error",
         },
       });
-    } else {      
+    } else {
       dispatch({
         type: GLOBALTYPES.ALERT,
         payload: {
@@ -73,9 +74,9 @@ export const createStationsData = (data, token, lang) => async (dispatch) => {
     dispatch({
       type: GLOBALTYPES.ALERT,
       payload: {
-        success: "Ma'lumotlar saqlandi"
-      }
-    })
+        success: "Ma'lumotlar saqlandi",
+      },
+    });
   } catch (err) {
     if (!err.response) {
       dispatch({
@@ -141,17 +142,17 @@ export const deleteStationsData = (data, token) => async (dispatch) => {
   try {
     dispatch({
       type: GLOBALTYPES.LOADING,
-      payload: true
-    })
+      payload: true,
+    });
 
-    const res = await postDataApi('stations/delete?lang=uz', data, token)
+    const res = await postDataApi("stations/delete?lang=uz", data, token);
 
     dispatch({
       type: GLOBALTYPES.ALERT,
       payload: {
-        success: res.data.message
-      }
-    })
+        success: res.data.message,
+      },
+    });
   } catch (err) {
     if (!err.response) {
       dispatch({
@@ -176,14 +177,22 @@ export const deleteStationsData = (data, token) => async (dispatch) => {
   }
 };
 
-export const findByIdStationsData = (data, token) => async (dispatch) => {
+export const findByIdStationsData = (data, token, lang) => async (dispatch) => {
   try {
-    const res = await getDataApi(`stations/findById?lang=uz&id=${data}`, token)
+    dispatch({
+      type: GLOBALTYPES.LOADING,
+      payload: true,
+    });
+
+    const res = await getDataApi(
+      `stations/findById?lang=${lang}&id=${data}`,
+      token
+    );
 
     dispatch({
       type: STATIONS_TYPES.FIND_BY_ID_STATIONS,
-      payload: res.data.data
-    })
+      payload: res.data.data,
+    });
   } catch (err) {
     if (!err.response) {
       dispatch({
@@ -206,4 +215,4 @@ export const findByIdStationsData = (data, token) => async (dispatch) => {
       payload: false,
     });
   }
-}
+};

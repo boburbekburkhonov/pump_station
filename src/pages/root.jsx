@@ -17,6 +17,7 @@ const UserJoin = lazy(() => import("./userJoin"));
 const Notifications = lazy(() => import("./notifications"));
 const ElectrPage = lazy(() => import("./electrydata"));
 const ProfilePage = lazy(() => import('./profilePage'))
+const StationsInformations = lazy(() => import('./stationsInfo'))
 const NotFound = lazy(() => import("./notFound"));
 
 function Root() {
@@ -26,6 +27,7 @@ function Root() {
     <Routes>
       <Route path='/' element={<Home />} />
       <Route path='/stations' element={<Stations />} />
+      <Route path='/statetions/:id' element={<StationsInformations />} />
       <Route path='/maps' element={<MapsPage />} />
       <Route path='/profile' element={<ProfilePage />} />
       <Route path='/data' element={<DataPage />} />

@@ -62,11 +62,12 @@
   display: flex;
   width: 100%;
   align-items: center;
+  justify-content: space-between;
   gap: 0.25rem;
 }
 
 .electrical_box {
-  width: calc(150px - 0.25rem);
+  width: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,9 +76,9 @@
 }
 
 .stations_header_title {
-    width: 100%;
-    padding: 10px 0 0 0;
-    text-align: center;
+  width: 100%;
+  padding: 10px 0 0 0;
+  text-align: center;
 }
 
 .stations_container {
@@ -95,18 +96,18 @@
 }
 
 .stations_card_data {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .change_or_delete_station {
-    position: absolute;
-    right: 0;
-    top: -10px;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
+  position: absolute;
+  right: 0;
+  top: -10px;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .status_component {

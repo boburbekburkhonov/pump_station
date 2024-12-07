@@ -36,7 +36,6 @@ const initialStationData = {
   devicePhoneNum: "",
   isIntegration: true,
   haveElectricalEnergy: false,
-  codeElectricalEnergy: "",
 };
 
 const initialAggregate = {
@@ -49,13 +48,14 @@ const Stations = memo(() => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [stationData, setStationData] = useState(initialStationData);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [form] = Form.useForm();
 
   const [aggregateModal, setAggregateModal] = useState(false);
   const [aggregateData, setAggregateData] = useState(initialAggregate);
   const [aggregateUpdate, setAggregateUpdate] = useState(false);
 
   const { i18n, t } = useTranslation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.alert);
   const { colors } = useSelector((state) => state.theme);
@@ -164,6 +164,7 @@ const Stations = memo(() => {
     setSendData(data);
     setIsUpdateding(false);
     setModalData(false);
+    form.resetFields();
   };
 
   const handleSubmit = (sendData, sendType) => {
@@ -241,7 +242,6 @@ const Stations = memo(() => {
       devicePhoneNum: item.devicePhoneNum,
       isIntegration: item.isIntegration,
       haveElectricalEnergy: item.haveElectricalEnergy,
-      codeElectricalEnergy: item.codeElectricalEnergy,
       regionId,
       districtId,
       organizationId,
@@ -254,6 +254,8 @@ const Stations = memo(() => {
       setIsModalVisible,
       setIsUpdating
     );
+
+    form.setFieldsValue(updatedData);
   };
 
   const columns = [
@@ -403,6 +405,15 @@ const Stations = memo(() => {
     },
   ];
 
+  const dataSource = Array.from({
+    length: 100,
+  }).map((_, i) => ({
+    key: i,
+    name: `Edward King ${i}`,
+    age: 32,
+    address: `London, Park Lane no. ${i}`,
+  }));
+
   return (
     <section className='stations_sections'>
       {loading ? (
@@ -454,7 +465,6 @@ const Stations = memo(() => {
                   dataSource={stationsData?.data?.map((item) => ({
                     key: item.id,
                     name: item.name,
-                    codeElectricalEnergy: item.codeElectricalEnergy,
                     devicePhoneNum: item.devicePhoneNum,
                     district: item.district,
                     haveElectricalEnergy: item.haveElectricalEnergy,
@@ -472,6 +482,7 @@ const Stations = memo(() => {
       )}
 
       <Modal
+        key='stations_modal'
         title={
           isUpdating
             ? t("stationsPageData.stationsUpdateHeaderModal")
@@ -519,6 +530,7 @@ const Stations = memo(() => {
         className='modal_stations'>
         <div className='modal_body_container'>
           <Form
+            form={form}
             key={stationData.id || "new"}
             className='create_stations_form'
             name='station_form'
@@ -630,44 +642,32 @@ const Stations = memo(() => {
             </Form.Item>
 
             <Form.Item>
-              <Input
-                size='large'
-                className='stations_inputs'
-                name='codeElectricalEnergy'
-                onChange={(e) => handleInputChange(e, setStationData)}
-                placeholder={t("stationsPageData.stationsInputEnergy")}
-                disabled={!stationData.haveElectricalEnergy}
-                value={stationData.codeElectricalEnergy}
-              />
+              <div
+                className='electrical_box'
+                style={{
+                  border: `2px solid ${colors.textLight}`,
+                }}>
+                <Checkbox
+                  onChange={handleCheckboxChange}
+                  name='isIntegration'
+                  checked={stationData.isIntegration}>
+                  {t("stationsPageData.stationsCheckboxIntegration")}
+                </Checkbox>
+              </div>
             </Form.Item>
 
             <Form.Item>
-              <div className='checkbox_container_stations'>
-                <div
-                  className='electrical_box'
-                  style={{
-                    border: `2px solid ${colors.textLight}`,
-                  }}>
-                  <Checkbox
-                    onChange={handleCheckboxChange}
-                    name='haveElectricalEnergy'
-                    checked={stationData.haveElectricalEnergy}>
-                    {t("stationsPageData.stationsCheckboxEnergy")}
-                  </Checkbox>
-                </div>
-
-                <div
-                  className='electrical_box'
-                  style={{
-                    border: `2px solid ${colors.textLight}`,
-                  }}>
-                  <Checkbox
-                    onChange={handleCheckboxChange}
-                    name='isIntegration'
-                    checked={stationData.isIntegration}>
-                    {t("stationsPageData.stationsCheckboxIntegration")}
-                  </Checkbox>
-                </div>
+              <div
+                className='electrical_box'
+                style={{
+                  border: `2px solid ${colors.textLight}`,
+                }}>
+                <Checkbox
+                  onChange={handleCheckboxChange}
+                  name='haveElectricalEnergy'
+                  checked={stationData.haveElectricalEnergy}>
+                  {t("stationsPageData.stationsCheckboxEnergy")}
+                </Checkbox>
               </div>
             </Form.Item>
           </Form>
@@ -675,6 +675,7 @@ const Stations = memo(() => {
       </Modal>
 
       <Modal
+        key='aggregate_modal'
         title={t("stationsPageData.aggrigateStations")}
         open={aggregateModal}
         centered
@@ -718,6 +719,7 @@ const Stations = memo(() => {
         className='modal_stations'>
         <div className='modal_body_container'>
           <Form
+            key='aggegate_create'
             className='create_stations_form'
             name='station_form'
             initialValues={aggregateData}
