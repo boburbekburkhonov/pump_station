@@ -188,7 +188,8 @@
       "aggrigateTotalFlow": "Umumiy oqim",
       "aggrigateTime": "Ma'lumot vaqti",
       "electryName": "Elektr nomi",
-      "electryCode": "Elektr kodi"
+      "electryCode": "Elektr kodi",
+      "electryVolt": "Elektr kuchlanish"
     }
   }
 }

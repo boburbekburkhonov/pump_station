@@ -195,7 +195,7 @@
 }
 
 .dashboard_last_data_icons {
-  font-size: 1rem !important;
+  font-size: 1.3rem !important;
   font-weight: bold !important;
 }
 
@@ -259,6 +259,12 @@
   gap: 0.75rem;
 }
 
+.dashboard_view_more_electr_card {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.8rem;
+}
+
 .dashboard_view_more_modal_card {
   display: flex;
   flex-direction: column;
@@ -274,7 +280,7 @@
 }
 
 .dashboard_view_more_modal_card_item h4 {
-  font-weight: 400;
+  font-weight: 700;
 }
 
 .dashboard_view_more_import_data {
