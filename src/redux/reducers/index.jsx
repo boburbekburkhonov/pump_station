@@ -6,6 +6,10 @@ import region from './regionReducers'
 import district from './districtReducers'
 import organization from './organizationReducers'
 import aggregates from './aggregateReducer'
+import dashboard from './dashboardReducer'
+import user from './userReducer'
+import pie from './statisticPieReducer'
+import line from './lineStatisticsReducer'
 
 export default combineReducers({
   theme,
@@ -14,5 +18,9 @@ export default combineReducers({
   region,
   district,
   organization,
-  aggregates
+  aggregates,
+  dashboard,
+  user,
+  pie,
+  line
 });

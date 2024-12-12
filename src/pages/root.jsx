@@ -3,116 +3,60 @@
 import React, { memo, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 
-const Home = lazy(() => import("./dashboard/home"));
-const Stations = lazy(() => import("./stations"));
-const Users = lazy(() => import("./users"));
-const DataPage = lazy(() => import("./data"));
-const MapsPage = lazy(() => import("./maps"));
-const RolePage = lazy(() => import("./role"));
-const Reports = lazy(() => import("./reports"));
-const RegionPages = lazy(() => import("./regions"));
-const Districts = lazy(() => import("./districts"));
-const OrganizationsPages = lazy(() => import("./organizations"));
-const UserJoin = lazy(() => import("./userJoin"));
-const Notifications = lazy(() => import("./notifications"));
-const ElectrPage = lazy(() => import("./electrydata"));
-const ProfilePage = lazy(() => import('./profilePage'))
-const StationsInformations = lazy(() => import('./stationsInfo'))
-const NotFound = lazy(() => import("./notFound"));
+const pages = {
+  Home: lazy(() => import("./dashboard/home")),
+  UserDashboard: lazy(() => import("./dashboardUser")),
+  Stations: lazy(() => import("./stations")),
+  StationsWithUser: lazy(() => import("./stationsWithUser")),
+  StationsInformations: lazy(() => import("./stationsInfo")),
+  MapsPage: lazy(() => import("./maps")),
+  ProfilePage: lazy(() => import("./profilePage")),
+  DataPage: lazy(() => import("./data")),
+  ElectrPage: lazy(() => import("./electrydata")),
+  Users: lazy(() => import("./users")),
+  RolePage: lazy(() => import("./role")),
+  Reports: lazy(() => import("./reports")),
+  RegionPages: lazy(() => import("./regions")),
+  Districts: lazy(() => import("./districts")),
+  OrganizationsPages: lazy(() => import("./organizations")),
+  UserJoin: lazy(() => import("./userJoin")),
+  Notifications: lazy(() => import("./notifications")),
+  NotFound: lazy(() => import("./notFound")),
+};
+
+const isAdmin = () =>
+  localStorage.getItem("roles") === "674877fbf0a8ec5c59065cb6";
 
 function Root() {
-  const isAuthenticated = localStorage.getItem("roles");
-
   return (
     <Routes>
-      <Route path='/' element={<Home />} />
-      <Route path='/stations' element={<Stations />} />
-      <Route path='/statetions/:id' element={<StationsInformations />} />
-      <Route path='/maps' element={<MapsPage />} />
-      <Route path='/profile' element={<ProfilePage />} />
-      <Route path='/data' element={<DataPage />} />
-      <Route path='/electrical/data' element={<ElectrPage />} />
       <Route
-        path='/users'
-        element={
-          isAuthenticated === "674877fbf0a8ec5c59065cb6" ? (
-            <Users />
-          ) : (
-            <NotFound />
-          )
-        }
+        path='/'
+        element={isAdmin() ? <pages.Home /> : <pages.UserDashboard />}
       />
       <Route
-        path='/roles'
-        element={
-          isAuthenticated === "674877fbf0a8ec5c59065cb6" ? (
-            <RolePage />
-          ) : (
-            <NotFound />
-          )
-        }
+        path='/stations'
+        element={isAdmin() ? <pages.Stations /> : <pages.StationsWithUser />}
       />
-      <Route
-        path='/reports'
-        element={
-          isAuthenticated === "674877fbf0a8ec5c59065cb6" ? (
-            <Reports />
-          ) : (
-            <NotFound />
-          )
-        }
-      />
-      <Route
-        path='/regions'
-        element={
-          isAuthenticated === "674877fbf0a8ec5c59065cb6" ? (
-            <RegionPages />
-          ) : (
-            <NotFound />
-          )
-        }
-      />
-      <Route
-        path='/districts'
-        element={
-          isAuthenticated === "674877fbf0a8ec5c59065cb6" ? (
-            <Districts />
-          ) : (
-            <NotFound />
-          )
-        }
-      />
-      <Route
-        path='/organizations'
-        element={
-          isAuthenticated === "674877fbf0a8ec5c59065cb6" ? (
-            <OrganizationsPages />
-          ) : (
-            <NotFound />
-          )
-        }
-      />
-      <Route
-        path='/user/join'
-        element={
-          isAuthenticated === "674877fbf0a8ec5c59065cb6" ? (
-            <UserJoin />
-          ) : (
-            <NotFound />
-          )
-        }
-      />
-      <Route
-        path='/natification'
-        element={
-          isAuthenticated === "674877fbf0a8ec5c59065cb6" ? (
-            <Notifications />
-          ) : (
-            <NotFound />
-          )
-        }
-      />
-      <Route path='*' element={<NotFound />} />
+      <Route path='/notification' element={<pages.Notifications />} />
+      <Route path='/stations/:id' element={<pages.StationsInformations />} />
+      <Route path='/maps' element={<pages.MapsPage />} />
+      <Route path='/profile' element={<pages.ProfilePage />} />
+      <Route path='/data' element={<pages.DataPage />} />
+      <Route path='/electrical/data' element={<pages.ElectrPage />} />
+      <Route path='/reports' element={<pages.Reports />} />
+
+      {isAdmin() && (
+        <>
+          <Route path='/users' element={<pages.Users />} />
+          <Route path='/roles' element={<pages.RolePage />} />
+          <Route path='/regions' element={<pages.RegionPages />} />
+          <Route path='/districts' element={<pages.Districts />} />
+          <Route path='/organizations' element={<pages.OrganizationsPages />} />
+          <Route path='/user/join' element={<pages.UserJoin />} />
+        </>
+      )}
+      <Route path='*' element={<pages.NotFound />} />
     </Routes>
   );
 }

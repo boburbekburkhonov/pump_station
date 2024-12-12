@@ -3,7 +3,8 @@
 import React, { useCallback, useEffect, useState, useMemo, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { Button, Form, Input, Modal, Select, Checkbox, Table } from "antd";
+import { Button, Form, Input, Modal, Select, Checkbox } from "antd";
+import { useNavigate } from "react-router-dom";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -24,8 +25,17 @@ import { getByRegionIdData } from "../../redux/actions/districtActions";
 import { getAllOrganizationsData } from "../../redux/actions/organizationActions";
 import { GLOBALTYPES } from "../../redux/actions/globalTypes";
 import { getDataApi } from "../../utils";
-import { createAggregateData } from "../../redux/actions/aggregateActions";
-import { useNavigate } from "react-router-dom";
+import {
+  handleCheckboxChange,
+  handleInputChange,
+  handleSelectChange,
+  renderOptions,
+  openModal,
+  closeModal,
+  isFormValid,
+} from "../../utils/inputElementHandler";
+
+import TableComponent from "../../components/tableComponent";
 
 const initialStationData = {
   name: "",
@@ -48,6 +58,9 @@ const Stations = memo(() => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [stationData, setStationData] = useState(initialStationData);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [dataSource, setDataSource] = useState([]);
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
   const [form] = Form.useForm();
 
   const [aggregateModal, setAggregateModal] = useState(false);
@@ -68,23 +81,21 @@ const Stations = memo(() => {
 
   const fetchAllData = useCallback(() => {
     const lang = i18n.language;
-    dispatch(
-      getAllStationsData(
-        {
-          lang,
-          page: 1,
-          perPage: 10,
-          search: "",
-          regionId: "",
-          organizationId: "",
-          status: "",
-        },
-        token
-      )
-    );
+
+    const stationParams = {
+      lang,
+      page: currentPage,
+      perPage: pageSize,
+      search: "",
+      regionId: "",
+      organizationId: "",
+      status: "",
+    };
+
+    dispatch(getAllStationsData(stationParams, token));
     dispatch(getAllRegionId(lang, token));
     dispatch(getAllOrganizationsData(lang, token));
-  }, [dispatch, token, i18n.language]);
+  }, [dispatch, token, currentPage, pageSize, i18n.language]);
 
   useEffect(() => {
     fetchAllData();
@@ -99,82 +110,98 @@ const Stations = memo(() => {
     }
   }, [stationData.regionId, i18n.language, dispatch, token]);
 
-  const isFormValid = (data) => {
-    const requiredFields = [
-      "name",
-      "regionId",
-      "districtId",
-      "organizationId",
-      "location",
-      "devicePhoneNum",
-    ];
+  useEffect(() => {
+    if (stationsData?.data) {
+      const processedData = stationsData.data.map((item) => ({
+        key: item.id,
+        name: item.name,
+        devicePhoneNum: item.devicePhoneNum,
+        district: item.district,
+        haveElectricalEnergy: item.haveElectricalEnergy,
+        isIntegration: item.isIntegration,
+        organization: item.organization,
+        region: item.region,
+        status: item.status,
+        location: item.location,
+      }));
+      setDataSource(processedData);
+    }
+  }, [stationsData]);
 
-    return requiredFields.every((field) => {
-      const value = data[field];
-      return (
-        value !== undefined && value !== null && value.toString().trim() !== ""
-      );
-    });
+  const handlePaginationChange = (page, size) => {
+    const lang = i18n.language;
+
+    const paginationParams = {
+      lang,
+      page,
+      perPage: size,
+      search: "",
+      regionId: "",
+      organizationId: "",
+      status: "",
+    };
+
+    dispatch(getAllStationsData(paginationParams, token));
+    setPageSize(size);
+    setCurrentPage(page);
   };
 
   const getIdByName = useCallback((name, list) => {
+    if (!name || !list?.length) return 0;
     const item = list.find(
       (item) => item.name.toLowerCase() === name.toLowerCase()
     );
-    return item ? item.id : 0;
+    return item?.id || 0;
   }, []);
 
-  const getRegionIdName = async (regionId, name) => {
-    try {
-      const response = await getDataApi(
-        `districts/getByRegionId?regionId=${regionId}&lang=${i18n.language}`
-      );
+  const getRegionIdName = useCallback(
+    async (regionId, name) => {
+      if (!regionId || !name) return 0;
 
-      const district = response.data.data.find(
-        (item) => item.name.toLowerCase() === name.toLowerCase()
-      );
+      try {
+        const response = await getDataApi(
+          `districts/getByRegionId?regionId=${regionId}&lang=${i18n.language}`
+        );
 
-      return district ? district.id : 0;
-    } catch (error) {
-      dispatch({
-        type: GLOBALTYPES.ALERT,
-        payload: {
-          error:
-            error.response?.message || "An error occurred while fetching data.",
-        },
-      });
+        const district = response.data.data.find(
+          (item) => item.name.toLowerCase() === name.toLowerCase()
+        );
+        return district?.id || 0;
+      } catch (error) {
+        const errorMessage =
+          error.response?.message || t("error.fetchDistricts");
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: { error: errorMessage },
+        });
+        return 0;
+      }
+    },
+    [dispatch, i18n.language]
+  );
 
-      return 0; // Return 0 in case of an error
-    }
-  };
-
-  const openModal = (
-    data = initialStationData,
-    isEdit = false,
-    setSendData,
-    setModalData,
-    setIsUpdateding
-  ) => {
-    setSendData(data);
-    setIsUpdateding(isEdit);
-    setModalData(true);
-  };
-
-  const closeModal = (data, setSendData, setModalData, setIsUpdateding) => {
-    setSendData(data);
-    setIsUpdateding(false);
-    setModalData(false);
+  const clearFormFileds = () => {
     form.resetFields();
   };
 
-  const handleSubmit = (sendData, sendType) => {
-    if (sendType === "stations") {
-      if (!isFormValid(sendData)) {
+  const handleSubmit = useCallback(
+    (sendData) => {
+      if (
+        !isFormValid({
+          data: sendData,
+          requiredFields: [
+            "name",
+            "regionId",
+            "districtId",
+            "organizationId",
+            "location",
+            "devicePhoneNum",
+          ],
+        })
+      ) {
         dispatch({
           type: GLOBALTYPES.ALERT,
-          payload: {
-            error: t("stationsPageData.validInputs"),
-          },
+          payload: { error: t("stationsPageData.validInputs") },
         });
         return;
       }
@@ -186,49 +213,19 @@ const Stations = memo(() => {
       }
 
       closeModal(
-        initialStationData,
+        { data: initialStationData },
         setStationData,
         setIsModalVisible,
-        setIsUpdating
+        setIsUpdating,
+        clearFormFileds
       );
-    } else {
-      if (aggregateUpdate) {
-        dispatch(updateStationsData(sendData, token, i18n.language));
-      } else {
-        dispatch(createAggregateData(sendData, i18n.language, token));
-      }
-      closeModal(
-        initialAggregate,
-        setAggregateData,
-        setAggregateModal,
-        setAggregateUpdate
-      );
-    }
-  };
-
-  const onClickPhoneNumber = () => {
-    setStationData((prevData) => ({
-      ...prevData,
-      devicePhoneNum: "+998",
-    }));
-  };
-
-  const handleInputChange = ({ target: { name, value } }, setSendData) => {
-    setSendData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleCheckboxChange = ({ target: { name, checked } }) => {
-    setStationData((prev) => ({ ...prev, [name]: checked }));
-  };
-
-  const handleSelectChange = (value, { name }) => {
-    setStationData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const renderOptions = useMemo(
-    () => (list) => list.map((item) => ({ value: item.id, label: item.name })),
-    []
+    },
+    [aggregateUpdate, isUpdating, dispatch, token, i18n.language, closeModal]
   );
+
+  const onClickPhoneNumber = useCallback(() => {
+    setStationData((prevData) => ({ ...prevData, devicePhoneNum: "+998" }));
+  }, []);
 
   const handleEditClick = async (item) => {
     const regionId = getIdByName(item.region, regions);
@@ -248,8 +245,7 @@ const Stations = memo(() => {
     };
 
     openModal(
-      updatedData,
-      true,
+      { data: updatedData, isEdit: true },
       setStationData,
       setIsModalVisible,
       setIsUpdating
@@ -258,161 +254,145 @@ const Stations = memo(() => {
     form.setFieldsValue(updatedData);
   };
 
-  const columns = [
-    {
-      title: t("stationsPageData.table1Data"),
-      dataIndex: "name",
-      key: "name",
-      align: "center",
-    },
-
-    {
-      title: t("stationsPageData.table2Data"),
-      dataIndex: "region",
-      key: "region",
-      align: "center",
-    },
-
-    {
-      title: t("stationsPageData.table3Data"),
-      dataIndex: "district",
-      key: "district",
-      align: "center",
-    },
-
-    {
-      title: t("stationsPageData.table4Data"),
-      dataIndex: "organization",
-      key: "organization",
-      align: "center",
-    },
-
-    {
-      title: t("stationsPageData.table5Data"),
-      dataIndex: "devicePhoneNum",
-      key: "devicePhoneNum",
-      align: "center",
-    },
-
-    {
-      title: t("stationsPageData.table14Data"),
-      dataIndex: "haveElectricalEnergy",
-      key: "haveElectricalEnergy",
-      align: "center",
-      render: (_, key) => (
-        <Button
-          type='primary'
-          icon={<EyeFilled />}
-          onClick={() => navigate(`/statetions/${key.key}`)}
-          style={{
-            boxShadow: "none",
-          }}
-        />
-      ),
-    },
-
-    {
-      title: t("stationsPageData.table9Data"),
-      dataIndex: "haveElectricalEnergy",
-      key: "haveElectricalEnergy",
-      align: "center",
-      render: (_, key) => (
-        <Button
-          type='primary'
-          icon={<PlusSquareOutlined />}
-          onClick={() =>
-            openModal(
-              {
-                name: "",
-                stationId: key.key,
-                code: "",
-              },
-              false,
-              setAggregateData,
-              setAggregateModal,
-              setAggregateUpdate
-            )
-          }
-          style={{
-            boxShadow: "none",
-          }}
-        />
-      ),
-    },
-
-    {
-      title: t("stationsPageData.table13Data"),
-      dataIndex: "id",
-      key: "id",
-      align: "center",
-      render: (_, key) => (
-        <Button
-          type='primary'
-          icon={<PlusSquareOutlined />}
-          onClick={() =>
-            openModal(
-              {
-                name: "",
-                stationId: key.key,
-                code: "",
-              },
-              false,
-              setAggregateData,
-              setAggregateModal,
-              setAggregateUpdate
-            )
-          }
-          style={{
-            boxShadow: "none",
-          }}
-        />
-      ),
-    },
-
-    {
-      title: t("stationsPageData.table10Data"),
-      dataIndex: "id",
-      key: "id",
-      align: "center",
-      render: (_, key) => (
-        <Button
-          type='primary'
-          icon={<EditOutlined />}
-          onClick={async () => handleEditClick(key)}
-          style={{
-            boxShadow: "none",
-          }}
-        />
-      ),
-    },
-
-    {
-      title: t("stationsPageData.table11Data"),
-      dataIndex: "",
-      key: "x",
-      align: "center",
-      render: (_, key) => (
-        <Button
-          onClick={() => dispatch(deleteStationsData({ id: key.key }, token))}
-          type='primary'
-          danger
-          icon={<DeleteOutlined />}
-          style={{
-            boxShadow: "none",
-          }}
-        />
-      ),
-    },
-  ];
-
-  const dataSource = Array.from({
-    length: 100,
-  }).map((_, i) => ({
-    key: i,
-    name: `Edward King ${i}`,
-    age: 32,
-    address: `London, Park Lane no. ${i}`,
-  }));
+  const columns = useMemo(
+    () => [
+      {
+        title: t("stationsPageData.table1Data"),
+        dataIndex: "name",
+        key: "name",
+      },
+      {
+        title: t("stationsPageData.table2Data"),
+        dataIndex: "region",
+        key: "region",
+        align: "center",
+      },
+      {
+        title: t("stationsPageData.table3Data"),
+        dataIndex: "district",
+        key: "district",
+        align: "center",
+      },
+      {
+        title: t("stationsPageData.table4Data"),
+        dataIndex: "organization",
+        key: "organization",
+        align: "center",
+      },
+      {
+        title: t("stationsPageData.table5Data"),
+        dataIndex: "devicePhoneNum",
+        key: "devicePhoneNum",
+        align: "center",
+      },
+      {
+        title: t("stationsPageData.table14Data"),
+        dataIndex: "haveElectricalEnergy",
+        key: "haveElectricalEnergy",
+        align: "center",
+        render: (_, key) => (
+          <Button
+            type='primary'
+            icon={<EyeFilled />}
+            onClick={() => navigate(`/statetions/${key.key}`)}
+            style={{ boxShadow: "none" }}
+          />
+        ),
+        width: 140,
+      },
+      {
+        title: t("stationsPageData.table9Data"),
+        dataIndex: "haveElectricalEnergy",
+        key: "haveElectricalEnergy",
+        align: "center",
+        render: (_, key) => (
+          <Button
+            type='primary'
+            icon={<PlusSquareOutlined />}
+            onClick={() =>
+              openModal(
+                {
+                  data: { name: "", stationId: key.key, code: "" },
+                  isEdit: false,
+                },
+                setAggregateData,
+                setAggregateModal,
+                setAggregateUpdate
+              )
+            }
+            style={{ boxShadow: "none" }}
+          />
+        ),
+        width: 120,
+      },
+      {
+        title: t("stationsPageData.table13Data"),
+        dataIndex: "id",
+        key: "id",
+        align: "center",
+        render: (_, key) => (
+          <Button
+            type='primary'
+            icon={<PlusSquareOutlined />}
+            onClick={() =>
+              openModal(
+                { name: "", stationId: key.key, code: "" },
+                false,
+                setAggregateData,
+                setAggregateModal,
+                setAggregateUpdate
+              )
+            }
+            style={{ boxShadow: "none" }}
+          />
+        ),
+        width: 120,
+      },
+      {
+        title: t("stationsPageData.table10Data"),
+        dataIndex: "id",
+        key: "id",
+        align: "center",
+        render: (_, key) => (
+          <Button
+            type='primary'
+            icon={<EditOutlined />}
+            onClick={async () => handleEditClick(key)}
+            style={{ boxShadow: "none" }}
+          />
+        ),
+        width: 105,
+      },
+      {
+        title: t("stationsPageData.table11Data"),
+        dataIndex: "",
+        key: "x",
+        align: "center",
+        render: (_, key) => (
+          <Button
+            onClick={() => dispatch(deleteStationsData({ id: key.key }, token))}
+            type='primary'
+            danger
+            icon={<DeleteOutlined />}
+            style={{ boxShadow: "none" }}
+          />
+        ),
+        width: 100,
+      },
+    ],
+    [
+      t,
+      navigate,
+      openModal,
+      setAggregateData,
+      setAggregateModal,
+      setAggregateUpdate,
+      handleEditClick,
+      dispatch,
+      deleteStationsData,
+      token,
+    ]
+  );
 
   return (
     <section className='stations_sections'>
@@ -425,8 +405,7 @@ const Stations = memo(() => {
               type='primary'
               onClick={() =>
                 openModal(
-                  initialStationData,
-                  false,
+                  { data: initialStationData, isEdit: false },
                   setStationData,
                   setIsModalVisible,
                   setIsUpdating
@@ -453,29 +432,14 @@ const Stations = memo(() => {
                 <h1>{t("stationsPageData.stationsDataHeader")}</h1>
               </div>
 
-              <div className='stations_container'>
-                <Table
-                  style={{
-                    width: "100%",
-                  }}
-                  scroll={{
-                    x: "max-content",
-                  }}
-                  columns={columns}
-                  dataSource={stationsData?.data?.map((item) => ({
-                    key: item.id,
-                    name: item.name,
-                    devicePhoneNum: item.devicePhoneNum,
-                    district: item.district,
-                    haveElectricalEnergy: item.haveElectricalEnergy,
-                    isIntegration: item.isIntegration,
-                    organization: item.organization,
-                    region: item.region,
-                    status: item.status,
-                    location: item.location,
-                  }))}
-                />
-              </div>
+              <TableComponent
+                columns={columns}
+                dataSource={dataSource}
+                currentPage={currentPage}
+                pageSize={pageSize}
+                totalPage={stationsData.totalDocuments}
+                handlePaginationChange={handlePaginationChange}
+              />
             </div>
           )}
         </>
@@ -492,10 +456,11 @@ const Stations = memo(() => {
         centered
         onCancel={() =>
           closeModal(
-            initialStationData,
+            { data: initialStationData },
             setStationData,
             setIsModalVisible,
-            setIsUpdating
+            setIsUpdating,
+            clearFormFileds
           )
         }
         onOk={() => handleSubmit(stationData, "stations")}
@@ -507,10 +472,11 @@ const Stations = memo(() => {
             type='primary'
             onClick={() =>
               closeModal(
-                initialStationData,
+                { data: initialStationData },
                 setStationData,
                 setIsModalVisible,
-                setIsUpdating
+                setIsUpdating,
+                clearFormFileds
               )
             }>
             {t("stationsPageData.cancelButtonModal")}
@@ -675,8 +641,8 @@ const Stations = memo(() => {
       </Modal>
 
       <Modal
-        key='aggregate_modal'
-        title={t("stationsPageData.aggrigateStations")}
+        key='energy_modal'
+        title={t("stationsPageData.energyStations")}
         open={aggregateModal}
         centered
         onCancel={() =>
@@ -684,7 +650,8 @@ const Stations = memo(() => {
             initialAggregate,
             setAggregateData,
             setAggregateModal,
-            setAggregateUpdate
+            setAggregateUpdate,
+            false
           )
         }
         onOk={() => handleSubmit(aggregateData, "")}
@@ -699,7 +666,8 @@ const Stations = memo(() => {
                 initialAggregate,
                 setAggregateData,
                 setAggregateModal,
-                setAggregateUpdate
+                setAggregateUpdate,
+                false
               )
             }>
             {t("stationsPageData.cancelButtonModal")}
@@ -721,7 +689,7 @@ const Stations = memo(() => {
           <Form
             key='aggegate_create'
             className='create_stations_form'
-            name='station_form'
+            name='electrical_form'
             initialValues={aggregateData}
             layout='inline'
             requiredMark='optional'>
@@ -731,7 +699,7 @@ const Stations = memo(() => {
                 className='stations_inputs'
                 name='name'
                 onChange={(e) => handleInputChange(e, setAggregateData)}
-                placeholder={t("stationsPageData.stationsInputEnergy")}
+                placeholder={t("stationsPageData.stationsEnergyNameInput")}
                 value={aggregateData.name}
               />
             </Form.Item>
@@ -742,7 +710,7 @@ const Stations = memo(() => {
                 className='stations_inputs'
                 name='code'
                 onChange={(e) => handleInputChange(e, setAggregateData)}
-                placeholder={t("stationsPageData.stationsInputEnergy")}
+                placeholder={t("stationsPageData.stationsEnerdyCode")}
                 value={aggregateData.code}
               />
             </Form.Item>

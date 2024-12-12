@@ -52,6 +52,10 @@
     "stationsInputEnergy": "Energiya kodini kiriting",
     "stationsCheckboxEnergy": "Elektr energiyasi",
     "stationsCheckboxIntegration": "Integratsiya",
+    "stationsAggregateNameInput": "Aggregat nomi",
+    "stationsAggregateCode": "Aggregat kodi",
+    "stationsEnergyNameInput": "Elekt nomi",
+    "stationsEnerdyCode": "Elektr Kodi",
     "noDataTitle": "Ma'lumot topilmadi",
     "validInputs": "Barcha bo'limlarni to'ldiring",
     "table1Data": "Stansiya nomi",
@@ -70,34 +74,121 @@
     "tableData2": "Mavjud emas",
     "table13Data": "Agregart qo'shish",
     "table14Data": "Ma'lumot olish",
-    "aggrigateStations": "Stansiya uchun agregat qo'shish"
+    "aggrigateStations": "Stansiya uchun agregat qo'shish",
+    "energyStations": "Stansiya uchun elektr qurilma qo'shish"
   },
   "dashboardPageData": {
     "cardData": [
       {
-        "status": "Ishlamoqda",
-        "counts": "300 ta",
+        "status": "Barcha stansiyalar",
+        "color": "#11A9FF",
+        "countValue": "Qurilmalar soni"
+      },
+      {
+        "status": "Faol stansiyalar",
         "color": "#29CB97",
         "countValue": "Qurilmalar soni"
       },
       {
-        "status": "Nosoz",
-        "counts": "50 ta",
-        "color": "rgb(240 142 86)",
+        "status": "Faolmas stansiyalar",
+        "color": "#F76500",
         "countValue": "Qurilmalar soni"
       },
       {
-        "status": "O'chirilgan",
-        "counts": "20 ta",
-        "color": "#F3464E",
+        "status": "Barcha agrigatlar",
+        "color": "#00AB6A",
         "countValue": "Qurilmalar soni"
       },
       {
-        "status": "Yuklanmoqda",
-        "counts": "40 ta",
-        "color": "#748AA1",
+        "status": "Faol agrigatlar",
+        "color": "#03845C",
+        "countValue": "Qurilmalar soni"
+      },
+      {
+        "status": "Buzilgan agrigatlar",
+        "color": "#FF9445",
+        "countValue": "Qurilmalar soni"
+      },
+      {
+        "status": "Nosoz agrigatlar",
+        "color": "#FB0015",
+        "countValue": "Qurilmalar soni"
+      },
+      {
+        "status": "Barcha energiya",
+        "color": "#03845C",
+        "countValue": "Qurilmalar soni"
+      },
+      {
+        "status": "Faol energiya",
+        "color": "#85A1D0",
+        "countValue": "Qurilmalar soni"
+      },
+      {
+        "status": "Nosoz energiya",
+        "color": "#C91B21",
+        "countValue": "Qurilmalar soni"
+      },
+      {
+        "status": "Buzilgan energiya",
+        "color": "#E2C11E",
         "countValue": "Qurilmalar soni"
       }
-    ]
+    ],
+    "filterCardData": [
+      {
+        "title": "Bugungi ma'lumotlar"
+      },
+      {
+        "title": "Kechagi ma'lumotlar"
+      },
+      {
+        "title": "Haftalik ma'lumotlar"
+      },
+      {
+        "title": "Oylik ma'lumotlar"
+      },
+      {
+        "title": "Bu yillik ma'lumotlar"
+      }
+    ],
+    "filterTitle": "Tanlangan stansiya so'ngi ma'lumotlari",
+    "tooltipName": "Suv hajmi",
+    "tooltipName2": "Sariflangan quvat",
+    "statisticsTitle1": "Stansiyalarning suv hajmi statistikasi",
+    "statisticsTitle2": "Stansiyalarning elektr sarfi statistikasi",
+    "filterTitle2": [
+      {
+        "title": "Bugungi ma'lumotlar statistikasi"
+      },
+      {
+        "title": "Kechagi ma'lumotlar statistikasi"
+      },
+      {
+        "title": "Haftalik ma'lumotlar statistikasi"
+      },
+      {
+        "title": "Oylik ma'lumotlar statistikasi"
+      },
+      {
+        "title": "Bu yillik ma'lumotlar statistikasi"
+      }
+    ],
+    "lastStationsData": {
+      "locations": "Viloyat",
+      "locations2": "Tashkilot",
+      "agrigateName": "Agrigat nomi",
+      "agrigateSpeed": "Oqim tezligi",
+      "aggrigateCode": "Agrigat kodi",
+      "agrigateStatus": "Ishlamoqda",
+      "agrigateStatus2": "Nosoz",
+      "aggrigateTitle": "Qurilma xolati",
+      "aggrigateSpeedConst": "m³/soat",
+      "aggrigateTotalVolume": "Umumiy hajm",
+      "aggrigateTotalFlow": "Umumiy oqim",
+      "aggrigateTime": "Ma'lumot vaqti",
+      "electryName": "Elektr nomi",
+      "electryCode": "Elektr kodi"
+    }
   }
 }

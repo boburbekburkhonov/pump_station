@@ -49,6 +49,10 @@
     "stationsInputEnergy": "Enter energy code",
     "stationsCheckboxEnergy": "Electricity",
     "stationsCheckboxIntegration": "Integration",
+    "stationsAggregateNameInput": "Aggregate name",
+    "stationsAggregateCode": "Aggregate code",
+    "stationsEnergyNameInput": "Electrical name",
+    "stationsEnerdyCode": "Electrical code",
     "noDataTitle": "Information not found",
     "table1Data": "Station name",
     "table2Data": "Region",
@@ -58,7 +62,7 @@
     "table6Data": "Energy code",
     "table7Data": "Integration",
     "table8Data": "Status",
-    "table9Data": "Energy Status",
+    "table9Data": "Add Enerdy",
     "table10Data": "Update",
     "table11Data": "Delete",
     "table12Data": "Joylashuv",
@@ -66,34 +70,121 @@
     "tableData2": "Not available",
     "table13Data": "Add aggregate",
     "table14Data": "Getting information",
-    "aggrigateStations": "Add aggregate for the station"
+    "aggrigateStations": "Add aggregate for the station",
+    "energyStations": "Add an electrical device for the station"
   },
   "dashboardPageData": {
     "cardData": [
       {
-        "status": "Operating",
-        "counts": 300,
+        "status": "All stations",
+        "color": "#11A9FF",
+        "countValue": "Number of devices"
+      },
+      {
+        "status": "Active stations",
         "color": "#29CB97",
         "countValue": "Number of devices"
       },
       {
-        "status": "Error",
-        "counts": 50,
-        "color": "rgb(240 142 86)",
+        "status": "Inactive stations",
+        "color": "#F76500",
         "countValue": "Number of devices"
       },
       {
-        "status": "Offline",
-        "counts": 20,
-        "color": "#F3464E",
+        "status": "All aggregates",
+        "color": "#00AB6A",
         "countValue": "Number of devices"
       },
       {
-        "status": "Loading",
-        "counts": 40,
-        "color": "#748AA1",
+        "status": "Active aggregates",
+        "color": "#03845C",
+        "countValue": "Number of devices"
+      },
+      {
+        "status": "Broken aggregates",
+        "color": "#FF9445",
+        "countValue": "Number of devices"
+      },
+      {
+        "status": "Faulty aggregates",
+        "color": "#FB0015",
+        "countValue": "Number of devices"
+      },
+      {
+        "status": "All energy",
+        "color": "#03845C",
+        "countValue": "Number of devices"
+      },
+      {
+        "status": "Active energy",
+        "color": "#85A1D0",
+        "countValue": "Number of devices"
+      },
+      {
+        "status": "Faulty energy",
+        "color": "#C91B21",
+        "countValue": "Number of devices"
+      },
+      {
+        "status": "Broken energy",
+        "color": "#E2C11E",
         "countValue": "Number of devices"
       }
-    ]
+    ],
+    "filterCardData": [
+      {
+        "title": "Today's data"
+      },
+      {
+        "title": "Yesterday's data"
+      },
+      {
+        "title": "Weekly data"
+      },
+      {
+        "title": "Monthly data"
+      },
+      {
+        "title": "This year data"
+      }
+    ],
+    "filterTitle": "Selected station's last data",
+    "tooltipName": "Water volume",
+    "tooltipName2": "Rated power",
+    "statisticsTitle1": "Water volume statistics of stations",
+    "statisticsTitle2": "Electricity consumption statistics of stations",
+    "filterTitle2": [
+      {
+        "title": "Today's data statistics"
+      },
+      {
+        "title": "Yesterday's data statistics"
+      },
+      {
+        "title": "Weekly data statistics"
+      },
+      {
+        "title": "Monthly data statistics"
+      },
+      {
+        "title": "This year data statistics"
+      }
+    ],
+    "lastStationsData": {
+      "locations": "Viloyat",
+      "locations2": "Tashkilot",
+      "agrigateName": "Aggregate name",
+      "agrigateSpeed": "Flow rate",
+      "aggrigateCode": "Aggregate code",
+      "agrigateStatus": "Working",
+      "agrigateStatus2": "Defective",
+      "aggrigateTitle": "Device status",
+      "aggrigateSpeedConst": "m³/hour",
+      "aggrigateTotalVolume": "Total volume",
+      "aggrigateTotalFlow": "Total flow",
+      "aggrigateTime": "Information time",
+      "electryName": "Electric name",
+      "electryCode": "Electrical code"
+    }
   }
 }

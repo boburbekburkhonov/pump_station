@@ -1,37 +1,53 @@
-import React, { useEffect } from 'react';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import tashkentGeoJson from '../../assets/uz.json';
+import React, { useEffect, useRef } from "react";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
-const MapWithPolygon = () => {
+const MapWithPolygon = ({ data }) => {
+  const mapRef = useRef(null); // Xarita faqat bir marta yaratilishini kuzatish
+
   useEffect(() => {
-    const map = L.map('map').setView([41.2995, 69.2401], 12);
+    if (!mapRef.current) {
+      // Xarita faqat bir marta yaratiladi
+      mapRef.current = L.map("map").setView([data.latitude, data.longitude], 12);
 
-    L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-      maxZoom: 19,
-      attribution: 'Map data &copy; Google',
-    }).addTo(map);
+      L.tileLayer("https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", {
+        subdomains: ["mt0", "mt1", "mt2", "mt3"],
+        maxZoom: 19,
+        attribution: "Map data &copy; Google",
+      }).addTo(mapRef.current);
+    }
 
-    L.geoJSON(tashkentGeoJson.features[13].geometry, {
-      style: {
-        color: 'blue', 
-        fillColor: 'lightblue',
-        fillOpacity: 0.5, 
-      },
-      onEachFeature: (feature, layer) => {
-        if (feature.properties && feature.properties.name) {
-          layer.bindPopup(feature.properties.name); 
-        }
-      },
-    }).addTo(map);
+    if (data?.pointsPolygon?.length) {
+      const validCoordinates = data.pointsPolygon
+        .filter(
+          (point) =>
+            typeof point.latitude === "number" &&
+            typeof point.longitude === "number"
+        )
+        .map((point) => [point.latitude, point.longitude]);
+
+      if (validCoordinates.length > 0) {
+        L.polygon(validCoordinates, {
+          color: "blue",
+          fillColor: "lightblue",
+          fillOpacity: 0.5,
+        })
+          .bindPopup(data.name?.[0]?.name || "Polygon Area")
+          .addTo(mapRef.current);
+      }
+    }
 
     return () => {
-      map.remove();
+      // Xaritani tozalash
+      mapRef.current.eachLayer((layer) => {
+        if (!layer._url) {
+          mapRef.current.removeLayer(layer);
+        }
+      });
     };
-  }, []);
+  }, [data]);
 
-  return <div id="map" style={{ height: '100vh', width: '100%' }} />;
+  return <div id="map" style={{ height: "100vh", width: "100%" }} />;
 };
 
 export default MapWithPolygon;

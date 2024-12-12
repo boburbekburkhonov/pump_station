@@ -2,7 +2,6 @@
 
 import React from "react";
 import "./index.css";
-import DemoMemo from "../../components/pieChart";
 import { useTranslation } from "react-i18next";
 import {
   CarryOutOutlined,
@@ -12,11 +11,13 @@ import {
 } from "@ant-design/icons";
 import { Card, Calendar, theme } from "antd";
 import { useSelector } from "react-redux";
+// import DemoMemo from "../../components/pieChart";
 
 function Home() {
   const { t } = useTranslation();
   const { colors } = useSelector((state) => state.theme);
   const { token } = theme.useToken();
+  
   const iconData = [
     <CarryOutOutlined
       style={{
@@ -83,7 +84,7 @@ function Home() {
           )}
         </div>
 
-        <div className='dashboard_chart_container' style={{
+        {/* <div className='dashboard_chart_container' style={{
           background: colors.layoutBackground,
           color: colors.text
         }}>
@@ -94,7 +95,7 @@ function Home() {
           <div className='second_chart_data'>
             
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div

@@ -2,6 +2,7 @@
 
 import { GLOBALTYPES } from "./globalTypes";
 import { postDataApi } from "../../utils";
+import Cookies from 'js-cookie';
 
 export const signInAction = (data, lang) => async (dispatch) => {
   try {
@@ -10,8 +11,8 @@ export const signInAction = (data, lang) => async (dispatch) => {
       payload: false,
     });
 
-    localStorage.setItem("login", data.username);
-    localStorage.setItem("code", data.password);
+    Cookies.set('login', data.username, { expires: 1, path: '/' })
+    Cookies.set('code', data.password, { expires: 1, path: '/' })
 
     const res = await postDataApi(`auth/signIn?lang=${lang}`, {
       username: data.username,
@@ -21,6 +22,8 @@ export const signInAction = (data, lang) => async (dispatch) => {
     localStorage.setItem("roles", res.data.data.user.role.id);
     localStorage.setItem("access_token", res.data.data.accessToken);
     localStorage.setItem("refresh_token", res.data.data.refreshToken);
+    Cookies.set('regionId', res.data.data.user.regionId, { expires: 1, path: '/' })
+    
 
     dispatch({
       type: GLOBALTYPES.AUTH,
@@ -65,7 +68,7 @@ export const signInAction = (data, lang) => async (dispatch) => {
 export const refresh_token = () => async (dispatch) => {
   try {
     const res = await postDataApi('auth/refreshToken', {
-      username: localStorage.getItem('login'),
+      username: Cookies.get('login'),
       refreshToken: localStorage.getItem("refresh_token")
     })
 
@@ -99,8 +102,8 @@ export const refresh_token = () => async (dispatch) => {
 };
 
 export const logoutAction = (token) => async (dispatch) => {
-  const username = localStorage.getItem('login')
-  const password = localStorage.getItem('code')
+  const username = Cookies.get('login')
+  const password = Cookies.get('code')
 
   try {
     if (username && password) {
@@ -110,12 +113,10 @@ export const logoutAction = (token) => async (dispatch) => {
         password
       }, token)
 
-      console.log(res.status);
-
-
       if (res.status === 201) {
-        localStorage.removeItem("login")
-        localStorage.removeItem("code")
+        Cookies.remove('login', { path: '/' })
+        Cookies.remove('code', { path: '/' })
+        Cookies.remove('regionId', { path: '/' })
         localStorage.removeItem("access_token")
         localStorage.removeItem("refresh_token")
         localStorage.removeItem("roles")

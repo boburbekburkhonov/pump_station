@@ -2,7 +2,9 @@ import { STATIONS_TYPES } from "../actions/stationsActions";
 
 const initialState = {
     stationsData: [],
-    stationData: []
+    stationData: [],
+    stationsLoading: false,
+    stationsLastData: []
 }
 
 const stationsReducer = (state = initialState, action) => {
@@ -16,6 +18,16 @@ const stationsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 stationData: action.payload
+            };
+        case STATIONS_TYPES.FIND_LAST_DATA_AND_STATIONS:
+            return {
+                ...state,
+                stationsLastData: action.payload
+            };
+        case STATIONS_TYPES.FIND_LAST_DATA_LOADING:
+            return {
+                ...state,
+                stationsLoading: action.payload
             };
         default:
             return state;

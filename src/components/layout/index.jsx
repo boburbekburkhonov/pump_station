@@ -122,7 +122,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       ),
     },
     {
-      key: "/natification",
+      key: "/notification",
       icon: (
         <BellOutlined
           className='menu-icon'
@@ -130,7 +130,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
         />
       ),
       label: (
-        <Link className='layout_links' to='/natification'>
+        <Link className='layout_links' to='/notification'>
           {t("layoutData.navLink15")}
         </Link>
       ),
@@ -295,6 +295,20 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       ),
     },
     {
+      key: "/notification",
+      icon: (
+        <BellOutlined
+          className='menu-icon'
+          style={{ fontSize: "16px", fontWeight: "500" }}
+        />
+      ),
+      label: (
+        <Link className='layout_links' to='/notification'>
+          {t("layoutData.navLink15")}
+        </Link>
+      ),
+    },
+    {
       key: "/stations",
       icon: (
         <DesktopOutlined
@@ -351,6 +365,9 @@ const LayoutComponent = memo(({ childrenComponent }) => {
           colorTextPlaceholder: colors.textLight,
           colorTextQuaternary: colors.text,
           colorTextDescription: colors.text,
+          dangerShadow: 'none',
+          defaultShadow: 'none',
+          primaryShadow: 'none'
         },
       }}>
       <Layout
@@ -530,4 +547,5 @@ const LayoutComponent = memo(({ childrenComponent }) => {
     </ConfigProvider>
   );
 });
+
 export default LayoutComponent;

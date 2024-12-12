@@ -8,6 +8,8 @@ export const STATIONS_TYPES = {
   DELETE_STATIONS: "DELETE_STATIONS",
   FIND_ALL_STATIONS: "FIND_ALL_STATIONS",
   FIND_BY_ID_STATIONS: "FIND_BY_ID_STATIONS",
+  FIND_LAST_DATA_AND_STATIONS: "FIND_LAST_DATA_AND_STATIONS",
+  FIND_LAST_DATA_LOADING: "FIND_LAST_DATA_LOADING"
 };
 
 export const getAllStationsData = (data, token) => async (dispatch) => {
@@ -216,3 +218,41 @@ export const findByIdStationsData = (data, token, lang) => async (dispatch) => {
     });
   }
 };
+
+export const findLastStationsData = (lang, token) => async (dispatch) => {
+  try {
+    dispatch({
+      type: STATIONS_TYPES.FIND_LAST_DATA_LOADING,
+      payload: true
+    })
+
+    const res = await getDataApi(`dashboard/getSelectedStationLastData?lang=${lang}`, token)
+
+    dispatch({
+      type: STATIONS_TYPES.FIND_LAST_DATA_AND_STATIONS,
+      payload: res.data.data
+    })
+
+  } catch (err) {
+    if (!err.response) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: "Network Error",
+        },
+      });
+    } else {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: err.response.data.message || err.response.statusText,
+        },
+      });
+    }
+  } finally {
+    dispatch({
+      type: STATIONS_TYPES.FIND_LAST_DATA_LOADING,
+      payload: false,
+    });
+  }
+}
