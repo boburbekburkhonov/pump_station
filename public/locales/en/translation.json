@@ -71,7 +71,24 @@
     "table13Data": "Add aggregate",
     "table14Data": "Getting information",
     "aggrigateStations": "Add aggregate for the station",
-    "energyStations": "Add an electrical device for the station"
+    "energyStations": "Add an electrical device for the station",
+    "stationsMoreInfo": {
+      "codeElectricalEnergy": "Electrical energy code",
+      "devicePhoneNum": "Phone number",
+      "district": "District",
+      "electricalEnergy": "Electrical energy information",
+      "haveElectricalEnergy": "Availability of electrical energy",
+      "id": "Identifier",
+      "isIntegration": "Integration status",
+      "location": "Location coordinates",
+      "organization": "Organization",
+      "region": "Region",
+      "code": "Code",
+      "defectionStatus": "Defection status",
+      "workingStatus": "Working status",
+      "stationsAggrigats": "Station aggregate data",
+      "stationsElectrs": "Electrical data of the station"
+    }
   },
   "dashboardPageData": {
     "cardData": [
@@ -184,7 +201,20 @@
       "aggrigateTotalFlow": "Total flow",
       "aggrigateTime": "Information time",
       "electryName": "Electric name",
-      "electryCode": "Electrical code"
+      "electryCode": "Electrical code",
+      "electryVolt": "Electric Voltage",
+      "electryAmper": "Electric Current",
+      "energyValueView": "kWh",
+      "energyActive": "Active Energy",
+      "energyReactive": "Reactive Energy",
+      "powerActive": "Active Power",
+      "powerReactive": "Reactive Power",
+      "energyActiveToday": "Active Energy Today",
+      "energyActiveTotal": "Total Active Energy",
+      "energyReactiveToday": "Reactive Energy Today",
+      "energyReactiveTotal": "Total Reactive Energy",
+      "stationsMoreInfoAgirgate": "Final data of the station aggregate",
+      "stationsMoreInfoElectr": "Final data of the station electrical device"
     }
   }
 }

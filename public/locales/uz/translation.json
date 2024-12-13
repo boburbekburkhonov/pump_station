@@ -33,7 +33,7 @@
     "navLink14": "Xisobotlar",
     "navLink15": "Bildirishnomalar",
     "navLink16": "Ma'lumot qo'shish",
-
+    "notifTitle": "Xabarlat",
     "rus": "Rus",
     "eng": "Ingliz",
     "oz": "O'zbek"
@@ -75,7 +75,24 @@
     "table13Data": "Agregart qo'shish",
     "table14Data": "Ma'lumot olish",
     "aggrigateStations": "Stansiya uchun agregat qo'shish",
-    "energyStations": "Stansiya uchun elektr qurilma qo'shish"
+    "energyStations": "Stansiya uchun elektr qurilma qo'shish",
+    "stationsMoreInfo": {
+      "codeElectricalEnergy": "Elektr energiyasi kodi",
+      "devicePhoneNum": "Telefon raqami",
+      "district": "Tuman",
+      "electricalEnergy": "Elektr energiyasi ma'lumotlari",
+      "haveElectricalEnergy": "Elektr energiyasi mavjudligi",
+      "id": "Identifikator",
+      "isIntegration": "Integratsiya holati",
+      "location": "Joylashuv koordinatalari",
+      "organization": "Tashkilot",
+      "region": "Viloyat",
+      "code": "Kod",
+      "defectionStatus": "Nosozlik holati",
+      "workingStatus": "Ishlash holati",
+      "stationsAggrigats": "Stansiya agrigat ma'lumotlari",
+      "stationsElectrs": "Stansiyaning elektr ma'lumotlari"
+    }
   },
   "dashboardPageData": {
     "cardData": [
@@ -189,7 +206,19 @@
       "aggrigateTime": "Ma'lumot vaqti",
       "electryName": "Elektr nomi",
       "electryCode": "Elektr kodi",
-      "electryVolt": "Elektr kuchlanish"
+      "electryVolt": "Elektr kuchlanish",
+      "electryAmper": "Tok kuchi",
+      "energyValueView": "Kw*soat",
+      "energyActive": "Aktiv energiya",
+      "energyReactive": "Reaktiv energiya",
+      "powerActive": "Aktiv quvat",
+      "powerReactive": "Reaktiv quvat",
+      "energyActiveToday": "Bugungi aktiv energiya",
+      "energyActiveTotal": "Umumiy aktiv energiya",
+      "energyReactiveToday": "Bugungi reaktiv energiya",
+      "energyReactiveTotal": "Umumiy reaktiv energiya",
+      "stationsMoreInfoAgirgate": "Stansiya agrigatining so'ngi ma'lumotlari",
+      "stationsMoreInfoElectr": "Stansiya elektr qurilmasining so'ngi ma'lumotlari"
     }
   }
 }

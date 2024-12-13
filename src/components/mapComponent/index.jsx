@@ -1,19 +1,33 @@
-import React, { useEffect, useRef } from "react";
+/** @format */
+
+import React, { memo, useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import myLocations from "../../assets/my_location.svg";
+import { useSelector } from "react-redux";
 
-const MapWithPolygon = ({ data }) => {
-  const mapRef = useRef(null); // Xarita faqat bir marta yaratilishini kuzatish
+const customIcon = L.icon({
+  iconUrl: myLocations,
+  iconSize: [64, 64],
+  iconAnchor: [32, 64],
+  popupAnchor: [0, -64],
+});
+
+const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
+  const mapRef = useRef(null);
+  const { colors } = useSelector((state) => state.theme);
 
   useEffect(() => {
     if (!mapRef.current) {
-      // Xarita faqat bir marta yaratiladi
-      mapRef.current = L.map("map").setView([data.latitude, data.longitude], 12);
+      mapRef.current = L.map("map").setView(
+        [data.latitude, data.longitude],
+        12
+      );
 
-      L.tileLayer("https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", {
-        subdomains: ["mt0", "mt1", "mt2", "mt3"],
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
-        attribution: "Map data &copy; Google",
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(mapRef.current);
     }
 
@@ -27,27 +41,60 @@ const MapWithPolygon = ({ data }) => {
         .map((point) => [point.latitude, point.longitude]);
 
       if (validCoordinates.length > 0) {
-        L.polygon(validCoordinates, {
-          color: "blue",
-          fillColor: "lightblue",
-          fillOpacity: 0.5,
-        })
-          .bindPopup(data.name?.[0]?.name || "Polygon Area")
-          .addTo(mapRef.current);
+        const worldBounds = [
+          [-90, -180],
+          [-90, 180],
+          [90, 180],
+          [90, -180],
+          [-90, -180],
+        ];
+
+        const geoJsonData = {
+          type: "Feature",
+          geometry: {
+            type: "Polygon",
+            coordinates: [
+              worldBounds.map(([lat, lng]) => [lng, lat]),
+              validCoordinates.map(([lat, lng]) => [lng, lat]),
+            ],
+          },
+        };
+
+        L.geoJSON(geoJsonData, {
+          style: {
+            color: colors.buttonColor,
+            fillColor: colors.layoutBackground,
+            fillOpacity: 1,
+            weight: 5,
+          },
+        }).addTo(mapRef.current);
       }
     }
 
+    if (stationData?.data?.length) {
+      stationData.data.forEach((item) => {
+        const [latitude, longitude] = item.location.split("-").map(Number);
+
+        if (!isNaN(latitude) && !isNaN(longitude)) {
+          const marker = L.marker([latitude, longitude], { icon: customIcon })
+            .addTo(mapRef.current)
+            .bindPopup(`<b>${item.name}</b>`);
+
+          marker.on("click", () => onClickMyLocations(item));
+        }
+      });
+    }
+
     return () => {
-      // Xaritani tozalash
       mapRef.current.eachLayer((layer) => {
-        if (!layer._url) {
+        if (!(layer instanceof L.TileLayer)) {
           mapRef.current.removeLayer(layer);
         }
       });
     };
   }, [data]);
 
-  return <div id="map" style={{ height: "100vh", width: "100%" }} />;
-};
+  return <div id='map' style={{ height: "100vh", width: "100%" }} />;
+});
 
 export default MapWithPolygon;

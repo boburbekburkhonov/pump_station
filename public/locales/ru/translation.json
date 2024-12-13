@@ -71,7 +71,24 @@
     "table13Data": "Добавить агрегат",
     "table14Data": "Получить информацию",
     "aggrigateStations": "Добавить заполнитель для станции",
-    "energyStations": "Добавить электрическое устройство для станции"
+    "energyStations": "Добавить электрическое устройство для станции",
+    "stationsMoreInfo": {
+      "codeElectricalEnergy": "Код электроэнергии",
+      "devicePhoneNum": "Номер телефона",
+      "district": "Район",
+      "electricalEnergy": "Информация о электроэнергии",
+      "haveElectricalEnergy": "Наличие электроэнергии",
+      "id": "Идентификатор",
+      "isIntegration": "Статус интеграции",
+      "location": "Координаты местоположения",
+      "organization": "Организация",
+      "region": "Регион",
+      "code": "Код",
+      "defectionStatus": "Статус неисправности",
+      "workingStatus": "Рабочий статус",
+      "stationsAggrigats": "Совокупная информация о станции",
+      "stationsElectrs": "Электрические данные станции"
+    }
   },
   "dashboardPageData": {
     "cardData": [
@@ -184,7 +201,20 @@
       "aggrigateTotalFlow": "Общий поток",
       "aggrigateTime": "Информационное время",
       "electryName": "Электрическое название",
-      "electryCode": "Электрический код"
+      "electryCode": "Электрический код",
+      "electryVolt": "Электрическое напряжение",
+      "electryAmper": "Электрический ток",
+      "energyValueView": "кВт·ч",
+      "energyActive": "Активная энергия",
+      "energyReactive": "Реактивная энергия",
+      "powerActive": "Активная мощность",
+      "powerReactive": "Реактивная мощность",
+      "energyActiveToday": "Активная энергия сегодня",
+      "energyActiveTotal": "Общая активная энергия",
+      "energyReactiveToday": "Реактивная энергия сегодня",
+      "energyReactiveTotal": "Общая реактивная энергия",
+      "stationsMoreInfoAgirgate": "Последняя информация о станционном блоке",
+      "stationsMoreInfoElectr": "Самая актуальная информация по электрооборудованию станции"
     }
   }
 }

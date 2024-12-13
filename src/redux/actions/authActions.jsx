@@ -23,6 +23,7 @@ export const signInAction = (data, lang) => async (dispatch) => {
     localStorage.setItem("access_token", res.data.data.accessToken);
     localStorage.setItem("refresh_token", res.data.data.refreshToken);
     Cookies.set('regionId', res.data.data.user.regionId, { expires: 1, path: '/' })
+    Cookies.set('districtId', res.data.data.user.districtId, { expires: 1, path: '/' })
     
 
     dispatch({

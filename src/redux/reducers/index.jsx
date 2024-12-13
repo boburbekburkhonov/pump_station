@@ -10,6 +10,7 @@ import dashboard from './dashboardReducer'
 import user from './userReducer'
 import pie from './statisticPieReducer'
 import line from './lineStatisticsReducer'
+import notifications from "./notificationReducer";
 
 export default combineReducers({
   theme,
@@ -22,5 +23,6 @@ export default combineReducers({
   dashboard,
   user,
   pie,
-  line
+  line,
+  notifications
 });

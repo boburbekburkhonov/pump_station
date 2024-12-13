@@ -9,7 +9,9 @@ export const STATIONS_TYPES = {
   FIND_ALL_STATIONS: "FIND_ALL_STATIONS",
   FIND_BY_ID_STATIONS: "FIND_BY_ID_STATIONS",
   FIND_LAST_DATA_AND_STATIONS: "FIND_LAST_DATA_AND_STATIONS",
-  FIND_LAST_DATA_LOADING: "FIND_LAST_DATA_LOADING"
+  FIND_MAPS_LAST_DATA: "FIND_MAPS_LAST_DATA",
+  FIND_MY_LOCATIONS_POLYGONE: "FIND_MY_LOCATIONS_POLYGONE",
+  FIND_LAST_DATA_LOADING: "FIND_LAST_DATA_LOADING",
 };
 
 export const getAllStationsData = (data, token) => async (dispatch) => {
@@ -223,16 +225,18 @@ export const findLastStationsData = (lang, token) => async (dispatch) => {
   try {
     dispatch({
       type: STATIONS_TYPES.FIND_LAST_DATA_LOADING,
-      payload: true
-    })
+      payload: true,
+    });
 
-    const res = await getDataApi(`dashboard/getSelectedStationLastData?lang=${lang}`, token)
+    const res = await getDataApi(
+      `dashboard/getSelectedStationLastData?lang=${lang}`,
+      token
+    );
 
     dispatch({
       type: STATIONS_TYPES.FIND_LAST_DATA_AND_STATIONS,
-      payload: res.data.data
-    })
-
+      payload: res.data.data,
+    });
   } catch (err) {
     if (!err.response) {
       dispatch({
@@ -255,4 +259,85 @@ export const findLastStationsData = (lang, token) => async (dispatch) => {
       payload: false,
     });
   }
-}
+};
+
+export const findInMapsLastData =
+  (lang, token, page, perPage) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const res = await getDataApi(
+        `stations/findAllLastData?lang=${lang}&page=${page}&perPage=${perPage}`,
+        token
+      );
+
+      dispatch({
+        type: STATIONS_TYPES.FIND_MAPS_LAST_DATA,
+        payload: res.data.data,
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+export const findMyLocationsPolygon = (lang, id, token) => async (dispatch) => {
+  try {
+    dispatch({
+      type: STATIONS_TYPES.FIND_LAST_DATA_LOADING,
+      payload: true,
+    });
+
+    const res = await getDataApi(
+      `districts/getById?lang=${lang}&id=${id}`,
+      token
+    );
+
+    dispatch({
+      type: STATIONS_TYPES.FIND_MY_LOCATIONS_POLYGONE,
+      payload: res.data.data,
+    });
+  } catch (err) {
+    if (!err.response) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: "Network Error",
+        },
+      });
+    } else {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: err.response.data.message || err.response.statusText,
+        },
+      });
+    }
+  } finally {
+    dispatch({
+      type: STATIONS_TYPES.FIND_LAST_DATA_LOADING,
+      payload: false,
+    });
+  }
+};

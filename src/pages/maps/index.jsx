@@ -1,47 +1,630 @@
-import React, { useEffect, useState } from "react";
+/** @format */
+
+import React, { useEffect, useState, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
+import { useTranslation } from "react-i18next";
+import { Drawer } from "antd";
+import {
+  NodeIndexOutlined,
+  FormOutlined,
+  QrcodeOutlined,
+  SettingOutlined,
+  AreaChartOutlined,
+  ExperimentOutlined,
+  FieldTimeOutlined,
+  ThunderboltOutlined,
+  PoweroffOutlined,
+  BulbOutlined,
+  LineChartOutlined,
+  DashboardOutlined,
+  PieChartFilled,
+} from "@ant-design/icons";
+
 import MapWithPolygon from "../../components/mapComponent";
-import { getDataApi } from "../../utils/index";
 import "./index.css";
+import {
+  findInMapsLastData,
+  findMyLocationsPolygon,
+} from "../../redux/actions/stationsActions";
+import Loading from "../../components/loading";
 
 function MapsPage() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const { stationsMap, stationsPolygon, stationsLoading } = useSelector(
+    (state) => state.stations
+  );
+  const { loading } = useSelector((state) => state.alert);
+  const { colors } = useSelector((state) => state.theme);
+  const { i18n, t } = useTranslation();
 
-  const getData = async () => {
-    try {
-      setLoading(true);
-      const res = await getDataApi(`districts/getById?id=122`);
-      setData(res.data.data);
-    } catch (err) {
-      console.error("Error fetching data:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const token = localStorage.getItem("access_token");
+  const districtId = Cookies.get("districtId");
+
+  const [visible, setVisible] = useState(false);
+  const [dataStations, setDataStations] = useState({});
+
+  const [pageData, setPageData] = useState({
+    page: 1,
+    perPage: 10,
+  });
+
+  const fetchAllData = useCallback(() => {
+    const lang = i18n.language;
+    const { page, perPage } = pageData;
+
+    dispatch(findInMapsLastData(lang, token, page, perPage));
+    dispatch(findMyLocationsPolygon(lang, districtId, token));
+  }, [dispatch, token, districtId, i18n.language, pageData]);
 
   useEffect(() => {
-    getData();
-  }, []);
+    fetchAllData();
+    i18n.on("languageChanged", fetchAllData);
 
-  if (loading) {
+    return () => i18n.off("languageChanged", fetchAllData);
+  }, [fetchAllData, i18n]);
+
+  if (loading || stationsLoading) {
     return (
-      <section className="map_container">
-        <p>Loading map data...</p>
+      <section className='map_container'>
+        <Loading />
       </section>
     );
   }
 
-  if (!data) {
+  if (!stationsPolygon?.pointsPolygon) {
     return (
-      <section className="map_container">
+      <section className='map_container'>
         <p>Map data could not be loaded. Please try again later.</p>
       </section>
     );
   }
 
+  const showDrawer = (data) => {
+    setVisible(true);
+    setDataStations(data);
+  };
+
+  const closeDrawer = () => {
+    setVisible(false);
+    setDataStations({});
+  };
+
+  function formatDate(inputDate) {
+    const formatDate = new Date(inputDate).toLocaleString("uz-UZ", {
+      timeZone: "Asia/Tashkent",
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    return formatDate;
+  }
+
   return (
-    <section className="map_container">
-      <MapWithPolygon data={data} />
+    <section className='map_container'>
+      <MapWithPolygon
+        data={stationsPolygon}
+        onClickMyLocations={showDrawer}
+        stationData={stationsMap}
+      />
+
+      <Drawer
+        title={dataStations?.name || ""}
+        placement='right'
+        closable={true}
+        onClose={closeDrawer}
+        open={visible}>
+        <h2 className="map_drower_header">
+          {t("dashboardPageData.lastStationsData.stationsMoreInfoAgirgate")}
+        </h2>
+        <div className='dashboard_view_more_modal_info'>
+          {dataStations?.aggregate?.map((item, index) => (
+            <div
+              key={index}
+              className='dashboard_view_more_modal_card'
+              style={{
+                background: colors.background,
+                boxShadow: `0 0 5px 2px ${colors.boxShadow}`,
+              }}>
+              <div className='dashboard_view_more_modal_card_item'>
+                <div className='normal_flex_card'>
+                  <FormOutlined
+                    style={{
+                      color: "#11A9FF",
+                    }}
+                    className='dashboard_last_data_icons'
+                  />
+
+                  <h4>
+                    {t("dashboardPageData.lastStationsData.agrigateName")}:
+                  </h4>
+                </div>
+
+                <h4 className='dashboard_view_more_import_data'>{item.name}</h4>
+              </div>
+
+              <div className='dashboard_view_more_modal_card_item'>
+                <div className='normal_flex_card'>
+                  <QrcodeOutlined
+                    style={{
+                      color: "#29CB97",
+                    }}
+                    className='dashboard_last_data_icons'
+                  />
+                  <h4>
+                    {t("dashboardPageData.lastStationsData.aggrigateCode")}:{" "}
+                  </h4>
+                </div>
+
+                <h4 className='dashboard_view_more_import_data'>{item.code}</h4>
+              </div>
+
+              <div className='dashboard_view_more_modal_card_item'>
+                <div className='normal_flex_card'>
+                  <SettingOutlined
+                    style={{
+                      color: "#F76500",
+                    }}
+                    className='dashboard_last_data_icons'
+                  />
+                  <h4>
+                    {t("dashboardPageData.lastStationsData.aggrigateTitle")}:{" "}
+                  </h4>
+                </div>
+                <h4 className='dashboard_view_more_import_data'>
+                  {item.workingStatus
+                    ? t("dashboardPageData.lastStationsData.agrigateStatus")
+                    : t("dashboardPageData.lastStationsData.agrigateStatus2")}
+                </h4>
+              </div>
+
+              <div className='dashboard_view_more_modal_card_item'>
+                <div className='normal_flex_card'>
+                  <AreaChartOutlined
+                    style={{
+                      color: "#00AB6A",
+                    }}
+                    className='dashboard_last_data_icons'
+                  />
+                  <h4>
+                    {t("dashboardPageData.lastStationsData.agrigateSpeed")}:{" "}
+                  </h4>
+                </div>
+                <h4 className='dashboard_view_more_import_data'>
+                  {item.pumpLastData?.velocity}{" "}
+                  {t("dashboardPageData.lastStationsData.aggrigateSpeedConst")}
+                </h4>
+              </div>
+
+              <div className='dashboard_view_more_modal_card_item'>
+                <div className='normal_flex_card'>
+                  <NodeIndexOutlined
+                    style={{
+                      color: "#85A1D0",
+                    }}
+                    className='dashboard_last_data_icons'
+                  />
+                  <h4>
+                    {t("dashboardPageData.lastStationsData.aggrigateTotalFlow")}
+                    :{" "}
+                  </h4>
+                </div>
+                <h4 className='dashboard_view_more_import_data'>
+                  {item.pumpLastData?.todayTotalFlow} m³
+                </h4>
+              </div>
+
+              <div className='dashboard_view_more_modal_card_item'>
+                <div className='normal_flex_card'>
+                  <ExperimentOutlined
+                    style={{
+                      color: "#FF9445",
+                    }}
+                    className='dashboard_last_data_icons'
+                  />
+                  <h4>
+                    {t(
+                      "dashboardPageData.lastStationsData.aggrigateTotalVolume"
+                    )}
+                    :{" "}
+                  </h4>
+                </div>
+                <h4 className='dashboard_view_more_import_data'>
+                  {item.pumpLastData?.totalsVolume} m³
+                </h4>
+              </div>
+
+              <div className='dashboard_view_more_modal_card_item'>
+                <div className='normal_flex_card'>
+                  <FieldTimeOutlined
+                    style={{
+                      color: "#FB0015",
+                    }}
+                    className='dashboard_last_data_icons'
+                  />
+                  <h4>
+                    {t("dashboardPageData.lastStationsData.aggrigateTime")}:{" "}
+                  </h4>
+                </div>
+
+                <h4 className='dashboard_view_more_import_data'>
+                  {formatDate(item.pumpLastData?.date)}
+                </h4>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <h2 className="map_drower_header">
+          {t("dashboardPageData.lastStationsData.stationsMoreInfoElectr")}
+        </h2>
+        <div className='dashboard_electr_modal_info'>
+          {dataStations?.electricalEnergyLastData?.map((item, index) => (
+            <div
+              key={index}
+              className='dashboard_view_more_modal_card'
+              style={{
+                background: colors.background,
+                boxShadow: `0 0 5px 2px ${colors.boxShadow}`,
+              }}>
+              <div className='dashboard_view_more_electr_card'>
+                {/* row */}
+                <div className='dashboard_view_more_modal_card_item 1'>
+                  <div className='normal_flex_card'>
+                    <FormOutlined
+                      style={{
+                        color: "#11A9FF",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+
+                    <h4>
+                      {t("dashboardPageData.lastStationsData.electryName")}:
+                    </h4>
+                  </div>
+
+                  <h4 className='dashboard_view_more_import_data'>
+                    {item.name}
+                  </h4>
+                </div>
+
+                <div className='dashboard_view_more_modal_card_item 2'>
+                  <div className='normal_flex_card'>
+                    <QrcodeOutlined
+                      style={{
+                        color: "#29CB97",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+                    <h4>
+                      {t("dashboardPageData.lastStationsData.electryCode")}:{" "}
+                    </h4>
+                  </div>
+
+                  <h4 className='dashboard_view_more_import_data'>
+                    {item.code}
+                  </h4>
+                </div>
+
+                <div className='dashboard_view_more_modal_card_item 3'>
+                  <div className='normal_flex_card'>
+                    <SettingOutlined
+                      style={{
+                        color: "#F76500",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+                    <h4>
+                      {t("dashboardPageData.lastStationsData.aggrigateTitle")}:{" "}
+                    </h4>
+                  </div>
+                  <h4 className='dashboard_view_more_import_data'>
+                    {item.workingStatus
+                      ? t("dashboardPageData.lastStationsData.agrigateStatus")
+                      : t("dashboardPageData.lastStationsData.agrigateStatus2")}
+                  </h4>
+                </div>
+
+                {/* row */}
+
+                <div className='dashboard_view_more_modal_card_item 4'>
+                  <div className='normal_flex_card'>
+                    <ThunderboltOutlined
+                      style={{
+                        color: "#C91B21",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+                    <h4>
+                      {t("dashboardPageData.lastStationsData.electryVolt")}:
+                    </h4>
+                  </div>
+
+                  <h4 className='dashboard_view_more_import_data'>
+                    {item.electricalEnergyLastData.voltage1} V
+                  </h4>
+                </div>
+
+                <div className='dashboard_view_more_modal_card_item 5'>
+                  <div className='normal_flex_card'>
+                    <BulbOutlined
+                      style={{
+                        color: "#F76500",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+
+                    <h4>
+                      {t("dashboardPageData.lastStationsData.electryAmper")}:
+                    </h4>
+                  </div>
+
+                  <h4 className='dashboard_view_more_import_data'>
+                    {item.electricalEnergyLastData.current1} A
+                  </h4>
+                </div>
+
+                <div className='dashboard_view_more_modal_card_item 6'>
+                  <div className='normal_flex_card'>
+                    <PoweroffOutlined
+                      style={{
+                        color: "#FB0015",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+
+                    <h4>
+                      {t("dashboardPageData.lastStationsData.powerActive")}:
+                    </h4>
+                  </div>
+
+                  <h4 className='dashboard_view_more_import_data'>
+                    {item.electricalEnergyLastData.powerActive} Kw
+                  </h4>
+                </div>
+
+                {/* row */}
+
+                <div className='dashboard_view_more_modal_card_item 7'>
+                  <div className='normal_flex_card'>
+                    <ThunderboltOutlined
+                      style={{
+                        color: "#C91B21",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+
+                    <h4>
+                      {t("dashboardPageData.lastStationsData.electryVolt")}:
+                    </h4>
+                  </div>
+
+                  <h4 className='dashboard_view_more_import_data'>
+                    {item.electricalEnergyLastData.voltage2} V
+                  </h4>
+                </div>
+
+                <div className='dashboard_view_more_modal_card_item 8'>
+                  <div className='normal_flex_card'>
+                    <BulbOutlined
+                      style={{
+                        color: "#F76500",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+                    <h4>
+                      {t("dashboardPageData.lastStationsData.electryAmper")}:
+                    </h4>
+                  </div>
+
+                  <h4 className='dashboard_view_more_import_data'>
+                    {item.electricalEnergyLastData.current2} A
+                  </h4>
+                </div>
+
+                <div className='dashboard_view_more_modal_card_item 9'>
+                  <div className='normal_flex_card'>
+                    <PoweroffOutlined
+                      style={{
+                        color: "#FB0015",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+                    <h4>
+                      {t("dashboardPageData.lastStationsData.powerReactive")}:
+                    </h4>
+                  </div>
+
+                  <h4 className='dashboard_view_more_import_data'>
+                    {item.electricalEnergyLastData.powerReactive} Kw
+                  </h4>
+                </div>
+
+                {/* row */}
+
+                <div className='dashboard_view_more_modal_card_item 10'>
+                  <div className='normal_flex_card'>
+                    <ThunderboltOutlined
+                      style={{
+                        color: "#C91B21",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+                    <h4>
+                      {t("dashboardPageData.lastStationsData.electryVolt")}:
+                    </h4>
+                  </div>
+                  <h4 className='dashboard_view_more_import_data'>
+                    {item.electricalEnergyLastData.voltage3} V
+                  </h4>
+                </div>
+
+                <div className='dashboard_view_more_modal_card_item 11'>
+                  <div className='normal_flex_card'>
+                    <BulbOutlined
+                      style={{
+                        color: "#F76500",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+                    <h4>
+                      {t("dashboardPageData.lastStationsData.electryAmper")}:
+                    </h4>
+                  </div>
+
+                  <h4 className='dashboard_view_more_import_data'>
+                    {item.electricalEnergyLastData.current3} A
+                  </h4>
+                </div>
+
+                <div className='dashboard_view_more_modal_card_item 12'>
+                  <div className='normal_flex_card'>
+                    <PieChartFilled
+                      style={{
+                        color: "#E2C11E",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+
+                    <h4>
+                      {t(
+                        "dashboardPageData.lastStationsData.energyActiveTotal"
+                      )}
+                      :
+                    </h4>
+                  </div>
+
+                  <h4 className='dashboard_view_more_import_data'>
+                    {item.electricalEnergyLastData.energyActiveTotal}{" "}
+                    {t("dashboardPageData.lastStationsData.energyValueView")}
+                  </h4>
+                </div>
+
+                {/* row */}
+
+                <div className='dashboard_view_more_modal_card_item 13'>
+                  <div className='normal_flex_card'>
+                    <DashboardOutlined
+                      style={{
+                        color: "#03845C",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+                    <h4>
+                      {t("dashboardPageData.lastStationsData.energyActive")}:
+                    </h4>
+                  </div>
+
+                  <h4 className='dashboard_view_more_import_data'>
+                    {item.electricalEnergyLastData.energyActive}{" "}
+                    {t("dashboardPageData.lastStationsData.energyValueView")}
+                  </h4>
+                </div>
+
+                <div className='dashboard_view_more_modal_card_item 14'>
+                  <div className='normal_flex_card'>
+                    <LineChartOutlined
+                      style={{
+                        color: "#85A1D0",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+                    <h4>
+                      {t("dashboardPageData.lastStationsData.powerActive")}:{" "}
+                    </h4>
+                  </div>
+
+                  <h4 className='dashboard_view_more_import_data'>
+                    {item.electricalEnergyLastData.powerActive} Kw
+                  </h4>
+                </div>
+
+                <div className='dashboard_view_more_modal_card_item 15'>
+                  <div className='normal_flex_card'>
+                    <PieChartFilled
+                      style={{
+                        color: "#E2C11E",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+                    <h4>
+                      {t(
+                        "dashboardPageData.lastStationsData.energyReactiveTotal"
+                      )}
+                      :{" "}
+                    </h4>
+                  </div>
+
+                  <h4 className='dashboard_view_more_import_data'>
+                    {item.electricalEnergyLastData.energyReactiveTotal}{" "}
+                    {t("dashboardPageData.lastStationsData.energyValueView")}
+                  </h4>
+                </div>
+
+                {/* row */}
+
+                <div className='dashboard_view_more_modal_card_item 16'>
+                  <div className='normal_flex_card'>
+                    <DashboardOutlined
+                      style={{
+                        color: "#03845C",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+                    <h4>
+                      {t("dashboardPageData.lastStationsData.energyReactive")}:
+                    </h4>
+                  </div>
+
+                  <h4 className='dashboard_view_more_import_data'>
+                    {item.electricalEnergyLastData.energyReactive}{" "}
+                    {t("dashboardPageData.lastStationsData.energyValueView")}
+                  </h4>
+                </div>
+
+                <div className='dashboard_view_more_modal_card_item 17'>
+                  <div className='normal_flex_card'>
+                    <LineChartOutlined
+                      style={{
+                        color: "#85A1D0",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+                    <h4>
+                      {t("dashboardPageData.lastStationsData.powerReactive")}:{" "}
+                    </h4>
+                  </div>
+
+                  <h4 className='dashboard_view_more_import_data'>
+                    {item.electricalEnergyLastData.powerReactive} Kw
+                  </h4>
+                </div>
+
+                <div className='dashboard_view_more_modal_card_item 18'>
+                  <div className='normal_flex_card'>
+                    <FieldTimeOutlined
+                      style={{
+                        color: "#FB0015",
+                      }}
+                      className='dashboard_last_data_icons'
+                    />
+                    <h4>
+                      {t("dashboardPageData.lastStationsData.aggrigateTime")}:{" "}
+                    </h4>
+                  </div>
+
+                  <h4 className='dashboard_view_more_import_data'>
+                    {formatDate(item.electricalEnergyLastData?.date)}
+                  </h4>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Drawer>
     </section>
   );
 }

@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { memo, useState } from "react";
+import React, { memo, useState, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -13,6 +13,9 @@ import {
   Select,
   Badge,
   Avatar,
+  Drawer,
+  List,
+  Empty,
 } from "antd";
 import {
   MenuFoldOutlined,
@@ -31,12 +34,18 @@ import {
   BellOutlined,
   BellFilled,
   UserOutlined,
+  DeleteFilled,
 } from "@ant-design/icons";
 
 import { toggleTheme } from "../../redux/actions/themeType";
 import "./index.css";
 import Logo from "../../assets/react.svg";
 import { logoutAction } from "../../redux/actions/authActions";
+import {
+  deleteNotification,
+  getAllNotifications,
+  getNotificationCount,
+} from "../../redux/actions/notificationActions";
 
 const { Header, Sider, Content } = Layout;
 
@@ -46,9 +55,28 @@ const LayoutComponent = memo(({ childrenComponent }) => {
   const { i18n, t } = useTranslation();
   const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem("roles");
+  const isToken = localStorage.getItem("access_token");
 
   const { colors, theme } = useSelector((state) => state.theme);
+  const { countNotif, unseenNotif } = useSelector(
+    (state) => state.notifications
+  );
   const [collapsed, setCollapsed] = useState(true);
+  const [visible, setVisible] = useState(false);
+
+  const fetchAllData = useCallback(() => {
+    const lang = i18n.language;
+
+    dispatch(getNotificationCount(lang, isToken));
+    dispatch(getAllNotifications(lang, isToken));
+  }, [dispatch, isToken, i18n.language]);
+
+  useEffect(() => {
+    fetchAllData();
+    i18n.on("languageChanged", fetchAllData);
+
+    return () => i18n.off("languageChanged", fetchAllData);
+  }, [fetchAllData, i18n]);
 
   const menuItems = [
     {
@@ -325,7 +353,6 @@ const LayoutComponent = memo(({ childrenComponent }) => {
   ];
 
   const changeLanguage = (lng) => i18n.changeLanguage(lng);
-
   const handleToggleTheme = () => dispatch(toggleTheme());
 
   const onChangeLogout = () =>
@@ -346,6 +373,18 @@ const LayoutComponent = memo(({ childrenComponent }) => {
     </div>
   );
 
+  const showDrawer = () => {
+    setVisible(true);
+  };
+
+  const closeDrawer = () => {
+    setVisible(false);
+  };
+
+  const handleDismiss = (id) => {
+    dispatch(deleteNotification(id, isToken));
+  };
+
   return (
     <ConfigProvider
       renderEmpty={customizeRenderEmpty}
@@ -365,9 +404,11 @@ const LayoutComponent = memo(({ childrenComponent }) => {
           colorTextPlaceholder: colors.textLight,
           colorTextQuaternary: colors.text,
           colorTextDescription: colors.text,
-          dangerShadow: 'none',
-          defaultShadow: 'none',
-          primaryShadow: 'none'
+          colorTextSecondary: colors.text,
+          colorIcon: colors.text,
+          dangerShadow: "none",
+          defaultShadow: "none",
+          primaryShadow: "none",
         },
       }}>
       <Layout
@@ -482,7 +523,10 @@ const LayoutComponent = memo(({ childrenComponent }) => {
               </div>
 
               <div className='header_badge_container'>
-                <Badge count={99} overflowCount={10}>
+                <Badge
+                  onClick={showDrawer}
+                  count={countNotif}
+                  overflowCount={10}>
                   <Button type='primary' icon={<BellFilled />} />
                 </Badge>
               </div>
@@ -544,6 +588,33 @@ const LayoutComponent = memo(({ childrenComponent }) => {
           </Content>
         </Layout>
       </Layout>
+
+      <Drawer
+        title={t("layoutData.navLink15")}
+        placement='right'
+        closable={true}
+        onClose={closeDrawer}
+        open={visible}>
+        {countNotif === 0 ? (
+          <Empty description={false} />
+        ) : (
+          <List
+            dataSource={unseenNotif}
+            renderItem={(item, index) => (
+              <List.Item
+                actions={[
+                  <Button
+                    type='text'
+                    onClick={() => handleDismiss(index)}
+                    icon={<DeleteFilled />}
+                  />,
+                ]}>
+                {item}
+              </List.Item>
+            )}
+          />
+        )}
+      </Drawer>
     </ConfigProvider>
   );
 });

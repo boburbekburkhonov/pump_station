@@ -126,7 +126,7 @@ const StationsWithUser = memo(() => {
           <Button
             type='primary'
             icon={<EyeFilled />}
-            onClick={() => navigate(`/statetions/${key.key}`)}
+            onClick={() => navigate(`/stations/${key.key}`)}
             style={{ boxShadow: "none" }}
           />
         ),
