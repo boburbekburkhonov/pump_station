@@ -120,16 +120,16 @@ function MapsPage() {
         <h2 className="map_drower_header">
           {t("dashboardPageData.lastStationsData.stationsMoreInfoAgirgate")}
         </h2>
-        <div className='dashboard_view_more_modal_info'>
+        <div className='maps_view_more_info'>
           {dataStations?.aggregate?.map((item, index) => (
             <div
               key={index}
-              className='dashboard_view_more_modal_card'
+              className='maps_view_more_info_card'
               style={{
                 background: colors.background,
                 boxShadow: `0 0 5px 2px ${colors.boxShadow}`,
               }}>
-              <div className='dashboard_view_more_modal_card_item'>
+              <div className='maps_view_more_info_card_item'>
                 <div className='normal_flex_card'>
                   <FormOutlined
                     style={{
@@ -146,7 +146,7 @@ function MapsPage() {
                 <h4 className='dashboard_view_more_import_data'>{item.name}</h4>
               </div>
 
-              <div className='dashboard_view_more_modal_card_item'>
+              <div className='maps_view_more_info_card_item'>
                 <div className='normal_flex_card'>
                   <QrcodeOutlined
                     style={{
@@ -162,7 +162,7 @@ function MapsPage() {
                 <h4 className='dashboard_view_more_import_data'>{item.code}</h4>
               </div>
 
-              <div className='dashboard_view_more_modal_card_item'>
+              <div className='maps_view_more_info_card_item'>
                 <div className='normal_flex_card'>
                   <SettingOutlined
                     style={{
@@ -181,7 +181,7 @@ function MapsPage() {
                 </h4>
               </div>
 
-              <div className='dashboard_view_more_modal_card_item'>
+              <div className='maps_view_more_info_card_item'>
                 <div className='normal_flex_card'>
                   <AreaChartOutlined
                     style={{
@@ -199,7 +199,7 @@ function MapsPage() {
                 </h4>
               </div>
 
-              <div className='dashboard_view_more_modal_card_item'>
+              <div className='maps_view_more_info_card_item'>
                 <div className='normal_flex_card'>
                   <NodeIndexOutlined
                     style={{
@@ -217,7 +217,7 @@ function MapsPage() {
                 </h4>
               </div>
 
-              <div className='dashboard_view_more_modal_card_item'>
+              <div className='maps_view_more_info_card_item'>
                 <div className='normal_flex_card'>
                   <ExperimentOutlined
                     style={{
@@ -237,7 +237,7 @@ function MapsPage() {
                 </h4>
               </div>
 
-              <div className='dashboard_view_more_modal_card_item'>
+              <div className='maps_view_more_info_card_item'>
                 <div className='normal_flex_card'>
                   <FieldTimeOutlined
                     style={{
@@ -261,18 +261,18 @@ function MapsPage() {
         <h2 className="map_drower_header">
           {t("dashboardPageData.lastStationsData.stationsMoreInfoElectr")}
         </h2>
-        <div className='dashboard_electr_modal_info'>
+        <div className='maps_electr_modal_info'>
           {dataStations?.electricalEnergyLastData?.map((item, index) => (
             <div
               key={index}
-              className='dashboard_view_more_modal_card'
+              className='maps_view_more_info_card'
               style={{
                 background: colors.background,
                 boxShadow: `0 0 5px 2px ${colors.boxShadow}`,
               }}>
-              <div className='dashboard_view_more_electr_card'>
+              <div className='maps_view_more_electr_card'>
                 {/* row */}
-                <div className='dashboard_view_more_modal_card_item 1'>
+                <div className='maps_view_more_info_card_item 1'>
                   <div className='normal_flex_card'>
                     <FormOutlined
                       style={{
@@ -291,7 +291,7 @@ function MapsPage() {
                   </h4>
                 </div>
 
-                <div className='dashboard_view_more_modal_card_item 2'>
+                <div className='maps_view_more_info_card_item 2'>
                   <div className='normal_flex_card'>
                     <QrcodeOutlined
                       style={{
@@ -309,7 +309,7 @@ function MapsPage() {
                   </h4>
                 </div>
 
-                <div className='dashboard_view_more_modal_card_item 3'>
+                <div className='maps_view_more_info_card_item 3'>
                   <div className='normal_flex_card'>
                     <SettingOutlined
                       style={{
@@ -330,7 +330,7 @@ function MapsPage() {
 
                 {/* row */}
 
-                <div className='dashboard_view_more_modal_card_item 4'>
+                <div className='maps_view_more_info_card_item 4'>
                   <div className='normal_flex_card'>
                     <ThunderboltOutlined
                       style={{
@@ -348,7 +348,7 @@ function MapsPage() {
                   </h4>
                 </div>
 
-                <div className='dashboard_view_more_modal_card_item 5'>
+                <div className='maps_view_more_info_card_item 5'>
                   <div className='normal_flex_card'>
                     <BulbOutlined
                       style={{
@@ -367,7 +367,7 @@ function MapsPage() {
                   </h4>
                 </div>
 
-                <div className='dashboard_view_more_modal_card_item 6'>
+                <div className='maps_view_more_info_card_item 6'>
                   <div className='normal_flex_card'>
                     <PoweroffOutlined
                       style={{
@@ -388,7 +388,7 @@ function MapsPage() {
 
                 {/* row */}
 
-                <div className='dashboard_view_more_modal_card_item 7'>
+                <div className='maps_view_more_info_card_item 7'>
                   <div className='normal_flex_card'>
                     <ThunderboltOutlined
                       style={{
@@ -407,7 +407,7 @@ function MapsPage() {
                   </h4>
                 </div>
 
-                <div className='dashboard_view_more_modal_card_item 8'>
+                <div className='maps_view_more_info_card_item 8'>
                   <div className='normal_flex_card'>
                     <BulbOutlined
                       style={{
@@ -425,7 +425,7 @@ function MapsPage() {
                   </h4>
                 </div>
 
-                <div className='dashboard_view_more_modal_card_item 9'>
+                <div className='maps_view_more_info_card_item 9'>
                   <div className='normal_flex_card'>
                     <PoweroffOutlined
                       style={{
@@ -445,7 +445,7 @@ function MapsPage() {
 
                 {/* row */}
 
-                <div className='dashboard_view_more_modal_card_item 10'>
+                <div className='maps_view_more_info_card_item 10'>
                   <div className='normal_flex_card'>
                     <ThunderboltOutlined
                       style={{
@@ -462,7 +462,7 @@ function MapsPage() {
                   </h4>
                 </div>
 
-                <div className='dashboard_view_more_modal_card_item 11'>
+                <div className='maps_view_more_info_card_item 11'>
                   <div className='normal_flex_card'>
                     <BulbOutlined
                       style={{
@@ -480,7 +480,7 @@ function MapsPage() {
                   </h4>
                 </div>
 
-                <div className='dashboard_view_more_modal_card_item 12'>
+                <div className='maps_view_more_info_card_item 12'>
                   <div className='normal_flex_card'>
                     <PieChartFilled
                       style={{
@@ -505,7 +505,7 @@ function MapsPage() {
 
                 {/* row */}
 
-                <div className='dashboard_view_more_modal_card_item 13'>
+                <div className='maps_view_more_info_card_item 13'>
                   <div className='normal_flex_card'>
                     <DashboardOutlined
                       style={{
@@ -524,7 +524,7 @@ function MapsPage() {
                   </h4>
                 </div>
 
-                <div className='dashboard_view_more_modal_card_item 14'>
+                <div className='maps_view_more_info_card_item 14'>
                   <div className='normal_flex_card'>
                     <LineChartOutlined
                       style={{
@@ -542,7 +542,7 @@ function MapsPage() {
                   </h4>
                 </div>
 
-                <div className='dashboard_view_more_modal_card_item 15'>
+                <div className='maps_view_more_info_card_item 15'>
                   <div className='normal_flex_card'>
                     <PieChartFilled
                       style={{
@@ -566,7 +566,7 @@ function MapsPage() {
 
                 {/* row */}
 
-                <div className='dashboard_view_more_modal_card_item 16'>
+                <div className='maps_view_more_info_card_item 16'>
                   <div className='normal_flex_card'>
                     <DashboardOutlined
                       style={{
@@ -585,7 +585,7 @@ function MapsPage() {
                   </h4>
                 </div>
 
-                <div className='dashboard_view_more_modal_card_item 17'>
+                <div className='maps_view_more_info_card_item 17'>
                   <div className='normal_flex_card'>
                     <LineChartOutlined
                       style={{
@@ -603,7 +603,7 @@ function MapsPage() {
                   </h4>
                 </div>
 
-                <div className='dashboard_view_more_modal_card_item 18'>
+                <div className='maps_view_more_info_card_item 18'>
                   <div className='normal_flex_card'>
                     <FieldTimeOutlined
                       style={{

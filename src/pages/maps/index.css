@@ -3,24 +3,24 @@
     height: 100%;
 }
 
-.dashboard_view_more_modal_info {
+.maps_view_more_info {
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
 }
 
-.dashboard_view_more_modal_card {
+.maps_view_more_info_card {
     display: grid;
     gap: 0.5rem;
     grid-template-columns: repeat(1, 1ft);
     padding: 15px;
 }
 
-.dashboard_electr_modal_info .dashboard_view_more_modal_card_item {
+.dashboard_electr_modal_info .maps_view_more_info_card_item {
     margin: 10px 0;
 }
 
-.dashboard_view_more_modal_card_item {
+.maps_view_more_info_card_item {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -46,4 +46,10 @@
 
 .ant-drawer-title {
     text-align: center;
+}
+
+.maps_view_more_electr_card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
