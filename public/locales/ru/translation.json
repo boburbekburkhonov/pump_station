@@ -2,7 +2,7 @@
   "loginData": {
     "header": "Войти",
     "header2": "Восстановление пароля",
-    "description": "Добро пожаловать в статистическую базу данных “Smart Solutions System”",
+    "description": "Добро пожаловать в статистическую базу данных “Умная водонасосная станция”",
     "usernameDetectMessage": "Пожалуйста, введите имя пользователя",
     "passwordDetectMessage": "Пожалуйста, введите пароль",
     "phoneDetectMessage": "Пожалуйста, введите номер телефона",

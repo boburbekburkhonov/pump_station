@@ -19,6 +19,10 @@ import {
   LineChartOutlined,
   DashboardOutlined,
   PieChartFilled,
+  HomeOutlined,
+  GlobalOutlined,
+  PhoneOutlined,
+  EnvironmentOutlined,
 } from "@ant-design/icons";
 
 import MapWithPolygon from "../../components/mapComponent";
@@ -46,7 +50,7 @@ function MapsPage() {
 
   const [pageData, setPageData] = useState({
     page: 1,
-    perPage: 10,
+    perPage: 20,
   });
 
   const fetchAllData = useCallback(() => {
@@ -112,12 +116,91 @@ function MapsPage() {
       />
 
       <Drawer
-        title={dataStations?.name || ""}
+        title={false}
         placement='right'
         closable={true}
         onClose={closeDrawer}
         open={visible}>
-        <h2 className="map_drower_header">
+        <div
+          className='stations_information_with_maps_page'
+          style={{
+            background: colors.background,
+            boxShadow: `0 0 5px 2px ${colors.boxShadow}`,
+          }}>
+          <div className='stations_maps_header'>
+            <h1>{dataStations?.name}</h1>
+          </div>
+
+          <div className='maps_view_more_info_card_item'>
+            <div className='normal_flex_card'>
+              <GlobalOutlined
+                style={{
+                  color: "#52C41A",
+                }}
+                className='dashboard_last_data_icons'
+              />
+
+              <h4>{t("stationsPageData.stationsMoreInfo.region")}:</h4>
+            </div>
+
+            <h4 className='dashboard_view_more_import_data'>
+              {dataStations.region}
+            </h4>
+          </div>
+
+          <div className='maps_view_more_info_card_item'>
+            <div className='normal_flex_card'>
+              <EnvironmentOutlined  
+                style={{
+                  color: "#722ED1",
+                }}
+                className='dashboard_last_data_icons'
+              />
+
+              <h4>{t("stationsPageData.stationsMoreInfo.district")}:</h4>
+            </div>
+
+            <h4 className='dashboard_view_more_import_data'>
+              {dataStations.district}
+            </h4>
+          </div>
+
+          <div className='maps_view_more_info_card_item'>
+            <div className='normal_flex_card'>
+              <HomeOutlined
+                style={{
+                  color: "#1890FF",
+                }}
+                className='dashboard_last_data_icons'
+              />
+
+              <h4>{t("stationsPageData.stationsMoreInfo.organization")}:</h4>
+            </div>
+
+            <h4 className='dashboard_view_more_import_data'>
+              {dataStations.organization}
+            </h4>
+          </div>
+
+          <div className='maps_view_more_info_card_item'>
+            <div className='normal_flex_card'>
+              <PhoneOutlined
+                style={{
+                  color: "#FAAD14",
+                }}
+                className='dashboard_last_data_icons'
+              />
+
+              <h4>{t("stationsPageData.stationsMoreInfo.devicePhoneNum")}:</h4>
+            </div>
+
+            <h4 className='dashboard_view_more_import_data'>
+              {dataStations.devicePhoneNum}
+            </h4>
+          </div>
+        </div>
+
+        <h2 className='map_drower_header'>
           {t("dashboardPageData.lastStationsData.stationsMoreInfoAgirgate")}
         </h2>
         <div className='maps_view_more_info'>
@@ -258,7 +341,7 @@ function MapsPage() {
           ))}
         </div>
 
-        <h2 className="map_drower_header">
+        <h2 className='map_drower_header'>
           {t("dashboardPageData.lastStationsData.stationsMoreInfoElectr")}
         </h2>
         <div className='maps_electr_modal_info'>

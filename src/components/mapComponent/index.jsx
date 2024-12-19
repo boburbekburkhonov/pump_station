@@ -21,10 +21,10 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
     if (!mapRef.current) {
       mapRef.current = L.map("map").setView(
         [data.latitude, data.longitude],
-        12
+        12.5
       );
 
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      L.tileLayer("https://api.maptiler.com/maps/outdoor/{z}/{x}/{y}.png?key=PgF65VMmxh6pzLEWNBMd", {
         maxZoom: 19,
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -63,7 +63,7 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
         L.geoJSON(geoJsonData, {
           style: {
             color: colors.buttonColor,
-            fillColor: colors.layoutBackground,
+            fillColor: 'rgba(0, 0, 0, 0.1)',
             fillOpacity: 1,
             weight: 5,
           },

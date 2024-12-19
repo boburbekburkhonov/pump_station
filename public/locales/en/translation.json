@@ -2,7 +2,7 @@
   "loginData": {
     "header": "Sign In",
     "header2": "Password recovery",
-    "description": "Welcome to the “Smart Solutions System” statistical database",
+    "description": "Welcome to the “Smart water pumping station” statistical database",
     "usernameDetectMessage": "Please enter your username",
     "passwordDetectMessage": "Please enter your password",
     "phoneDetectMessage": "Please enter a phone number",

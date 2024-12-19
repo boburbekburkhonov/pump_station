@@ -2,7 +2,7 @@
   "loginData": {
     "header": "Tizimga kirish",
     "header2": "Parolni tiklash",
-    "description": "“Smart Solutions System” statistik ma'lumotlar bazasiga hush kelibsiz",
+    "description": "“Aqilli suv nasos stansiyasi” statistik ma'lumotlar bazasiga hush kelibsiz",
     "usernameDetectMessage": "Iltimos Foydalanuvchi nomini kiriting",
     "passwordDetectMessage": "Iltimos Parolni kiriting",
     "phoneDetectMessage": "Iltimos Telefon raqam kiriting",
@@ -220,5 +220,43 @@
       "stationsMoreInfoAgirgate": "Stansiya agrigatining so'ngi ma'lumotlari",
       "stationsMoreInfoElectr": "Stansiya elektr qurilmasining so'ngi ma'lumotlari"
     }
+  },
+  "dataPagesInformation": {
+    "selectButtonNames": [
+      {
+        "title": "So'ngi ma'lumotlar"
+      },
+      {
+        "title": "Bugungi ma'lumotlar"
+      },
+      {
+        "title": "Kechagi ma'lumotlar"
+      },
+      {
+        "title": "Tanlangan oy ma'lumotlari"
+      },
+      {
+        "title": "Haftalik ma'lumotlar"
+      },
+      {
+        "title": "10 kunlik ma'lumotlar"
+      },
+      {
+        "title": "Oylik ma'lumotlar"
+      },
+      {
+        "title": "So'ngi ma'lumotlar"
+      },
+      {
+        "title": "So'ngi ma'lumotlar"
+      },
+      {
+        "title": "Tanlangan kun ma'lumotlari"
+      },
+      {
+        "title": "Tanlangan kun oralig'idagi ma'lumotlar"
+      }
+    ],
+    "dataPagesTitle": "Stansiya agrigatlarining ma'lumotlari"
   }
 }

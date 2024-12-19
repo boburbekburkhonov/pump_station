@@ -969,7 +969,7 @@ function UserDashboard() {
                   data={totalData?.stationData || []}
                   value='volume'
                   labelText='volume'
-                  title={`${totalData?.totalVolumeToday || 0}m³`}
+                  title={`${totalData?.totalVolumeToday || 0}\nm³`}
                   tooltipName={t("dashboardPageData.tooltipName")}
                 />
               </div>
@@ -984,7 +984,7 @@ function UserDashboard() {
                   data={totalData?.stationData || []}
                   value='energyActive'
                   labelText='energyActive'
-                  title={`${totalData?.totalEnergyActiveToday || 0} ${t(
+                  title={`${totalData?.totalEnergyActiveToday || 0}\n${t(
                     "dashboardPageData.lastStationsData.energyValueView"
                   )}`}
                   tooltipName={t("dashboardPageData.tooltipName2")}
@@ -1045,65 +1045,16 @@ function UserDashboard() {
                 />
               </div>
             </div>
-            <DashboardLineChart data={totalLineData || []} theme={theme} />
+            <DashboardLinesChart
+              data={totalLineData || []}
+              theme={theme}
+              valueTemp={t(
+                "dashboardPageData.lastStationsData.energyValueView"
+              )}
+            />
           </>
         )}
       </div>
-
-      {/* <div
-        style={{
-          background: colors.layoutBackground,
-        }}
-        className='dashboard_secont_chart_container'>
-        {loadingLineData || isPendingLine ? (
-          <Card
-            style={{
-              width: "100%",
-              height: 600,
-            }}
-            loading={loadingLineData}
-          />
-        ) : (
-          <>
-            <div className='filter_container_dashboard'>
-              <h1>
-                {
-                  t("dashboardPageData.filterTitle2", { returnObjects: true })[
-                    selectDataType
-                  ]?.title
-                }
-              </h1>
-
-              <div className='filter_select_box'>
-                <Select
-                  size='large'
-                  value={selectDataType}
-                  className='select_input_stations'
-                  options={t("dashboardPageData.filterCardData", {
-                    returnObjects: true,
-                  }).map((item, index) => ({
-                    value: index,
-                    label: item.title,
-                  }))}
-                  onChange={(key, option) => handleChangeLineStatistics(key)}
-                />
-
-                <Select
-                  size='large'
-                  value={selectStationsId}
-                  className='select_input_stations'
-                  options={stationsId.map((item) => ({
-                    value: item.id,
-                    label: item.name,
-                  }))}
-                  onChange={(key, option) => setSelectStationsId(key)}
-                />
-              </div>
-            </div>
-            <DashboardLinesChart data={totalLineData || []} theme={theme} />
-          </>
-        )}
-      </div> */}
 
       <ViewMoreLastData
         colors={colors}

@@ -1,0 +1,40 @@
+/** @format */
+
+.main_data_sections {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+  }
+  
+  .data_pump_main_body_cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    margin-top: 0.75rem;
+  }
+  
+  .data_pump_main_body_cards h2 {
+    text-align: center;
+    margin-bottom: 0.75rem;
+  }
+  
+  .data_pump_main_body_container {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .data_card_custom_style {
+    cursor: pointer;
+  }
+  
+  .data_pump_head_controller_section {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+  }
+  

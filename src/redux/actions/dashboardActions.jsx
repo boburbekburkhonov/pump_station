@@ -47,7 +47,8 @@ export const DASHBOARD_ACTIONS_TYPES = {
   FIND_ALL_ELECTRICAL_ENERGY_ID: "FIND_ALL_ELECTRICAL_ENERGY_ID",
 };
 
-// Last data
+// * Last data
+
 export const getLastAggregateData =
   (stationId, token, lang) => async (dispatch) => {
     try {
@@ -212,7 +213,8 @@ export const findLastDataElectricityId =
     }
   };
 
-// Today data
+// * Today data
+
 export const getTodayAggregateData =
   (stationId, token, lang, page, perPage) => async (dispatch) => {
     try {
@@ -377,9 +379,9 @@ export const findTodayDataElectricityId =
     }
   };
 
-// Yesterday
+// * Yesterday
 export const getYesterdayAggregateData =
-  (stationId, token, lang) => async (dispatch) => {
+  (stationId, token, lang, page, perPage) => async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -387,12 +389,12 @@ export const getYesterdayAggregateData =
       });
 
       const res = await getDataApi(
-        `stations/findPumpLastDataByStationId?lang=${lang}&stationId=${stationId}`,
+        `pump-yesterday-data/findDataByStationId?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}`,
         token
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_PUMP_LAST_DATA_BY_STATIONS_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_YESTERDAY_DATA_BY_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -420,7 +422,7 @@ export const getYesterdayAggregateData =
   };
 
 export const getYesterdayAggregateIDData =
-  (aggregateId, token, lang) => async (dispatch) => {
+  (aggregateId, token, lang, page, perPage) => async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -428,12 +430,12 @@ export const getYesterdayAggregateIDData =
       });
 
       const res = await getDataApi(
-        `aggregate/findLastDataByAggregateId?lang=${lang}&aggregateId=${aggregateId}`,
+        `pump-yesterday-data/findDataByAggregateId?lang=${lang}&stationId=${aggregateId}&page=${page}&perPage=${perPage}`,
         token
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_LAST_DATA_BY_AGGREGATE_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_YESTERDAY_DATA_BY_AGGREGATE_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -461,7 +463,7 @@ export const getYesterdayAggregateIDData =
   };
 
 export const findYesterdayElectricityStationId =
-  (stationId, token, lang) => async (dispatch) => {
+  (stationId, token, lang, page, perPage) => async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -469,12 +471,12 @@ export const findYesterdayElectricityStationId =
       });
 
       const res = await getDataApi(
-        `stations/findElectricityLastDataByStationId?lang=${lang}&aggregateId=${stationId}`,
+        `electrical-energy-yesterday-data/findDataByStationId?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}`,
         token
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_DATA_BY_STATION_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_YESTERDAY_DATA_BY_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -502,7 +504,7 @@ export const findYesterdayElectricityStationId =
   };
 
 export const findYesterdayDataElectricityId =
-  (electricalId, token, lang) => async (dispatch) => {
+  (electricalId, token, lang, page, perPage) => async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -510,12 +512,12 @@ export const findYesterdayDataElectricityId =
       });
 
       const res = await getDataApi(
-        `electrical-energy/findLastDataByElectricalEnergyId?lang=${lang}&aggregateId=${electricalId}`,
+        `electrical-energy-yesterday-data/findDataByElectricalEnergyId?lang=${lang}&stationId=${electricalId}&page=${page}&perPage=${perPage}`,
         token
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_LAST_DATA_BY_ELECTIRAL_ENERGY_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_YESTERDAY_DATA_ELECTRICAL_ENERGY_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -542,9 +544,9 @@ export const findYesterdayDataElectricityId =
     }
   };
 
-// Weekly
+// * Weekly
 export const getWeeklyAggregateData =
-  (stationId, token, lang) => async (dispatch) => {
+  (stationId, token, lang, page, perPage, month, year) => async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -552,12 +554,12 @@ export const getWeeklyAggregateData =
       });
 
       const res = await getDataApi(
-        `stations/findPumpLastDataByStationId?lang=${lang}&stationId=${stationId}`,
+        `pump-weekly-data/findDataByStationIdAndYearMonthNumber?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&month=${month}&year=${year}`,
         token
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_PUMP_LAST_DATA_BY_STATIONS_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_WEEKLY_DATA_BY_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -585,7 +587,7 @@ export const getWeeklyAggregateData =
   };
 
 export const getWeeklyAggregateIDData =
-  (aggregateId, token, lang) => async (dispatch) => {
+  (aggregateId, token, lang, month, year) => async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -593,12 +595,12 @@ export const getWeeklyAggregateIDData =
       });
 
       const res = await getDataApi(
-        `aggregate/findLastDataByAggregateId?lang=${lang}&aggregateId=${aggregateId}`,
+        `pump-weekly-data/findDataByAggregateIdAndYearMonthNumber??lang=${lang}&stationId=${aggregateId}&page=${page}&perPage=${perPage}&month=${month}&year=${year}`,
         token
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_LAST_DATA_BY_AGGREGATE_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_WEEKLY_DATA_BY_AGGREGATE_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -626,7 +628,7 @@ export const getWeeklyAggregateIDData =
   };
 
 export const findWeeklyElectricityStationId =
-  (stationId, token, lang) => async (dispatch) => {
+  (stationId, token, lang, page, perPage, month, year) => async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -634,12 +636,12 @@ export const findWeeklyElectricityStationId =
       });
 
       const res = await getDataApi(
-        `stations/findElectricityLastDataByStationId?lang=${lang}&aggregateId=${stationId}`,
+        `electrical-energy-weekly-data/findDataByStationId?lang=${lang}&aggregateId=${stationId}&page=${page}&perPage=${perPage}&month=${month}&year=${year}`,
         token
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_DATA_BY_STATION_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_WEEKLY_DATA_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -667,7 +669,8 @@ export const findWeeklyElectricityStationId =
   };
 
 export const findWeeklyDataElectricityId =
-  (electricalId, token, lang) => async (dispatch) => {
+  (electricalId, token, lang, page, perPage, month, year) =>
+  async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -675,12 +678,12 @@ export const findWeeklyDataElectricityId =
       });
 
       const res = await getDataApi(
-        `electrical-energy/findLastDataByElectricalEnergyId?lang=${lang}&aggregateId=${electricalId}`,
+        `electrical-energy-weekly-data/findDataByElectricalEnergyId?lang=${lang}&aggregateId=${electricalId}&page=${page}&perPage=${perPage}&month=${month}&year=${year}`,
         token
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_LAST_DATA_BY_ELECTIRAL_ENERGY_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_WEEKLY_ELECTRICAL_ENERGY_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -707,9 +710,9 @@ export const findWeeklyDataElectricityId =
     }
   };
 
-// Ten day data
+// * Ten day data
 export const getTenDayAggregateData =
-  (stationId, token, lang) => async (dispatch) => {
+  (stationId, token, lang, page, perPage, year) => async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -717,12 +720,12 @@ export const getTenDayAggregateData =
       });
 
       const res = await getDataApi(
-        `stations/findPumpLastDataByStationId?lang=${lang}&stationId=${stationId}`,
+        `/pump-ten-day-data/findDataByStationIdAnfYearNumber??lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}`,
         token
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_PUMP_LAST_DATA_BY_STATIONS_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_TEN_DAY_DATA_BY_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -750,7 +753,7 @@ export const getTenDayAggregateData =
   };
 
 export const getTenDayAggregateIDData =
-  (aggregateId, token, lang) => async (dispatch) => {
+  (aggregateId, token, lang, page, perPage, year) => async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -758,12 +761,12 @@ export const getTenDayAggregateIDData =
       });
 
       const res = await getDataApi(
-        `aggregate/findLastDataByAggregateId?lang=${lang}&aggregateId=${aggregateId}`,
+        `pump-ten-day-data/findDataByAggregateIdAndYearNumber?lang=${lang}&stationId=${aggregateId}&page=${page}&perPage=${perPage}&year=${year}`,
         token
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_LAST_DATA_BY_AGGREGATE_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_TEN_DAY_DATA_BY_AGGREGATE_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -791,7 +794,7 @@ export const getTenDayAggregateIDData =
   };
 
 export const findTenDayElectricityStationId =
-  (stationId, token, lang) => async (dispatch) => {
+  (stationId, token, lang, page, perPage, year) => async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -799,12 +802,12 @@ export const findTenDayElectricityStationId =
       });
 
       const res = await getDataApi(
-        `stations/findElectricityLastDataByStationId?lang=${lang}&aggregateId=${stationId}`,
+        `electrical-energy-ten-day-data/findDataByStationId?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}`,
         token
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_DATA_BY_STATION_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_TEN_DAY_DATA_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -832,7 +835,7 @@ export const findTenDayElectricityStationId =
   };
 
 export const findTenDayDataElectricityId =
-  (electricalId, token, lang) => async (dispatch) => {
+  (electricalId, token, lang, page, perPage, year) => async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -840,12 +843,12 @@ export const findTenDayDataElectricityId =
       });
 
       const res = await getDataApi(
-        `electrical-energy/findLastDataByElectricalEnergyId?lang=${lang}&aggregateId=${electricalId}`,
+        `electrical-energy-ten-day-data/findDataByElectricalEnergyId?lang=${lang}&stationId=${electricalId}&page=${page}&perPage=${perPage}&year=${year}`,
         token
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_LAST_DATA_BY_ELECTIRAL_ENERGY_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_TEN_DAY_ELECTRICAL_ENERGY_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -872,9 +875,9 @@ export const findTenDayDataElectricityId =
     }
   };
 
-// Monthly data
+// * Monthly data
 export const getMonthlyAggregateData =
-  (stationId, token, lang) => async (dispatch) => {
+  (stationId, token, lang, page, perPage, year) => async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -882,12 +885,12 @@ export const getMonthlyAggregateData =
       });
 
       const res = await getDataApi(
-        `stations/findPumpLastDataByStationId?lang=${lang}&stationId=${stationId}`,
+        `pump-monthly-data/findDataByStationIdAndYearNumber?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}`,
         token
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_PUMP_LAST_DATA_BY_STATIONS_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_MONTHLY_DATA_BY_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -915,7 +918,7 @@ export const getMonthlyAggregateData =
   };
 
 export const getMonthlyAggregateIDData =
-  (aggregateId, token, lang) => async (dispatch) => {
+  (aggregateId, token, lang, page, perPage, year) => async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -923,12 +926,12 @@ export const getMonthlyAggregateIDData =
       });
 
       const res = await getDataApi(
-        `aggregate/findLastDataByAggregateId?lang=${lang}&aggregateId=${aggregateId}`,
+        `pump-monthly-data/findDataByAggregateIdAndYearNumber?lang=${lang}&stationId=${aggregateId}&page=${page}&perPage=${perPage}&year=${year}`,
         token
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_LAST_DATA_BY_AGGREGATE_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_MONTHLY_DATA_BY_AGGREGATE_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -956,7 +959,7 @@ export const getMonthlyAggregateIDData =
   };
 
 export const findMonthlyElectricityStationId =
-  (stationId, token, lang) => async (dispatch) => {
+  (stationId, token, lang, page, perPage, year) => async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -964,12 +967,12 @@ export const findMonthlyElectricityStationId =
       });
 
       const res = await getDataApi(
-        `stations/findElectricityLastDataByStationId?lang=${lang}&aggregateId=${stationId}`,
+        `electrical-energy-monthly-data/findDataByStationId?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}`,
         token
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_DATA_BY_STATION_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_MONTHLY_DATA_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -997,7 +1000,7 @@ export const findMonthlyElectricityStationId =
   };
 
 export const findMonthlyDataElectricityId =
-  (electricalId, token, lang) => async (dispatch) => {
+  (electricalId, token, lang, page, perPage, year) => async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -1005,12 +1008,12 @@ export const findMonthlyDataElectricityId =
       });
 
       const res = await getDataApi(
-        `electrical-energy/findLastDataByElectricalEnergyId?lang=${lang}&aggregateId=${electricalId}`,
+        `electrical-energy-monthly-data/findDataByElectricalEnergyId?lang=${lang}&stationId=${electricalId}&page=${page}&perPage=${perPage}&year=${year}`,
         token
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_LAST_DATA_BY_ELECTIRAL_ENERGY_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_MONTHLY_ELECTRICAL_ENERGY_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -1037,7 +1040,7 @@ export const findMonthlyDataElectricityId =
     }
   };
 
-//   All data
+// todo  All data
 export const getAllAggregateData =
   (stationId, token, lang) => async (dispatch) => {
     try {
