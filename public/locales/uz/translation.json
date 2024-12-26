@@ -200,7 +200,7 @@
       "agrigateStatus": "Ishlamoqda",
       "agrigateStatus2": "Nosoz",
       "aggrigateTitle": "Qurilma xolati",
-      "aggrigateSpeedConst": "m³/soat",
+      "aggrigateSpeedConst": "m³/s",
       "aggrigateTotalVolume": "Umumiy hajm",
       "aggrigateTotalFlow": "Umumiy oqim",
       "aggrigateTime": "Ma'lumot vaqti",
@@ -224,9 +224,6 @@
   "dataPagesInformation": {
     "selectButtonNames": [
       {
-        "title": "So'ngi ma'lumotlar"
-      },
-      {
         "title": "Bugungi ma'lumotlar"
       },
       {
@@ -245,18 +242,20 @@
         "title": "Oylik ma'lumotlar"
       },
       {
-        "title": "So'ngi ma'lumotlar"
-      },
-      {
-        "title": "So'ngi ma'lumotlar"
-      },
-      {
         "title": "Tanlangan kun ma'lumotlari"
       },
       {
         "title": "Tanlangan kun oralig'idagi ma'lumotlar"
       }
     ],
-    "dataPagesTitle": "Stansiya agrigatlarining ma'lumotlari"
+    "dataPagesTitle": "Stansiya agrigatlarining ma'lumotlari",
+    "dataHeaderTitle": "Stansiyalarning so'ngi ma'lumotlari",
+    "moreButton": "Ko'proq",
+    "dataTableInformation": {
+      "dataVelocity": "Tezlik (m/s)",
+      "dataFlow": "Oqim tezligi (m/s)",
+      "dataVolume": "Hajm (m³)",
+      "dataDate": "Ma'lumot sanasi"
+    }
   }
 }

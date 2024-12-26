@@ -147,7 +147,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                 <div className='normal_flex_card'>
                   <QrcodeOutlined
                     style={{
-                      color: "#29CB97",
+                      color: "#11A9FF",
                     }}
                     className='dashboard_last_data_icons'
                   />
@@ -163,7 +163,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                 <div className='normal_flex_card'>
                   <SettingOutlined
                     style={{
-                      color: "#F76500",
+                      color: "#11A9FF",
                     }}
                     className='dashboard_last_data_icons'
                   />
@@ -182,7 +182,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                 <div className='normal_flex_card'>
                   <AreaChartOutlined
                     style={{
-                      color: "#00AB6A",
+                      color: "#11A9FF",
                     }}
                     className='dashboard_last_data_icons'
                   />
@@ -200,7 +200,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                 <div className='normal_flex_card'>
                   <NodeIndexOutlined
                     style={{
-                      color: "#85A1D0",
+                      color: "#11A9FF",
                     }}
                     className='dashboard_last_data_icons'
                   />
@@ -218,7 +218,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                 <div className='normal_flex_card'>
                   <ExperimentOutlined
                     style={{
-                      color: "#FF9445",
+                      color: "#11A9FF",
                     }}
                     className='dashboard_last_data_icons'
                   />
@@ -238,7 +238,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                 <div className='normal_flex_card'>
                   <FieldTimeOutlined
                     style={{
-                      color: "#FB0015",
+                      color: "#11A9FF",
                     }}
                     className='dashboard_last_data_icons'
                   />
@@ -292,7 +292,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                   <div className='normal_flex_card'>
                     <QrcodeOutlined
                       style={{
-                        color: "#29CB97",
+                        color: "#11A9FF",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -310,7 +310,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                   <div className='normal_flex_card'>
                     <SettingOutlined
                       style={{
-                        color: "#F76500",
+                        color: "#11A9FF",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -331,7 +331,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                   <div className='normal_flex_card'>
                     <ThunderboltOutlined
                       style={{
-                        color: "#C91B21",
+                        color: "#11A9FF",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -349,7 +349,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                   <div className='normal_flex_card'>
                     <BulbOutlined
                       style={{
-                        color: "#F76500",
+                        color: "#11A9FF",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -368,7 +368,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                   <div className='normal_flex_card'>
                     <PoweroffOutlined
                       style={{
-                        color: "#FB0015",
+                        color: "#11A9FF",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -389,7 +389,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                   <div className='normal_flex_card'>
                     <ThunderboltOutlined
                       style={{
-                        color: "#C91B21",
+                        color: "#11A9FF",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -408,7 +408,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                   <div className='normal_flex_card'>
                     <BulbOutlined
                       style={{
-                        color: "#F76500",
+                        color: "#11A9FF",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -426,7 +426,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                   <div className='normal_flex_card'>
                     <PoweroffOutlined
                       style={{
-                        color: "#FB0015",
+                        color: "#11A9FF",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -446,7 +446,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                   <div className='normal_flex_card'>
                     <ThunderboltOutlined
                       style={{
-                        color: "#C91B21",
+                        color: "#11A9FF",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -463,7 +463,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                   <div className='normal_flex_card'>
                     <BulbOutlined
                       style={{
-                        color: "#F76500",
+                        color: "#11A9FF",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -481,7 +481,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                   <div className='normal_flex_card'>
                     <PieChartFilled
                       style={{
-                        color: "#E2C11E",
+                        color: "#11A9FF",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -506,7 +506,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                   <div className='normal_flex_card'>
                     <DashboardOutlined
                       style={{
-                        color: "#03845C",
+                        color: "#11A9FF",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -525,7 +525,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                   <div className='normal_flex_card'>
                     <LineChartOutlined
                       style={{
-                        color: "#85A1D0",
+                        color: "#11A9FF",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -543,7 +543,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                   <div className='normal_flex_card'>
                     <PieChartFilled
                       style={{
-                        color: "#E2C11E",
+                        color: "#11A9FF",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -567,7 +567,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                   <div className='normal_flex_card'>
                     <DashboardOutlined
                       style={{
-                        color: "#03845C",
+                        color: "#11A9FF",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -586,7 +586,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                   <div className='normal_flex_card'>
                     <LineChartOutlined
                       style={{
-                        color: "#85A1D0",
+                        color: "#11A9FF",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -604,7 +604,7 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                   <div className='normal_flex_card'>
                     <FieldTimeOutlined
                       style={{
-                        color: "#FB0015",
+                        color: "#11A9FF",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -880,7 +880,7 @@ function UserDashboard() {
                       <div className='dashboard_last_data_values' key={indexAg}>
                         <p>{itemAg.name}</p>
 
-                        <p>{itemAg.pumpLastData.totalsVolume} m³</p>
+                        <p>{itemAg.pumpLastData?.totalsVolume} m³</p>
                       </div>
                     ))}
                   </div>

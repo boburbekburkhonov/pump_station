@@ -24,6 +24,7 @@ export const signInAction = (data, lang) => async (dispatch) => {
     localStorage.setItem("refresh_token", res.data.data.refreshToken);
     Cookies.set('regionId', res.data.data.user.regionId, { expires: 1, path: '/' })
     Cookies.set('districtId', res.data.data.user.districtId, { expires: 1, path: '/' })
+    Cookies.set('userId', res.data.data.user.id, { expires: 1, path: '/' })
     
 
     dispatch({
@@ -118,6 +119,8 @@ export const logoutAction = (token) => async (dispatch) => {
         Cookies.remove('login', { path: '/' })
         Cookies.remove('code', { path: '/' })
         Cookies.remove('regionId', { path: '/' })
+        Cookies.remove('districtId', { path: '/' })
+        Cookies.remove('userId', { path: '/' })
         localStorage.removeItem("access_token")
         localStorage.removeItem("refresh_token")
         localStorage.removeItem("roles")

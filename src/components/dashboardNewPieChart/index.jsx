@@ -13,9 +13,23 @@ const DashboardNewPieChart = ({
   tooltipName,
 }) => {
   const plotMaps = useMemo(() => ({}), []);
+  let isLarge = {
+    color: {
+      title: false,
+      position: "left",
+      rowPadding: 5,
+      color: colors.text,
+      fontWeigth: "bold",
+      fontSize: "18px",
+    },
+  }
 
   if (!data || !Object.keys(data).length) {
     return null;
+  }
+
+  if (data.length > 20) {
+    isLarge = false
   }
 
   const handleTooltip = (event, pie, action) => {
@@ -43,21 +57,12 @@ const DashboardNewPieChart = ({
       theme: theme,
       label: {
         style: {
-          fill: colors.text,
+          fill: "#fff",
         },
         text: (d) =>
           value === "volume" ? `${d.volume} m³` : `${d.energyActive} kw`,
       },
-      legend: {
-        color: {
-          title: false,
-          position: "left",
-          rowPadding: 5,
-          color: colors.text,
-          fontWeigth: "bold",
-          fontSize: "18px",
-        },
-      },
+      legend: isLarge,
       tooltip: {
         title: "stationName",
         items: [

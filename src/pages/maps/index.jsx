@@ -50,7 +50,7 @@ function MapsPage() {
 
   const [pageData, setPageData] = useState({
     page: 1,
-    perPage: 20,
+    perPage: 1000,
   });
 
   const fetchAllData = useCallback(() => {

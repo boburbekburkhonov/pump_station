@@ -6,7 +6,8 @@ const initialState = {
     stationsLoading: false,
     stationsLastData: [],
     stationsMap: [],
-    stationsPolygon: {}
+    stationsPolygon: {},
+    stationsId: []
 }
 
 const stationsReducer = (state = initialState, action) => {
@@ -40,6 +41,11 @@ const stationsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 stationsPolygon: action.payload
+            };
+        case STATIONS_TYPES.FIND_SELECTED_STATIONS_ID:
+            return {
+                ...state,
+                stationsId: action.payload
             };
         default:
             return state;

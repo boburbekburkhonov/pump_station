@@ -216,5 +216,28 @@
       "stationsMoreInfoAgirgate": "Final data of the station aggregate",
       "stationsMoreInfoElectr": "Final data of the station electrical device"
     }
+  },
+  "dataPagesInformation": {
+    "selectButtonNames": [
+      { "title": "Today's data" },
+      { "title": "Yesterday's data" },
+      { "title": "Selected month's data" },
+      { "title": "Weekly data" },
+      { "title": "10-day data" },
+      { "title": "Monthly data" },
+      { "title": "Latest data" },
+      { "title": "Latest data" },
+      { "title": "Selected day's data" },
+      { "title": "Data for the selected date range" }
+    ],
+    "dataPagesTitle": "Station aggregates data",
+    "dataHeaderTitle": "Stations' last data",
+    "moreButton": "More",
+    "dataTableInformation": {
+      "dataVelocity": "Velocity (m/s)",
+      "dataFlow": "Flow rate (m³/s)",
+      "dataVolume": "Volume (m³)",
+      "dataDate": "Data date"
+    }
   }
 }

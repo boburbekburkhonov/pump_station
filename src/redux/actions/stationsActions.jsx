@@ -12,6 +12,7 @@ export const STATIONS_TYPES = {
   FIND_MAPS_LAST_DATA: "FIND_MAPS_LAST_DATA",
   FIND_MY_LOCATIONS_POLYGONE: "FIND_MY_LOCATIONS_POLYGONE",
   FIND_LAST_DATA_LOADING: "FIND_LAST_DATA_LOADING",
+  FIND_SELECTED_STATIONS_ID: "FIND_SELECTED_STATIONS_ID"
 };
 
 export const getAllStationsData = (data, token) => async (dispatch) => {
@@ -233,10 +234,18 @@ export const findLastStationsData = (lang, token) => async (dispatch) => {
       token
     );
 
+    const stationsId = res.data.data.map((item) => item.id)
+
     dispatch({
       type: STATIONS_TYPES.FIND_LAST_DATA_AND_STATIONS,
       payload: res.data.data,
     });
+
+    dispatch({
+      type: STATIONS_TYPES.FIND_SELECTED_STATIONS_ID,
+      payload: stationsId
+    })
+
   } catch (err) {
     if (!err.response) {
       dispatch({
@@ -341,3 +350,47 @@ export const findMyLocationsPolygon = (lang, id, token) => async (dispatch) => {
     });
   }
 };
+
+export const createNewLastDataStation =
+  (lang, data, token) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const res = await postDataApi(
+        `dashboard/create?lang=${lang}`,
+        data,
+        token
+      );
+
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          success: res.data.message,
+        },
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };

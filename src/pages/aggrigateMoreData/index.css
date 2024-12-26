@@ -1,0 +1,28 @@
+/** @format */
+
+.more_info_sections {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+}
+
+.pump_data_view_more_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.pump_data_view_more_header_selected {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.pump_selected_data_with_today {
+    padding: 0.75rem;
+}
+
+.head_title_data {
+    margin-bottom: 0.75rem;
+}

@@ -3,8 +3,9 @@
 import { DASHBOARD_ACTIONS_TYPES } from "../actions/dashboardActions";
 
 const initialState = {
-  pumpLastData: [],
-  pumpLastIdData: [],
+  pumpLastData: {},
+  pumpLastIdData: {},
+  pumpIdData: {}
 };
 
 const dashboardDataReducer = (state = initialState, action) => {
@@ -19,6 +20,12 @@ const dashboardDataReducer = (state = initialState, action) => {
         ...state,
         pumpLastIdData: action.payload,
       };
+      case DASHBOARD_ACTIONS_TYPES.FIND_TODAY_DATA_BY_AGGREGATE_ID:
+        return {
+          ...state,
+          pumpIdData: action.payload,
+        };
+      
     default:
       return state;
   }
