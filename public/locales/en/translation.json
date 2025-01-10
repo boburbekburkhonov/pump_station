@@ -12,7 +12,9 @@
     "passPlaceholder": "Password",
     "phonePlaceholder": "Phone number",
     "codeSendButton": "Confirmation",
-    "resetPassword": "Forgot password"
+    "resetPassword": "Forgot password",
+    "notFoundTitle": "You have reached a page that does not exist.",
+    "notFoundLink": "Return to homepage"
   },
   "layoutData": {
     "navLink1": "Dashboard",
@@ -31,6 +33,7 @@
     "navLink14": "Reports",
     "navLink15": "Notifications",
     "navLink16": "Add information",
+    "notifTitle": "Notifications",
     "rus": "Russian",
     "eng": "English",
     "oz": "Uzbek"
@@ -54,6 +57,7 @@
     "stationsEnergyNameInput": "Electrical name",
     "stationsEnerdyCode": "Electrical code",
     "noDataTitle": "Information not found",
+    "validInputs": "Fill in all sections.",
     "table1Data": "Station name",
     "table2Data": "Region",
     "table3Data": "District",
@@ -99,7 +103,7 @@
       },
       {
         "status": "Active stations",
-        "color": "#29CB97",
+        "color": "#3652AD",
         "countValue": "Number of devices"
       },
       {
@@ -170,6 +174,7 @@
     "tooltipName2": "Rated power",
     "statisticsTitle1": "Water volume statistics of stations",
     "statisticsTitle2": "Electricity consumption statistics of stations",
+    "emptyData": "No information available.",
     "filterTitle2": [
       {
         "title": "Today's data statistics"
@@ -219,20 +224,20 @@
   },
   "dataPagesInformation": {
     "selectButtonNames": [
-      { "title": "Today's data" },
-      { "title": "Yesterday's data" },
-      { "title": "Selected month's data" },
-      { "title": "Weekly data" },
-      { "title": "10-day data" },
-      { "title": "Monthly data" },
-      { "title": "Latest data" },
-      { "title": "Latest data" },
-      { "title": "Selected day's data" },
-      { "title": "Data for the selected date range" }
+      { "title": "Today's Data" },
+      { "title": "Yesterday's Data" },
+      { "title": "Daily Data" },
+      { "title": "Weekly Data" },
+      { "title": "10-Day Data" },
+      { "title": "Monthly Data" },
+      { "title": "Selected Date" },
+      { "title": "Selected Date Range" }
     ],
     "dataPagesTitle": "Station aggregates data",
     "dataHeaderTitle": "Stations' last data",
     "moreButton": "More",
+    "buttonDataType1": "Table View",
+    "buttonDataType2": "Graph View",
     "dataTableInformation": {
       "dataVelocity": "Velocity (m/s)",
       "dataFlow": "Flow rate (m³/s)",

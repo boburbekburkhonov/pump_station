@@ -33,7 +33,7 @@
     "navLink14": "Xisobotlar",
     "navLink15": "Bildirishnomalar",
     "navLink16": "Ma'lumot qo'shish",
-    "notifTitle": "Xabarlat",
+    "notifTitle": "Xabarlar",
     "rus": "Rus",
     "eng": "Ingliz",
     "oz": "O'zbek"
@@ -103,7 +103,7 @@
       },
       {
         "status": "Faol stansiyalar",
-        "color": "#29CB97",
+        "color": "#3652AD",
         "countValue": "Qurilmalar soni"
       },
       {
@@ -174,6 +174,7 @@
     "tooltipName2": "Sariflangan quvat",
     "statisticsTitle1": "Stansiyalarning suv hajmi statistikasi",
     "statisticsTitle2": "Stansiyalarning elektr sarfi statistikasi",
+    "emptyData": "Ma'lumot mavjud emas",
     "filterTitle2": [
       {
         "title": "Bugungi ma'lumotlar statistikasi"
@@ -223,34 +224,20 @@
   },
   "dataPagesInformation": {
     "selectButtonNames": [
-      {
-        "title": "Bugungi ma'lumotlar"
-      },
-      {
-        "title": "Kechagi ma'lumotlar"
-      },
-      {
-        "title": "Tanlangan oy ma'lumotlari"
-      },
-      {
-        "title": "Haftalik ma'lumotlar"
-      },
-      {
-        "title": "10 kunlik ma'lumotlar"
-      },
-      {
-        "title": "Oylik ma'lumotlar"
-      },
-      {
-        "title": "Tanlangan kun ma'lumotlari"
-      },
-      {
-        "title": "Tanlangan kun oralig'idagi ma'lumotlar"
-      }
+      { "title": "Bugungi ma'lumotlar" },
+      { "title": "Kechagi ma'lumotlar" },
+      { "title": "Kundalik ma'lumotlar" },
+      { "title": "Haftalik ma'lumotlar" },
+      { "title": "10 kunlik ma'lumotlar" },
+      { "title": "Oylik ma'lumotlar" },
+      { "title": "Tanlangan sana" },
+      { "title": "Tanlangan sana oralig'i" }
     ],
     "dataPagesTitle": "Stansiya agrigatlarining ma'lumotlari",
     "dataHeaderTitle": "Stansiyalarning so'ngi ma'lumotlari",
     "moreButton": "Ko'proq",
+    "buttonDataType1": "Jadval shaklida",
+    "buttonDataType2": "Grafik shakilda",
     "dataTableInformation": {
       "dataVelocity": "Tezlik (m/s)",
       "dataFlow": "Oqim tezligi (m/s)",

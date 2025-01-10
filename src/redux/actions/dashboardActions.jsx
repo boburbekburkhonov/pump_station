@@ -23,6 +23,13 @@ export const DASHBOARD_ACTIONS_TYPES = {
   FIND_YESTERDAY_DATA_ELECTRICAL_ENERGY_ID:
     "FIND_YESTERDAY_DATA_ELECTRICAL_ENERGY_ID",
 
+  FIND_DAILY_DATA_BY_STATION_ID: "FIND_DAILY_DATA_BY_STATION_ID",
+  FIND_DAILY_DATA_BY_AGGREGATE_ID: "FIND_DAILY_DATA_BY_AGGREGATE_ID",
+  FIND_ELECTRCITY_DAILY_DATA_BY_STATION_ID:
+    "FIND_ELECTRCITY_DAILY_DATA_BY_STATION_ID",
+  FIND_DAILY_DATA_ELECTRICAL_ENERGY_ID:
+    "FIND_DAILY_DATA_ELECTRICAL_ENERGY_ID",
+
   FIND_WEEKLY_DATA_BY_STATION_ID: "FIND_WEEKLY_DATA_BY_STATION_ID",
   FIND_WEEKLY_DATA_BY_AGGREGATE_ID: "FIND_WEEKLY_DATA_BY_AGGREGATE_ID",
   FIND_ELECTRCITY_WEEKLY_DATA_STATION_ID:
@@ -430,7 +437,7 @@ export const getYesterdayAggregateIDData =
       });
 
       const res = await getDataApi(
-        `pump-yesterday-data/findDataByAggregateId?lang=${lang}&stationId=${aggregateId}&page=${page}&perPage=${perPage}`,
+        `pump-yesterday-data/findDataByAggregateId?lang=${lang}&aggregateId=${aggregateId}&page=${page}&perPage=${perPage}`,
         token
       );
 
@@ -595,7 +602,7 @@ export const getWeeklyAggregateIDData =
       });
 
       const res = await getDataApi(
-        `pump-weekly-data/findDataByAggregateIdAndYearMonthNumber??lang=${lang}&stationId=${aggregateId}&page=${page}&perPage=${perPage}&month=${month}&year=${year}`,
+        `pump-weekly-data/findDataByAggregateIdAndYearMonthNumber?lang=${lang}&aggregateId=${aggregateId}&page=${page}&perPage=${perPage}&month=${month}&year=${year}`,
         token
       );
 
@@ -670,45 +677,45 @@ export const findWeeklyElectricityStationId =
 
 export const findWeeklyDataElectricityId =
   (electricalId, token, lang, page, perPage, month, year) =>
-  async (dispatch) => {
-    try {
-      dispatch({
-        type: GLOBALTYPES.LOADING,
-        payload: true,
-      });
-
-      const res = await getDataApi(
-        `electrical-energy-weekly-data/findDataByElectricalEnergyId?lang=${lang}&aggregateId=${electricalId}&page=${page}&perPage=${perPage}&month=${month}&year=${year}`,
-        token
-      );
-
-      dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_WEEKLY_ELECTRICAL_ENERGY_ID,
-        payload: res.data.data,
-      });
-    } catch (err) {
-      if (!err.response) {
+    async (dispatch) => {
+      try {
         dispatch({
-          type: GLOBALTYPES.ALERT,
-          payload: {
-            error: "Network Error",
-          },
+          type: GLOBALTYPES.LOADING,
+          payload: true,
         });
-      } else {
+
+        const res = await getDataApi(
+          `electrical-energy-weekly-data/findDataByElectricalEnergyId?lang=${lang}&aggregateId=${electricalId}&page=${page}&perPage=${perPage}&month=${month}&year=${year}`,
+          token
+        );
+
         dispatch({
-          type: GLOBALTYPES.ALERT,
-          payload: {
-            error: err.response.data.message || err.response.statusText,
-          },
+          type: DASHBOARD_ACTIONS_TYPES.FIND_WEEKLY_ELECTRICAL_ENERGY_ID,
+          payload: res.data.data,
+        });
+      } catch (err) {
+        if (!err.response) {
+          dispatch({
+            type: GLOBALTYPES.ALERT,
+            payload: {
+              error: "Network Error",
+            },
+          });
+        } else {
+          dispatch({
+            type: GLOBALTYPES.ALERT,
+            payload: {
+              error: err.response.data.message || err.response.statusText,
+            },
+          });
+        }
+      } finally {
+        dispatch({
+          type: GLOBALTYPES.LOADING,
+          payload: false,
         });
       }
-    } finally {
-      dispatch({
-        type: GLOBALTYPES.LOADING,
-        payload: false,
-      });
-    }
-  };
+    };
 
 // * Ten day data
 export const getTenDayAggregateData =
@@ -720,7 +727,7 @@ export const getTenDayAggregateData =
       });
 
       const res = await getDataApi(
-        `/pump-ten-day-data/findDataByStationIdAnfYearNumber??lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}`,
+        `/pump-ten-day-data/findDataByStationIdAnfYearNumber?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}`,
         token
       );
 
@@ -1204,3 +1211,170 @@ export const findAllDataElectricityId =
       });
     }
   };
+
+
+// todo Daily
+export const getDailyAggregateData =
+  (stationId, token, lang, page, perPage, month, year) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const res = await getDataApi(
+        `pump-daily-data/findDataByStationId?lang=${lang}&stationId=${stationId}&page=${perPage}&perPage=${page}&year=${year}&month=${month}`,
+        token
+      );
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DAILY_DATA_BY_STATION_ID,
+        payload: res.data.data,
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+export const getDailyAggregateIDData =
+  (aggregateId, token, lang, page, perPage, month, year) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const res = await getDataApi(
+        `pump-daily-data/findDataByAggregateId?lang=${lang}&aggregateId=${aggregateId}&page=${page}&perPage=${perPage}&month=${month}&year=${year}`,
+        token
+      );
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DAILY_DATA_BY_AGGREGATE_ID,
+        payload: res.data.data,
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+export const findDailyElectricityStationId =
+  (stationId, token, lang, page, perPage, month, year) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const res = await getDataApi(
+        `electrical-energy-weekly-data/findDataByStationId?lang=${lang}&aggregateId=${stationId}&page=${page}&perPage=${perPage}&month=${month}&year=${year}`,
+        token
+      );
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_WEEKLY_DATA_STATION_ID,
+        payload: res.data.data,
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+export const findDailyDataElectricityId =
+  (electricalId, token, lang, page, perPage, month, year) =>
+    async (dispatch) => {
+      try {
+        dispatch({
+          type: GLOBALTYPES.LOADING,
+          payload: true,
+        });
+
+        const res = await getDataApi(
+          `electrical-energy-weekly-data/findDataByElectricalEnergyId?lang=${lang}&aggregateId=${electricalId}&page=${page}&perPage=${perPage}&month=${month}&year=${year}`,
+          token
+        );
+
+        dispatch({
+          type: DASHBOARD_ACTIONS_TYPES.FIND_WEEKLY_ELECTRICAL_ENERGY_ID,
+          payload: res.data.data,
+        });
+      } catch (err) {
+        if (!err.response) {
+          dispatch({
+            type: GLOBALTYPES.ALERT,
+            payload: {
+              error: "Network Error",
+            },
+          });
+        } else {
+          dispatch({
+            type: GLOBALTYPES.ALERT,
+            payload: {
+              error: err.response.data.message || err.response.statusText,
+            },
+          });
+        }
+      } finally {
+        dispatch({
+          type: GLOBALTYPES.LOADING,
+          payload: false,
+        });
+      }
+    };

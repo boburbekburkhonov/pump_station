@@ -21,18 +21,10 @@ import {
   AreaChartOutlined,
   ExperimentOutlined,
   FieldTimeOutlined,
-  ThunderboltOutlined,
-  PoweroffOutlined,
-  BulbOutlined,
-  LineChartOutlined,
-  DashboardOutlined,
-  PieChartFilled,
   HomeOutlined,
   GlobalOutlined,
   PhoneOutlined,
   EnvironmentOutlined,
-  HeartFilled,
-  HeartOutlined,
   ArrowRightOutlined,
 } from "@ant-design/icons";
 import "./index.css";
@@ -340,7 +332,7 @@ function DataPage() {
                   <div className='normal_flex_card'>
                     <GlobalOutlined
                       style={{
-                        color: "#4ed9a8",
+                        color: colors.textColor,
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -357,7 +349,7 @@ function DataPage() {
                   <div className='normal_flex_card'>
                     <EnvironmentOutlined
                       style={{
-                        color: "#4ed9a8",
+                        color: colors.textColor,
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -374,7 +366,7 @@ function DataPage() {
                   <div className='normal_flex_card'>
                     <HomeOutlined
                       style={{
-                        color: "#4ed9a8",
+                        color: colors.textColor,
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -393,7 +385,7 @@ function DataPage() {
                   <div className='normal_flex_card'>
                     <PhoneOutlined
                       style={{
-                        color: "#4ed9a8",
+                        color: colors.textColor,
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -418,7 +410,7 @@ function DataPage() {
                         <div className='normal_flex_card'>
                           <AreaChartOutlined
                             style={{
-                              color: "#4ed9a8",
+                              color: colors.textColor,
                             }}
                             className='dashboard_last_data_icons'
                           />
@@ -438,7 +430,7 @@ function DataPage() {
                         <div className='normal_flex_card'>
                           <ExperimentOutlined
                             style={{
-                              color: "#4ed9a8",
+                              color: colors.textColor,
                             }}
                             className='dashboard_last_data_icons'
                           />

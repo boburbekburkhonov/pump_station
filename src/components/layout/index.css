@@ -137,7 +137,7 @@
   background: rgb(245, 246, 250);
 }
 .switch-container input:checked + label .ball {
-  background: rgb(41, 203, 151);
+  background: #3652AD;
 }
 .switch-container input {
   display: none;

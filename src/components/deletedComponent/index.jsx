@@ -83,7 +83,7 @@ import React, {
           <div className='normal_flex_card'>
             <QrcodeOutlined
               style={{
-                color: "#29CB97",
+                color: "#3652AD",
               }}
               className='dashboard_last_data_icons'
             />

@@ -1,45 +1,107 @@
 /** @format */
 
-import React, { memo, useCallback, useEffect, useState, useMemo } from "react";
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+  useMemo,
+  lazy,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import moment from "moment";
-import { Select, DatePicker } from "antd";
+import { Select, DatePicker, Anchor, Button } from "antd";
+import Excel from "../../assets/xls.d451c295.png";
 
 import {
-  NodeIndexOutlined,
-  FormOutlined,
-  QrcodeOutlined,
-  SettingOutlined,
-  AreaChartOutlined,
-  ExperimentOutlined,
-  FieldTimeOutlined,
-  ThunderboltOutlined,
-  PoweroffOutlined,
-  BulbOutlined,
-  LineChartOutlined,
-  DashboardOutlined,
-  PieChartFilled,
-  HomeOutlined,
-  GlobalOutlined,
-  PhoneOutlined,
-  EnvironmentOutlined,
-  HeartFilled,
-  HeartOutlined,
-  ArrowRightOutlined,
-} from "@ant-design/icons";
-
-import {
-  getLastAggregateIDData,
+  getYesterdayAggregateIDData,
   getTodayAggregateIDData,
+  getDailyAggregateIDData,
 } from "../../redux/actions/dashboardActions";
 import Loading from "../../components/loading";
 import "../dashboard/index.css";
 import "./index.css";
 import TableComponent from "../../components/tableComponent";
 
+const DashboardLineChart = lazy(() =>
+  import("../../components/dashboardLineChart")
+);
 const { RangePicker } = DatePicker;
+
+const FirstSections = memo(
+  ({
+    dataSource,
+    columns,
+    currentPage,
+    pageSize,
+    totalPage,
+    handlePaginationChange,
+    colors,
+    t,
+    changeDataViewType,
+    isType,
+    theme,
+  }) => (
+    <div
+      style={{
+        background: colors.layoutBackground,
+      }}
+      className='pump_selected_data_with_today'>
+      <div className='header_more_aggregate_data'>
+        <h1 className='head_title_data'>
+          {
+            t("dataPagesInformation.selectButtonNames", {
+              returnObjects: true,
+            })[0].title
+          }
+        </h1>
+
+        <div className='header_more_aggregate_data'>
+          <Button
+            type={isType ? "default" : "primary"}
+            onClick={() => changeDataViewType(false)}>
+            {t("dataPagesInformation.buttonDataType1")}
+          </Button>
+
+          <Button
+            type={isType ? "primary" : "default"}
+            onClick={() => changeDataViewType(true)}>
+            {t("dataPagesInformation.buttonDataType2")}
+          </Button>
+          <span>
+            <img alt='download_excel' src={Excel} />
+          </span>
+        </div>
+      </div>
+      {isType ? (
+        <DashboardLineChart
+          data={dataSource || []}
+          theme={theme}
+          valueTemp={t("dashboardPageData.lastStationsData.energyValueView")}
+        />
+      ) : (
+        <TableComponent
+          columns={columns}
+          dataSource={dataSource}
+          currentPage={currentPage}
+          pageSize={pageSize}
+          totalPage={totalPage}
+          handlePaginationChange={handlePaginationChange}
+        />
+      )}
+    </div>
+  )
+);
+
+const SecondSections = memo(() => <div>Second Element</div>);
+
+const ThirdSections = memo(() => <div>Third Element</div>);
+
+const FourThSections = memo(() => <div>FourTh Element</div>);
+
+const FiveThSections = memo(() => <div>FiveTh Element</div>);
 
 const AggrigateMoreData = memo(() => {
   const dispatch = useDispatch();
@@ -48,8 +110,8 @@ const AggrigateMoreData = memo(() => {
   const token = localStorage.getItem("access_token");
 
   const { loading } = useSelector((state) => state.alert);
-  const { colors } = useSelector((state) => state.theme);
-  const { pumpLastIdData, pumpIdData } = useSelector((state) => state.pumps);
+  const { colors, theme } = useSelector((state) => state.theme);
+  const { pumpIdData } = useSelector((state) => state.pumps);
 
   const [dates, setDates] = useState([moment().subtract(1, "days"), moment()]);
   const [selectDataType, setSelectDataType] = useState(0);
@@ -57,27 +119,100 @@ const AggrigateMoreData = memo(() => {
     page: 1,
     perPage: 9,
   });
+  const [activeSection, setActiveSection] = useState("section1");
+  const [isActiveGraphic, setIsActiveGraphic] = useState(false);
 
-  const fetchAllData = useCallback(() => {
+  // const fetchAllData = useCallback(() => {
+  //   const lang = i18n.language;
+  //   const id = params.id;
+
+  //   dispatch(
+  //     getTodayAggregateIDData(id, token, lang, pageData.page, pageData.perPage)
+  //   );
+  // }, [dispatch, token, i18n.language, params, pageData]);
+
+  const changeDataTime = useCallback(() => {
     const lang = i18n.language;
     const id = params.id;
 
-    dispatch(getLastAggregateIDData(id, token, lang));
-    dispatch(
-      getTodayAggregateIDData(id, token, lang, pageData.page, pageData.perPage)
-    );
-  }, [dispatch, token, i18n.language, params, pageData]);
+    switch (activeSection) {
+      case "section1":
+        dispatch(
+          getTodayAggregateIDData(
+            id,
+            token,
+            lang,
+            pageData.page,
+            pageData.perPage
+          )
+        );
+        break;
+      case "section2":
+        dispatch(
+          getYesterdayAggregateIDData(
+            id,
+            token,
+            lang,
+            pageData.page,
+            pageData.perPage
+          )
+        );
+        break;
+      case "section3":
+        dispatch(
+          getDailyAggregateIDData(
+            id,
+            token,
+            lang,
+            pageData.page,
+            pageData.perPage
+          )
+        );
+        break;
+      case "section4":
+        dispatch(
+          getTodayAggregateIDData(
+            id,
+            token,
+            lang,
+            pageData.page,
+            pageData.perPage
+          )
+        );
+        break;
+      case "section5":
+        dispatch(
+          getTodayAggregateIDData(
+            id,
+            token,
+            lang,
+            pageData.page,
+            pageData.perPage
+          )
+        );
+        break;
+      default:
+        break;
+    }
+  }, [
+    activeSection,
+    i18n.language,
+    params.id,
+    token,
+    pageData.page,
+    pageData.perPage,
+  ]);
 
   useEffect(() => {
-    fetchAllData();
+    changeDataTime();
 
-    const handleLanguageChange = () => fetchAllData();
+    const handleLanguageChange = () => changeDataTime();
     i18n.on("languageChanged", handleLanguageChange);
 
     return () => {
       i18n.off("languageChanged", handleLanguageChange);
     };
-  }, [fetchAllData, i18n]);
+  }, [changeDataTime, i18n]);
 
   function formatDate(inputDate) {
     const formatDate = new Date(inputDate).toLocaleString("uz-UZ", {
@@ -133,6 +268,10 @@ const AggrigateMoreData = memo(() => {
     });
   });
 
+  const changeDataViewType = (value) => {
+    setIsActiveGraphic(value);
+  };
+
   if (loading) {
     return (
       <section className='more_info_sections'>
@@ -144,9 +283,7 @@ const AggrigateMoreData = memo(() => {
   return (
     <section className='more_info_sections'>
       <div className='pump_data_view_more_header'>
-        <div className='pump_data_main_header'>
-
-        </div>
+        <div className='pump_data_main_header'></div>
 
         <div className='pump_data_view_more_header_selected'>
           <Select
@@ -177,25 +314,71 @@ const AggrigateMoreData = memo(() => {
         </div>
       </div>
 
-      <div
-        style={{
-          background: colors.layoutBackground,
+      <Anchor
+        className='anchor-items-container'
+        direction='horizontal'
+        items={t("dataPagesInformation.selectButtonNames", {
+          returnObjects: true,
+        }).map((item, index) => ({
+          key: `section-${index + 1}`,
+          href: `#section${index + 1}`,
+          title: (
+            <p
+              style={{
+                color:
+                  activeSection === `section${index + 1}`
+                    ? colors.textWhite
+                    : colors.text,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                border:
+                  activeSection === `section${index + 1}`
+                    ? "none"
+                    : `1px solid ${colors.buttonColor}`,
+                background:
+                  activeSection === `section${index + 1}`
+                    ? colors.buttonColor
+                    : "transparent",
+                paddingRight: 10,
+                paddingLeft: 10,
+                paddingTop: 5,
+                paddingBottom: 5,
+                borderRadius: 5,
+              }}>
+              {item.title}
+            </p>
+          ),
+        }))}
+        onClick={(e, link) => {
+          e.preventDefault();
+          setActiveSection(link.href.replace("#", "")); // Aktiv seksiyani yangilang
         }}
-        className='pump_selected_data_with_today'>
-        <h1 className="head_title_data">
-          {t("dataPagesInformation.selectButtonNames", {
-            returnObjects: true,
-          })[0].title}
-        </h1>
-        <TableComponent
+      />
+
+      {activeSection === "section1" && (
+        <FirstSections
           columns={columnsUser}
-          dataSource={pumpIdData.data}
+          dataSource={pumpIdData.data?.map((item, index) => ({
+            ...item,
+            key: item.id || `temp-key-${index}`,
+          }))}
           currentPage={pageData.page}
           pageSize={pageData.perPage}
           totalPage={pumpIdData.totalDocuments}
           handlePaginationChange={handlePaginationChange}
+          colors={colors}
+          t={t}
+          changeDataViewType={changeDataViewType}
+          isType={isActiveGraphic}
+          theme={theme}
         />
-      </div>
+      )}
+
+      {activeSection === "section2" && <SecondSections />}
+      {activeSection === "section3" && <ThirdSections />}
+      {activeSection === "section4" && <FourThSections />}
+      {activeSection === "section5" && <FiveThSections />}
     </section>
   );
 });

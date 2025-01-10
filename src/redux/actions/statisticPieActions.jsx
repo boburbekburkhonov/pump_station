@@ -10,6 +10,18 @@ export const PIE_ACTIONS_TYPES = {
   FIND_LOADING_STATISTICS: "FIND_LOADING_STATISTICS"
 }
 
+const translations = {
+  uz: {
+    meter: "kv*soat",
+  },
+  ru: {
+    meter: "Значение счетчика",
+  },
+  en: {
+    meter: "Elektr value",
+  },
+};
+
 export const findTodayStatisticData = (lang, token) => async (dispatch) => {
   try {
     dispatch({
@@ -18,6 +30,14 @@ export const findTodayStatisticData = (lang, token) => async (dispatch) => {
     })
 
     const res = await getDataApi(`dashboard/getVolumeAndEnergyDataToday?lang=${lang}`, token)
+
+    const firstPie = res.data.data?.map((item) => {
+      return {
+        name: item.stationName,
+        y: item.volume,
+
+      }
+    })
 
     dispatch({
       type: PIE_ACTIONS_TYPES.FIND_TODAY_DATA_STATISTICS,
