@@ -33,34 +33,40 @@ function Root() {
   return (
     <Routes>
       <Route
-        path='/'
+        path="/"
         element={isAdmin() ? <pages.Home /> : <pages.UserDashboard />}
       />
       <Route
-        path='/stations'
+        path="/stations"
         element={isAdmin() ? <pages.Stations /> : <pages.StationsWithUser />}
       />
-      <Route path='/notification' element={<pages.Notifications />} />
-      <Route path='/stations/:id' element={<pages.StationsInformations />} />
-      <Route path='/maps' element={<pages.MapsPage />} />
-      <Route path='/profile' element={<pages.ProfilePage />} />
-      <Route path='/data' element={<pages.DataPage />} />
-      <Route path='/electrical/data' element={<pages.ElectrPage />} />
-      <Route path='/reports' element={<pages.Reports />} />
-      <Route path='/agrigate/infos/:id' element={<pages.AggrigateMoreData />} />
-      <Route path='/electrical/infos/:id' element={<pages.ElectricalMoreData />} />
+      <Route path="/notification" element={<pages.Notifications />} />
+      <Route path="/stations/:id" element={<pages.StationsInformations />} />
+      <Route path="/maps" element={<pages.MapsPage />} />
+      <Route path="/profile" element={<pages.ProfilePage />} />
+      <Route path="/data" element={<pages.DataPage />} />
+      <Route path="/electrical/data" element={<pages.ElectrPage />} />
+      <Route path="/reports" element={<pages.Reports />} />
+      <Route path="/agrigate/infos/:id" element={<pages.AggrigateMoreData />} />
+      <Route
+        path="/electrical/infos/:id"
+        element={<pages.ElectricalMoreData />}
+      />
 
       {isAdmin() && (
         <>
-          <Route path='/users' element={<pages.Users />} />
-          <Route path='/roles' element={<pages.RolePage />} />
-          <Route path='/regions' element={<pages.RegionPages />} />
-          <Route path='/districts' element={<pages.Districts />} />
-          <Route path='/organizations' element={<pages.OrganizationsPages />} />
-          <Route path='/user/join' element={<pages.UserJoin />} />
+          <Route path="/users" element={<pages.Users />} />
+          <Route path="/roles" element={<pages.RolePage />} />
+          <Route path="/regions" element={<pages.RegionPages />} />
+          <Route path="/districts" element={<pages.Districts />} />
+          <Route
+            path="/organizations"
+            element={<pages.OrganizationsPages />}
+          />{" "}
+          <Route path="/user/join" element={<pages.UserJoin />} />
         </>
       )}
-      <Route path='*' element={<pages.NotFound />} />
+      <Route path="*" element={<pages.NotFound />} />
     </Routes>
   );
 }
