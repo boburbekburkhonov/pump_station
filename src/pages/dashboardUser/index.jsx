@@ -53,22 +53,17 @@ import {
   findWeeklyLineStatisticData,
   findYearLineStatisticData,
 } from "../../redux/actions/lineStatisticsActions";
-import EmptyCard from "../../components/emptyCard";
 import PieChart from "../../components/googlePieChart";
-
-const DashboardLineChart = lazy(() =>
-  import("../../components/dashboardLineChart")
-);
+import EmptyCard from "../../components/emptyCard";
+import SolarEmploymentChart from "../../components/googleNewPieChart";
 
 const DashboardLinesChart = lazy(() =>
   import("../../components/dashboardColomnChart")
 );
 
-const DashboardNewPieChart = lazy(() =>
-  import("../../components/dashboardNewPieChart")
-);
-
 const STATISTIC_CARDS_CHUNK = 3;
+
+const STATISTIC_CARDS_CHUNK_NEXT = 7;
 
 const StatisticCard = memo(({ icon, color, status, countValue, cardStyle }) => (
   <Card
@@ -76,12 +71,13 @@ const StatisticCard = memo(({ icon, color, status, countValue, cardStyle }) => (
     style={cardStyle}
     type='inner'
     className='dashbord_card_element'>
-    <div className='icon_box_card' style={{ background: color }}>
+    <div className='icon_box_card' style={{ background: color.blurBgColor }}>
       {icon}
     </div>
+
     <div>
-      <p>{status}</p>
       <h3>{countValue}</h3>
+      <p>{status}</p>
     </div>
   </Card>
 ));
@@ -668,10 +664,14 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
 function UserDashboard() {
   const dispatch = useDispatch();
   const { i18n, t } = useTranslation();
-  const { colors, theme } = useSelector((state) => state.theme);
+  const { colors } = useSelector((state) => state.theme);
   const { statisticData, stationsId } = useSelector((state) => state.dashboard);
-  const { totalData, loadingData } = useSelector((state) => state.pie);
-  const { totalLineData, loadingLineData } = useSelector((state) => state.line);
+  const { totalData, loadingData, firstPieData, secondPieData } = useSelector(
+    (state) => state.pie
+  );
+  const { totalLineData, loadingLineData, totalLineElectData } = useSelector(
+    (state) => state.line
+  );
 
   const { stationsLoading, stationsLastData } = useSelector(
     (state) => state.stations
@@ -684,6 +684,8 @@ function UserDashboard() {
   const [modalViewData, setModalViewData] = useState({});
   const [isPending, startTransition] = useTransition();
   const [isPendingLine, startTransitionLine] = useTransition();
+  const [selectAggregateLineChart, setSelectAggregateLineChart] =
+    useState(true);
 
   const regionId = Cookies.get("regionId");
   const token = localStorage.getItem("access_token");
@@ -728,10 +730,6 @@ function UserDashboard() {
     color: colors.text,
   };
 
-  console.log("====================================");
-  console.log(totalData?.stationData);
-  console.log("====================================");
-
   const firstThreeCards = useMemo(
     () =>
       t("dashboardPageData.cardData", { returnObjects: true }).slice(
@@ -741,10 +739,19 @@ function UserDashboard() {
     [t]
   );
 
-  const remainingCards = useMemo(
+  const secondThreeCards = useMemo(
     () =>
       t("dashboardPageData.cardData", { returnObjects: true }).slice(
-        STATISTIC_CARDS_CHUNK
+        STATISTIC_CARDS_CHUNK,
+        STATISTIC_CARDS_CHUNK_NEXT
+      ),
+    [t]
+  );
+
+  const thirdThreeCards = useMemo(
+    () =>
+      t("dashboardPageData.cardData", { returnObjects: true }).slice(
+        STATISTIC_CARDS_CHUNK_NEXT
       ),
     [t]
   );
@@ -857,32 +864,47 @@ function UserDashboard() {
             <StatisticCard
               key={index}
               icon={iconData[index]}
-              color={item.color}
+              color={colors}
               status={item.status}
-              countValue={`${item.countValue} ${statisticData[index]}`}
-              cardStyle={cardStyle}
-            />
-          ))}
-        </div>
-
-        <div className='card_container_dashboard'>
-          {remainingCards.map((item, index) => (
-            <StatisticCard
-              key={index + STATISTIC_CARDS_CHUNK}
-              icon={iconData[index + STATISTIC_CARDS_CHUNK]}
-              color={item.color}
-              status={item.status}
-              countValue={`${item.countValue} ${
-                statisticData[index + STATISTIC_CARDS_CHUNK]
-              }`}
+              countValue={`${statisticData[index]}`}
               cardStyle={cardStyle}
             />
           ))}
         </div>
       </div>
 
-      <div>
-        <PieChart theme={colors} />
+      <div className='filter_container_dashboard'>
+        <h1>{t("dashboardPageData.titleStationsDetails1")}</h1>
+      </div>
+
+      <div className='card_container_dashboard'>
+        {secondThreeCards.map((item, index) => (
+          <StatisticCard
+            key={index + STATISTIC_CARDS_CHUNK}
+            icon={iconData[index + STATISTIC_CARDS_CHUNK]}
+            color={colors}
+            status={item.status}
+            countValue={`${statisticData[index + STATISTIC_CARDS_CHUNK]}`}
+            cardStyle={cardStyle}
+          />
+        ))}
+      </div>
+
+      <div className='filter_container_dashboard'>
+        <h1>{t("dashboardPageData.titleStationsDetails2")}</h1>
+      </div>
+
+      <div className='card_container_dashboard'>
+        {thirdThreeCards.map((item, index) => (
+          <StatisticCard
+            key={index + STATISTIC_CARDS_CHUNK_NEXT}
+            icon={iconData[index + STATISTIC_CARDS_CHUNK_NEXT]}
+            color={colors}
+            status={item.status}
+            countValue={`${statisticData[index + STATISTIC_CARDS_CHUNK_NEXT]}`}
+            cardStyle={cardStyle}
+          />
+        ))}
       </div>
 
       <div className='filter_container_dashboard'>
@@ -953,12 +975,18 @@ function UserDashboard() {
                 </div>
 
                 <div className='dashboard_last_data_button'>
-                  <Button
-                    onClick={() => openModal(item)}
-                    className='dashboard_last_data_button'
-                    type='primary'>
-                    {t("stationsPageData.table14Data")}
-                  </Button>
+                  <div
+                    style={{
+                      width: "100%",
+                      padding: "10px",
+                    }}>
+                    <Button
+                      onClick={() => openModal(item)}
+                      className='dashboard_last_data_button'
+                      type='primary'>
+                      {t("stationsPageData.table14Data")}
+                    </Button>
+                  </div>
                 </div>
               </Card>
             ))}
@@ -1007,41 +1035,27 @@ function UserDashboard() {
 
             <div className='dashboard_pie_chart_container'>
               <div className='dashboard_pie_chart_card'>
-                <PieChart
-                  theme={colors}
-                  data={totalData?.stationData || []}
-                  value='volume'
-                  labelText='volume'
-                  titleValue={t("dashboardPageData.statisticsTitle1")}
-                  title={`${totalData?.totalVolumeToday || 0}\nm³`}
-                  tooltipName={t("dashboardPageData.tooltipName")}
-                />
+                {secondPieData && (
+                  <PieChart
+                    theme={colors}
+                    data={secondPieData}
+                    centerText={`${totalData?.totalVolumeToday || 0}\nm³`}
+                    title={t("dashboardPageData.statisticsTitle2")}
+                  />
+                )}
               </div>
 
               <div className='dashboard_pie_chart_card'>
-                {/* <h3 className='dashboard_statistic_header'>
-                  {t("dashboardPageData.statisticsTitle2")}
-                </h3> */}
-                <PieChart
-                  theme={colors}
-                  data={totalData?.stationData || []}
-                  value='volume'
-                  labelText='volume'
-                  titleValue={t("dashboardPageData.statisticsTitle1")}
-                  title={`${totalData?.totalVolumeToday || 0}\nm³`}
-                  tooltipName={t("dashboardPageData.tooltipName")}
-                />
-                {/* <DashboardNewPieChart
-                  theme={theme}
-                  colors={colors}
-                  data={totalData?.stationData || []}
-                  value='energyActive'
-                  labelText='energyActive'
-                  title={`${totalData?.totalEnergyActiveToday || 0}\n${t(
-                    "dashboardPageData.lastStationsData.energyValueView"
-                  )}`}
-                  tooltipName={t("dashboardPageData.tooltipName2")}
-                /> */}
+                {firstPieData && (
+                  <PieChart
+                    theme={colors}
+                    data={firstPieData}
+                    centerText={`${totalData?.totalEnergyActiveToday || 0}\n${t(
+                      "dashboardPageData.lastStationsData.energyValueView"
+                    )}`}
+                    title={t("dashboardPageData.statisticsTitle1")}
+                  />
+                )}
               </div>
             </div>
           </>
@@ -1073,6 +1087,16 @@ function UserDashboard() {
               </h1>
 
               <div className='filter_select_box'>
+                <Button
+                  type='primary'
+                  size='large'
+                  onClick={() =>
+                    setSelectAggregateLineChart(!selectAggregateLineChart)
+                  }>
+                  {selectAggregateLineChart
+                    ? totalLineData.name
+                    : totalLineElectData.name}
+                </Button>
                 <Select
                   size='large'
                   value={selectDataType}
@@ -1098,13 +1122,16 @@ function UserDashboard() {
                 />
               </div>
             </div>
-            <DashboardLinesChart
-              data={totalLineData || []}
-              theme={theme}
-              valueTemp={t(
-                "dashboardPageData.lastStationsData.energyValueView"
-              )}
-            />
+            {totalLineData && (
+              <SolarEmploymentChart
+                theme={colors}
+                data={
+                  selectAggregateLineChart
+                    ? totalLineData
+                    : totalLineElectData || []
+                }
+              />
+            )}
           </>
         )}
       </div>

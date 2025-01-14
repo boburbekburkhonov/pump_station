@@ -25,7 +25,6 @@ export const getStatisticsDashboard = (regionId, lang, token) => async (dispatch
       data.electricalEnergy.countWorking,
       data.electricalEnergy.countNotWorking,
       data.electricalEnergy.countDefection,
-
     ]
     
     dispatch({

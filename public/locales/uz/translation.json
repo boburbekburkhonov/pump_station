@@ -132,22 +132,22 @@
         "countValue": "Qurilmalar soni"
       },
       {
-        "status": "Barcha energiya",
+        "status": "Barcha hisoblagichlar",
         "color": "#03845C",
         "countValue": "Qurilmalar soni"
       },
       {
-        "status": "Faol energiya",
+        "status": "Faol hisoblagichlar",
         "color": "#85A1D0",
         "countValue": "Qurilmalar soni"
       },
       {
-        "status": "Nosoz energiya",
+        "status": "Nosoz hisoblagichlar",
         "color": "#C91B21",
         "countValue": "Qurilmalar soni"
       },
       {
-        "status": "Buzilgan energiya",
+        "status": "Buzilgan hisoblagichlar",
         "color": "#E2C11E",
         "countValue": "Qurilmalar soni"
       }
@@ -220,7 +220,9 @@
       "energyReactiveTotal": "Umumiy reaktiv energiya",
       "stationsMoreInfoAgirgate": "Stansiya agrigatining so'ngi ma'lumotlari",
       "stationsMoreInfoElectr": "Stansiya elektr qurilmasining so'ngi ma'lumotlari"
-    }
+    },
+    "titleStationsDetails1": "Barcha stansiya agrigatlarining holati",
+    "titleStationsDetails2": "Barcha stansiya elektr hisoblagichlarning holati"
   },
   "dataPagesInformation": {
     "selectButtonNames": [
@@ -243,6 +245,8 @@
       "dataFlow": "Oqim tezligi (m/s)",
       "dataVolume": "Hajm (m³)",
       "dataDate": "Ma'lumot sanasi"
-    }
+    },
+    "active_indicator": "Faol",
+    "not_active_indicator": "Faolmas"
   }
 }

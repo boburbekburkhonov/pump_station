@@ -4,6 +4,8 @@ import { PIE_ACTIONS_TYPES } from "../actions/statisticPieActions";
 
 const initialState = {
   totalData: null,
+  firstPieData: false,
+  secondPieData: false,
   loadingData: false,
 };
 
@@ -38,6 +40,16 @@ const pieReducer = (state = initialState, action) => {
       return {
         ...state,
         totalData: action.payload,
+      };
+    case PIE_ACTIONS_TYPES.FIRST_PIE_DATA:
+      return {
+        ...state,
+        firstPieData: action.payload,
+      };
+    case PIE_ACTIONS_TYPES.SECOND_PIE_DATA:
+      return {
+        ...state,
+        secondPieData: action.payload,
       };
     default:
       return state;

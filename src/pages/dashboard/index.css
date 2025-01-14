@@ -32,7 +32,7 @@
   display: grid;
   width: 100%;
   gap: 0.5rem;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .first_all_stations_statistic_cards {
@@ -40,7 +40,6 @@
   width: 100%;
   gap: 0.5rem;
   grid-template-columns: repeat(3, 1fr);
-  margin-bottom: 0.5rem;
 }
 
 .first_all_stations_statistic_cards .ant-card-body {
@@ -61,23 +60,25 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  text-align: center;
+  text-align: left;
   cursor: pointer;
 }
 
 .card_container_dashboard .ant-card-body {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
 }
 
 .dashbord_card_element p {
-  font-weight: 700;
+  font-size: 1.3rem;
+  font-weight: 400;
 }
 
 .dashbord_card_element h3 {
-  font-weight: 400;
+  font-weight: 600;
+  font-size: 1.4rem;
 }
 
 .dashbord_card_element span {
@@ -85,12 +86,12 @@
 }
 
 .icon_box_card {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   color: #fff;
 }
 
@@ -148,6 +149,7 @@
 .filter_select_box {
   display: flex;
   gap: 0.75rem;
+  align-items: center;
 }
 
 .last_stations_data_container {
@@ -173,6 +175,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  margin-bottom: 30px;
 }
 
 .dashboard_last_data_card_header {
@@ -235,7 +238,9 @@
 
 .dashboard_last_data_button {
   width: 100%;
-  margin-top: 5px;
+  position: absolute;
+  bottom: 5px;
+  left: 0;
 }
 
 .dashboard_view_more_modal .ant-modal-title {
@@ -308,4 +313,11 @@
 
 .highcharts-credits {
   display: none !important;
+}
+
+.empty_card_container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

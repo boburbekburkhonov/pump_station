@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, memo } from "react";
+import React, { useEffect, memo, useRef } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
@@ -57,182 +57,90 @@ const modernColors = [
   "#FAD7A0",
 ];
 
-const PieChart = ({ theme, data, value, tooltipName, title, titleValue }) => {
+const PieChart = ({ theme, data, title, centerText }) => {
+  const chartRef = useRef(null);
   useEffect(() => {
-    (function (H) {
-      H.seriesTypes.pie.prototype.animate = function (init) {
-        const series = this,
-          chart = series.chart,
-          points = series.points,
-          { animation } = series.options,
-          { startAngleRad } = series;
+    if (chartRef.current?.chart) {
+      const chart = chartRef.current.chart;
 
-        function fanAnimate(point, startAngleRad) {
-          const graphic = point.graphic,
-            args = point.shapeArgs;
+      chart.series[0].setData(data, true, { duration: 1500 });
 
-          if (graphic && args) {
-            graphic
-              .attr({
-                start: startAngleRad,
-                end: startAngleRad,
-                opacity: 1,
-              })
-              .animate(
-                {
-                  start: args.start,
-                  end: args.end,
-                },
-                {
-                  duration: animation.duration / points.length,
-                },
-                function () {
-                  if (points[point.index + 1]) {
-                    fanAnimate(points[point.index + 1], args.end);
-                  }
-                  if (point.index === series.points.length - 1) {
-                    series.dataLabelsGroup.animate(
-                      {
-                        opacity: 1,
-                      },
-                      void 0,
-                      function () {
-                        points.forEach((point) => {
-                          point.opacity = 1;
-                        });
-                        series.update(
-                          {
-                            enableMouseTracking: true,
-                          },
-                          false
-                        );
-                        chart.update({
-                          plotOptions: {
-                            pie: {
-                              innerSize: "40%",
-                              borderRadius: 8,
-                            },
-                          },
-                        });
-                      }
-                    );
-                  }
-                }
-              );
-          }
+      if (centerText) {
+        if (chart.centerTextElement) {
+          chart.centerTextElement.destroy();
         }
 
-        if (init) {
-          points.forEach((point) => {
-            point.opacity = 0;
-          });
-        } else {
-          fanAnimate(points[0], startAngleRad);
-        }
-      };
-    })(Highcharts);
-  }, []);
+        chart.centerTextElement = chart.renderer
+          .text(
+            centerText,
+            chart.plotWidth / 2 + chart.plotLeft,
+            chart.plotHeight / 2 + chart.plotTop
+          )
+          .attr({
+            align: "center",
+            zIndex: 5,
+          })
+          .css({
+            color: theme.text,
+            fontSize: "16px",
+            fontWeight: "bold",
+          })
+          .add();
+      }
+    }
+  }, [data, centerText, theme]);
 
   const options = {
     chart: {
       type: "pie",
       backgroundColor: theme.backgroundColor,
-      width: 700,
-      height: 700,
+      width: centerText ? 600 : 600,
+      height: centerText ? 500 : 300,
     },
-    title: {
-      text: "Resource Usage Distribution",
-    },
-    colors: modernColors,
-    subtitle: false,
     tooltip: {
       headerFormat: "",
       pointFormat:
         '<span style="color:{point.color}">\u25cf</span> ' +
         `{point.name}: <b>{point.y} {point.unit}</b>`,
     },
-    accessibility: {
-      enabled: false,
+    title: {
+      text: title,
+      style: {
+        color: theme.text,
+      },
     },
+    colors: modernColors,
     plotOptions: {
       pie: {
-        allowPointSelect: true,
+        innerSize: centerText ? "40%" : '0',
+        borderRadius: 8,
         borderWidth: 2,
-        cursor: "pointer",
+
+        allowPointSelect: true,
         dataLabels: {
           enabled: true,
-          format: "<b>{point.name}</b><br>{point.y} {point.unit}",
           distance: 20,
+          color: theme.text,
+          format: `<b>{point.name}</b><br>{point.y} {point.unit}`,
         },
       },
     },
+    accessibility: {
+      enabled: false,
+    },
     series: [
       {
-        enableMouseTracking: false,
         animation: {
           duration: 1500,
         },
         colorByPoint: true,
-        data: [
-          { name: "Coal Consumption", y: 996, unit: "Joules" },
-          { name: "Nuclear Energy", y: 500, unit: "liters" },
-          { name: "Hydro Energy", y: 4199, unit: "tons" },
-          { name: "Electricity Usage", y: 3916, unit: "kWh" },
-          { name: "Water Consumption", y: 2972, unit: "liters" },
-          { name: "Electricity Usage", y: 1867, unit: "Joules" },
-          { name: "Oil Usage", y: 1371, unit: "m³" },
-          { name: "Water Consumption", y: 4654, unit: "tons" },
-          { name: "Solar Energy", y: 2598, unit: "kWh" },
-          { name: "Nuclear Energy", y: 4717, unit: "Joules" },
-          { name: "Gas Consumption", y: 3017, unit: "liters" },
-          { name: "Wind Energy", y: 3010, unit: "liters" },
-          { name: "Geothermal Energy", y: 905, unit: "kWh" },
-          { name: "Coal Consumption", y: 2108, unit: "liters" },
-          { name: "Oil Usage", y: 4180, unit: "m³" },
-          { name: "Water Consumption", y: 866, unit: "Joules" },
-          { name: "Oil Usage", y: 1676, unit: "Joules" },
-          { name: "Gas Consumption", y: 2108, unit: "m³" },
-          { name: "Solar Energy", y: 4069, unit: "tons" },
-          { name: "Gas Consumption", y: 4393, unit: "Joules" },
-          { name: "Electricity Usage", y: 3686, unit: "Joules" },
-          { name: "Gas Consumption", y: 3375, unit: "Joules" },
-          { name: "Oil Usage", y: 645, unit: "Joules" },
-          { name: "Wind Energy", y: 1759, unit: "liters" },
-          { name: "Wind Energy", y: 4811, unit: "kWh" },
-          { name: "Oil Usage", y: 1208, unit: "Joules" },
-          { name: "Solar Energy", y: 1379, unit: "Joules" },
-          { name: "Wind Energy", y: 2730, unit: "liters" },
-          { name: "Oil Usage", y: 4305, unit: "kWh" },
-          { name: "Wind Energy", y: 4596, unit: "m³" },
-          { name: "Coal Consumption", y: 2484, unit: "kWh" },
-          { name: "Wind Energy", y: 967, unit: "m³" },
-          { name: "Wind Energy", y: 1098, unit: "Joules" },
-          { name: "Gas Consumption", y: 3477, unit: "m³" },
-          { name: "Gas Consumption", y: 4849, unit: "Joules" },
-          { name: "Coal Consumption", y: 3413, unit: "kWh" },
-          { name: "Geothermal Energy", y: 2926, unit: "Joules" },
-          { name: "Solar Energy", y: 4054, unit: "Joules" },
-          { name: "Oil Usage", y: 2963, unit: "tons" },
-          { name: "Gas Consumption", y: 1034, unit: "liters" },
-          { name: "Solar Energy", y: 1887, unit: "kWh" },
-          { name: "Water Consumption", y: 4000, unit: "liters" },
-          { name: "Wind Energy", y: 541, unit: "tons" },
-          { name: "Water Consumption", y: 1272, unit: "tons" },
-          { name: "Hydro Energy", y: 897, unit: "Joules" },
-          { name: "Oil Usage", y: 2257, unit: "tons" },
-          { name: "Oil Usage", y: 1101, unit: "m³" },
-          { name: "Nuclear Energy", y: 2616, unit: "m³" },
-          { name: "Hydro Energy", y: 2075, unit: "kWh" },
-          { name: "Electricity Usage", y: 1116, unit: "kWh" },
-        ],
+        data: data,
       },
     ],
   };
 
   return (
-    <div>
-      <HighchartsReact highcharts={Highcharts} options={options} />
-    </div>
+    <HighchartsReact highcharts={Highcharts} options={options} ref={chartRef} />
   );
 };
 

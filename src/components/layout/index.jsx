@@ -61,7 +61,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
   const { countNotif, unseenNotif } = useSelector(
     (state) => state.notifications
   );
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
   const [visible, setVisible] = useState(false);
 
   const fetchAllData = useCallback(() => {
@@ -429,8 +429,8 @@ const LayoutComponent = memo(({ childrenComponent }) => {
             <img src={Logo} alt='logo' />
 
             {!collapsed && (
-              <h1 className='logo_name'>Smart Solutions System</h1>
-            )}
+              <h1 className='logo_name'>Logo</h1>
+            )}  
           </div>
 
           <Menu

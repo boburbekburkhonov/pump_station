@@ -25,6 +25,7 @@ const initialState = {
       initialTheme === "light"
         ? "rgba(34, 60, 80, 0.1)"
         : "rgba(255, 255, 255, 0.2)",
+    blurBgColor: "rgba(52, 152, 219, 0.2)"
   },
 };
 
@@ -42,6 +43,7 @@ const themes = {
     statisticElement1: "#B558F6",
     statisticElement2: "#FEC400",
     statisticElement3: "#4072EE",
+    blurBgColor: "rgba(52, 152, 219, 0.2)"
   },
   dark: {
     background: "#37424e",
@@ -56,6 +58,7 @@ const themes = {
     statisticElement3: "#4072EE",
     blurFilter: "rgba(256, 256, 256, 0.1)",
     boxShadow: "rgba(255, 255, 255, 0.2)",
+    blurBgColor: "rgba(52, 152, 219, 0.2)"
   },
 };
 

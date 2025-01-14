@@ -7,19 +7,23 @@ const translations = {
   uz: {
     agrigate: "Agrigat qiymati",
     meter: "Hisoblagich qiymati",
+    meter2: "kvs"
   },
   ru: {
     agrigate: "Значение агрегата",
     meter: "Значение счетчика",
+    meter2: "кВтч"
   },
   en: {
     agrigate: "Aggregate value",
     meter: "Elektr value",
+    meter2: "kWh",
   },
 };
 
 export const LINE_STATISTIC_DATA_TYPES = {
   FIND_TODAY_LINE_STATISTICS_DATA: "FIND_TODAY_LINE_STATISTICS_DATA",
+  FIND_TODAY_LINE_STATISTICS_DATA2: "FIND_TODAY_LINE_STATISTICS_DATA2",
   FIND_YESTERDAY_LINE_STATISTICS_DATA: "FIND_YESTERDAY_LINE_STATISTICS_DATA",
   FIND_WEEKLY_LINE_STATISTICS_DATA: "FIND_WEEKLY_LINE_STATISTICS_DATA",
   FIND_MONTHLY_LINE_STATISTICS_DATA: "FIND_MONTHLY_LINE_STATISTICS_DATA",
@@ -41,25 +45,29 @@ export const findTodayLineStatisticData =
       );
 
       const data = res.data.data;
-      const chartData = data.energyToday.flatMap((item, index) => {
-        const date = item.date.split(" ")[1];
-        return [
-          {
-            name: translations[lang].meter,
-            date: date,
-            value: item.energyActive,
-          },
-          {
-            name: translations[lang].agrigate,
-            date: date,
-            value: data.volumeToday[index].volume,
-          },
-        ];
-      });
+
+      const newAgrigateValue = {
+        name: translations[lang].agrigate,
+        date: data.volumeToday.map((item) => item.date.split(" ")[1]),
+        data: data.volumeToday.map((item) => item.volume),
+        unit: "m³",
+      };
+
+      const newElectricalValue = {
+        name: translations[lang].meter,
+        date: data.energyToday.map((item) => item.date.split(" ")[1]),
+        data: data.energyToday.map((item) => item.energyActive),
+        unit: translations[lang].meter2,
+      };
 
       dispatch({
         type: LINE_STATISTIC_DATA_TYPES.FIND_TODAY_LINE_STATISTICS_DATA,
-        payload: chartData,
+        payload: newAgrigateValue,
+      });
+
+      dispatch({
+        type: LINE_STATISTIC_DATA_TYPES.FIND_TODAY_LINE_STATISTICS_DATA2,
+        payload: newElectricalValue,
       });
     } catch (err) {
       if (!err.response) {
@@ -99,25 +107,29 @@ export const findYesterdayLineStatisticData =
       );
 
       const data = res.data.data;
-      const chartData = data.energyYesterday.flatMap((item, index) => {
-        const date = item.date.split(" ")[1];
-        return [
-          {
-            name: translations[lang].meter,
-            date: date,
-            value: item.energyActive,
-          },
-          {
-            name: translations[lang].agrigate,
-            date: date,
-            value: data.volumeYesterday[index].volume,
-          },
-        ];
-      });
+
+      const newAgrigateValue = {
+        name: translations[lang].agrigate,
+        date: data.volumeYesterday.map((item) => item.date.split(" ")[1]),
+        data: data.volumeYesterday.map((item) => item.volume),
+        unit: "m³",
+      };
+
+      const newElectricalValue = {
+        name: translations[lang].agrigate,
+        date: data.energyYesterday.map((item) => item.date.split(" ")[1]),
+        data: data.energyYesterday.map((item) => item.energyActive),
+        unit: translations[lang].meter2,
+      };
 
       dispatch({
         type: LINE_STATISTIC_DATA_TYPES.FIND_YESTERDAY_LINE_STATISTICS_DATA,
-        payload: chartData,
+        payload: newAgrigateValue,
+      });
+
+      dispatch({
+        type: LINE_STATISTIC_DATA_TYPES.FIND_TODAY_LINE_STATISTICS_DATA2,
+        payload: newElectricalValue,
       });
     } catch (err) {
       if (!err.response) {
@@ -187,48 +199,47 @@ export const findWeeklyLineStatisticData =
       };
 
       const selectedWeekDays = weekDays[lang];
-
       if (!selectedWeekDays) {
         throw new Error(
           "Invalid language code. Please provide a valid `lang` value."
         );
       }
 
-      const { energyThisWeek, volumeThisWeek } = res.data.data;
+      const { energyThisWeek = [], volumeThisWeek = [] } = res.data.data;
 
-      const chartData = energyThisWeek.flatMap((item, index) => [
-        {
-          name: translations[lang].meter,
-          date: selectedWeekDays[index],
-          value: item.energyActive,
-        },
-        {
-          name: translations[lang].agrigate,
-          date: selectedWeekDays[index],
-          value: volumeThisWeek[index].volume,
-        },
-      ]);
+      const newAggregateValue = {
+        name: translations[lang]?.agrigate || "Aggregate",
+        date: selectedWeekDays,
+        data: volumeThisWeek.map((item) => item.volume),
+        unit: "m³",
+      };
+
+      const newElectricalValue = {
+        name: translations[lang]?.electrical || "Electrical",
+        date: selectedWeekDays,
+        data: energyThisWeek.map((item) => item.energyActive),
+        unit: translations[lang].meter2,
+      };
 
       dispatch({
-        type: LINE_STATISTIC_DATA_TYPES.FIND_WEEKLY_LINE_STATISTICS_DATA,
-        payload: chartData,
+        type: LINE_STATISTIC_DATA_TYPES.FIND_YESTERDAY_LINE_STATISTICS_DATA,
+        payload: newAggregateValue,
+      });
+
+      dispatch({
+        type: LINE_STATISTIC_DATA_TYPES.FIND_TODAY_LINE_STATISTICS_DATA2,
+        payload: newElectricalValue,
       });
     } catch (err) {
-      if (!err.response) {
-        dispatch({
-          type: GLOBALTYPES.ALERT,
-          payload: {
-            error: "Network Error",
-          },
-        });
-      } else {
-        dispatch({
-          type: GLOBALTYPES.ALERT,
-          payload: {
-            error: err.response.data.message || err.response.statusText,
-          },
-        });
-      }
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error:
+            err.response?.data?.message ||
+            err.response?.statusText ||
+            "Network Error",
+        },
+      });
     } finally {
       dispatch({
         type: LINE_STATISTIC_DATA_TYPES.FIND_LINE_STATISTIC_LOADING,
@@ -295,30 +306,37 @@ export const findMonthlyLineStatisticData =
         ],
       };
 
+      const filterMonthName = (item) => {
+        const [year, month, day] = item.date.split("T")[0].split("-");
+        return `${
+          months[lang]?.[Number(month) - 1] || months.en[Number(month) - 1]
+        } ${day}`;
+      };
+
       const { energyThisMonth, volumeThisMonth } = res.data.data;
 
-      const chartData = energyThisMonth.flatMap((item, index) => {
-        const [year, day, month] = item.date.split("T")[0].split("-");
-        const monthName =
-          months[lang]?.[Number(month) - 1] || months.en[Number(month) - 1];
+      const newAgrigateValue = {
+        name: translations[lang].agrigate,
+        date: volumeThisMonth.map((item) => filterMonthName(item)),
+        data: volumeThisMonth.map((item) => item.volume),
+        unit: "m³",
+      };
 
-        return [
-          {
-            name: translations[lang].meter,
-            date: monthName,
-            value: item.energyActive,
-          },
-          {
-            name: translations[lang].agrigate,
-            date: monthName,
-            value: volumeThisMonth[index].volume,
-          },
-        ];
+      const newElectricalValue = {
+        name: translations[lang].agrigate,
+        date: energyThisMonth.map((item) => filterMonthName(item)),
+        data: energyThisMonth.map((item) => item.energyActive),
+        unit: translations[lang].meter2,
+      };
+
+      dispatch({
+        type: LINE_STATISTIC_DATA_TYPES.FIND_YESTERDAY_LINE_STATISTICS_DATA,
+        payload: newAgrigateValue,
       });
 
       dispatch({
-        type: LINE_STATISTIC_DATA_TYPES.FIND_MONTHLY_LINE_STATISTICS_DATA,
-        payload: chartData,
+        type: LINE_STATISTIC_DATA_TYPES.FIND_TODAY_LINE_STATISTICS_DATA2,
+        payload: newElectricalValue,
       });
     } catch (err) {
       if (!err.response) {
@@ -404,28 +422,35 @@ export const findYearLineStatisticData =
         ],
       };
 
-      const chartData = energyThisYear.flatMap((item, index) => {
-        const monthName =
-          months[lang]?.[item.month - 1] || months.en[item.month - 1];
-        return [
-          {
-            name: translations[lang].meter,
-            date: monthName,
-            value: item.energyActive,
-          },
-          {
-            name: translations[lang].agrigate,
-            date: monthName,
-            value: volumeThisYear[index].volume,
-          },
-        ];
+      const selectLanguageMongth = months[lang]
+
+      const newAgrigateValue = {
+        name: translations[lang].agrigate,
+        date: volumeThisYear.map((item) => selectLanguageMongth[item.month - 1]),
+        data: volumeThisYear.map((item) => item.volume),
+        unit: "m³",
+      };
+
+      const newElectricalValue = {
+        name: translations[lang].agrigate,
+        date: energyThisYear.map((item) => selectLanguageMongth[item.month- 1]),
+        data: energyThisYear.map((item) => item.energyActive),
+        unit: translations[lang].meter2,
+      };
+
+      dispatch({
+        type: LINE_STATISTIC_DATA_TYPES.FIND_YESTERDAY_LINE_STATISTICS_DATA,
+        payload: newAgrigateValue,
       });
 
       dispatch({
-        type: LINE_STATISTIC_DATA_TYPES.FIND_YEAR_LINE_STATISTICS_DATA,
-        payload: chartData,
+        type: LINE_STATISTIC_DATA_TYPES.FIND_TODAY_LINE_STATISTICS_DATA2,
+        payload: newElectricalValue,
       });
     } catch (err) {
+      console.log("====================================");
+      console.log(err);
+      console.log("====================================");
       if (!err.response) {
         dispatch({
           type: GLOBALTYPES.ALERT,

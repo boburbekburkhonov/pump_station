@@ -132,22 +132,22 @@
         "countValue": "Number of devices"
       },
       {
-        "status": "All energy",
+        "status": "All counters",
         "color": "#03845C",
         "countValue": "Number of devices"
       },
       {
-        "status": "Active energy",
+        "status": "Active counters",
         "color": "#85A1D0",
         "countValue": "Number of devices"
       },
       {
-        "status": "Faulty energy",
+        "status": "Faulty counters",
         "color": "#C91B21",
         "countValue": "Number of devices"
       },
       {
-        "status": "Broken energy",
+        "status": "Broken counters",
         "color": "#E2C11E",
         "countValue": "Number of devices"
       }
@@ -220,7 +220,9 @@
       "energyReactiveTotal": "Total Reactive Energy",
       "stationsMoreInfoAgirgate": "Final data of the station aggregate",
       "stationsMoreInfoElectr": "Final data of the station electrical device"
-    }
+    },
+    "titleStationsDetails1": "Status of all station units",
+    "titleStationsDetails2": "Status of all station electricity meters"
   },
   "dataPagesInformation": {
     "selectButtonNames": [
@@ -243,6 +245,8 @@
       "dataFlow": "Flow rate (m³/s)",
       "dataVolume": "Volume (m³)",
       "dataDate": "Data date"
-    }
+    },
+    "active_indicator": "Active",
+    "not_active_indicator": "Inactive"
   }
 }
