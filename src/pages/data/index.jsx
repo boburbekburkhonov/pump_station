@@ -60,6 +60,7 @@ const ViewMoreModal = memo(({ openModalData, closeModal, modalData }) => {
   return (
     <Modal
       key="aggregate_modal"
+      key="aggregate_modal"
       title={false}
       open={openModalData}
       centered

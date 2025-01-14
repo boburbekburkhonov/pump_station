@@ -25,7 +25,7 @@ export const signInAction = (data, lang) => async (dispatch) => {
     Cookies.set('regionId', res.data.data.user.regionId, { expires: 1, path: '/' })
     Cookies.set('districtId', res.data.data.user.districtId, { expires: 1, path: '/' })
     Cookies.set('userId', res.data.data.user.id, { expires: 1, path: '/' })
-    
+
 
     dispatch({
       type: GLOBALTYPES.AUTH,
