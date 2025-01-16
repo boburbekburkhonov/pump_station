@@ -10,48 +10,130 @@ export const DASHBOARD_ACTIONS_TYPES = {
   FIND_LAST_DATA_BY_ELECTIRAL_ENERGY_ID:
     "FIND_LAST_DATA_BY_ELECTIRAL_ENERGY_ID",
 
-  FIND_TODAY_DATA_BY_STATION_ID: "FIND_TODAY_DATA_BY_STATION_ID",
-  FIND_TODAY_DATA_BY_AGGREGATE_ID: "FIND_TODAY_DATA_BY_AGGREGATE_ID",
-  FIND_ELECTRCITY_TODAY_DATA_STATION_ID:
-    "FIND_ELECTRCITY_TODAY_DATA_STATION_ID",
-  FIND_TODAY_ELECTRICAL_ENERGY_ID: "FIND_TODAY_ELECTRICAL_ENERGY_ID",
+  FIND_DATA_BY_STATION_ID: "FIND_DATA_BY_STATION_ID",
+  FIND_DATA_BY_AGGREGATE_ID: "FIND_DATA_BY_AGGREGATE_ID",
+  FIND_ELECTRCITY_DATA_STATION_ID: "FIND_ELECTRCITY_DATA_STATION_ID",
+  FIND_ELECTRICAL_ENERGY_ID: "FIND_ELECTRICAL_ENERGY_ID",
 
-  FIND_YESTERDAY_DATA_BY_STATION_ID: "FIND_YESTERDAY_DATA_BY_STATION_ID",
-  FIND_YESTERDAY_DATA_BY_AGGREGATE_ID: "FIND_YESTERDAY_DATA_BY_AGGREGATE_ID",
-  FIND_ELECTRCITY_YESTERDAY_DATA_BY_STATION_ID:
-    "FIND_ELECTRCITY_YESTERDAY_DATA_BY_STATION_ID",
-  FIND_YESTERDAY_DATA_ELECTRICAL_ENERGY_ID:
-    "FIND_YESTERDAY_DATA_ELECTRICAL_ENERGY_ID",
+  LINE_CHART_DATA_WITH_AGGREGATE_ID: "LINE_CHART_DATA_WITH_AGGREGATE_ID",
+  LINE_CHART_DATA_WITH_ELECTY_ID: "LINE_CHART_DATA_WITH_ELECTY_ID",
+};
 
-  FIND_DAILY_DATA_BY_STATION_ID: "FIND_DAILY_DATA_BY_STATION_ID",
-  FIND_DAILY_DATA_BY_AGGREGATE_ID: "FIND_DAILY_DATA_BY_AGGREGATE_ID",
-  FIND_ELECTRCITY_DAILY_DATA_BY_STATION_ID:
-    "FIND_ELECTRCITY_DAILY_DATA_BY_STATION_ID",
-  FIND_DAILY_DATA_ELECTRICAL_ENERGY_ID:
-    "FIND_DAILY_DATA_ELECTRICAL_ENERGY_ID",
+const aggregateDataType = {
+  uz: {
+    name1: "Oqim tezligi",
+    name2: "Tezlik",
+    name3: "Suv Hajmi",
+    weekName: "Hafta",
+  },
+  ru: {
+    name1: "Скорость потока",
+    name2: "Скорость",
+    name3: "Объем",
+    weekName: "Неделя",
+  },
+  en: {
+    name1: "Flow rate",
+    name2: "Velocity",
+    name3: "Volume",
+    weekName: "Week",
+  },
+};
 
-  FIND_WEEKLY_DATA_BY_STATION_ID: "FIND_WEEKLY_DATA_BY_STATION_ID",
-  FIND_WEEKLY_DATA_BY_AGGREGATE_ID: "FIND_WEEKLY_DATA_BY_AGGREGATE_ID",
-  FIND_ELECTRCITY_WEEKLY_DATA_STATION_ID:
-    "FIND_ELECTRCITY_WEEKLY_DATA_STATION_ID",
-  FIND_WEEKLY_ELECTRICAL_ENERGY_ID: "FIND_WEEKLY_ELECTRICAL_ENERGY_ID",
+const electryDataType = {
+  uz: {
+    current1: "Birinchi oqim",
+    current2: "Ikkinchi oqim",
+    current3: "Uchinchi oqim",
+    energyActive: "Faol energiya",
+    energyReactive: "Reaktiv energiya",
+    powerActive: "Faol quvvat",
+    powerReactive: "Reaktiv quvvat",
+    voltage1: "Birinchi kuchlanish",
+    voltage2: "Ikkinchi kuchlanish",
+    voltage3: "Uchinchi kuchlanish",
+  },
+  ru: {
+    current1: "Первый ток",
+    current2: "Второй ток",
+    current3: "Третий ток",
+    energyActive: "Активная энергия",
+    energyReactive: "Реактивная энергия",
+    powerActive: "Активная мощность",
+    powerReactive: "Реактивная мощность",
+    voltage1: "Первое напряжение",
+    voltage2: "Второе напряжение",
+    voltage3: "Третье напряжение",
+  },
+  en: {
+    current1: "First current",
+    current2: "Second current",
+    current3: "Third current",
+    energyActive: "Active energy",
+    energyReactive: "Reactive energy",
+    powerActive: "Active power",
+    powerReactive: "Reactive power",
+    voltage1: "First voltage",
+    voltage2: "Second voltage",
+    voltage3: "Third voltage",
+  },
+};
 
-  FIND_TEN_DAY_DATA_BY_STATION_ID: "FIND_TEN_DAY_DATA_BY_STATION_ID",
-  FIND_TEN_DAY_DATA_BY_AGGREGATE_ID: "FIND_TEN_DAY_DATA_BY_AGGREGATE_ID",
-  FIND_ELECTRCITY_TEN_DAY_DATA_STATION_ID:
-    "FIND_ELECTRCITY_TEN_DAY_DATA_STATION_ID",
-  FIND_TEN_DAY_ELECTRICAL_ENERGY_ID: "FIND_TEN_DAY_ELECTRICAL_ENERGY_ID",
+const unitTranslations = {
+  uz: {
+    kwHour: "kVt·soat",
+  },
+  ru: {
+    kwHour: "кВт·ч",
+  },
+  en: {
+    kwHour: "kWh",
+  },
+};
 
-  FIND_MONTHLY_DATA_BY_STATION_ID: "FIND_MONTHLY_DATA_BY_STATION_ID",
-  FIND_MONTHLY_DATA_BY_AGGREGATE_ID: "FIND_MONTHLY_DATA_BY_AGGREGATE_ID",
-  FIND_ELECTRCITY_MONTHLY_DATA_STATION_ID:
-    "FIND_ELECTRCITY_MONTHLY_DATA_STATION_ID",
-  FIND_MONTHLY_ELECTRICAL_ENERGY_ID: "FIND_MONTHLY_ELECTRICAL_ENERGY_ID",
-
-  FIND_ALL_DATA_BY_STATION_ID: "FIND_ALL_DATA_BY_STATION_ID",
-  FIND_ALL_DATA_BY_AGGREGATE_ID: "FIND_ALL_DATA_BY_AGGREGATE_ID",
-  FIND_ELECTRCITY_ALL_DATA_STATION_ID: "FIND_ELECTRCITY_ALL_DATA_STATION_ID",
-  FIND_ALL_ELECTRICAL_ENERGY_ID: "FIND_ALL_ELECTRICAL_ENERGY_ID",
+const months = {
+  uz: [
+    "Yanvar",
+    "Fevral",
+    "Mart",
+    "Aprel",
+    "May",
+    "Iyun",
+    "Iyul",
+    "Avgust",
+    "Sentabr",
+    "Oktabr",
+    "Noyabr",
+    "Dekabr",
+  ],
+  en: [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ],
+  ru: [
+    "Январь",
+    "Февраль",
+    "Март",
+    "Апрель",
+    "Май",
+    "Июнь",
+    "Июль",
+    "Август",
+    "Сентябрь",
+    "Октябрь",
+    "Ноябрь",
+    "Декабрь",
+  ],
 };
 
 // * Last data
@@ -236,7 +318,7 @@ export const getTodayAggregateData =
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_TODAY_DATA_BY_STATION_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -276,8 +358,36 @@ export const getTodayAggregateIDData =
         token
       );
 
+      const data = res.data.data.data;
+
+      const lineChartData = {
+        date: data?.map((item) => item.date.split(" ")[1]),
+        lineData: [
+          {
+            name: aggregateDataType[lang].name1,
+            data: data?.map((item) => item.flow),
+            unit: "m³/s",
+          },
+          {
+            name: aggregateDataType[lang].name2,
+            data: data?.map((item) => item.velocity),
+            unit: "m/s",
+          },
+          {
+            name: aggregateDataType[lang].name3,
+            data: data?.map((item) => item.volume),
+            unit: "m³",
+          },
+        ],
+      };
+
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_TODAY_DATA_BY_AGGREGATE_ID,
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_AGGREGATE_ID,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -318,7 +428,7 @@ export const findTodayElectricityStationId =
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_TODAY_DATA_STATION_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_DATA_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -358,8 +468,73 @@ export const findTodayDataElectricityId =
         token
       );
 
+      const data = res.data.data.data;
+
+      const lineChartData = {
+        date: data?.map((item) => item.date.split(" ")[1]),
+        lineData: [
+          {
+            name: electryDataType[lang].energyActive,
+            data: data?.map((item) => item.energyActive),
+            unit: unitTranslations[lang].kwHour,
+          },
+          {
+            name: electryDataType[lang].energyReactive,
+            data: data?.map((item) => item.energyReactive),
+            unit: unitTranslations[lang].kwHour,
+          },
+          {
+            name: electryDataType[lang].powerActive,
+            data: data?.map((item) => item.powerActive),
+            unit: "Kw",
+          },
+          {
+            name: electryDataType[lang].powerReactive,
+            data: data?.map((item) => item.powerReactive),
+            unit: "Kw",
+          },
+
+          {
+            name: electryDataType[lang].current1,
+            data: data?.map((item) => item.current1),
+            unit: "A",
+          },
+          {
+            name: electryDataType[lang].current2,
+            data: data?.map((item) => item.current2),
+            unit: "A",
+          },
+          {
+            name: electryDataType[lang].current3,
+            data: data?.map((item) => item.current3),
+            unit: "A",
+          },
+
+          {
+            name: electryDataType[lang].voltage1,
+            data: data?.map((item) => item.voltage1),
+            unit: "V",
+          },
+          {
+            name: electryDataType[lang].voltage2,
+            data: data?.map((item) => item.voltage2),
+            unit: "V",
+          },
+          {
+            name: electryDataType[lang].voltage3,
+            data: data?.map((item) => item.voltage3),
+            unit: "V",
+          },
+        ],
+      };
+
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_LAST_DATA_BY_ELECTIRAL_ENERGY_ID,
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_ELECTY_ID,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRICAL_ENERGY_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -401,7 +576,7 @@ export const getYesterdayAggregateData =
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_YESTERDAY_DATA_BY_STATION_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -441,8 +616,36 @@ export const getYesterdayAggregateIDData =
         token
       );
 
+      const data = res.data.data.data;
+
+      const lineChartData = {
+        date: data?.map((item) => item.date.split(" ")[1]),
+        lineData: [
+          {
+            name: aggregateDataType[lang].name1,
+            data: data?.map((item) => item.flow),
+            unit: "m³/s",
+          },
+          {
+            name: aggregateDataType[lang].name2,
+            data: data?.map((item) => item.velocity),
+            unit: "m/s",
+          },
+          {
+            name: aggregateDataType[lang].name3,
+            data: data?.map((item) => item.volume),
+            unit: "m³",
+          },
+        ],
+      };
+
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_YESTERDAY_DATA_BY_AGGREGATE_ID,
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_AGGREGATE_ID,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -483,7 +686,7 @@ export const findYesterdayElectricityStationId =
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_YESTERDAY_DATA_BY_STATION_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_DATA_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -519,12 +722,77 @@ export const findYesterdayDataElectricityId =
       });
 
       const res = await getDataApi(
-        `electrical-energy-yesterday-data/findDataByElectricalEnergyId?lang=${lang}&stationId=${electricalId}&page=${page}&perPage=${perPage}`,
+        `electrical-energy-yesterday-data/findDataByElectricalEnergyId?lang=${lang}&electricalEnergyId=${electricalId}&page=${page}&perPage=${perPage}`,
         token
       );
 
+      const data = res.data.data.data;
+
+      const lineChartData = {
+        date: data?.map((item) => item.date.split(" ")[1]),
+        lineData: [
+          {
+            name: electryDataType[lang].energyActive,
+            data: data?.map((item) => item.energyActive),
+            unit: unitTranslations[lang].kwHour,
+          },
+          {
+            name: electryDataType[lang].energyReactive,
+            data: data?.map((item) => item.energyReactive),
+            unit: unitTranslations[lang].kwHour,
+          },
+          {
+            name: electryDataType[lang].powerActive,
+            data: data?.map((item) => item.powerActive),
+            unit: "Kw",
+          },
+          {
+            name: electryDataType[lang].powerReactive,
+            data: data?.map((item) => item.powerReactive),
+            unit: "Kw",
+          },
+
+          {
+            name: electryDataType[lang].current1,
+            data: data?.map((item) => item.current1),
+            unit: "A",
+          },
+          {
+            name: electryDataType[lang].current2,
+            data: data?.map((item) => item.current2),
+            unit: "A",
+          },
+          {
+            name: electryDataType[lang].current3,
+            data: data?.map((item) => item.current3),
+            unit: "A",
+          },
+
+          {
+            name: electryDataType[lang].voltage1,
+            data: data?.map((item) => item.voltage1),
+            unit: "V",
+          },
+          {
+            name: electryDataType[lang].voltage2,
+            data: data?.map((item) => item.voltage2),
+            unit: "V",
+          },
+          {
+            name: electryDataType[lang].voltage3,
+            data: data?.map((item) => item.voltage3),
+            unit: "V",
+          },
+        ],
+      };
+
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_YESTERDAY_DATA_ELECTRICAL_ENERGY_ID,
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_ELECTY_ID,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRICAL_ENERGY_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -566,7 +834,7 @@ export const getWeeklyAggregateData =
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_WEEKLY_DATA_BY_STATION_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -602,13 +870,51 @@ export const getWeeklyAggregateIDData =
       });
 
       const res = await getDataApi(
-        `pump-weekly-data/findDataByAggregateIdAndYearMonthNumber?lang=${lang}&aggregateId=${aggregateId}&page=${page}&perPage=${perPage}&month=${month}&year=${year}`,
+        `pump-weekly-data/findDataByAggregateIdAndYearMonthNumber?lang=${lang}&aggregateId=${aggregateId}&year=${year}&month=${month}`,
         token
       );
 
+      const data = res.data.data?.aggregateData;
+
+      const weekName = aggregateDataType[lang]?.weekName || "Unknown Week";
+
+      const newData = data?.map((item) => ({
+        ...item,
+        date: `${item.year}-${item.month}. ${item.week}-${weekName}`,
+      }));
+
+      const lineChartData = {
+        date: data?.map(
+          (item) =>
+            `${item.year}-${item.month}. ${item.week}-${aggregateDataType[lang].weekName}`
+        ),
+        lineData: [
+          {
+            name: aggregateDataType[lang].name1,
+            data: data?.map((item) => item.flow),
+            unit: "m³/s",
+          },
+          {
+            name: aggregateDataType[lang].name2,
+            data: data?.map((item) => item.velocity),
+            unit: "m/s",
+          },
+          {
+            name: aggregateDataType[lang].name3,
+            data: data?.map((item) => item.volume),
+            unit: "m³",
+          },
+        ],
+      };
+
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_WEEKLY_DATA_BY_AGGREGATE_ID,
-        payload: res.data.data,
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_AGGREGATE_ID,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
+        payload: newData || [],
       });
     } catch (err) {
       if (!err.response) {
@@ -648,7 +954,7 @@ export const findWeeklyElectricityStationId =
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_WEEKLY_DATA_STATION_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_DATA_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -677,45 +983,122 @@ export const findWeeklyElectricityStationId =
 
 export const findWeeklyDataElectricityId =
   (electricalId, token, lang, page, perPage, month, year) =>
-    async (dispatch) => {
-      try {
-        dispatch({
-          type: GLOBALTYPES.LOADING,
-          payload: true,
-        });
+  async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
 
-        const res = await getDataApi(
-          `electrical-energy-weekly-data/findDataByElectricalEnergyId?lang=${lang}&aggregateId=${electricalId}&page=${page}&perPage=${perPage}&month=${month}&year=${year}`,
-          token
-        );
+      const res = await getDataApi(
+        `electrical-energy-weekly-data/findDataByElectricalEnergyId?lang=${lang}&electricalEnergyId=${electricalId}&page=${page}&perPage=${perPage}&month=${month}&year=${year}`,
+        token
+      );
 
+      const data = res.data.data?.electricalEnergyData;
+
+      const lineChartData = {
+        date: data?.map(
+          (item) =>
+            `${item.year}-${item.month}${" "}${item.week} ${" "} ${
+              aggregateDataType[lang].weekName
+            }`
+        ),
+        lineData: [
+          {
+            name: electryDataType[lang].energyActive,
+            data: data?.map((item) => item.energyActive),
+            unit: unitTranslations[lang].kwHour,
+          },
+          {
+            name: electryDataType[lang].energyReactive,
+            data: data?.map((item) => item.energyReactive),
+            unit: unitTranslations[lang].kwHour,
+          },
+          {
+            name: electryDataType[lang].powerActive,
+            data: data?.map((item) => item.powerActive),
+            unit: "Kw",
+          },
+          {
+            name: electryDataType[lang].powerReactive,
+            data: data?.map((item) => item.powerReactive),
+            unit: "Kw",
+          },
+
+          {
+            name: electryDataType[lang].current1,
+            data: data?.map((item) => item.current1),
+            unit: "A",
+          },
+          {
+            name: electryDataType[lang].current2,
+            data: data?.map((item) => item.current2),
+            unit: "A",
+          },
+          {
+            name: electryDataType[lang].current3,
+            data: data?.map((item) => item.current3),
+            unit: "A",
+          },
+
+          {
+            name: electryDataType[lang].voltage1,
+            data: data?.map((item) => item.voltage1),
+            unit: "V",
+          },
+          {
+            name: electryDataType[lang].voltage2,
+            data: data?.map((item) => item.voltage2),
+            unit: "V",
+          },
+          {
+            name: electryDataType[lang].voltage3,
+            data: data?.map((item) => item.voltage3),
+            unit: "V",
+          },
+        ],
+      };
+
+      const newData = data?.map((item) => ({
+        ...item,
+        date: `${item.year}-${item.month}${" "}${item.week} ${" "} ${
+          aggregateDataType[lang].weekName
+        }`,
+      }));
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_ELECTY_ID,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRICAL_ENERGY_ID,
+        payload: newData,
+      });
+    } catch (err) {
+      if (!err.response) {
         dispatch({
-          type: DASHBOARD_ACTIONS_TYPES.FIND_WEEKLY_ELECTRICAL_ENERGY_ID,
-          payload: res.data.data,
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
         });
-      } catch (err) {
-        if (!err.response) {
-          dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-              error: "Network Error",
-            },
-          });
-        } else {
-          dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-              error: err.response.data.message || err.response.statusText,
-            },
-          });
-        }
-      } finally {
+      } else {
         dispatch({
-          type: GLOBALTYPES.LOADING,
-          payload: false,
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
         });
       }
-    };
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
 
 // * Ten day data
 export const getTenDayAggregateData =
@@ -732,7 +1115,7 @@ export const getTenDayAggregateData =
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_TEN_DAY_DATA_BY_STATION_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -768,12 +1151,42 @@ export const getTenDayAggregateIDData =
       });
 
       const res = await getDataApi(
-        `pump-ten-day-data/findDataByAggregateIdAndYearNumber?lang=${lang}&stationId=${aggregateId}&page=${page}&perPage=${perPage}&year=${year}`,
+        `pump-ten-day-data/findDataByAggregateIdAndYearNumber?lang=${lang}&aggregateId=${aggregateId}&page=${page}&perPage=${perPage}&year=${year}`,
         token
       );
 
+      const data = Array.isArray(res.data.data.data?.aggregateData)
+        ? res.data.data.data?.aggregateData[0]?.data
+        : [];
+
+      const lineChartData = {
+        date: data?.map((item) => item.tenDayNumber),
+        lineData: [
+          {
+            name: aggregateDataType[lang].name1,
+            data: data?.map((item) => item.flow),
+            unit: "m³/s",
+          },
+          {
+            name: aggregateDataType[lang].name2,
+            data: data?.map((item) => item.velocity),
+            unit: "m/s",
+          },
+          {
+            name: aggregateDataType[lang].name3,
+            data: data?.map((item) => item.volume),
+            unit: "m³",
+          },
+        ],
+      };
+
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_TEN_DAY_DATA_BY_AGGREGATE_ID,
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_AGGREGATE_ID,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -814,7 +1227,7 @@ export const findTenDayElectricityStationId =
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_TEN_DAY_DATA_STATION_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_DATA_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -850,15 +1263,85 @@ export const findTenDayDataElectricityId =
       });
 
       const res = await getDataApi(
-        `electrical-energy-ten-day-data/findDataByElectricalEnergyId?lang=${lang}&stationId=${electricalId}&page=${page}&perPage=${perPage}&year=${year}`,
+        `electrical-energy-ten-day-data/findDataByElectricalEnergyId?lang=${lang}&electricalEnergyId=${electricalId}&page=${page}&perPage=${perPage}&year=${year}`,
         token
       );
 
+      const data = res.data.data?.data[0]?.data;
+      const dateValue = res.data.data?.data[0];
+
+      const lineChartData = {
+        date: data?.map(
+          (item) => `${dateValue.year}${" "}${item.tenDayNumber}`
+        ),
+        lineData: [
+          {
+            name: electryDataType[lang].energyActive,
+            data: data?.map((item) => item.energyActive),
+            unit: unitTranslations[lang].kwHour,
+          },
+          {
+            name: electryDataType[lang].energyReactive,
+            data: data?.map((item) => item.energyReactive),
+            unit: unitTranslations[lang].kwHour,
+          },
+          {
+            name: electryDataType[lang].powerActive,
+            data: data?.map((item) => item.powerActive),
+            unit: "Kw",
+          },
+          {
+            name: electryDataType[lang].powerReactive,
+            data: data?.map((item) => item.powerReactive),
+            unit: "Kw",
+          },
+
+          {
+            name: electryDataType[lang].current1,
+            data: data?.map((item) => item.current1),
+            unit: "A",
+          },
+          {
+            name: electryDataType[lang].current2,
+            data: data?.map((item) => item.current2),
+            unit: "A",
+          },
+          {
+            name: electryDataType[lang].current3,
+            data: data?.map((item) => item.current3),
+            unit: "A",
+          },
+
+          {
+            name: electryDataType[lang].voltage1,
+            data: data?.map((item) => item.voltage1),
+            unit: "V",
+          },
+          {
+            name: electryDataType[lang].voltage2,
+            data: data?.map((item) => item.voltage2),
+            unit: "V",
+          },
+          {
+            name: electryDataType[lang].voltage3,
+            data: data?.map((item) => item.voltage3),
+            unit: "V",
+          },
+        ],
+      };
+
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_TEN_DAY_ELECTRICAL_ENERGY_ID,
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_ELECTY_ID,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRICAL_ENERGY_ID,
         payload: res.data.data,
       });
     } catch (err) {
+      console.log(err);
+
       if (!err.response) {
         dispatch({
           type: GLOBALTYPES.ALERT,
@@ -897,7 +1380,7 @@ export const getMonthlyAggregateData =
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_MONTHLY_DATA_BY_STATION_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -933,13 +1416,59 @@ export const getMonthlyAggregateIDData =
       });
 
       const res = await getDataApi(
-        `pump-monthly-data/findDataByAggregateIdAndYearNumber?lang=${lang}&stationId=${aggregateId}&page=${page}&perPage=${perPage}&year=${year}`,
+        `pump-monthly-data/findDataByAggregateIdAndYearNumber?lang=${lang}&aggregateId=${aggregateId}&page=${page}&perPage=${perPage}&year=${year}`,
         token
       );
 
+      const data = res.data.data;
+
+      const newData = {
+        currentPage: data.currentPage,
+        nextPages: data.nextPages,
+        totalDocuments: data.totalDocuments,
+        totalPages: data.totalPages,
+        data: data?.data.aggregateData?.map((item) => {
+          return {
+            id: item.id,
+            velocity: item.velocity,
+            flow: item.flow,
+            volume: item.volume,
+            date: `${item.year}- ${months[lang][item.month - 1]}`,
+          };
+        }),
+      };
+
+      const lineChartData = {
+        date: data?.data.aggregateData?.map(
+          (item) => `${item.year}- ${months[lang][item.month - 1]}`
+        ),
+        lineData: [
+          {
+            name: aggregateDataType[lang].name1,
+            data: data?.data.aggregateData?.map((item) => item.flow),
+            unit: "m³/s",
+          },
+          {
+            name: aggregateDataType[lang].name2,
+            data: data?.data.aggregateData?.map((item) => item.velocity),
+            unit: "m/s",
+          },
+          {
+            name: aggregateDataType[lang].name3,
+            data: data?.data.aggregateData?.map((item) => item.volume),
+            unit: "m³",
+          },
+        ],
+      };
+
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_MONTHLY_DATA_BY_AGGREGATE_ID,
-        payload: res.data.data,
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_AGGREGATE_ID,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
+        payload: newData,
       });
     } catch (err) {
       if (!err.response) {
@@ -979,7 +1508,7 @@ export const findMonthlyElectricityStationId =
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_MONTHLY_DATA_STATION_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_DATA_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -1015,13 +1544,85 @@ export const findMonthlyDataElectricityId =
       });
 
       const res = await getDataApi(
-        `electrical-energy-monthly-data/findDataByElectricalEnergyId?lang=${lang}&stationId=${electricalId}&page=${page}&perPage=${perPage}&year=${year}`,
+        `electrical-energy-monthly-data/findDataByElectricalEnergyId?lang=${lang}&electricalEnergyId=${electricalId}&page=${page}&perPage=${perPage}&year=${year}`,
         token
       );
 
+      const data = res.data.data?.data?.electricalEnergyData;
+
+      const newData = data.map((item) => ({
+        ...item,
+        date: `${item.year} ${" "} ${months[lang][item.month - 1]}`,
+      }));
+
+      const lineChartData = {
+        date: data?.map(
+          (item) => `${item.year} ${" "} ${months[lang][item.month - 1]}`
+        ),
+        lineData: [
+          {
+            name: electryDataType[lang].energyActive,
+            data: data?.map((item) => item.energyActive),
+            unit: unitTranslations[lang].kwHour,
+          },
+          {
+            name: electryDataType[lang].energyReactive,
+            data: data?.map((item) => item.energyReactive),
+            unit: unitTranslations[lang].kwHour,
+          },
+          {
+            name: electryDataType[lang].powerActive,
+            data: data?.map((item) => item.powerActive),
+            unit: "Kw",
+          },
+          {
+            name: electryDataType[lang].powerReactive,
+            data: data?.map((item) => item.powerReactive),
+            unit: "Kw",
+          },
+
+          {
+            name: electryDataType[lang].current1,
+            data: data?.map((item) => item.current1),
+            unit: "A",
+          },
+          {
+            name: electryDataType[lang].current2,
+            data: data?.map((item) => item.current2),
+            unit: "A",
+          },
+          {
+            name: electryDataType[lang].current3,
+            data: data?.map((item) => item.current3),
+            unit: "A",
+          },
+
+          {
+            name: electryDataType[lang].voltage1,
+            data: data?.map((item) => item.voltage1),
+            unit: "V",
+          },
+          {
+            name: electryDataType[lang].voltage2,
+            data: data?.map((item) => item.voltage2),
+            unit: "V",
+          },
+          {
+            name: electryDataType[lang].voltage3,
+            data: data?.map((item) => item.voltage3),
+            unit: "V",
+          },
+        ],
+      };
+
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_MONTHLY_ELECTRICAL_ENERGY_ID,
-        payload: res.data.data,
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_ELECTY_ID,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRICAL_ENERGY_ID,
+        payload: newData,
       });
     } catch (err) {
       if (!err.response) {
@@ -1089,8 +1690,9 @@ export const getAllAggregateData =
     }
   };
 
-export const getAllAggregateIDData =
-  (aggregateId, token, lang) => async (dispatch) => {
+// * Done
+export const getSelectDateAggregateIDData =
+  (aggregateId, token, lang, page, perPage, date) => async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -1098,12 +1700,40 @@ export const getAllAggregateIDData =
       });
 
       const res = await getDataApi(
-        `aggregate/findLastDataByAggregateId?lang=${lang}&aggregateId=${aggregateId}`,
+        `pump-all-data/findDataByAggregateIdDate?lang=${lang}&aggregateId=${aggregateId}&page=${page}&perPage=${perPage}&date=${date}`,
         token
       );
 
+      const data = res.data.data.data;
+
+      const lineChartData = {
+        date: data?.map((item) => item.date.split(" ")[1]),
+        lineData: [
+          {
+            name: aggregateDataType[lang].name1,
+            data: data?.map((item) => item.flow),
+            unit: "m³/s",
+          },
+          {
+            name: aggregateDataType[lang].name2,
+            data: data?.map((item) => item.velocity),
+            unit: "m/s",
+          },
+          {
+            name: aggregateDataType[lang].name3,
+            data: data?.map((item) => item.volume),
+            unit: "m³",
+          },
+        ],
+      };
+
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_LAST_DATA_BY_AGGREGATE_ID,
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_AGGREGATE_ID,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -1170,9 +1800,9 @@ export const findAllElectricityStationId =
       });
     }
   };
-
-export const findAllDataElectricityId =
-  (electricalId, token, lang) => async (dispatch) => {
+// * Done
+export const findSelectDateElectricityId =
+  (electricalId, token, lang, page, perPage, date) => async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -1180,12 +1810,77 @@ export const findAllDataElectricityId =
       });
 
       const res = await getDataApi(
-        `electrical-energy/findLastDataByElectricalEnergyId?lang=${lang}&aggregateId=${electricalId}`,
+        `electrical-energy-all-data/findDataByElectricalEnergyIdAndDate?lang=${lang}&electricalEnergyId=${electricalId}&page=${page}&perPage=${perPage}&date=${date}`,
         token
       );
 
+      const data = res.data.data.data;
+
+      const lineChartData = {
+        date: data?.map((item) => item.date.split(" ")[1]),
+        lineData: [
+          {
+            name: electryDataType[lang].energyActive,
+            data: data?.map((item) => item.energyActive),
+            unit: unitTranslations[lang].kwHour,
+          },
+          {
+            name: electryDataType[lang].energyReactive,
+            data: data?.map((item) => item.energyReactive),
+            unit: unitTranslations[lang].kwHour,
+          },
+          {
+            name: electryDataType[lang].powerActive,
+            data: data?.map((item) => item.powerActive),
+            unit: "Kw",
+          },
+          {
+            name: electryDataType[lang].powerReactive,
+            data: data?.map((item) => item.powerReactive),
+            unit: "Kw",
+          },
+
+          {
+            name: electryDataType[lang].current1,
+            data: data?.map((item) => item.current1),
+            unit: "A",
+          },
+          {
+            name: electryDataType[lang].current2,
+            data: data?.map((item) => item.current2),
+            unit: "A",
+          },
+          {
+            name: electryDataType[lang].current3,
+            data: data?.map((item) => item.current3),
+            unit: "A",
+          },
+
+          {
+            name: electryDataType[lang].voltage1,
+            data: data?.map((item) => item.voltage1),
+            unit: "V",
+          },
+          {
+            name: electryDataType[lang].voltage2,
+            data: data?.map((item) => item.voltage2),
+            unit: "V",
+          },
+          {
+            name: electryDataType[lang].voltage3,
+            data: data?.map((item) => item.voltage3),
+            unit: "V",
+          },
+        ],
+      };
+
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_LAST_DATA_BY_ELECTIRAL_ENERGY_ID,
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_ELECTY_ID,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRICAL_ENERGY_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -1212,7 +1907,6 @@ export const findAllDataElectricityId =
     }
   };
 
-
 // todo Daily
 export const getDailyAggregateData =
   (stationId, token, lang, page, perPage, month, year) => async (dispatch) => {
@@ -1228,7 +1922,7 @@ export const getDailyAggregateData =
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_DAILY_DATA_BY_STATION_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -1256,7 +1950,8 @@ export const getDailyAggregateData =
   };
 
 export const getDailyAggregateIDData =
-  (aggregateId, token, lang, page, perPage, month, year) => async (dispatch) => {
+  (aggregateId, token, lang, page, perPage, month, year) =>
+  async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -1268,8 +1963,36 @@ export const getDailyAggregateIDData =
         token
       );
 
+      const data = res.data.data.data?.aggregateData;
+
+      const lineChartData = {
+        date: data?.map((item) => item.date.split("T")[0]),
+        lineData: [
+          {
+            name: aggregateDataType[lang].name1,
+            data: data?.map((item) => item.flow),
+            unit: "m³/s",
+          },
+          {
+            name: aggregateDataType[lang].name2,
+            data: data?.map((item) => item.velocity),
+            unit: "m/s",
+          },
+          {
+            name: aggregateDataType[lang].name3,
+            data: data?.map((item) => item.volume),
+            unit: "m³",
+          },
+        ],
+      };
+
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_DAILY_DATA_BY_AGGREGATE_ID,
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_AGGREGATE_ID,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -1310,7 +2033,7 @@ export const findDailyElectricityStationId =
       );
 
       dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_WEEKLY_DATA_STATION_ID,
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_DATA_STATION_ID,
         payload: res.data.data,
       });
     } catch (err) {
@@ -1339,42 +2062,366 @@ export const findDailyElectricityStationId =
 
 export const findDailyDataElectricityId =
   (electricalId, token, lang, page, perPage, month, year) =>
-    async (dispatch) => {
-      try {
-        dispatch({
-          type: GLOBALTYPES.LOADING,
-          payload: true,
-        });
+  async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
 
-        const res = await getDataApi(
-          `electrical-energy-weekly-data/findDataByElectricalEnergyId?lang=${lang}&aggregateId=${electricalId}&page=${page}&perPage=${perPage}&month=${month}&year=${year}`,
-          token
-        );
+      const res = await getDataApi(
+        `electrical-energy-daily-data/findDataByElectricalEnergyId?lang=${lang}&electricalEnergyId=${electricalId}&page=${page}&perPage=${perPage}&year=${year}&month=${month}`,
+        token
+      );
 
+      const data = res.data.data.data.electricalEnergyData;
+
+      const lineChartData = {
+        date: data?.map((item) => item.date.split(" ")[1]),
+        lineData: [
+          {
+            name: electryDataType[lang].energyActive,
+            data: data?.map((item) => item.energyActive),
+            unit: unitTranslations[lang].kwHour,
+          },
+          {
+            name: electryDataType[lang].energyReactive,
+            data: data?.map((item) => item.energyReactive),
+            unit: unitTranslations[lang].kwHour,
+          },
+          {
+            name: electryDataType[lang].powerActive,
+            data: data?.map((item) => item.powerActive),
+            unit: "Kw",
+          },
+          {
+            name: electryDataType[lang].powerReactive,
+            data: data?.map((item) => item.powerReactive),
+            unit: "Kw",
+          },
+
+          {
+            name: electryDataType[lang].current1,
+            data: data?.map((item) => item.current1),
+            unit: "A",
+          },
+          {
+            name: electryDataType[lang].current2,
+            data: data?.map((item) => item.current2),
+            unit: "A",
+          },
+          {
+            name: electryDataType[lang].current3,
+            data: data?.map((item) => item.current3),
+            unit: "A",
+          },
+
+          {
+            name: electryDataType[lang].voltage1,
+            data: data?.map((item) => item.voltage1),
+            unit: "V",
+          },
+          {
+            name: electryDataType[lang].voltage2,
+            data: data?.map((item) => item.voltage2),
+            unit: "V",
+          },
+          {
+            name: electryDataType[lang].voltage3,
+            data: data?.map((item) => item.voltage3),
+            unit: "V",
+          },
+        ],
+      };
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_ELECTY_ID,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRICAL_ENERGY_ID,
+        payload: res.data.data,
+      });
+    } catch (err) {
+      if (!err.response) {
         dispatch({
-          type: DASHBOARD_ACTIONS_TYPES.FIND_WEEKLY_ELECTRICAL_ENERGY_ID,
-          payload: res.data.data,
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
         });
-      } catch (err) {
-        if (!err.response) {
-          dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-              error: "Network Error",
-            },
-          });
-        } else {
-          dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-              error: err.response.data.message || err.response.statusText,
-            },
-          });
-        }
-      } finally {
+      } else {
         dispatch({
-          type: GLOBALTYPES.LOADING,
-          payload: false,
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
         });
       }
-    };
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+// todo Date Range
+export const getRangeAggregateData =
+  (stationId, token, lang, page, perPage, month, year) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const res = await getDataApi(
+        `pump-daily-data/findDataByStationId?lang=${lang}&stationId=${stationId}&page=${perPage}&perPage=${page}&year=${year}&month=${month}`,
+        token
+      );
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
+        payload: res.data.data,
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+export const getRangeAggregateIDData =
+  (aggregateId, token, lang, page, perPage, startDate, endDate) =>
+  async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const res = await getDataApi(
+        `pump-all-data/findDataByAggregateIdAndDateRange?lang=${lang}&aggregateId=${aggregateId}&page=${page}&perPage=${perPage}&startDate=${startDate}&endDate=${endDate}`,
+        token
+      );
+
+      const data = res.data.data.data;
+
+      const lineChartData = {
+        date: data?.map((item) => item.date.split(" ")[0]),
+        lineData: [
+          {
+            name: aggregateDataType[lang].name1,
+            data: data?.map((item) => item.flow),
+            unit: "m³/s",
+          },
+          {
+            name: aggregateDataType[lang].name2,
+            data: data?.map((item) => item.velocity),
+            unit: "m/s",
+          },
+          {
+            name: aggregateDataType[lang].name3,
+            data: data?.map((item) => item.volume),
+            unit: "m³",
+          },
+        ],
+      };
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_AGGREGATE_ID,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
+        payload: res.data.data,
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+export const findRangeElectricityStationId =
+  (stationId, token, lang, page, perPage, month, year) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const res = await getDataApi(
+        `electrical-energy-weekly-data/findDataByStationId?lang=${lang}&aggregateId=${stationId}&page=${page}&perPage=${perPage}&month=${month}&year=${year}`,
+        token
+      );
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRCITY_DATA_STATION_ID,
+        payload: res.data.data,
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+export const findRangeDataElectricityId =
+  (electricalId, token, lang, page, perPage, startDate, endDate) =>
+  async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const res = await getDataApi(
+        `electrical-energy-all-data/findDataByElectricalEnergyIdAndDateRange?lang=${lang}&electricalEnergyId=${electricalId}&page=${page}&perPage=${perPage}&startDate=${startDate}&endDate=${endDate}`,
+        token
+      );
+
+      const data = res.data.data.data;
+
+      const lineChartData = {
+        date: data?.map((item) => item.date.split(" ")[1]),
+        lineData: [
+          {
+            name: electryDataType[lang].energyActive,
+            data: data?.map((item) => item.energyActive),
+            unit: unitTranslations[lang].kwHour,
+          },
+          {
+            name: electryDataType[lang].energyReactive,
+            data: data?.map((item) => item.energyReactive),
+            unit: unitTranslations[lang].kwHour,
+          },
+          {
+            name: electryDataType[lang].powerActive,
+            data: data?.map((item) => item.powerActive),
+            unit: "Kw",
+          },
+          {
+            name: electryDataType[lang].powerReactive,
+            data: data?.map((item) => item.powerReactive),
+            unit: "Kw",
+          },
+
+          {
+            name: electryDataType[lang].current1,
+            data: data?.map((item) => item.current1),
+            unit: "A",
+          },
+          {
+            name: electryDataType[lang].current2,
+            data: data?.map((item) => item.current2),
+            unit: "A",
+          },
+          {
+            name: electryDataType[lang].current3,
+            data: data?.map((item) => item.current3),
+            unit: "A",
+          },
+
+          {
+            name: electryDataType[lang].voltage1,
+            data: data?.map((item) => item.voltage1),
+            unit: "V",
+          },
+          {
+            name: electryDataType[lang].voltage2,
+            data: data?.map((item) => item.voltage2),
+            unit: "V",
+          },
+          {
+            name: electryDataType[lang].voltage3,
+            data: data?.map((item) => item.voltage3),
+            unit: "V",
+          },
+        ],
+      };
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_ELECTY_ID,
+        payload: lineChartData,
+      });
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_ELECTRICAL_ENERGY_ID,
+        payload: res.data.data,
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };

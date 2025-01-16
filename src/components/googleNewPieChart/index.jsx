@@ -4,12 +4,13 @@ import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-const SolarEmploymentChart = ({ theme, data }) => {
+const SolarEmploymentChart = ({ theme, data, lineStatus }) => {
   const chartOptions = {
     chart: {
       type: "line",
       backgroundColor: theme.backgroundColor,
-      marginTop: 30,
+      color: theme.text,
+      height: 600
     },
     title: {
       text: "",
@@ -18,7 +19,7 @@ const SolarEmploymentChart = ({ theme, data }) => {
 
     yAxis: {
       title: {
-        text: data.name,
+        text: data.name ? data.name : "",
         style: {
           color: theme.text,
         },
@@ -39,7 +40,15 @@ const SolarEmploymentChart = ({ theme, data }) => {
       },
     },
 
-    legend: false,
+    legend: lineStatus ? {
+      layout: "horizontal",
+      align: "center",
+      verticalAlign: "top",
+      itemStyle: {
+        color: theme.text,
+      },
+
+    } : false,
 
     plotOptions: {
       series: {
@@ -49,7 +58,7 @@ const SolarEmploymentChart = ({ theme, data }) => {
       },
     },
 
-    series: [
+    series: data?.lineData || [
       {
         name: data.name,
         data: data.data,
@@ -77,6 +86,8 @@ const SolarEmploymentChart = ({ theme, data }) => {
       enabled: false,
     },
   };
+
+  
 
   return (
     <HighchartsReact

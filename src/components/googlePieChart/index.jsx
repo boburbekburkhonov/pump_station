@@ -94,7 +94,7 @@ const PieChart = ({ theme, data, title, centerText }) => {
     chart: {
       type: "pie",
       backgroundColor: theme.backgroundColor,
-      width: centerText ? 600 : 600,
+      width: centerText ? 800 : 600,
       height: centerText ? 500 : 300,
     },
     tooltip: {

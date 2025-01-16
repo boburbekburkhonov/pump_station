@@ -5,7 +5,10 @@ import { DASHBOARD_ACTIONS_TYPES } from "../actions/dashboardActions";
 const initialState = {
   pumpLastData: {},
   pumpLastIdData: {},
-  pumpIdData: {}
+  pumpIdData: {},
+  pumpLineChartData: null,
+  electryIdData: {},
+  electryLineChartData: null,
 };
 
 const dashboardDataReducer = (state = initialState, action) => {
@@ -20,34 +23,27 @@ const dashboardDataReducer = (state = initialState, action) => {
         ...state,
         pumpLastIdData: action.payload,
       };
-    case DASHBOARD_ACTIONS_TYPES.FIND_TODAY_DATA_BY_AGGREGATE_ID:
+    case DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID:
       return {
         ...state,
         pumpIdData: action.payload,
       };
-    case DASHBOARD_ACTIONS_TYPES.FIND_YESTERDAY_DATA_BY_AGGREGATE_ID:
+    case DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_AGGREGATE_ID:
       return {
         ...state,
-        pumpIdData: action.payload,
+        pumpLineChartData: action.payload,
       };
-
-    case DASHBOARD_ACTIONS_TYPES.FIND_WEEKLY_DATA_BY_STATION_ID:
+    case DASHBOARD_ACTIONS_TYPES.FIND_ELECTRICAL_ENERGY_ID:
       return {
         ...state,
-        pumpIdData: action.payload,
+        electryIdData: action.payload,
       };
-
-    case DASHBOARD_ACTIONS_TYPES.FIND_TEN_DAY_DATA_BY_AGGREGATE_ID:
+    case DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_ELECTY_ID:
       return {
         ...state,
-        pumpIdData: action.payload,
+        electryLineChartData: action.payload,
       };
 
-    case DASHBOARD_ACTIONS_TYPES.FIND_MONTHLY_DATA_BY_AGGREGATE_ID:
-      return {
-        ...state,
-        pumpIdData: action.payload,
-      };
     default:
       return state;
   }

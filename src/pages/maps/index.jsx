@@ -95,16 +95,15 @@ function MapsPage() {
   };
 
   function formatDate(inputDate) {
-    const formatDate = new Date(inputDate).toLocaleString("uz-UZ", {
-      timeZone: "Asia/Tashkent",
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    if (!inputDate) {
+      return null;
+    }
+    const [year, hours] = inputDate.split("T");
+    const [hour, minuts, seconds] = hours.split(":");
 
-    return formatDate;
+    const formattedDate = `${year} ${hour}:${minuts}:${seconds.split(".")[0]}`;
+
+    return formattedDate;
   }
 
   return (
@@ -135,7 +134,7 @@ function MapsPage() {
             <div className='normal_flex_card'>
               <GlobalOutlined
                 style={{
-                  color: "#52C41A",
+                  color: "#11a9ff",
                 }}
                 className='dashboard_last_data_icons'
               />
@@ -150,9 +149,9 @@ function MapsPage() {
 
           <div className='maps_view_more_info_card_item'>
             <div className='normal_flex_card'>
-              <EnvironmentOutlined  
+              <EnvironmentOutlined
                 style={{
-                  color: "#722ED1",
+                  color: "#11a9ff",
                 }}
                 className='dashboard_last_data_icons'
               />
@@ -169,7 +168,7 @@ function MapsPage() {
             <div className='normal_flex_card'>
               <HomeOutlined
                 style={{
-                  color: "#1890FF",
+                  color: "#11a9ff",
                 }}
                 className='dashboard_last_data_icons'
               />
@@ -186,7 +185,7 @@ function MapsPage() {
             <div className='normal_flex_card'>
               <PhoneOutlined
                 style={{
-                  color: "#FAAD14",
+                  color: "#11a9ff",
                 }}
                 className='dashboard_last_data_icons'
               />
@@ -216,7 +215,7 @@ function MapsPage() {
                 <div className='normal_flex_card'>
                   <FormOutlined
                     style={{
-                      color: "#11A9FF",
+                      color: "#11a9ff",
                     }}
                     className='dashboard_last_data_icons'
                   />
@@ -233,7 +232,7 @@ function MapsPage() {
                 <div className='normal_flex_card'>
                   <QrcodeOutlined
                     style={{
-                      color: "#3652AD",
+                      color: "#11a9ff",
                     }}
                     className='dashboard_last_data_icons'
                   />
@@ -249,7 +248,7 @@ function MapsPage() {
                 <div className='normal_flex_card'>
                   <SettingOutlined
                     style={{
-                      color: "#F76500",
+                      color: "#11a9ff",
                     }}
                     className='dashboard_last_data_icons'
                   />
@@ -268,7 +267,7 @@ function MapsPage() {
                 <div className='normal_flex_card'>
                   <AreaChartOutlined
                     style={{
-                      color: "#00AB6A",
+                      color: "#11a9ff",
                     }}
                     className='dashboard_last_data_icons'
                   />
@@ -286,7 +285,7 @@ function MapsPage() {
                 <div className='normal_flex_card'>
                   <NodeIndexOutlined
                     style={{
-                      color: "#85A1D0",
+                      color: "#11a9ff",
                     }}
                     className='dashboard_last_data_icons'
                   />
@@ -304,7 +303,7 @@ function MapsPage() {
                 <div className='normal_flex_card'>
                   <ExperimentOutlined
                     style={{
-                      color: "#FF9445",
+                      color: "#11a9ff",
                     }}
                     className='dashboard_last_data_icons'
                   />
@@ -324,7 +323,7 @@ function MapsPage() {
                 <div className='normal_flex_card'>
                   <FieldTimeOutlined
                     style={{
-                      color: "#FB0015",
+                      color: "#11a9ff",
                     }}
                     className='dashboard_last_data_icons'
                   />
@@ -359,7 +358,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <FormOutlined
                       style={{
-                        color: "#11A9FF",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -378,7 +377,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <QrcodeOutlined
                       style={{
-                        color: "#3652AD",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -396,7 +395,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <SettingOutlined
                       style={{
-                        color: "#F76500",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -417,7 +416,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <ThunderboltOutlined
                       style={{
-                        color: "#C91B21",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -435,7 +434,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <BulbOutlined
                       style={{
-                        color: "#F76500",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -454,7 +453,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <PoweroffOutlined
                       style={{
-                        color: "#FB0015",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -475,7 +474,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <ThunderboltOutlined
                       style={{
-                        color: "#C91B21",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -494,7 +493,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <BulbOutlined
                       style={{
-                        color: "#F76500",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -512,7 +511,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <PoweroffOutlined
                       style={{
-                        color: "#FB0015",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -532,7 +531,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <ThunderboltOutlined
                       style={{
-                        color: "#C91B21",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -549,7 +548,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <BulbOutlined
                       style={{
-                        color: "#F76500",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -567,7 +566,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <PieChartFilled
                       style={{
-                        color: "#E2C11E",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -592,7 +591,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <DashboardOutlined
                       style={{
-                        color: "#03845C",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -611,7 +610,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <LineChartOutlined
                       style={{
-                        color: "#85A1D0",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -629,7 +628,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <PieChartFilled
                       style={{
-                        color: "#E2C11E",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -653,7 +652,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <DashboardOutlined
                       style={{
-                        color: "#03845C",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -672,7 +671,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <LineChartOutlined
                       style={{
-                        color: "#85A1D0",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />
@@ -690,7 +689,7 @@ function MapsPage() {
                   <div className='normal_flex_card'>
                     <FieldTimeOutlined
                       style={{
-                        color: "#FB0015",
+                        color: "#11a9ff",
                       }}
                       className='dashboard_last_data_icons'
                     />

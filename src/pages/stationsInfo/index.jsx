@@ -83,7 +83,7 @@ function StationsInformations() {
                 <div className='stations_more_info_item'>
                   <div
                     style={{
-                      background: "#5AA136",
+                      background: colors.buttonColor,
                     }}
                     className='squer_card_custom'>
                     <BankOutlined
@@ -104,7 +104,7 @@ function StationsInformations() {
                 <div className='stations_more_info_item'>
                   <div
                     style={{
-                      background: "#67BBC5",
+                      background: colors.buttonColor,
                     }}
                     className='squer_card_custom'>
                     <GlobalOutlined
@@ -124,7 +124,7 @@ function StationsInformations() {
                 <div className='stations_more_info_item'>
                   <div
                     style={{
-                      background: "#502F95",
+                      background: colors.buttonColor,
                     }}
                     className='squer_card_custom'>
                     <EnvironmentOutlined
@@ -143,7 +143,7 @@ function StationsInformations() {
                 <div className='stations_more_info_item'>
                   <div
                     style={{
-                      background: "#6A9B9F",
+                      background: colors.buttonColor,
                     }}
                     className='squer_card_custom'>
                     <PhoneOutlined
@@ -164,7 +164,7 @@ function StationsInformations() {
                 <div className='stations_more_info_item'>
                   <div
                     style={{
-                      background: "#24497D",
+                      background: colors.buttonColor,
                     }}
                     className='squer_card_custom'>
                     <ApiOutlined
@@ -189,7 +189,7 @@ function StationsInformations() {
                 <div className='stations_more_info_item'>
                   <div
                     style={{
-                      background: "#7D3ED6",
+                      background: colors.buttonColor,
                     }}
                     className='squer_card_custom'>
                     <CheckCircleOutlined
@@ -217,7 +217,7 @@ function StationsInformations() {
                 <div className='stations_more_info_item'>
                   <div
                     style={{
-                      background: "#00287A",
+                      background: colors.buttonColor,
                     }}
                     className='squer_card_custom'>
                     <IdcardOutlined
@@ -265,7 +265,7 @@ function StationsInformations() {
                   <div className='stations_more_info_item'>
                     <div
                       style={{
-                        background: "#2F5988",
+                        background: colors.buttonColor,
                       }}
                       className='squer_card_custom'>
                       <IdcardOutlined
@@ -284,7 +284,7 @@ function StationsInformations() {
                   <div className='stations_more_info_item'>
                     <div
                       style={{
-                        background: "#DC3F2C",
+                        background: colors.buttonColor,
                       }}
                       className='squer_card_custom'>
                       <CloseCircleOutlined
@@ -311,7 +311,7 @@ function StationsInformations() {
                   <div className='stations_more_info_item'>
                     <div
                       style={{
-                        background: "#68B72A",
+                        background: colors.buttonColor,
                       }}
                       className='squer_card_custom'>
                       <PlayCircleOutlined
@@ -357,7 +357,7 @@ function StationsInformations() {
                   <div className='stations_more_info_item'>
                     <div
                       style={{
-                        background: "#2F5988",
+                        background: colors.buttonColor,
                       }}
                       className='squer_card_custom'>
                       <IdcardOutlined
@@ -376,7 +376,7 @@ function StationsInformations() {
                   <div className='stations_more_info_item'>
                     <div
                       style={{
-                        background: "#DC3F2C",
+                        background: colors.buttonColor,
                       }}
                       className='squer_card_custom'>
                       <CloseCircleOutlined
@@ -403,7 +403,7 @@ function StationsInformations() {
                   <div className='stations_more_info_item'>
                     <div
                       style={{
-                        background: "#68B72A",
+                        background: colors.buttonColor,
                       }}
                       className='squer_card_custom'>
                       <PlayCircleOutlined

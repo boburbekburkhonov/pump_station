@@ -24,8 +24,9 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
         12.5
       );
 
-      L.tileLayer("https://api.maptiler.com/maps/outdoor/{z}/{x}/{y}.png?key=PgF65VMmxh6pzLEWNBMd", {
+      L.tileLayer("https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", {
         maxZoom: 19,
+        subdomains: ["mt0", "mt1", "mt2", "mt3"],
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(mapRef.current);

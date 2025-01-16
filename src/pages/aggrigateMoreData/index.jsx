@@ -6,102 +6,52 @@ import React, {
   useEffect,
   useState,
   useMemo,
-  lazy,
+  useTransition,
 } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import moment from "moment";
-import { Select, DatePicker, Anchor, Button } from "antd";
-import Excel from "../../assets/xls.d451c295.png";
+import { Anchor } from "antd";
+import dayjs from "dayjs";
 
 import {
   getYesterdayAggregateIDData,
   getTodayAggregateIDData,
   getDailyAggregateIDData,
+  getWeeklyAggregateIDData,
+  getTenDayAggregateIDData,
+  getMonthlyAggregateIDData,
+  getSelectDateAggregateIDData,
+  getRangeAggregateIDData,
 } from "../../redux/actions/dashboardActions";
 import Loading from "../../components/loading";
 import "../dashboard/index.css";
 import "./index.css";
-import TableComponent from "../../components/tableComponent";
+import {
+  FirstSections,
+  SecondSections,
+  ThirdSections,
+  FourThSections,
+  FiveThSections,
+  SixThSections,
+  SevenThSections,
+  EightThSections,
+} from "../../components/aggregateOrElectricalAnchorItem";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import localeData from "dayjs/plugin/localeData";
+import weekday from "dayjs/plugin/weekday";
+import weekOfYear from "dayjs/plugin/weekOfYear";
+import weekYear from "dayjs/plugin/weekYear";
 
-const DashboardLineChart = lazy(() =>
-  import("../../components/dashboardLineChart")
-);
-const { RangePicker } = DatePicker;
+dayjs.extend(customParseFormat);
+dayjs.extend(advancedFormat);
+dayjs.extend(weekday);
+dayjs.extend(localeData);
+dayjs.extend(weekOfYear);
+dayjs.extend(weekYear);
 
-const FirstSections = memo(
-  ({
-    dataSource,
-    columns,
-    currentPage,
-    pageSize,
-    totalPage,
-    handlePaginationChange,
-    colors,
-    t,
-    changeDataViewType,
-    isType,
-    theme,
-  }) => (
-    <div
-      style={{
-        background: colors.layoutBackground,
-      }}
-      className='pump_selected_data_with_today'>
-      <div className='header_more_aggregate_data'>
-        <h1 className='head_title_data'>
-          {
-            t("dataPagesInformation.selectButtonNames", {
-              returnObjects: true,
-            })[0].title
-          }
-        </h1>
-
-        <div className='header_more_aggregate_data'>
-          <Button
-            type={isType ? "default" : "primary"}
-            onClick={() => changeDataViewType(false)}>
-            {t("dataPagesInformation.buttonDataType1")}
-          </Button>
-
-          <Button
-            type={isType ? "primary" : "default"}
-            onClick={() => changeDataViewType(true)}>
-            {t("dataPagesInformation.buttonDataType2")}
-          </Button>
-          <span>
-            <img alt='download_excel' src={Excel} />
-          </span>
-        </div>
-      </div>
-      {isType ? (
-        <DashboardLineChart
-          data={dataSource || []}
-          theme={theme}
-          valueTemp={t("dashboardPageData.lastStationsData.energyValueView")}
-        />
-      ) : (
-        <TableComponent
-          columns={columns}
-          dataSource={dataSource}
-          currentPage={currentPage}
-          pageSize={pageSize}
-          totalPage={totalPage}
-          handlePaginationChange={handlePaginationChange}
-        />
-      )}
-    </div>
-  )
-);
-
-const SecondSections = memo(() => <div>Second Element</div>);
-
-const ThirdSections = memo(() => <div>Third Element</div>);
-
-const FourThSections = memo(() => <div>FourTh Element</div>);
-
-const FiveThSections = memo(() => <div>FiveTh Element</div>);
+const dateFormat = "YYYY-MM";
 
 const AggrigateMoreData = memo(() => {
   const dispatch = useDispatch();
@@ -111,89 +61,120 @@ const AggrigateMoreData = memo(() => {
 
   const { loading } = useSelector((state) => state.alert);
   const { colors, theme } = useSelector((state) => state.theme);
-  const { pumpIdData } = useSelector((state) => state.pumps);
+  const { pumpIdData, pumpLineChartData } = useSelector((state) => state.pumps);
 
-  const [dates, setDates] = useState([moment().subtract(1, "days"), moment()]);
-  const [selectDataType, setSelectDataType] = useState(0);
   const [pageData, setPageData] = useState({
     page: 1,
-    perPage: 9,
+    perPage: 10,
   });
   const [activeSection, setActiveSection] = useState("section1");
   const [isActiveGraphic, setIsActiveGraphic] = useState(false);
-
-  // const fetchAllData = useCallback(() => {
-  //   const lang = i18n.language;
-  //   const id = params.id;
-
-  //   dispatch(
-  //     getTodayAggregateIDData(id, token, lang, pageData.page, pageData.perPage)
-  //   );
-  // }, [dispatch, token, i18n.language, params, pageData]);
+  const [daylyDate, setDaylyDate] = useState(dayjs());
+  const [dateRange, setDateRange] = useState([dayjs(), dayjs()]);
+  const [isPending, setUseTransition] = useTransition();
 
   const changeDataTime = useCallback(() => {
     const lang = i18n.language;
     const id = params.id;
+    const month = daylyDate.month();
+    const year = daylyDate.year();
+    const selectDay = daylyDate.format("YYYY-MM-DD");
+    const startDate = dateRange[0].format("YYYY-MM-DD");
+    const endDate = dateRange[1].format("YYYY-MM-DD");
 
-    switch (activeSection) {
-      case "section1":
-        dispatch(
-          getTodayAggregateIDData(
-            id,
-            token,
-            lang,
-            pageData.page,
-            pageData.perPage
-          )
-        );
-        break;
-      case "section2":
-        dispatch(
-          getYesterdayAggregateIDData(
-            id,
-            token,
-            lang,
-            pageData.page,
-            pageData.perPage
-          )
-        );
-        break;
-      case "section3":
-        dispatch(
-          getDailyAggregateIDData(
-            id,
-            token,
-            lang,
-            pageData.page,
-            pageData.perPage
-          )
-        );
-        break;
-      case "section4":
-        dispatch(
-          getTodayAggregateIDData(
-            id,
-            token,
-            lang,
-            pageData.page,
-            pageData.perPage
-          )
-        );
-        break;
-      case "section5":
-        dispatch(
-          getTodayAggregateIDData(
-            id,
-            token,
-            lang,
-            pageData.page,
-            pageData.perPage
-          )
-        );
-        break;
-      default:
-        break;
-    }
+    setUseTransition(() => {
+      switch (activeSection) {
+        case "section1":
+          dispatch(
+            getTodayAggregateIDData(
+              id,
+              token,
+              lang,
+              pageData.page,
+              pageData.perPage
+            )
+          );
+          break;
+        case "section2":
+          dispatch(
+            getYesterdayAggregateIDData(
+              id,
+              token,
+              lang,
+              pageData.page,
+              pageData.perPage
+            )
+          );
+          break;
+        case "section3":
+          dispatch(
+            getDailyAggregateIDData(
+              id,
+              token,
+              lang,
+              pageData.page,
+              pageData.perPage,
+              month,
+              year
+            )
+          );
+          break;
+        case "section4":
+          dispatch(getWeeklyAggregateIDData(id, token, lang, month + 1, year));
+          break;
+        case "section5":
+          dispatch(
+            getTenDayAggregateIDData(
+              id,
+              token,
+              lang,
+              pageData.page,
+              pageData.perPage,
+              year
+            )
+          );
+          break;
+        case "section6":
+          dispatch(
+            getMonthlyAggregateIDData(
+              id,
+              token,
+              lang,
+              pageData.page,
+              pageData.perPage,
+              year
+            )
+          );
+          break;
+        case "section7":
+          dispatch(
+            getSelectDateAggregateIDData(
+              id,
+              token,
+              lang,
+              pageData.page,
+              pageData.perPage,
+              selectDay
+            )
+          );
+          break;
+        case "section8":
+          dispatch(
+            getRangeAggregateIDData(
+              id,
+              token,
+              lang,
+              pageData.page,
+              pageData.perPage,
+              startDate,
+              endDate
+            )
+          );
+          break;
+        default:
+          break;
+      }
+    });
   }, [
     activeSection,
     i18n.language,
@@ -201,6 +182,8 @@ const AggrigateMoreData = memo(() => {
     token,
     pageData.page,
     pageData.perPage,
+    daylyDate,
+    dateRange,
   ]);
 
   useEffect(() => {
@@ -214,25 +197,15 @@ const AggrigateMoreData = memo(() => {
     };
   }, [changeDataTime, i18n]);
 
-  function formatDate(inputDate) {
-    const formatDate = new Date(inputDate).toLocaleString("uz-UZ", {
-      timeZone: "Asia/Tashkent",
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
-    return formatDate;
-  }
-
-  const onDateChange = (dates, dateStrings) => {
-    setDates(dateStrings);
-  };
-
   const columnsUser = useMemo(
     () => [
+      {
+        title: t("dataPagesInformation.dataTableInformation.dataDate"),
+        dataIndex: "date",
+        key: "date",
+        align: "center",
+        width: 250,
+      },
       {
         title: t("dataPagesInformation.dataTableInformation.dataVolume"),
         dataIndex: "volume",
@@ -251,12 +224,6 @@ const AggrigateMoreData = memo(() => {
         key: "flow",
         align: "center",
       },
-      {
-        title: t("dataPagesInformation.dataTableInformation.dataDate"),
-        dataIndex: "date",
-        key: "date",
-        align: "center",
-      },
     ],
     [t]
   );
@@ -272,7 +239,23 @@ const AggrigateMoreData = memo(() => {
     setIsActiveGraphic(value);
   };
 
-  if (loading) {
+  const onChangeMonthYear = (date) => {
+    if (date) {
+      setDaylyDate(date);
+    } else {
+      setDaylyDate(dayjs());
+    }
+  };
+
+  const onChangeDateRange = (date) => {
+    if (date) {
+      setDateRange(date);
+    } else {
+      setDateRange(dayjs());
+    }
+  };
+
+  if (loading || isPending) {
     return (
       <section className='more_info_sections'>
         <Loading />
@@ -282,38 +265,6 @@ const AggrigateMoreData = memo(() => {
 
   return (
     <section className='more_info_sections'>
-      <div className='pump_data_view_more_header'>
-        <div className='pump_data_main_header'></div>
-
-        <div className='pump_data_view_more_header_selected'>
-          <Select
-            key={"selects_names"}
-            size='large'
-            style={{
-              minWidth: 300,
-            }}
-            value={selectDataType}
-            className='select_input_stations'
-            options={t("dataPagesInformation.selectButtonNames", {
-              returnObjects: true,
-            }).map((item, index) => ({
-              value: index,
-              label: item.title,
-            }))}
-            onChange={(key, option) => setSelectDataType(key)}
-          />
-
-          <RangePicker
-            style={{
-              minWidth: 400,
-            }}
-            size='large'
-            placeholder={["Boshlanish sanasi", "Tugash sanasi"]}
-            onChange={onDateChange}
-          />
-        </div>
-      </div>
-
       <Anchor
         className='anchor-items-container'
         direction='horizontal'
@@ -352,17 +303,24 @@ const AggrigateMoreData = memo(() => {
         }))}
         onClick={(e, link) => {
           e.preventDefault();
-          setActiveSection(link.href.replace("#", "")); // Aktiv seksiyani yangilang
+          setActiveSection(link.href.replace("#", ""));
         }}
       />
 
-      {activeSection === "section1" && (
+      {activeSection === "section1" && !isPending && (
         <FirstSections
           columns={columnsUser}
-          dataSource={pumpIdData.data?.map((item, index) => ({
-            ...item,
-            key: item.id || `temp-key-${index}`,
-          }))}
+          dataSource={
+            Array.isArray(pumpIdData.data)
+              ? pumpIdData.data?.map((item, index) => ({
+                  ...item,
+                  key: item.id || `temp-key1-${index}`,
+                  volume: item.volume.toFixed(2),
+                  velocity: item.velocity.toFixed(2),
+                  flow: item.flow.toFixed(2)
+                }))
+              : []
+          }
           currentPage={pageData.page}
           pageSize={pageData.perPage}
           totalPage={pumpIdData.totalDocuments}
@@ -372,13 +330,216 @@ const AggrigateMoreData = memo(() => {
           changeDataViewType={changeDataViewType}
           isType={isActiveGraphic}
           theme={theme}
+          lineChartData={pumpLineChartData}
         />
       )}
 
-      {activeSection === "section2" && <SecondSections />}
-      {activeSection === "section3" && <ThirdSections />}
-      {activeSection === "section4" && <FourThSections />}
-      {activeSection === "section5" && <FiveThSections />}
+      {activeSection === "section2" && !isPending && (
+        <SecondSections
+          columns={columnsUser}
+          dataSource={
+            Array.isArray(pumpIdData.data)
+              ? pumpIdData.data?.map((item, index) => ({
+                  ...item,
+                  key: item.id || `temp-key2-${index}`,
+                  volume: item.volume.toFixed(2),
+                  velocity: item.velocity.toFixed(2),
+                  flow: item.flow.toFixed(2)
+                }))
+              : []
+          }
+          currentPage={pageData.page}
+          pageSize={pageData.perPage}
+          totalPage={pumpIdData.totalDocuments}
+          handlePaginationChange={handlePaginationChange}
+          colors={colors}
+          t={t}
+          changeDataViewType={changeDataViewType}
+          isType={isActiveGraphic}
+          theme={theme}
+          lineChartData={pumpLineChartData}
+        />
+      )}
+      {activeSection === "section3" && !isPending && (
+        <ThirdSections
+          columns={columnsUser}
+          dataSource={
+            Array.isArray(pumpIdData?.data?.aggregateData)
+              ? pumpIdData.data.aggregateData.map((item, index) => ({
+                  ...item,
+                  key: item.id || `temp-key3-${index}`,
+                  date: item.date?.split("T")[0] || item.date,
+                  volume: item.volume.toFixed(2),
+                  velocity: item.velocity.toFixed(2),
+                  flow: item.flow.toFixed(2)
+                }))
+              : []
+          }
+          currentPage={pageData.page}
+          pageSize={pageData.perPage}
+          totalPage={pumpIdData.totalDocuments}
+          handlePaginationChange={handlePaginationChange}
+          colors={colors}
+          t={t}
+          changeDataViewType={changeDataViewType}
+          isType={isActiveGraphic}
+          theme={theme}
+          lineChartData={pumpLineChartData}
+          onChange={onChangeMonthYear}
+          dateFormat={dateFormat}
+          valueInput={daylyDate}
+        />
+      )}
+      {activeSection === "section4" && !isPending && (
+        <FourThSections
+          columns={columnsUser}
+          dataSource={
+            Array.isArray(pumpIdData)
+              ? pumpIdData?.map((item, index) => ({
+                  ...item,
+                  key: item.id || `temp-key4-${index}`,
+                  date: item.date?.split("T")[0] || item.date,
+                  volume: item.volume.toFixed(2),
+                  velocity: item.velocity.toFixed(2),
+                  flow: item.flow.toFixed(2)
+                }))
+              : []
+          }
+          currentPage={pageData.page}
+          pageSize={pageData.perPage}
+          totalPage={pumpIdData?.totalDocuments}
+          handlePaginationChange={handlePaginationChange}
+          colors={colors}
+          t={t}
+          changeDataViewType={changeDataViewType}
+          isType={isActiveGraphic}
+          theme={theme}
+          lineChartData={pumpLineChartData}
+          onChange={onChangeMonthYear}
+          dateFormat={dateFormat}
+          valueInput={daylyDate}
+        />
+      )}
+      {activeSection === "section5" && !isPending && (
+        <FiveThSections
+          columns={columnsUser}
+          dataSource={
+            Array.isArray(pumpIdData?.data?.aggregateData)
+              ? pumpIdData.data.aggregateData[0].data?.map((item, index) => ({
+                  ...item,
+                  key: item.id || `temp-key5-${index}`,
+                  date: item.tenDayNumber,
+                  volume: item.volume.toFixed(2),
+                  velocity: item.velocity.toFixed(2),
+                  flow: item.flow.toFixed(2)
+                }))
+              : []
+          }
+          currentPage={pageData.page}
+          pageSize={pageData.perPage}
+          totalPage={pumpIdData?.totalDocuments}
+          handlePaginationChange={handlePaginationChange}
+          colors={colors}
+          t={t}
+          changeDataViewType={changeDataViewType}
+          isType={isActiveGraphic}
+          theme={theme}
+          lineChartData={pumpLineChartData}
+          onChange={onChangeMonthYear}
+          dateFormat={dateFormat}
+          valueInput={daylyDate}
+        />
+      )}
+      {activeSection === "section6" && !isPending && (
+        <SixThSections
+          columns={columnsUser}
+          dataSource={
+            Array.isArray(pumpIdData?.data)
+              ? pumpIdData.data?.map((item, index) => ({
+                  ...item,
+                  key: item.id || `temp-key6-${index}`,
+                  date: item.date,
+                  volume: item.volume.toFixed(2),
+                  velocity: item.velocity.toFixed(2),
+                  flow: item.flow.toFixed(2)
+                }))
+              : []
+          }
+          currentPage={pageData.page}
+          pageSize={pageData.perPage}
+          totalPage={pumpIdData?.totalDocuments}
+          handlePaginationChange={handlePaginationChange}
+          colors={colors}
+          t={t}
+          changeDataViewType={changeDataViewType}
+          isType={isActiveGraphic}
+          theme={theme}
+          lineChartData={pumpLineChartData}
+          onChange={onChangeMonthYear}
+          dateFormat={dateFormat}
+          valueInput={daylyDate}
+        />
+      )}
+      {activeSection === "section7" && !isPending && (
+        <SevenThSections
+          columns={columnsUser}
+          dataSource={
+            Array.isArray(pumpIdData?.data)
+              ? pumpIdData.data?.map((item, index) => ({
+                  ...item,
+                  key: item.id || `temp-key7-${index}`,
+                  date: item.date,
+                  volume: item.volume.toFixed(2),
+                  velocity: item.velocity.toFixed(2),
+                  flow: item.flow.toFixed(2)
+                }))
+              : []
+          }
+          currentPage={pageData.page}
+          pageSize={pageData.perPage}
+          totalPage={pumpIdData?.totalDocuments}
+          handlePaginationChange={handlePaginationChange}
+          colors={colors}
+          t={t}
+          changeDataViewType={changeDataViewType}
+          isType={isActiveGraphic}
+          theme={theme}
+          lineChartData={pumpLineChartData}
+          onChange={onChangeMonthYear}
+          dateFormat={dateFormat}
+          valueInput={daylyDate}
+        />
+      )}
+      {activeSection === "section8" && !isPending && (
+        <EightThSections
+          columns={columnsUser}
+          dataSource={
+            Array.isArray(pumpIdData?.data)
+              ? pumpIdData.data?.map((item, index) => ({
+                  ...item,
+                  key: item.id || `temp-key8-${index}`,
+                  date: item.date,
+                  volume: item.volume.toFixed(2),
+                  velocity: item.velocity.toFixed(2),
+                  flow: item.flow.toFixed(2)
+                }))
+              : []
+          }
+          currentPage={pageData.page}
+          pageSize={pageData.perPage}
+          totalPage={pumpIdData?.totalDocuments}
+          handlePaginationChange={handlePaginationChange}
+          colors={colors}
+          t={t}
+          changeDataViewType={changeDataViewType}
+          isType={isActiveGraphic}
+          theme={theme}
+          lineChartData={pumpLineChartData}
+          onChange={onChangeDateRange}
+          dateFormat={dateFormat}
+          valueInput={dateRange}
+        />
+      )}
     </section>
   );
 });

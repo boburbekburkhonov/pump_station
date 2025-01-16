@@ -29,9 +29,9 @@ import React from 'react';
 const DashboardLinesChart = ({ theme, data }) => {
 
   const transformedData = data.flatMap((item) => [
-    { date: item.date, value: item?.flow, name: "Flow" },
-    { date: item.date, value: item?.velocity, name: "Velocity" },
-    { date: item.date, value: item?.volume, name: "Volume" },
+    { date: item.date.split(" ")[1], value: item?.flow, name: "Flow" },
+    { date: item.date.split(" ")[1], value: item?.velocity, name: "Velocity" },
+    { date: item.date.split(" ")[1], value: item?.volume, name: "Volume" },
   ]);
 
   const config = {

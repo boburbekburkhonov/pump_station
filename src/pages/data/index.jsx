@@ -45,21 +45,19 @@ const ViewMoreModal = memo(({ openModalData, closeModal, modalData }) => {
   const { colors } = useSelector((state) => state.theme);
 
   function formatDate(inputDate) {
-    const formatDate = new Date(inputDate).toLocaleString("uz-UZ", {
-      timeZone: "Asia/Tashkent",
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    if(!inputDate) {
+      return null
+    }
+    const [year, hours] = inputDate.split("T")
+    const [hour, minuts, seconds] = hours.split(":")
 
-    return formatDate;
+    const formattedDate = `${year} ${hour}:${minuts}:${seconds.split(".")[0]}`
+
+    return formattedDate;
   }
 
   return (
     <Modal
-      key="aggregate_modal"
       key="aggregate_modal"
       title={false}
       open={openModalData}

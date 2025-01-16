@@ -4,13 +4,13 @@ import React, {
   useEffect,
   useState,
   useCallback,
-  lazy,
   useMemo,
   memo,
   useTransition,
 } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
+import dayjs from "dayjs";
 import Cookies from "js-cookie";
 
 import { Card, Select, Button, Modal } from "antd";
@@ -56,46 +56,45 @@ import {
 import PieChart from "../../components/googlePieChart";
 import EmptyCard from "../../components/emptyCard";
 import SolarEmploymentChart from "../../components/googleNewPieChart";
-
-const DashboardLinesChart = lazy(() =>
-  import("../../components/dashboardColomnChart")
-);
+import ViewStationModal from "../../components/stationsModalStatus/index";
 
 const STATISTIC_CARDS_CHUNK = 3;
 
 const STATISTIC_CARDS_CHUNK_NEXT = 7;
 
-const StatisticCard = memo(({ icon, color, status, countValue, cardStyle }) => (
-  <Card
-    bordered={false}
-    style={cardStyle}
-    type='inner'
-    className='dashbord_card_element'>
-    <div className='icon_box_card' style={{ background: color.blurBgColor }}>
-      {icon}
-    </div>
+const StatisticCard = memo(
+  ({ icon, color, status, countValue, cardStyle, onChangeModalData }) => (
+    <Card
+      bordered={false}
+      style={cardStyle}
+      type='inner'
+      onClick={onChangeModalData}
+      className='dashbord_card_element'>
+      <div className='icon_box_card' style={{ background: color.blurBgColor }}>
+        {icon}
+      </div>
 
-    <div>
-      <h3>{countValue}</h3>
-      <p>{status}</p>
-    </div>
-  </Card>
-));
+      <div>
+        <h3>{countValue}</h3>
+        <p>{status}</p>
+      </div>
+    </Card>
+  )
+);
 
 const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
   const { t } = useTranslation();
 
   function formatDate(inputDate) {
-    const formatDate = new Date(inputDate).toLocaleString("uz-UZ", {
-      timeZone: "Asia/Tashkent",
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    if(!inputDate) {
+      return null
+    }
+    const [year, hours] = inputDate.split("T")
+    const [hour, minuts, seconds] = hours.split(":")
 
-    return formatDate;
+    const formattedDate = `${year} ${hour}:${minuts}:${seconds.split(".")[0]}`
+
+    return formattedDate;
   }
 
   return (
@@ -324,11 +323,11 @@ const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
                       <h4 className='dashboard_view_more_import_data'>
                         {item.workingStatus
                           ? t(
-                              "dashboardPageData.lastStationsData.agrigateStatus"
-                            )
+                            "dashboardPageData.lastStationsData.agrigateStatus"
+                          )
                           : t(
-                              "dashboardPageData.lastStationsData.agrigateStatus2"
-                            )}
+                            "dashboardPageData.lastStationsData.agrigateStatus2"
+                          )}
                       </h4>
                     </div>
 
@@ -686,20 +685,25 @@ function UserDashboard() {
   const [isPendingLine, startTransitionLine] = useTransition();
   const [selectAggregateLineChart, setSelectAggregateLineChart] =
     useState(true);
+  const [isOpenModalStation, setIsOpenModalStation] = useState(false);
+  const [isStationsStatus, setIsStationsStatus] = useState("");
 
   const regionId = Cookies.get("regionId");
   const token = localStorage.getItem("access_token");
 
-  const fetchAllData = useCallback(() => {
+  const fetchAllData = useCallback(async () => {
     const lang = i18n.language;
 
-    dispatch(getStatisticsDashboard(regionId, lang, token));
-    dispatch(findLastStationsData(lang, token));
-    dispatch(getAllStationsId(lang, token));
-
-    startTransition(() => {
-      dispatch(findTodayStatisticData(lang, token));
-    });
+    try {
+      await Promise.all([
+        dispatch(getStatisticsDashboard(regionId, lang, token)),
+        dispatch(findLastStationsData(lang, token)),
+        dispatch(getAllStationsId(lang, token)),
+        startTransition(() => dispatch(findTodayStatisticData(lang, token))),
+      ]);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   }, [dispatch, regionId, token, i18n.language]);
 
   useEffect(() => {
@@ -856,6 +860,13 @@ function UserDashboard() {
     }
   };
 
+  const handleOpenStatusStations = (index) => {
+    setIsOpenModalStation(true);
+    const newStationStatus = index === 0 ? "" : index === 1 ? true : false;
+
+    setIsStationsStatus(newStationStatus);
+  };
+
   return (
     <section className='global_sections_style'>
       <div className='user_dashboard_content_container'>
@@ -868,6 +879,7 @@ function UserDashboard() {
               status={item.status}
               countValue={`${statisticData[index]}`}
               cardStyle={cardStyle}
+              onChangeModalData={() => handleOpenStatusStations(index)}
             />
           ))}
         </div>
@@ -886,6 +898,7 @@ function UserDashboard() {
             status={item.status}
             countValue={`${statisticData[index + STATISTIC_CARDS_CHUNK]}`}
             cardStyle={cardStyle}
+            onChangeModalData={() => handleOpenStatusStations(index)}
           />
         ))}
       </div>
@@ -903,6 +916,7 @@ function UserDashboard() {
             status={item.status}
             countValue={`${statisticData[index + STATISTIC_CARDS_CHUNK_NEXT]}`}
             cardStyle={cardStyle}
+            onChangeModalData={() => handleOpenStatusStations(index)}
           />
         ))}
       </div>
@@ -1039,7 +1053,9 @@ function UserDashboard() {
                   <PieChart
                     theme={colors}
                     data={secondPieData}
-                    centerText={`${totalData?.totalVolumeToday || 0}\nm³`}
+                    centerText={`${totalData?.totalEnergyActiveToday || 0}\n${t(
+                      "dashboardPageData.lastStationsData.energyValueView"
+                    )}`}
                     title={t("dashboardPageData.statisticsTitle2")}
                   />
                 )}
@@ -1050,9 +1066,7 @@ function UserDashboard() {
                   <PieChart
                     theme={colors}
                     data={firstPieData}
-                    centerText={`${totalData?.totalEnergyActiveToday || 0}\n${t(
-                      "dashboardPageData.lastStationsData.energyValueView"
-                    )}`}
+                    centerText={`${totalData?.totalVolumeToday || 0}\nm³`}
                     title={t("dashboardPageData.statisticsTitle1")}
                   />
                 )}
@@ -1122,7 +1136,7 @@ function UserDashboard() {
                 />
               </div>
             </div>
-            {totalLineData && (
+            {totalLineData?.data?.length ? (
               <SolarEmploymentChart
                 theme={colors}
                 data={
@@ -1131,6 +1145,17 @@ function UserDashboard() {
                     : totalLineElectData || []
                 }
               />
+            ) : (
+              <div
+                style={{
+                  width: "100%",
+                  height: 500,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}>
+                <EmptyCard />
+              </div>
             )}
           </>
         )}
@@ -1142,6 +1167,12 @@ function UserDashboard() {
         closeModal={closeModal}
         data={modalViewData}
         langData={t}
+      />
+
+      <ViewStationModal
+        status={isStationsStatus}
+        isOpenStationModal={isOpenModalStation}
+        closeModal={() => setIsOpenModalStation(false)}
       />
     </section>
   );

@@ -1,3 +1,5 @@
+/** @format */
+
 import React, {
   useEffect,
   useCallback,
@@ -31,7 +33,7 @@ import {
 import "./index.css";
 import "../maps/index.css";
 import "../dashboard/index.css";
-import "../data/index.css"
+import "../data/index.css";
 import {
   createNewLastDataStation,
   findInMapsLastData,
@@ -47,21 +49,20 @@ const ViewMoreModal = memo(({ openModalData, closeModal, modalData }) => {
   const { colors } = useSelector((state) => state.theme);
 
   function formatDate(inputDate) {
-    const formatDate = new Date(inputDate).toLocaleString("uz-UZ", {
-      timeZone: "Asia/Tashkent",
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    if(!inputDate) {
+      return null
+    }
+    const [year, hours] = inputDate.split("T")
+    const [hour, minuts, seconds] = hours.split(":")
 
-    return formatDate;
+    const formattedDate = `${year} ${hour}:${minuts}:${seconds.split(".")[0]}`
+
+    return formattedDate;
   }
 
   return (
     <Modal
-      key="aggregate_modal"
+      key='aggregate_modal'
       title={false}
       open={openModalData}
       centered
@@ -70,64 +71,61 @@ const ViewMoreModal = memo(({ openModalData, closeModal, modalData }) => {
       style={{
         color: colors.textColor,
       }}
-      className="dashboard_view dashboard_view_extra_name"
-    >
-      <div className="dashboard_view_more_modal_card">
+      className='dashboard_view dashboard_view_extra_name'>
+      <div className='dashboard_view_more_modal_card'>
         <div
-          className="dashboard_view_more_modal_card dashboard_view_more_modal_card_extra_name"
+          className='dashboard_view_more_modal_card dashboard_view_more_modal_card_extra_name'
           style={{
             background: colors.background,
             boxShadow: `0 0 5px 2px ${colors.boxShadow}`,
-          }}
-        >
-          <div className="dashboard_view_more_electr_card">
-            {/* row */}
-            <div className="dashboard_view_more_modal_card_item 1">
-              <div className="normal_flex_card">
+          }}>
+          <div className='dashboard_view_more_electr_card'>
+            <div className='dashboard_view_more_modal_card_item 1'>
+              <div className='normal_flex_card'>
                 <FormOutlined
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
 
                 <h4>{t("dashboardPageData.lastStationsData.electryName")}:</h4>
               </div>
 
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {modalData.name}
               </h4>
             </div>
 
-            <div className="dashboard_view_more_modal_card_item 2">
-              <div className="normal_flex_card">
+            <div className='dashboard_view_more_modal_card_item 2'>
+              <div className='normal_flex_card'>
                 <QrcodeOutlined
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
                 <h4>{t("dashboardPageData.lastStationsData.electryCode")}: </h4>
               </div>
 
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {modalData.code}
               </h4>
             </div>
 
-            <div className="dashboard_view_more_modal_card_item 3">
-              <div className="normal_flex_card">
+            <div className='dashboard_view_more_modal_card_item 3'>
+              <div className='normal_flex_card'>
                 <SettingOutlined
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
                 <h4>
                   {t("dashboardPageData.lastStationsData.aggrigateTitle")}:{" "}
                 </h4>
               </div>
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {modalData.workingStatus
                   ? t("dashboardPageData.lastStationsData.agrigateStatus")
                   : t("dashboardPageData.lastStationsData.agrigateStatus2")}
@@ -136,150 +134,150 @@ const ViewMoreModal = memo(({ openModalData, closeModal, modalData }) => {
 
             {/* row */}
 
-            <div className="dashboard_view_more_modal_card_item 4">
-              <div className="normal_flex_card">
+            <div className='dashboard_view_more_modal_card_item 4'>
+              <div className='normal_flex_card'>
                 <ThunderboltOutlined
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
                 <h4>{t("dashboardPageData.lastStationsData.electryVolt")}:</h4>
               </div>
 
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {console.log(modalData)}
                 {modalData.electricalEnergyLastData?.voltage1} V
               </h4>
             </div>
 
-            <div className="dashboard_view_more_modal_card_item 5">
-              <div className="normal_flex_card">
+            <div className='dashboard_view_more_modal_card_item 5'>
+              <div className='normal_flex_card'>
                 <BulbOutlined
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
 
                 <h4>{t("dashboardPageData.lastStationsData.electryAmper")}:</h4>
               </div>
 
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {modalData.electricalEnergyLastData?.current1} A
               </h4>
             </div>
 
-            <div className="dashboard_view_more_modal_card_item 6">
-              <div className="normal_flex_card">
+            <div className='dashboard_view_more_modal_card_item 6'>
+              <div className='normal_flex_card'>
                 <PoweroffOutlined
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
 
                 <h4>{t("dashboardPageData.lastStationsData.powerActive")}:</h4>
               </div>
 
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {modalData.electricalEnergyLastData?.powerActive} Kw
               </h4>
             </div>
 
             {/* row */}
 
-            <div className="dashboard_view_more_modal_card_item 7">
-              <div className="normal_flex_card">
+            <div className='dashboard_view_more_modal_card_item 7'>
+              <div className='normal_flex_card'>
                 <ThunderboltOutlined
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
 
                 <h4>{t("dashboardPageData.lastStationsData.electryVolt")}:</h4>
               </div>
 
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {modalData.electricalEnergyLastData?.voltage2} V
               </h4>
             </div>
 
-            <div className="dashboard_view_more_modal_card_item 8">
-              <div className="normal_flex_card">
+            <div className='dashboard_view_more_modal_card_item 8'>
+              <div className='normal_flex_card'>
                 <BulbOutlined
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
                 <h4>{t("dashboardPageData.lastStationsData.electryAmper")}:</h4>
               </div>
 
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {modalData.electricalEnergyLastData?.current2} A
               </h4>
             </div>
 
-            <div className="dashboard_view_more_modal_card_item 9">
-              <div className="normal_flex_card">
+            <div className='dashboard_view_more_modal_card_item 9'>
+              <div className='normal_flex_card'>
                 <PoweroffOutlined
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
                 <h4>
                   {t("dashboardPageData.lastStationsData.powerReactive")}:
                 </h4>
               </div>
 
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {modalData.electricalEnergyLastData?.powerReactive} Kw
               </h4>
             </div>
 
             {/* row */}
 
-            <div className="dashboard_view_more_modal_card_item 10">
-              <div className="normal_flex_card">
+            <div className='dashboard_view_more_modal_card_item 10'>
+              <div className='normal_flex_card'>
                 <ThunderboltOutlined
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
                 <h4>{t("dashboardPageData.lastStationsData.electryVolt")}:</h4>
               </div>
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {modalData.electricalEnergyLastData?.voltage3} V
               </h4>
             </div>
 
-            <div className="dashboard_view_more_modal_card_item 11">
-              <div className="normal_flex_card">
+            <div className='dashboard_view_more_modal_card_item 11'>
+              <div className='normal_flex_card'>
                 <BulbOutlined
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
                 <h4>{t("dashboardPageData.lastStationsData.electryAmper")}:</h4>
               </div>
 
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {modalData.electricalEnergyLastData?.current3} A
               </h4>
             </div>
 
-            <div className="dashboard_view_more_modal_card_item 12">
-              <div className="normal_flex_card">
+            <div className='dashboard_view_more_modal_card_item 12'>
+              <div className='normal_flex_card'>
                 <PieChartFilled
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
 
                 <h4>
@@ -287,7 +285,7 @@ const ViewMoreModal = memo(({ openModalData, closeModal, modalData }) => {
                 </h4>
               </div>
 
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {modalData.electricalEnergyLastData?.energyActiveTotal}{" "}
                 {t("dashboardPageData.lastStationsData.energyValueView")}
               </h4>
@@ -295,53 +293,53 @@ const ViewMoreModal = memo(({ openModalData, closeModal, modalData }) => {
 
             {/* row */}
 
-            <div className="dashboard_view_more_modal_card_item 13">
-              <div className="normal_flex_card">
+            <div className='dashboard_view_more_modal_card_item 13'>
+              <div className='normal_flex_card'>
                 <DashboardOutlined
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
                 <h4>{t("dashboardPageData.lastStationsData.energyActive")}:</h4>
               </div>
 
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {modalData.electricalEnergyLastData?.energyActive}{" "}
                 {t("dashboardPageData.lastStationsData.energyValueView")}
               </h4>
             </div>
 
-            <div className="dashboard_view_more_modal_card_item 14">
-              <div className="normal_flex_card">
+            <div className='dashboard_view_more_modal_card_item 14'>
+              <div className='normal_flex_card'>
                 <LineChartOutlined
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
                 <h4>{t("dashboardPageData.lastStationsData.powerActive")}: </h4>
               </div>
 
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {modalData.electricalEnergyLastData?.powerActive} Kw
               </h4>
             </div>
 
-            <div className="dashboard_view_more_modal_card_item 15">
-              <div className="normal_flex_card">
+            <div className='dashboard_view_more_modal_card_item 15'>
+              <div className='normal_flex_card'>
                 <PieChartFilled
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
                 <h4>
                   {t("dashboardPageData.lastStationsData.energyReactiveTotal")}:{" "}
                 </h4>
               </div>
 
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {modalData.electricalEnergyLastData?.energyReactiveTotal}{" "}
                 {t("dashboardPageData.lastStationsData.energyValueView")}
               </h4>
@@ -349,80 +347,78 @@ const ViewMoreModal = memo(({ openModalData, closeModal, modalData }) => {
 
             {/* row */}
 
-            <div className="dashboard_view_more_modal_card_item 16">
-              <div className="normal_flex_card">
+            <div className='dashboard_view_more_modal_card_item 16'>
+              <div className='normal_flex_card'>
                 <DashboardOutlined
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
                 <h4>
                   {t("dashboardPageData.lastStationsData.energyReactive")}:
                 </h4>
               </div>
 
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {modalData.electricalEnergyLastData?.energyReactive}{" "}
                 {t("dashboardPageData.lastStationsData.energyValueView")}
               </h4>
             </div>
 
-            <div className="dashboard_view_more_modal_card_item 17">
-              <div className="normal_flex_card">
+            <div className='dashboard_view_more_modal_card_item 17'>
+              <div className='normal_flex_card'>
                 <LineChartOutlined
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
                 <h4>
                   {t("dashboardPageData.lastStationsData.powerReactive")}:{" "}
                 </h4>
               </div>
 
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {modalData.electricalEnergyLastData?.powerReactive} Kw
               </h4>
             </div>
 
-            <div className="dashboard_view_more_modal_card_item 18">
-              <div className="normal_flex_card">
+            <div className='dashboard_view_more_modal_card_item 18'>
+              <div className='normal_flex_card'>
                 <FieldTimeOutlined
                   style={{
                     color: "#11A9FF",
                   }}
-                  className="dashboard_last_data_icons"
+                  className='dashboard_last_data_icons'
                 />
                 <h4>
                   {t("dashboardPageData.lastStationsData.aggrigateTime")}:{" "}
                 </h4>
               </div>
 
-              <h4 className="dashboard_view_more_import_data">
+              <h4 className='dashboard_view_more_import_data'>
                 {formatDate(modalData.electricalEnergyLastData?.date)}
               </h4>
             </div>
           </div>
-          <div className="data_page_aggrigate_item_child_row">
+          <div className='data_page_aggrigate_item_child_row'>
             <Button
               onClick={closeModal}
-              type="default"
+              type='default'
               style={{
                 width: "110px",
-              }}
-            >
+              }}>
               {t("stationsPageData.cancelButtonModal")}
             </Button>
             <Link
               to={`/electrical/infos/${modalData?.electricalEnergyLastData?.electricalEnergyId}`}
-              className="read_more_data_page_card"
+              className='read_more_data_page_card'
               style={{
                 width: "170px",
-              }}
-            >
+              }}>
               {t("stationsPageData.table14Data")}
-              <ArrowRightOutlined className="read_more_data_page_card_button" />
+              <ArrowRightOutlined className='read_more_data_page_card_button' />
             </Link>
           </div>
         </div>
@@ -535,14 +531,14 @@ function ElectrPage() {
 
   if (stationsLoading || loading || isPending)
     return (
-      <section className="data_main_sections">
+      <section className='data_main_sections'>
         <Loading />
       </section>
     );
 
   return (
-    <section className="data_main_sections">
-      <div className="data_main_header">
+    <section className='data_main_sections'>
+      <div className='data_main_header'>
         <h1>{t("dataPagesInformation.dataHeaderTitle")}</h1>
       </div>
 
@@ -550,79 +546,85 @@ function ElectrPage() {
         style={{
           background: colors.layoutBackground,
         }}
-        className="data_page_main_stations_info_container"
-      >
-        <div className="data_page_main_stations_info">
+        className='data_page_main_stations_info_container'>
+        <div className='data_page_main_stations_info'>
           {stationsMap?.data?.map((item, index) => (
-            <Card key={index} type="inner" className="data_paga_card_element">
-              <div className="data_page_card_header">
+            <Card key={index} type='inner' className='data_paga_card_element'>
+              <div className='data_page_card_header'>
                 <h1>{item.name}</h1>
 
-                <div>
+                <div
+                  style={{
+                    display: "flex",
+                  }}>
                   {item.status ? (
-                    <span className="active_indicator"></span>
+                    <span className='active_indicator'>
+                      {t("dataPagesInformation.active_indicator")}
+                    </span>
                   ) : (
-                    <span className="not_active_indicator"></span>
+                    <span className='not_active_indicator'>
+                      {t("dataPagesInformation.not_active_indicator")}
+                    </span>
                   )}
 
                   <img
                     style={{
                       filter: theme === "light" ? "invert(0)" : "invert(1)",
                     }}
-                    className="save_action_data"
+                    className='save_action_data'
                     src={
                       filterStationsId(item?.id)
                         ? CheckBookmark
                         : UnCheckBookmark
                     }
-                    alt="Images"
+                    alt='Images'
                     onClick={() => handleChangeSelectStationData(item?.id)}
                   />
                 </div>
               </div>
 
-              <div className="data_page_card_stations">
-                <div className="maps_view_more_info_card_item">
-                  <div className="normal_flex_card">
+              <div className='data_page_card_stations'>
+                <div className='maps_view_more_info_card_item'>
+                  <div className='normal_flex_card'>
                     <GlobalOutlined
                       style={{
                         color: colors.textColor,
                       }}
-                      className="dashboard_last_data_icons"
+                      className='dashboard_last_data_icons'
                     />
 
                     <h4>{t("stationsPageData.stationsMoreInfo.region")}:</h4>
                   </div>
 
-                  <h4 className="dashboard_view_more_import_data">
+                  <h4 className='dashboard_view_more_import_data'>
                     {item.region}
                   </h4>
                 </div>
 
-                <div className="maps_view_more_info_card_item">
-                  <div className="normal_flex_card">
+                <div className='maps_view_more_info_card_item'>
+                  <div className='normal_flex_card'>
                     <EnvironmentOutlined
                       style={{
                         color: colors.textColor,
                       }}
-                      className="dashboard_last_data_icons"
+                      className='dashboard_last_data_icons'
                     />
 
                     <h4>{t("stationsPageData.stationsMoreInfo.district")}:</h4>
                   </div>
 
-                  <h4 className="dashboard_view_more_import_data">
+                  <h4 className='dashboard_view_more_import_data'>
                     {item.district}
                   </h4>
                 </div>
 
-                <div className="maps_view_more_info_card_item">
-                  <div className="normal_flex_card">
+                <div className='maps_view_more_info_card_item'>
+                  <div className='normal_flex_card'>
                     <HomeOutlined
                       style={{
                         color: colors.textColor,
                       }}
-                      className="dashboard_last_data_icons"
+                      className='dashboard_last_data_icons'
                     />
 
                     <h4>
@@ -630,18 +632,18 @@ function ElectrPage() {
                     </h4>
                   </div>
 
-                  <h4 className="dashboard_view_more_import_data">
+                  <h4 className='dashboard_view_more_import_data'>
                     {item.organization}
                   </h4>
                 </div>
 
-                <div className="maps_view_more_info_card_item">
-                  <div className="normal_flex_card">
+                <div className='maps_view_more_info_card_item'>
+                  <div className='normal_flex_card'>
                     <PhoneOutlined
                       style={{
                         color: colors.textColor,
                       }}
-                      className="dashboard_last_data_icons"
+                      className='dashboard_last_data_icons'
                     />
 
                     <h4>
@@ -649,47 +651,38 @@ function ElectrPage() {
                     </h4>
                   </div>
 
-                  <h4 className="dashboard_view_more_import_data">
+                  <h4 className='dashboard_view_more_import_data'>
                     {item.devicePhoneNum}
                   </h4>
                 </div>
               </div>
 
-              <div className="data_page_aggrigate_container">
+              <div className='data_page_aggrigate_container'>
                 {item.electricalEnergyLastData?.map((itemAg, indexAg) => (
                   <div
-                    className="data_page_aggrigate_card_item"
+                    className='data_page_aggrigate_card_item'
                     key={indexAg}
-                    onClick={() => handleOpenModal(itemAg)}
-                  >
-                    <div className="data_page_aggrigate_card_item_header_wrapper">
+                    onClick={() => handleOpenModal(itemAg)}>
+                    <div className='data_page_aggrigate_card_item_header_wrapper'>
                       <h3>{itemAg.name}</h3>
                       {itemAg.workingStatus ? (
-                        <span
-                          className="active_indicator"
-                          style={{
-                            width: "19px",
-                            height: "19px",
-                          }}
-                        ></span>
+                        <span className='active_indicator'>
+                          {t("dataPagesInformation.active_indicator")}
+                        </span>
                       ) : (
-                        <span
-                          className="not_active_indicator"
-                          style={{
-                            width: "19px",
-                            height: "19px",
-                          }}
-                        ></span>
+                        <span className='not_active_indicator'>
+                          {t("dataPagesInformation.not_active_indicator")}
+                        </span>
                       )}
                     </div>
-                    <div className="data_page_aggrigate_item">
-                      <div className="dashboard_view_more_modal_card_item">
-                        <div className="normal_flex_card">
+                    <div className='data_page_aggrigate_item'>
+                      <div className='dashboard_view_more_modal_card_item'>
+                        <div className='normal_flex_card'>
                           <ThunderboltOutlined
                             style={{
                               color: colors.textColor,
                             }}
-                            className="dashboard_last_data_icons"
+                            className='dashboard_last_data_icons'
                           />
                           <h4>
                             {t(
@@ -698,18 +691,18 @@ function ElectrPage() {
                             :{" "}
                           </h4>
                         </div>
-                        <h4 className="dashboard_view_more_import_data">
+                        <h4 className='dashboard_view_more_import_data'>
                           {itemAg.electricalEnergyLastData.voltage1} V
                         </h4>
                       </div>
 
-                      <div className="dashboard_view_more_modal_card_item dashboard_view_more_modal_card_item_extra_name">
-                        <div className="normal_flex_card">
+                      <div className='dashboard_view_more_modal_card_item dashboard_view_more_modal_card_item_extra_name'>
+                        <div className='normal_flex_card'>
                           <BulbOutlined
                             style={{
                               color: colors.textColor,
                             }}
-                            className="dashboard_last_data_icons"
+                            className='dashboard_last_data_icons'
                           />
                           <h4>
                             {t(
@@ -718,7 +711,7 @@ function ElectrPage() {
                             :{" "}
                           </h4>
                         </div>
-                        <h4 className="dashboard_view_more_import_data">
+                        <h4 className='dashboard_view_more_import_data'>
                           {itemAg.electricalEnergyLastData.current1} A
                         </h4>
                       </div>
@@ -735,7 +728,7 @@ function ElectrPage() {
           onChange={handlePaginationChange}
           total={stationsMap?.totalDocuments}
           pageSize={pageData.perPage}
-          align="end"
+          align='end'
         />
       </div>
 
