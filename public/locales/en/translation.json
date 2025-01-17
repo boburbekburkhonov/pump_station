@@ -246,6 +246,8 @@
       "dataVolume": "Volume (m³)",
       "dataDate": "Data date"
     },
+    "dateSelectDay": "Date",
+    "dateSelectYear": "Year",
     "active_indicator": "Active",
     "not_active_indicator": "Inactive"
   }

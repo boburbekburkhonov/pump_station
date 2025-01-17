@@ -246,6 +246,8 @@
       "dataVolume": "Объем (м³)",
       "dataDate": "Дата данных"
     },
+    "dateSelectDay": "Дата",
+    "dateSelectYear": "Год",
     "active_indicator": "Активный",
     "not_active_indicator": "Неактивный"
   }

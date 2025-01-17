@@ -12,6 +12,7 @@ import { getAllStationsData } from "../../redux/actions/stationsActions";
 import Loading from "../../components/loading";
 
 import TableComponent from "../../components/tableComponent";
+import '../data/index.css'
 
 const StationsWithUser = memo(() => {
   const [dataSource, setDataSource] = useState([]);
@@ -116,6 +117,23 @@ const StationsWithUser = memo(() => {
         dataIndex: "devicePhoneNum",
         key: "devicePhoneNum",
         align: "center",
+      },
+      {
+        title: t("stationsPageData.table8Data"),
+        dataIndex: "status",
+        key: "haveElectricalEnergy",
+        align: "center",
+        render: (_, key) => (
+          <span
+            className={
+              key.status ? "active_indicator" : "not_active_indicator"
+            }>
+            {key.status
+              ? t("dataPagesInformation.active_indicator")
+              : t("dataPagesInformation.not_active_indicator")}
+          </span>
+        ),
+        width: 100,
       },
       {
         title: t("stationsPageData.table14Data"),

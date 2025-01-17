@@ -168,6 +168,8 @@ const ThirdSections = memo(
         <h1 className='head_title_data'>
           {valueInput.format("YYYY-MM")}
           {"\t"}
+          {t("dataPagesInformation.dateSelectDay")}
+          {"\t"}
           {
             t("dataPagesInformation.selectButtonNames", {
               returnObjects: true,
@@ -246,6 +248,8 @@ const FourThSections = memo(
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
           {valueInput.format("YYYY-MM")}
+          {"\t"}
+          {t("dataPagesInformation.dateSelectDay")}
           {"\t"}
           {
             t("dataPagesInformation.selectButtonNames", {
@@ -326,6 +330,8 @@ const FiveThSections = memo(
         <h1 className='head_title_data'>
           {valueInput.format("YYYY")}
           {"\t"}
+          {t("dataPagesInformation.dateSelectYear")}
+          {"\t"}
           {
             t("dataPagesInformation.selectButtonNames", {
               returnObjects: true,
@@ -405,6 +411,8 @@ const SixThSections = memo(
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
           {valueInput.format("YYYY")}
+          {"\t"}
+          {t("dataPagesInformation.dateSelectYear")}
           {"\t"}
           {
             t("dataPagesInformation.selectButtonNames", {

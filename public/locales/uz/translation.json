@@ -246,6 +246,8 @@
       "dataVolume": "Hajm (m³)",
       "dataDate": "Ma'lumot sanasi"
     },
+    "dateSelectDay": "Sanadagi",
+    "dateSelectYear": "Yildagi",
     "active_indicator": "Faol",
     "not_active_indicator": "Faolmas"
   }
