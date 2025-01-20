@@ -33,6 +33,7 @@
     "navLink14": "Xisobotlar",
     "navLink15": "Bildirishnomalar",
     "navLink16": "Ma'lumot qo'shish",
+    "navLink17": "Barcha ma'lumotlar",
     "notifTitle": "Xabarlar",
     "rus": "Rus",
     "eng": "Ingliz",
@@ -249,6 +250,17 @@
     "dateSelectDay": "Sanadagi",
     "dateSelectYear": "Yildagi",
     "active_indicator": "Faol",
-    "not_active_indicator": "Faolmas"
+    "not_active_indicator": "Faolmas",
+    "allStationsDataHead": "Barcha stansiyalarning so'ngi agrigat va elektr hisoblagich ma'lumotlari",
+    "allStationsAggrigatetotalsVolume": "Agrigatlarning umumiy oqib o'tgan suv hajmi",
+    "allStationsAggrigatetotalsFlow": "Agrigatlarning umumiy oqim tezligi",
+    "allStationsElektrActiveEnergy": "Elektr hisoblagichlarning umumiy aktiv energiyasi",
+    "allStationsElektrReactiveEnergy": "Elektr hisoblagichlarning umumiy reaktiv energiyasi",
+    "allStationsDataModalCancelButton": "Ortga qaytish",
+    "allStationsDataModalOkButton": "Tushunarli",
+    "allStationsDataElectryButton": "Elektr hisoblagich ma'lumotlari",
+    "allStationsDataAgrigateButton": "Agrigat ma'lumotlari",
+    "allStationsAgrigateTitle": "Umumiy agrigat ma'lumotlari",
+    "allStationsElectrTitle": "Umumiy elektr hisoblagich ma'lumotlari"
   }
 }

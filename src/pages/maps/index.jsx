@@ -26,6 +26,8 @@ import {
 } from "@ant-design/icons";
 
 import MapWithPolygon from "../../components/mapComponent";
+import { formatDate } from "../../utils/inputElementHandler";
+
 import "./index.css";
 import {
   findInMapsLastData,
@@ -93,18 +95,6 @@ function MapsPage() {
     setVisible(false);
     setDataStations({});
   };
-
-  function formatDate(inputDate) {
-    if (!inputDate) {
-      return null;
-    }
-    const [year, hours] = inputDate.split("T");
-    const [hour, minuts, seconds] = hours.split(":");
-
-    const formattedDate = `${year} ${hour}:${minuts}:${seconds.split(".")[0]}`;
-
-    return formattedDate;
-  }
 
   return (
     <section className='map_container'>

@@ -10,10 +10,10 @@ import React, {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import dayjs from "dayjs";
 import Cookies from "js-cookie";
-
 import { Card, Select, Button, Modal } from "antd";
+import { formatDate } from "../../utils/inputElementHandler";
+
 import {
   EnvironmentOutlined,
   TeamOutlined,
@@ -59,7 +59,6 @@ import SolarEmploymentChart from "../../components/googleNewPieChart";
 import ViewStationModal from "../../components/stationsModalStatus/index";
 
 const STATISTIC_CARDS_CHUNK = 3;
-
 const STATISTIC_CARDS_CHUNK_NEXT = 7;
 
 const StatisticCard = memo(
@@ -82,20 +81,7 @@ const StatisticCard = memo(
   )
 );
 
-const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data }) => {
-  const { t } = useTranslation();
-
-  function formatDate(inputDate) {
-    if(!inputDate) {
-      return null
-    }
-    const [year, hours] = inputDate.split("T")
-    const [hour, minuts, seconds] = hours.split(":")
-
-    const formattedDate = `${year} ${hour}:${minuts}:${seconds.split(".")[0]}`
-
-    return formattedDate;
-  }
+const ViewMoreLastData = memo(({ openModalData, closeModal, colors, data, t }) => {
 
   return (
     <Modal
@@ -969,7 +955,7 @@ function UserDashboard() {
                   </div>
                   <hr
                     style={{
-                      borderColor: "#3652AD",
+                      borderColor: "#405FF2",
                     }}
                   />
                   <div className='dashboard_last_data_values_card'>
@@ -1166,7 +1152,7 @@ function UserDashboard() {
         openModalData={isOpenModal}
         closeModal={closeModal}
         data={modalViewData}
-        langData={t}
+        t={t}
       />
 
       <ViewStationModal

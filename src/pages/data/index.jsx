@@ -11,8 +11,8 @@ import React, {
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
-
 import { Button, Card, Modal, Pagination } from "antd";
+
 import {
   NodeIndexOutlined,
   FormOutlined,
@@ -21,10 +21,6 @@ import {
   AreaChartOutlined,
   ExperimentOutlined,
   FieldTimeOutlined,
-  HomeOutlined,
-  GlobalOutlined,
-  PhoneOutlined,
-  EnvironmentOutlined,
   ArrowRightOutlined,
 } from "@ant-design/icons";
 import "./index.css";
@@ -35,26 +31,13 @@ import {
   findInMapsLastData,
   findLastStationsData,
 } from "../../redux/actions/stationsActions";
+import { formatDate } from "../../utils/inputElementHandler";
 import Loading from "../../components/loading/index";
 import { Link } from "react-router-dom";
 import CheckBookmark from "../../assets/bookmark.svg";
 import UnCheckBookmark from "../../assets/bookmarkCheck.svg";
 
-const ViewMoreModal = memo(({ openModalData, closeModal, modalData }) => {
-  const { t } = useTranslation();
-  const { colors } = useSelector((state) => state.theme);
-
-  function formatDate(inputDate) {
-    if(!inputDate) {
-      return null
-    }
-    const [year, hours] = inputDate.split("T")
-    const [hour, minuts, seconds] = hours.split(":")
-
-    const formattedDate = `${year} ${hour}:${minuts}:${seconds.split(".")[0]}`
-
-    return formattedDate;
-  }
+const ViewMoreModal = memo(({ openModalData, closeModal, modalData, colors, t }) => {
 
   return (
     <Modal
@@ -359,80 +342,6 @@ function DataPage() {
                 </div>
               </div>
 
-              <div className="data_page_card_stations">
-                <div className="maps_view_more_info_card_item">
-                  <div className="normal_flex_card">
-                    <GlobalOutlined
-                      style={{
-                        color: colors.textColor,
-                      }}
-                      className="dashboard_last_data_icons"
-                    />
-
-                    <h4>{t("stationsPageData.stationsMoreInfo.region")}:</h4>
-                  </div>
-
-                  <h4 className="dashboard_view_more_import_data">
-                    {item.region}
-                  </h4>
-                </div>
-
-                <div className="maps_view_more_info_card_item">
-                  <div className="normal_flex_card">
-                    <EnvironmentOutlined
-                      style={{
-                        color: colors.textColor,
-                      }}
-                      className="dashboard_last_data_icons"
-                    />
-
-                    <h4>{t("stationsPageData.stationsMoreInfo.district")}:</h4>
-                  </div>
-
-                  <h4 className="dashboard_view_more_import_data">
-                    {item.district}
-                  </h4>
-                </div>
-
-                <div className="maps_view_more_info_card_item">
-                  <div className="normal_flex_card">
-                    <HomeOutlined
-                      style={{
-                        color: colors.textColor,
-                      }}
-                      className="dashboard_last_data_icons"
-                    />
-
-                    <h4>
-                      {t("stationsPageData.stationsMoreInfo.organization")}:
-                    </h4>
-                  </div>
-
-                  <h4 className="dashboard_view_more_import_data">
-                    {item.organization}
-                  </h4>
-                </div>
-
-                <div className="maps_view_more_info_card_item">
-                  <div className="normal_flex_card">
-                    <PhoneOutlined
-                      style={{
-                        color: colors.textColor,
-                      }}
-                      className="dashboard_last_data_icons"
-                    />
-
-                    <h4>
-                      {t("stationsPageData.stationsMoreInfo.devicePhoneNum")}:
-                    </h4>
-                  </div>
-
-                  <h4 className="dashboard_view_more_import_data">
-                    {item.devicePhoneNum}
-                  </h4>
-                </div>
-              </div>
-
               <div className="data_page_aggrigate_container">
                 {item.aggregate?.map((itemAg, indexAg) => (
                   <div
@@ -512,6 +421,8 @@ function DataPage() {
         openModalData={openModalData}
         closeModal={handleCloseModal}
         modalData={modalData}
+        t={t}
+        colors={colors}
       />
     </section>
   );

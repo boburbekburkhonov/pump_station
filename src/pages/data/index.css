@@ -23,7 +23,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.75rem;
-  border-bottom: 0.125rem solid #3652AD;
+  border-bottom: 0.125rem solid #405FF2;
 }
 
 .save_action_data {
@@ -54,14 +54,14 @@
   flex-direction: column;
   gap: 0.75rem;
   padding-bottom: 0.75rem;
-  border-bottom: 0.125rem solid #3652AD;
+  border-bottom: 0.125rem solid #405FF2;
 }
 
 .read_more_data_page_card {
   font-weight: 600;
   font-size: small;
   color: #fff;
-  background: #3652AD;
+  background: #405FF2;
   display: flex;
   gap: 0.75rem;
   align-items: center;

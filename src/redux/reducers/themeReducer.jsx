@@ -10,10 +10,10 @@ const initialState = {
     background: initialTheme === "light" ? "#F3F7FF" : "#37424e",
     layoutBackground: initialTheme === "light" ? "#FDFEFF" : "#2e3540",
     text: initialTheme === "light" ? "#31394D" : "#FFFFFF",
-    buttonText: initialTheme === "light" ? "#F3F7FF" : "#37424e", 
+    buttonText: initialTheme === "light" ? "#F3F7FF" : "#37424e",
     textWhite: "#fff",
     textLight: "#748AA1",
-    buttonColor: "#3652AD",
+    buttonColor: "#405FF2",
     statisticElement1: "#B558F6",
     statisticElement2: "#FEC400",
     statisticElement3: "#4072EE",
@@ -25,7 +25,9 @@ const initialState = {
       initialTheme === "light"
         ? "rgba(34, 60, 80, 0.1)"
         : "rgba(255, 255, 255, 0.2)",
-    blurBgColor: "rgba(52, 152, 219, 0.2)"
+    blurBgColor: "rgba(64, 95, 242, 0.2)",
+    logoColor: initialTheme === "light" ? "#405FF2" : "#fff",
+    blurBgColor2: "rgba(64, 95, 242, 0.1)",
   },
 };
 
@@ -34,7 +36,7 @@ const themes = {
     background: "#F3F7FF",
     layoutBackground: "#FDFEFF",
     text: "#31394D",
-    buttonColor: "#3652AD",
+    buttonColor: "#405FF2",
     buttonText: "#F3F7FF",
     boxShadow: "rgba(34, 60, 80, 0.1)",
     textWhite: "#fff",
@@ -43,14 +45,16 @@ const themes = {
     statisticElement1: "#B558F6",
     statisticElement2: "#FEC400",
     statisticElement3: "#4072EE",
-    blurBgColor: "rgba(52, 152, 219, 0.2)"
+    blurBgColor: "rgba(64, 95, 242, 0.2)",
+    blurBgColor2: "rgba(64, 95, 242, 0.1)",
+    logoColor: "#405FF2"
   },
   dark: {
     background: "#37424e",
     layoutBackground: "#2e3540",
     text: "#FFFFFF",
-    buttonColor: "#3652AD",
-    buttonText: "#37424e", 
+    buttonColor: "#405FF2",
+    buttonText: "#37424e",
     textWhite: "#fff",
     textLight: "#748AA1",
     statisticElement1: "#B558F6",
@@ -58,7 +62,9 @@ const themes = {
     statisticElement3: "#4072EE",
     blurFilter: "rgba(256, 256, 256, 0.1)",
     boxShadow: "rgba(255, 255, 255, 0.2)",
-    blurBgColor: "rgba(52, 152, 219, 0.2)"
+    blurBgColor: "rgba(64, 95, 242, 0.2)",
+    blurBgColor2: "rgba(64, 95, 255, 0.1)",
+    logoColor: "#fff"
   },
 };
 

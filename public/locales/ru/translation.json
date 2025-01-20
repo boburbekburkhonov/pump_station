@@ -33,6 +33,7 @@
     "navLink14": "Отчеты",
     "navLink15": "Уведомления",
     "navLink16": "Добавить информацию",
+    "navLink17": "Вся информация",
     "notifTitle": "Уведомления",
     "rus": "Русский",
     "eng": "Английский",
@@ -249,6 +250,17 @@
     "dateSelectDay": "Дата",
     "dateSelectYear": "Год",
     "active_indicator": "Активный",
-    "not_active_indicator": "Неактивный"
+    "not_active_indicator": "Неактивный",
+    "allStationsDataHead": "Окончательные совокупные данные и данные счетчиков электроэнергии по всем станциям",
+    "allStationsAggrigatetotalsVolume": "Общий объем воды, пропущенной агрегатами",
+    "allStationsAggrigatetotalsFlow": "Общий расход заполнителей",
+    "allStationsElektrActiveEnergy": "Суммарная активная энергия счетчиков электроэнергии",
+    "allStationsElektrReactiveEnergy": "Суммарная реактивная энергия электросчетчиков",
+    "allStationsDataModalCancelButton": "Возвращаться",
+    "allStationsDataModalOkButton": "Понятно",
+    "allStationsDataElectryButton": "Данные счетчиков электроэнергии",
+    "allStationsDataAgrigateButton": "Совокупные данные",
+    "allStationsAgrigateTitle": "Общая совокупная информация",
+    "allStationsElectrTitle": "Общая информация о счетчиках электроэнергии"
   }
 }

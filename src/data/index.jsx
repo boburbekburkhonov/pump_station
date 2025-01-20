@@ -12,77 +12,77 @@ export const iconData = [
     <AppstoreOutlined
         style={{
             fontSize: "24px",
-            color: "#3498DB"
+            color: "#405FF2"
         }}
     />,
 
     <CheckCircleOutlined
         style={{
             fontSize: "24px",
-            color: "#3498DB"
+            color: "#405FF2"
         }}
     />,
 
     <ExclamationCircleOutlined
         style={{
             fontSize: "24px",
-            color: "#3498DB"
+            color: "#405FF2"
         }}
     />,
 
     <ApartmentOutlined
         style={{
             fontSize: "24px",
-            color: "#3498DB"
+            color: "#405FF2"
         }}
     />,
 
     <CarryOutOutlined
         style={{
             fontSize: "24px",
-            color: "#3498DB"
+            color: "#405FF2"
         }}
     />,
 
     <WarningOutlined
         style={{
             fontSize: "24px",
-            color: "#3498DB"
+            color: "#405FF2"
         }}
     />,
 
     <InteractionOutlined
         style={{
             fontSize: "24px",
-            color: "#3498DB"
+            color: "#405FF2"
         }}
     />,
 
     <CarryOutOutlined
         style={{
             fontSize: "24px",
-            color: "#3498DB"
+            color: "#405FF2"
         }}
     />,
 
     <WarningOutlined
         style={{
             fontSize: "24px",
-            color: "#3498DB"
+            color: "#405FF2"
         }}
     />,
 
     <InteractionOutlined
         style={{
             fontSize: "24px",
-            color: "#3498DB"
+            color: "#405FF2"
         }}
     />,
 
     <WarningOutlined
         style={{
             fontSize: "24px",
-            color: "#3498DB"
+            color: "#405FF2"
         }}
     />,
 ];

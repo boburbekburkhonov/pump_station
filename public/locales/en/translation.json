@@ -33,6 +33,7 @@
     "navLink14": "Reports",
     "navLink15": "Notifications",
     "navLink16": "Add information",
+    "navLink17": "All data",
     "notifTitle": "Notifications",
     "rus": "Russian",
     "eng": "English",
@@ -249,6 +250,17 @@
     "dateSelectDay": "Date",
     "dateSelectYear": "Year",
     "active_indicator": "Active",
-    "not_active_indicator": "Inactive"
+    "not_active_indicator": "Inactive",
+    "allStationsDataHead": "Last aggregate and electricity meter data for all stations",
+    "allStationsAggrigatetotalsVolume": "Total volume of water flowed by the aggregates",
+    "allStationsAggrigatetotalsFlow": "Total flow rate of aggregates",
+    "allStationsElektrActiveEnergy": "Total active energy of electricity meters",
+    "allStationsElektrReactiveEnergy": "Total reactive energy of electricity meters",
+    "allStationsDataModalCancelButton": "Go back",
+    "allStationsDataModalOkButton": "Understandable",
+    "allStationsDataElectryButton": "Electricity meter data",
+    "allStationsDataAgrigateButton": "Aggregate data",
+    "allStationsAgrigateTitle": "General aggregate data",
+    "allStationsElectrTitle": "General electricity meter information"
   }
 }

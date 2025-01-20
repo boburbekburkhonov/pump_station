@@ -39,7 +39,8 @@ import {
 
 import { toggleTheme } from "../../redux/actions/themeType";
 import "./index.css";
-import Logo from "../../assets/react.svg";
+import Logo from "../../assets/output-onlinepngtools-removebg-preview.png";
+import Logo2 from "../../assets/output-onlinepngtools__1_-removebg-preview.png";
 import { logoutAction } from "../../redux/actions/authActions";
 import {
   deleteNotification,
@@ -291,6 +292,14 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       label: <p className='link_new_text_style'>{t("layoutData.navLink3")}</p>,
       children: [
         {
+          key: "/all/data",
+          label: (
+            <Link className='layout_links' to='/all/data'>
+              {t("layoutData.navLink17")}
+            </Link>
+          ),
+        },
+        {
           key: "/data",
           label: (
             <Link className='layout_links' to='/data'>
@@ -425,12 +434,14 @@ const LayoutComponent = memo(({ childrenComponent }) => {
           collapsible
           collapsed={collapsed}
           className='custom-sider'>
-          <div className='layout_logo_box'>
-            <img src={Logo} alt='logo' />
-
-            {!collapsed && (
-              <h1 className='logo_name'>Logo</h1>
-            )}  
+          <div className='layout_logo_box' style={{
+            background: colors.background
+          }}>
+            <img src={theme === "light" ? Logo : Logo2} alt='logo' className="logo_image_styles" />
+ 
+            {!collapsed && <h1 className='logo_name' style={{
+              color: colors.logoColor
+            }} >Smart Pump Station</h1>}
           </div>
 
           <Menu

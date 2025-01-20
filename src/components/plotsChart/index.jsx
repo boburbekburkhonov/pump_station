@@ -1,6 +1,5 @@
 import { Column } from '@ant-design/plots';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 const DemoColumn = () => {
   const config = {

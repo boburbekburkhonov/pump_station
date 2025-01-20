@@ -9,10 +9,9 @@ import React, {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-
+import { Select, DatePicker } from "antd";
+import moment from "moment";
 import {
-  EnvironmentOutlined,
-  TeamOutlined,
   NodeIndexOutlined,
   FormOutlined,
   QrcodeOutlined,
@@ -20,15 +19,9 @@ import {
   AreaChartOutlined,
   ExperimentOutlined,
   FieldTimeOutlined,
-  ThunderboltOutlined,
-  PoweroffOutlined,
-  BulbOutlined,
-  LineChartOutlined,
-  DashboardOutlined,
-  PieChartFilled,
 } from "@ant-design/icons";
-import { Select, DatePicker } from "antd";
-import moment from "moment";
+import { formatDate } from "../../utils/inputElementHandler";
+
 
 import { getLastAggregateData } from "../../redux/actions/dashboardActions";
 import { getAllStationsId } from "../../redux/actions/dashboard";
@@ -41,18 +34,6 @@ const { RangePicker } = DatePicker;
 const AggregateCardData = memo(({ item, index, changeData }) => {
   const { t } = useTranslation();
   const { colors } = useSelector((state) => state.theme);
-
-  function formatDate(inputDate) {
-    if(!inputDate) {
-      return null
-    }
-    const [year, hours] = inputDate.split("T")
-    const [hour, minuts, seconds] = hours.split(":")
-
-    const formattedDate = `${year} ${hour}:${minuts}:${seconds.split(".")[0]}`
-
-    return formattedDate;
-  }
 
   return (
     <div
@@ -82,7 +63,7 @@ const AggregateCardData = memo(({ item, index, changeData }) => {
         <div className='normal_flex_card'>
           <QrcodeOutlined
             style={{
-              color: "#3652AD",
+              color: "#405FF2",
             }}
             className='dashboard_last_data_icons'
           />
@@ -181,7 +162,6 @@ const AggregateCardData = memo(({ item, index, changeData }) => {
 function DataPage() {
   const dispatch = useDispatch();
 
-  const { loading } = useSelector((state) => state.alert);
   const { colors } = useSelector((state) => state.theme);
   const { stationsId } = useSelector((state) => state.dashboard);
   const { pumpLastData } = useSelector((state) => state.pumps);

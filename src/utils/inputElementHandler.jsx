@@ -45,6 +45,18 @@ export const closeModal = (
   clearFormFileds()
 };
 
-export const isFormValid = ({data, requiredFields}) => {
+export const isFormValid = ({ data, requiredFields }) => {
   return requiredFields.every((field) => data?.[field]?.toString().trim());
 };
+
+export const formatDate = (inputDate) => {
+  if (!inputDate) {
+    return null;
+  }
+  const [year, hours] = inputDate.split("T");
+  const [hour, minuts, seconds] = hours.split(":");
+
+  const formattedDate = `${year} ${hour}:${minuts}:${seconds.split(".")[0]}`;
+
+  return formattedDate;
+}

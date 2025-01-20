@@ -11,14 +11,10 @@ import React, {
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
-
 import { Button, Card, Modal, Pagination } from "antd";
+import { Link } from "react-router-dom";
 import {
-  HomeOutlined,
-  GlobalOutlined,
-  PhoneOutlined,
   ArrowRightOutlined,
-  EnvironmentOutlined,
   FormOutlined,
   QrcodeOutlined,
   SettingOutlined,
@@ -30,6 +26,7 @@ import {
   DashboardOutlined,
   PieChartFilled,
 } from "@ant-design/icons";
+
 import "./index.css";
 import "../maps/index.css";
 import "../dashboard/index.css";
@@ -39,26 +36,12 @@ import {
   findInMapsLastData,
   findLastStationsData,
 } from "../../redux/actions/stationsActions";
+import { formatDate } from "../../utils/inputElementHandler";
 import Loading from "../../components/loading/index";
-import { Link } from "react-router-dom";
 import CheckBookmark from "../../assets/bookmark.svg";
 import UnCheckBookmark from "../../assets/bookmarkCheck.svg";
 
-const ViewMoreModal = memo(({ openModalData, closeModal, modalData }) => {
-  const { t } = useTranslation();
-  const { colors } = useSelector((state) => state.theme);
-
-  function formatDate(inputDate) {
-    if(!inputDate) {
-      return null
-    }
-    const [year, hours] = inputDate.split("T")
-    const [hour, minuts, seconds] = hours.split(":")
-
-    const formattedDate = `${year} ${hour}:${minuts}:${seconds.split(".")[0]}`
-
-    return formattedDate;
-  }
+const ViewMoreModal = memo(({ openModalData, closeModal, modalData, t, colors }) => {
 
   return (
     <Modal
@@ -146,7 +129,6 @@ const ViewMoreModal = memo(({ openModalData, closeModal, modalData }) => {
               </div>
 
               <h4 className='dashboard_view_more_import_data'>
-                {console.log(modalData)}
                 {modalData.electricalEnergyLastData?.voltage1} V
               </h4>
             </div>
@@ -439,7 +421,7 @@ function ElectrPage() {
 
   const [pageData, setPageData] = useState({
     page: 1,
-    perPage: 6,
+    perPage: 9,
   });
   const [openModalData, setOpenModaldata] = useState(false);
   const [modalData, setModalData] = useState({});
@@ -583,7 +565,7 @@ function ElectrPage() {
                 </div>
               </div>
 
-              <div className='data_page_card_stations'>
+              {/* <div className='data_page_card_stations'>
                 <div className='maps_view_more_info_card_item'>
                   <div className='normal_flex_card'>
                     <GlobalOutlined
@@ -655,7 +637,7 @@ function ElectrPage() {
                     {item.devicePhoneNum}
                   </h4>
                 </div>
-              </div>
+              </div> */}
 
               <div className='data_page_aggrigate_container'>
                 {item.electricalEnergyLastData?.map((itemAg, indexAg) => (
@@ -736,6 +718,8 @@ function ElectrPage() {
         openModalData={openModalData}
         closeModal={handleCloseModal}
         modalData={modalData}
+        colors={colors}
+        t={t}
       />
     </section>
   );

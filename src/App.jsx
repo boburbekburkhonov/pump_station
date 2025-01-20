@@ -61,7 +61,7 @@ const ConditionalContent = memo(({ isAuthenticated }) => {
 });
 
 const App = () => {
-  const { colors } = useSelector((state) => state.theme);
+  const { colors, theme } = useSelector((state) => state.theme);
   const dispatch = useDispatch()
   const isAuthenticated = localStorage.getItem("access_token");
 
@@ -74,6 +74,17 @@ const App = () => {
   useEffect(() => {
     refreshedTokenFunction()
   }, [refreshedTokenFunction])
+
+  useEffect(() => {
+    const logoLink = document.querySelector('link[rel="icon"]');
+
+    if (logoLink) {
+      logoLink.href =
+        theme === "light"
+          ? "./src/assets/output-onlinepngtools-removebg-preview.png"
+          : "./src/assets/output-onlinepngtools__1_-removebg-preview.png";
+    }
+  }, [theme]);
 
   return (
     <div
