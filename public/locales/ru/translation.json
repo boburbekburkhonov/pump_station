@@ -245,22 +245,26 @@
       "dataVelocity": "Скорость (м/с)",
       "dataFlow": "Расход воды (м³/с)",
       "dataVolume": "Объем (м³)",
-      "dataDate": "Дата данных"
+      "dataDate": "Дата данных",
+      "totalEnergy": "Общее количество использованной энергии (кВтч)",
+      "totalValume": "Общий объем воды (м³)"
     },
     "dateSelectDay": "Дата",
     "dateSelectYear": "Год",
     "active_indicator": "Активный",
     "not_active_indicator": "Неактивный",
     "allStationsDataHead": "Окончательные совокупные данные и данные счетчиков электроэнергии по всем станциям",
-    "allStationsAggrigatetotalsVolume": "Общий объем воды, пропущенной агрегатами",
-    "allStationsAggrigatetotalsFlow": "Общий расход заполнителей",
-    "allStationsElektrActiveEnergy": "Суммарная активная энергия счетчиков электроэнергии",
-    "allStationsElektrReactiveEnergy": "Суммарная реактивная энергия электросчетчиков",
+    "allStationsAggrigatetotalsVolume": "Объем прошедшей воды",
+    "allStationsAggrigatetotalsFlow": "Средний расход",
+    "allStationsElektrActiveEnergy": "Активное потребление энергии",
+    "allStationsElektrReactiveEnergy": "Номинальная реактивная энергия",
     "allStationsDataModalCancelButton": "Возвращаться",
     "allStationsDataModalOkButton": "Понятно",
     "allStationsDataElectryButton": "Данные счетчиков электроэнергии",
     "allStationsDataAgrigateButton": "Совокупные данные",
     "allStationsAgrigateTitle": "Общая совокупная информация",
-    "allStationsElectrTitle": "Общая информация о счетчиках электроэнергии"
+    "allStationsElectrTitle": "Общая информация о счетчиках электроэнергии",
+    "aggrigateName": "Название агрегата",
+    "electrycalName": "Имя счетчика"
   }
 }

@@ -5,6 +5,7 @@ import { getDataApi } from "../../utils";
 
 export const DASHBOARD_DATAS = {
   GET_COUNT_STATIONS_STATISTICS: "GET_COUNT_STATIONS_STATISTICS",
+  GET_COUNT_STATIONS_STATISTICS_FOR_ADMIN: "GET_COUNT_STATIONS_STATISTICS_FOR_ADMIN",
   FIND_ALL_STATIONS_ID: "FIND_ALL_STATIONS_ID"
 };
 
@@ -54,6 +55,38 @@ export const getStatisticsDashboard =
       }
     }
   };
+
+export const getStatisticsDashboardForAdmin =
+(lang, token) => async (dispatch) => {
+  try {
+    const res = await getDataApi(
+      `dashboard/findStationCountGroup?lang=${lang}`,
+      token
+    );
+    const data = res.data.data;
+    
+    dispatch({
+      type: DASHBOARD_DATAS.GET_COUNT_STATIONS_STATISTICS_FOR_ADMIN,
+      payload: data,
+    });
+  } catch (err) {
+    if (!err.response) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: "Network Error",
+        },
+      });
+    } else {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: err.response.data.message || err.response.statusText,
+        },
+      });
+    }
+  }
+};
 
 export const getAllStationsId = (lang, token) => async (dispatch) => {
   try {

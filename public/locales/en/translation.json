@@ -245,22 +245,26 @@
       "dataVelocity": "Velocity (m/s)",
       "dataFlow": "Flow rate (m³/s)",
       "dataVolume": "Volume (m³)",
-      "dataDate": "Data date"
+      "dataDate": "Data date",
+      "totalEnergy": "Total Energy Used (Kwh)",
+      "totalValume": "Total Water Volume (m³)"
     },
     "dateSelectDay": "Date",
     "dateSelectYear": "Year",
     "active_indicator": "Active",
     "not_active_indicator": "Inactive",
     "allStationsDataHead": "Last aggregate and electricity meter data for all stations",
-    "allStationsAggrigatetotalsVolume": "Total volume of water flowed by the aggregates",
-    "allStationsAggrigatetotalsFlow": "Total flow rate of aggregates",
-    "allStationsElektrActiveEnergy": "Total active energy of electricity meters",
-    "allStationsElektrReactiveEnergy": "Total reactive energy of electricity meters",
+    "allStationsAggrigatetotalsVolume": "Volume of water flowed",
+    "allStationsAggrigatetotalsFlow": "Average flow rate",
+    "allStationsElektrActiveEnergy": "Active energy consumed",
+    "allStationsElektrReactiveEnergy": "Rated reactive energy",
     "allStationsDataModalCancelButton": "Go back",
     "allStationsDataModalOkButton": "Understandable",
     "allStationsDataElectryButton": "Electricity meter data",
     "allStationsDataAgrigateButton": "Aggregate data",
     "allStationsAgrigateTitle": "General aggregate data",
-    "allStationsElectrTitle": "General electricity meter information"
+    "allStationsElectrTitle": "General electricity meter information",
+    "aggrigateName": "Aggregate name",
+    "electrycalName": "Counter name"
   }
 }

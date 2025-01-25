@@ -12,6 +12,7 @@ import pie from './statisticPieReducer'
 import line from './lineStatisticsReducer'
 import notifications from "./notificationReducer";
 import pumps from './dashboardDataReducer'
+import reports from './reports'
 
 export default combineReducers({
   theme,
@@ -26,5 +27,6 @@ export default combineReducers({
   pie,
   line,
   notifications,
-  pumps
+  pumps,
+  reports
 });

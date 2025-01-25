@@ -206,9 +206,7 @@ function DataPage() {
   });
   const [openModalData, setOpenModaldata] = useState(false);
   const [modalData, setModalData] = useState({});
-  const [isPending, setUseTransition] = useTransition();
-  const [updatedStations, setUpdatedStations] = useState([]);
-  const prevStationsLastData = useRef([]);
+  const [localStationsId, setLocalStationsId] = useState([...stationsId]);
 
   const fetchAllData = useCallback(() => {
     const lang = i18n.language;
@@ -230,30 +228,27 @@ function DataPage() {
   }, [fetchAllData, i18n]);
 
   useEffect(() => {
-    if (
-      JSON.stringify(prevStationsLastData.current) !==
-      JSON.stringify(stationsLastData)
-    ) {
-      prevStationsLastData.current = stationsLastData;
-      setUpdatedStations(stationsLastData);
-    }
-  }, [stationsLastData]);
 
-  const filterStationsId = useCallback(
-    (id) => updatedStations.some((item) => item.id === id),
-    [updatedStations]
-  );
+    if (stationsId) {
+      setLocalStationsId([...stationsId]);
+    }
+  }, [stationsId]);
+
+  const filterStationsId = (id) => localStationsId.includes(id);
 
   const handleChangeSelectStationData = (id) => {
     const userId = Cookies.get("userId");
     const lang = i18n.language;
-    let existingIds = stationsId;
+
+    let existingIds = [...localStationsId];
 
     if (existingIds.includes(id)) {
       existingIds = existingIds.filter((existingId) => existingId !== id);
     } else {
-      existingIds.push(id);
+      existingIds = [...existingIds, id];
     }
+
+    setLocalStationsId(existingIds);
 
     dispatch(
       createNewLastDataStation(
@@ -265,10 +260,6 @@ function DataPage() {
         token
       )
     );
-
-    setUseTransition(() => {
-      dispatch(findLastStationsData(lang, token));
-    });
   };
 
   const handlePaginationChange = (page, size) => {
@@ -292,7 +283,7 @@ function DataPage() {
     setModalData({});
   };
 
-  if (stationsLoading || loading || isPending)
+  if (stationsLoading || loading)
     return (
       <section className="data_main_sections">
         <Loading />

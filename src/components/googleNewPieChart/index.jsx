@@ -7,10 +7,10 @@ import HighchartsReact from "highcharts-react-official";
 const SolarEmploymentChart = ({ theme, data, lineStatus }) => {
   const chartOptions = {
     chart: {
-      type: "line",
+      type: "spline",
       backgroundColor: theme.backgroundColor,
       color: theme.text,
-      height: 600
+      height: 600,
     },
     title: {
       text: "",
@@ -40,21 +40,34 @@ const SolarEmploymentChart = ({ theme, data, lineStatus }) => {
       },
     },
 
-    legend: lineStatus ? {
-      layout: "horizontal",
-      align: "center",
-      verticalAlign: "top",
-      itemStyle: {
-        color: theme.text,
-      },
-
-    } : false,
+    legend: lineStatus
+      ? {
+          layout: "horizontal",
+          align: "center",
+          verticalAlign: "top",
+          itemStyle: {
+            color: theme.text,
+          },
+        }
+      : false,
 
     plotOptions: {
       series: {
         label: {
           connectorAllowed: false,
-        }
+        },
+      },
+    },
+
+    tooltip: {
+      shared: true,
+      formatter: function () {
+        return this.points
+          .map(
+            (point) =>
+              `<span style="color:${point.color}">\u25CF</span> ${point.series.name}: <b>${point.y} ${point.series.userOptions.unit}</b><br/>`
+          )
+          .join("");
       },
     },
 
@@ -62,6 +75,7 @@ const SolarEmploymentChart = ({ theme, data, lineStatus }) => {
       {
         name: data.name,
         data: data.data,
+        unit: data.unit,
       },
     ],
 
@@ -86,8 +100,6 @@ const SolarEmploymentChart = ({ theme, data, lineStatus }) => {
       enabled: false,
     },
   };
-
-  
 
   return (
     <HighchartsReact

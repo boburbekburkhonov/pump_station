@@ -11,12 +11,15 @@ export const DASHBOARD_ACTIONS_TYPES = {
     "FIND_LAST_DATA_BY_ELECTIRAL_ENERGY_ID",
 
   FIND_DATA_BY_STATION_ID: "FIND_DATA_BY_STATION_ID",
+  FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL:
+    "FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL",
   FIND_DATA_BY_AGGREGATE_ID: "FIND_DATA_BY_AGGREGATE_ID",
   FIND_ELECTRCITY_DATA_STATION_ID: "FIND_ELECTRCITY_DATA_STATION_ID",
   FIND_ELECTRICAL_ENERGY_ID: "FIND_ELECTRICAL_ENERGY_ID",
 
   LINE_CHART_DATA_WITH_AGGREGATE_ID: "LINE_CHART_DATA_WITH_AGGREGATE_ID",
   LINE_CHART_DATA_WITH_ELECTY_ID: "LINE_CHART_DATA_WITH_ELECTY_ID",
+  LINE_CHART_ALL_DATA: "LINE_CHART_ALL_DATA",
 };
 
 const aggregateDataType = {
@@ -37,6 +40,21 @@ const aggregateDataType = {
     name2: "Velocity",
     name3: "Volume",
     weekName: "Week",
+  },
+};
+
+const allDataType = {
+  uz: {
+    name1: "Umumiy suv hajmi",
+    name2: "Umumiy sariflangan energiya",
+  },
+  ru: {
+    name1: "Общий объем воды",
+    name2: "Общее количество потребленной энергии",
+  },
+  en: {
+    name1: "Total water volume",
+    name2: "Total energy consumed",
   },
 };
 
@@ -136,8 +154,407 @@ const months = {
   ],
 };
 
-// * Last data
+const processAndCombineData = (pumpData, electricalData) => {
+  const pumpDataMap = {};
+  pumpData.forEach((item) => {
+    item.aggregateData.forEach((data) => {
+      const date = data.date;
+      if (!pumpDataMap[date]) {
+        pumpDataMap[date] = { totalVolume: 0 };
+      }
+      pumpDataMap[date].totalVolume += data.volume || 0;
+    });
+  });
 
+  const electricalDataMap = {};
+  electricalData.forEach((item) => {
+    item.electricalEnergyData.forEach((data) => {
+      const date = data.date;
+      if (!electricalDataMap[date]) {
+        electricalDataMap[date] = { totalEnergyActive: 0 };
+      }
+      electricalDataMap[date].totalEnergyActive += data.energyActive || 0;
+    });
+  });
+
+  const combinedData = [];
+  const allDates = new Set([
+    ...Object.keys(pumpDataMap),
+    ...Object.keys(electricalDataMap),
+  ]);
+
+  allDates.forEach((date) => {
+    combinedData.push({
+      date,
+      totalVolume: pumpDataMap[date]?.totalVolume || 0,
+      totalEnergyActive: electricalDataMap[date]?.totalEnergyActive || 0,
+      key: Math.random(),
+    });
+  });
+
+  combinedData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  return combinedData;
+};
+
+const mergeDataByDate = (pumpData, electricalData) => {
+  const formatExpandData = (data, typeKey, typeValues) =>
+    data?.map((item) => ({
+      key: item[typeKey]?.id,
+      values: item[typeValues] || [],
+    })) || [];
+
+  const formatDataSource = (data, typeKey, defaultName) =>
+    data?.map((item) => ({
+      name: item[typeKey]?.name || defaultName,
+      key: item[typeKey]?.id,
+      dataType: typeKey,
+    })) || [];
+
+  const pumpExpandData = formatExpandData(
+    pumpData,
+    "aggregate",
+    "aggregateData"
+  );
+
+  const electricalExpandData = formatExpandData(
+    electricalData,
+    "electricalEnergy",
+    "electricalEnergyData"
+  );
+
+  const dataSource = [
+    ...formatDataSource(pumpData, "aggregate", "Pump"),
+    ...formatDataSource(electricalData, "electricalEnergy", "Electrical"),
+  ];
+
+  return {
+    dataSource,
+    expandData: [...pumpExpandData, ...electricalExpandData],
+  };
+};
+
+// * Today Data With Stations Id
+export const getTodayDataByStationId =
+  (stationId, token, lang, page, perPage) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const createEndpoint = (basePath) =>
+        `${basePath}?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}`;
+
+      const [res1, res2] = await Promise.all([
+        getDataApi(
+          createEndpoint("pump-today-data/findDataByStationId"),
+          token
+        ),
+        getDataApi(
+          createEndpoint("electrical-energy-today-data/findDataByStationId"),
+          token
+        ),
+      ]);
+
+      const pumpData = res1.data.data.data;
+      const electricalData = res2.data.data.data;
+
+      const combinedData = processAndCombineData(pumpData, electricalData);
+
+      const dataByDate = mergeDataByDate(pumpData, electricalData);
+
+      const lineChartData = {
+        date: combinedData?.map((item) => item.date.split(" ")[1]),
+        lineData: [
+          {
+            name: allDataType[lang].name1,
+            data: combinedData?.map((item) => item.totalVolume),
+            unit: "m³",
+          },
+          {
+            name: allDataType[lang].name2,
+            data: combinedData?.map((item) => item.totalEnergyActive),
+            unit: unitTranslations[lang].kwHour,
+          },
+        ],
+      };
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_ALL_DATA,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
+        payload: combinedData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
+        payload: dataByDate,
+      });
+    } catch (err) {
+      console.log(err);
+
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.statusText ||
+        "Network Error";
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: errorMessage },
+      });
+    } finally {
+      dispatch({ type: GLOBALTYPES.LOADING, payload: false });
+    }
+  };
+
+// * Yesterday Data With Stations Id
+export const getYesterdayStationIdData =
+  (stationId, token, lang, page, perPage) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const createEndpoint = (basePath) =>
+        `${basePath}?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}`;
+
+      const [res1, res2] = await Promise.all([
+        getDataApi(
+          createEndpoint("pump-yesterday-data/findDataByStationId"),
+          token
+        ),
+        getDataApi(
+          createEndpoint(
+            "electrical-energy-yesterday-data/findDataByStationId"
+          ),
+          token
+        ),
+      ]);
+
+      const pumpData = res1.data.data.data;
+      const electricalData = res2.data.data.data;
+
+      const combinedData = processAndCombineData(pumpData, electricalData);
+
+      const dataByDate = mergeDataByDate(pumpData, electricalData);
+
+      const lineChartData = {
+        date: combinedData?.map((item) => item.date.split(" ")[1]),
+        lineData: [
+          {
+            name: allDataType[lang].name1,
+            data: combinedData?.map((item) => item.totalVolume),
+            unit: "m³",
+          },
+          {
+            name: allDataType[lang].name2,
+            data: combinedData?.map((item) => item.totalEnergyActive),
+            unit: unitTranslations[lang].kwHour,
+          },
+        ],
+      };
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_ALL_DATA,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
+        payload: combinedData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
+        payload: dataByDate,
+      });
+    } catch (err) {
+      console.log(err);
+
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.statusText ||
+        "Network Error";
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: errorMessage },
+      });
+    } finally {
+      dispatch({ type: GLOBALTYPES.LOADING, payload: false });
+    }
+  };
+
+// * Daily Data With Stations Id
+export const getDailyStationsIdData =
+  (stationId, token, lang, page, perPage, month, year) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+      const createEndpoint = (basePath) =>
+        `${basePath}?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}&month=${month}`;
+
+      const [res1, res2] = await Promise.all([
+        getDataApi(
+          createEndpoint("pump-daily-data/findDataByStationId"),
+          token
+        ),
+        getDataApi(
+          createEndpoint("electrical-energy-daily-data/findDataByStationId"),
+          token
+        ),
+      ]);
+
+      const pumpData = res1.data.data.data;
+      const electricalData = res2.data.data.data;
+
+      const combinedData = processAndCombineData(pumpData, electricalData);
+
+      const dataByDate = mergeDataByDate(pumpData, electricalData);
+
+      const lineChartData = {
+        date: combinedData?.map((item) => item.date.split(" ")[1]),
+        lineData: [
+          {
+            name: allDataType[lang].name1,
+            data: combinedData?.map((item) => item.totalVolume),
+            unit: "m³",
+          },
+          {
+            name: allDataType[lang].name2,
+            data: combinedData?.map((item) => item.totalEnergyActive),
+            unit: unitTranslations[lang].kwHour,
+          },
+        ],
+      };
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_ALL_DATA,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
+        payload: combinedData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
+        payload: dataByDate,
+      });
+    } catch (err) {
+      console.log(err);
+
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.statusText ||
+        "Network Error";
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: errorMessage },
+      });
+    } finally {
+      dispatch({ type: GLOBALTYPES.LOADING, payload: false });
+    }
+  };
+
+// * Weekly Data With Stations Id
+export const getWeeklyStationsIdData =
+  (stationId, token, lang, page, perPage, month, year) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      console.log(month);
+      
+      const createEndpoint = (basePath) =>
+        `${basePath}?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}&month=${month}`;
+
+      const [res1, res2] = await Promise.all([
+        getDataApi(
+          createEndpoint(
+            "pump-weekly-data/findDataByStationIdAndYearMonthNumber"
+          ),
+          token
+        ),
+        getDataApi(
+          createEndpoint("electrical-energy-weekly-data/findDataByStationId"),
+          token
+        ),
+      ]);
+
+      const pumpData = res1.data.data.data;
+      const electricalData = res2.data.data.data;
+
+      console.log(res1.data.data);
+      console.log(res2.data.data);
+
+      const combinedData = processAndCombineData(pumpData, electricalData);
+
+      const dataByDate = mergeDataByDate(pumpData, electricalData);
+
+      const lineChartData = {
+        date: combinedData?.map((item) => item.date.split(" ")[1]),
+        lineData: [
+          {
+            name: allDataType[lang].name1,
+            data: combinedData?.map((item) => item.totalVolume),
+            unit: "m³",
+          },
+          {
+            name: allDataType[lang].name2,
+            data: combinedData?.map((item) => item.totalEnergyActive),
+            unit: unitTranslations[lang].kwHour,
+          },
+        ],
+      };
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_ALL_DATA,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
+        payload: combinedData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
+        payload: dataByDate,
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+// * Last data
 export const getLastAggregateData =
   (stationId, token, lang) => async (dispatch) => {
     try {
@@ -317,9 +734,11 @@ export const getTodayAggregateData =
         token
       );
 
+      const data = res.data.data.data;
+
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
-        payload: res.data.data,
+        payload: data,
       });
     } catch (err) {
       if (!err.response) {

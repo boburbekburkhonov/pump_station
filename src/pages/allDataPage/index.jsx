@@ -1,17 +1,11 @@
 /** @format */
 
-import React, {
-  useEffect,
-  useCallback,
-  useState,
-  memo,
-  useTransition,
-  useRef,
-} from "react";
+import React, { useEffect, useCallback, useState, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import { Button, Card, Modal, Pagination } from "antd";
+import { Button, Card, Pagination } from "antd";
+
 import {
   NodeIndexOutlined,
   AreaChartOutlined,
@@ -24,73 +18,35 @@ import "../dashboard/index.css";
 import {
   createNewLastDataStation,
   findInMapsLastData,
-  findLastStationsData,
 } from "../../redux/actions/stationsActions";
 import Loading from "../../components/loading/index";
 import CheckBookmark from "../../assets/bookmark.svg";
 import UnCheckBookmark from "../../assets/bookmarkCheck.svg";
-
-const ViewMoreModal = memo(
-  ({ openModalData, closeModal, modalData, colors, t }) => {
-    return (
-      <Modal
-        key='all_stations_data'
-        title={false}
-        open={openModalData}
-        centered
-        onCancel={closeModal}
-        footer={[
-          <Button
-            key='close'
-            onClick={closeModal}
-            style={{ color: colors.textColor }}>
-            {t("dataPagesInformation.allStationsDataModalCancelButton")}
-          </Button>,
-          <Button
-            key='ok'
-            type='primary'
-            onClick={() => {
-              closeModal();
-            }}>
-            {t("dataPagesInformation.allStationsDataModalOkButton")}
-          </Button>,
-        ]}
-        style={{
-          color: colors.textColor,
-        }}
-        className='all_stations_data_view_with_modal'>
-        {/* Modal mazmuni bu yerda */}
-      </Modal>
-    );
-  }
-);
+import { useNavigate } from "react-router-dom";
 
 function AllDatapPage() {
   const dispatch = useDispatch();
   const { i18n, t } = useTranslation();
   const token = localStorage.getItem("access_token");
+    const navigate = useNavigate();
 
   const { colors, theme } = useSelector((state) => state.theme);
   const { loading } = useSelector((state) => state.alert);
-  const { stationsMap, stationsLoading, stationsLastData, stationsId } =
-    useSelector((state) => state.stations);
+  const { stationsMap, stationsLoading, stationsId } = useSelector(
+    (state) => state.stations
+  );
 
   const [pageData, setPageData] = useState({
     page: 1,
     perPage: 9,
   });
-  const [openModalData, setOpenModaldata] = useState(false);
-  const [modalData, setModalData] = useState({});
-  const [isPending, setUseTransition] = useTransition();
-  const [updatedStations, setUpdatedStations] = useState([]);
-  const prevStationsLastData = useRef([]);
+  const [localStationsId, setLocalStationsId] = useState([...stationsId]);
 
   const fetchAllData = useCallback(() => {
     const lang = i18n.language;
     const { page, perPage } = pageData;
 
     dispatch(findInMapsLastData(lang, token, page, perPage));
-    dispatch(findLastStationsData(lang, token));
   }, [dispatch, token, i18n.language, pageData]);
 
   useEffect(() => {
@@ -105,30 +61,26 @@ function AllDatapPage() {
   }, [fetchAllData, i18n]);
 
   useEffect(() => {
-    if (
-      JSON.stringify(prevStationsLastData.current) !==
-      JSON.stringify(stationsLastData)
-    ) {
-      prevStationsLastData.current = stationsLastData;
-      setUpdatedStations(stationsLastData);
+    if (stationsId) {
+      setLocalStationsId([...stationsId]);
     }
-  }, [stationsLastData]);
+  }, [stationsId]);
 
-  const filterStationsId = useCallback(
-    (id) => updatedStations.some((item) => item.id === id),
-    [updatedStations]
-  );
+  const filterStationsId = (id) => localStationsId.includes(id);
 
   const handleChangeSelectStationData = (id) => {
     const userId = Cookies.get("userId");
     const lang = i18n.language;
-    let existingIds = stationsId;
+
+    let existingIds = [...localStationsId];
 
     if (existingIds.includes(id)) {
       existingIds = existingIds.filter((existingId) => existingId !== id);
     } else {
-      existingIds.push(id);
+      existingIds = [...existingIds, id];
     }
+
+    setLocalStationsId(existingIds);
 
     dispatch(
       createNewLastDataStation(
@@ -140,10 +92,6 @@ function AllDatapPage() {
         token
       )
     );
-
-    setUseTransition(() => {
-      dispatch(findLastStationsData(lang, token));
-    });
   };
 
   const handlePaginationChange = (page, size) => {
@@ -157,17 +105,11 @@ function AllDatapPage() {
     });
   };
 
-  const handleOpenModal = (data) => {
-    setOpenModaldata(true);
-    setModalData(data);
+  const handleOpenModal = (id) => {
+    navigate(`/all/data/infos/${id}`)
   };
 
-  const handleCloseModal = () => {
-    setOpenModaldata(false);
-    setModalData({});
-  };
-
-  if (stationsLoading || loading || isPending)
+  if (stationsLoading || loading)
     return (
       <section className='data_main_sections'>
         <Loading />
@@ -196,7 +138,7 @@ function AllDatapPage() {
                   totalsVolume:
                     acc.totalsVolume + (totalsVolume ? +totalsVolume : 0),
                   todayTotalFlow:
-                    acc.todayTotalFlow + (todayTotalFlow ? +todayTotalFlow : 0),
+                    acc.todayTotalFlow + (todayTotalFlow ? +todayTotalFlow : 0)/item?.aggregate?.length,
                 };
               },
               { totalsVolume: 0, todayTotalFlow: 0 }
@@ -225,12 +167,10 @@ function AllDatapPage() {
               <Card
                 key={index}
                 type='inner'
-                onClick={handleOpenModal}
-                className='all_stations_data_paga_card_element' 
+                className='all_stations_data_paga_card_element'
                 style={{
-                  background: colors.blurBgColor2
-                }}
-                >
+                  background: colors.blurBgColor2,
+                }}>
                 <div className='all_stations_data_page_card_header'>
                   <h1>{item.name}</h1>
 
@@ -277,7 +217,7 @@ function AllDatapPage() {
                     </div>
 
                     <div className='all_stations_data_page_aggrigate_item'>
-                      <div className='dashboard_view_more_modal_card_item'>
+                      <div className='all_stations_data_item'>
                         <div className='normal_flex_card'>
                           <AreaChartOutlined
                             style={{
@@ -297,7 +237,7 @@ function AllDatapPage() {
                         </h4>
                       </div>
 
-                      <div className='dashboard_view_more_modal_card_item dashboard_view_more_modal_card_item_extra_name'>
+                      <div className='all_stations_data_item'>
                         <div className='normal_flex_card'>
                           <ExperimentOutlined
                             style={{
@@ -312,8 +252,8 @@ function AllDatapPage() {
                             :{" "}
                           </h4>
                         </div>
-                        <h4 className='dashboard_view_more_import_data'>
-                          {allAgrigateData.todayTotalFlow}{" "}
+                        <h4 className='all_stations_data_item_import_data'>
+                          {allAgrigateData.todayTotalFlow?.toFixed(2)  }{" "}
                           {t(
                             "dashboardPageData.lastStationsData.aggrigateSpeedConst"
                           )}
@@ -376,6 +316,16 @@ function AllDatapPage() {
                     </div>
                   </div>
                 </div>
+
+                <Button
+                  type='primary'
+                  onClick={() => handleOpenModal(item.id)}
+                  style={{
+                    marginTop: 10,
+                    width: "100%",
+                  }}>
+                  {t("stationsPageData.table14Data")}
+                </Button>
               </Card>
             );
           })}
@@ -389,16 +339,8 @@ function AllDatapPage() {
           align='end'
         />
       </div>
-
-      <ViewMoreModal
-        openModalData={openModalData}
-        closeModal={handleCloseModal}
-        modalData={[]}
-        colors={colors}
-        t={t}
-      />
     </section>
   );
 }
 
-export default AllDatapPage;
+export default memo(AllDatapPage);

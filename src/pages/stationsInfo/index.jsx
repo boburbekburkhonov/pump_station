@@ -33,8 +33,6 @@ function StationsInformations() {
 
   const token = localStorage.getItem("access_token");
 
-  console.log(stationData);
-
   const fetchAllData = useCallback(() => {
     dispatch(findByIdStationsData(params.id, token, i18n.language));
   }, [dispatch, token, i18n.language]);

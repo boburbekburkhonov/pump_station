@@ -245,22 +245,26 @@
       "dataVelocity": "Tezlik (m/s)",
       "dataFlow": "Oqim tezligi (m/s)",
       "dataVolume": "Hajm (m³)",
-      "dataDate": "Ma'lumot sanasi"
+      "dataDate": "Ma'lumot sanasi",
+      "totalEnergy": "Sariflangan Umumiy Energiya (Kw*soat)",
+      "totalValume": "Umumiy Suv Hajmi (m³)"
     },
     "dateSelectDay": "Sanadagi",
     "dateSelectYear": "Yildagi",
     "active_indicator": "Faol",
     "not_active_indicator": "Faolmas",
     "allStationsDataHead": "Barcha stansiyalarning so'ngi agrigat va elektr hisoblagich ma'lumotlari",
-    "allStationsAggrigatetotalsVolume": "Agrigatlarning umumiy oqib o'tgan suv hajmi",
-    "allStationsAggrigatetotalsFlow": "Agrigatlarning umumiy oqim tezligi",
-    "allStationsElektrActiveEnergy": "Elektr hisoblagichlarning umumiy aktiv energiyasi",
-    "allStationsElektrReactiveEnergy": "Elektr hisoblagichlarning umumiy reaktiv energiyasi",
+    "allStationsAggrigatetotalsVolume": "Oqib o'tgan suv hajmi",
+    "allStationsAggrigatetotalsFlow": "O'rtacha oqim tezligi",
+    "allStationsElektrActiveEnergy": "Sariflangan aktiv energiya",
+    "allStationsElektrReactiveEnergy": "Sariflangan reaktiv energiya",
     "allStationsDataModalCancelButton": "Ortga qaytish",
     "allStationsDataModalOkButton": "Tushunarli",
     "allStationsDataElectryButton": "Elektr hisoblagich ma'lumotlari",
     "allStationsDataAgrigateButton": "Agrigat ma'lumotlari",
     "allStationsAgrigateTitle": "Umumiy agrigat ma'lumotlari",
-    "allStationsElectrTitle": "Umumiy elektr hisoblagich ma'lumotlari"
+    "allStationsElectrTitle": "Umumiy elektr hisoblagich ma'lumotlari",
+    "aggrigateName": "Aggrigat nomi",
+    "electrycalName": "Hisoblagich nomi"
   }
 }

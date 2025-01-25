@@ -1,0 +1,194 @@
+.modalForAllStations {
+  min-width: 1500px;
+  width: 100%;
+}
+
+.active_indicator {
+  display: flex;
+  border-radius: 3px;
+  height: 22px;
+  background:#40C057;
+  align-items: center;
+  padding: 5px 8px;
+  justify-content: center;
+  color: #fff;
+}
+
+.not_active_indicator {
+  display: flex;
+  border-radius: 3px;
+  padding: 2px 8px;
+  height: 22px;
+  background:#FA5252;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.reports_statistics_wrapper_list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 40px;
+  gap: 4.1rem;
+}
+
+.reports_statistics_wrapper_item {
+  background: #ffffff;
+  padding: 13px 20px;
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.reports_statistics_wrapper_item_heading {
+  display: flex;
+  justify-content: space-between;
+}
+
+.reports_statistics_wrapper_item_desc {
+  margin: 0;
+  padding: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.reports_statistics_wrapper_item_desc_extra_name {
+  font-size: 20px !important;
+  font-weight: 400 !important;
+}
+
+.reports_statistics_wrapper_item_desc {
+  margin-left: auto;
+}
+
+.reports_statistics_wrapper_item_span {
+  display: flex;
+  justify-content: end;
+  font-size: 18px;
+  color: #3652AD;
+  font-weight: 500;
+}
+
+.reports_sort {
+  padding-top: 20px;
+}
+
+.reports_sort_select_wrapper {
+  margin-top: 20px;
+}
+
+.reports_sort_select_day {
+  margin-left: 13px;
+  margin-bottom: 20px;
+  margin-right: 13px;
+}
+
+.reports_table_heading_wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 22px 0;
+}
+
+.reports_table {
+  background: #ffffff;
+  padding: 20px 40px;
+  max-width: 1400px;
+  width: 100%;
+  margin: auto;
+}
+
+.reports_table_tbody_td {
+  padding: 20px;
+  text-align: center;
+  width: "47px"
+}
+
+.reports_table_heading_righthand_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reports_table_heading_righthand_xls_image {
+  margin: 0 10px;
+}
+
+.reports_table_heading_span {
+  text-transform: lowercase
+}
+
+.reports_sort_select_wrapper_search-btn {
+  font-size: 15px;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 10px;
+  background: #3652AD;
+  color: #fff;
+  cursor: pointer;
+}
+
+.reports_sort_select_wrapper_search-btn:hover {
+  opacity: 0.8;
+}
+
+.reports_sort_select_wrapper_search-btn:active {
+  opacity: 0.5;
+}
+
+.reports_table_electrical {
+  margin-top: 50px;
+  padding: 20px 40px;
+}
+
+.reports_table_electrical_heading_wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 22px 0;
+}
+
+.cursor_pointer {
+  cursor: pointer;
+}
+
+.cursor_pointer:hover {
+  opacity: 0.8;
+}
+
+.cursor_pointer:active {
+  opacity: 0.5;
+}
+
+.reports_aggrigate_line_chart_wrapper {
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+.reports_aggrigate_line_chart_heading_wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 60px;
+  margin-bottom: 20px;
+}
+
+.reports_aggrigate_line_chart_righthand_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: auto;
+}
+
+.reports_table_station_total_information_table_wrapper {
+  margin-top: 20px;
+}
+
+.reports_table_station_total_aggregate_information {
+  margin: 20px 0;
+}

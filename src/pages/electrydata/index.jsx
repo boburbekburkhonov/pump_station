@@ -425,9 +425,7 @@ function ElectrPage() {
   });
   const [openModalData, setOpenModaldata] = useState(false);
   const [modalData, setModalData] = useState({});
-  const [isPending, setUseTransition] = useTransition();
-  const [updatedStations, setUpdatedStations] = useState([]);
-  const prevStationsLastData = useRef([]);
+  const [localStationsId, setLocalStationsId] = useState([...stationsId]);
 
   const fetchAllData = useCallback(() => {
     const lang = i18n.language;
@@ -448,31 +446,29 @@ function ElectrPage() {
     };
   }, [fetchAllData, i18n]);
 
-  useEffect(() => {
-    if (
-      JSON.stringify(prevStationsLastData.current) !==
-      JSON.stringify(stationsLastData)
-    ) {
-      prevStationsLastData.current = stationsLastData;
-      setUpdatedStations(stationsLastData);
-    }
-  }, [stationsLastData]);
 
-  const filterStationsId = useCallback(
-    (id) => updatedStations.some((item) => item.id === id),
-    [updatedStations]
-  );
+  useEffect(() => {
+
+    if (stationsId) {
+      setLocalStationsId([...stationsId]);
+    }
+  }, [stationsId]);
+
+  const filterStationsId = (id) => localStationsId.includes(id);
 
   const handleChangeSelectStationData = (id) => {
     const userId = Cookies.get("userId");
     const lang = i18n.language;
-    let existingIds = stationsId;
+
+    let existingIds = [...localStationsId];
 
     if (existingIds.includes(id)) {
       existingIds = existingIds.filter((existingId) => existingId !== id);
     } else {
-      existingIds.push(id);
+      existingIds = [...existingIds, id];
     }
+
+    setLocalStationsId(existingIds);
 
     dispatch(
       createNewLastDataStation(
@@ -484,10 +480,6 @@ function ElectrPage() {
         token
       )
     );
-
-    setUseTransition(() => {
-      dispatch(findLastStationsData(lang, token));
-    });
   };
 
   const handlePaginationChange = (page, size) => {
@@ -511,7 +503,7 @@ function ElectrPage() {
     setModalData({});
   };
 
-  if (stationsLoading || loading || isPending)
+  if (stationsLoading || loading)
     return (
       <section className='data_main_sections'>
         <Loading />
@@ -564,80 +556,6 @@ function ElectrPage() {
                   />
                 </div>
               </div>
-
-              {/* <div className='data_page_card_stations'>
-                <div className='maps_view_more_info_card_item'>
-                  <div className='normal_flex_card'>
-                    <GlobalOutlined
-                      style={{
-                        color: colors.textColor,
-                      }}
-                      className='dashboard_last_data_icons'
-                    />
-
-                    <h4>{t("stationsPageData.stationsMoreInfo.region")}:</h4>
-                  </div>
-
-                  <h4 className='dashboard_view_more_import_data'>
-                    {item.region}
-                  </h4>
-                </div>
-
-                <div className='maps_view_more_info_card_item'>
-                  <div className='normal_flex_card'>
-                    <EnvironmentOutlined
-                      style={{
-                        color: colors.textColor,
-                      }}
-                      className='dashboard_last_data_icons'
-                    />
-
-                    <h4>{t("stationsPageData.stationsMoreInfo.district")}:</h4>
-                  </div>
-
-                  <h4 className='dashboard_view_more_import_data'>
-                    {item.district}
-                  </h4>
-                </div>
-
-                <div className='maps_view_more_info_card_item'>
-                  <div className='normal_flex_card'>
-                    <HomeOutlined
-                      style={{
-                        color: colors.textColor,
-                      }}
-                      className='dashboard_last_data_icons'
-                    />
-
-                    <h4>
-                      {t("stationsPageData.stationsMoreInfo.organization")}:
-                    </h4>
-                  </div>
-
-                  <h4 className='dashboard_view_more_import_data'>
-                    {item.organization}
-                  </h4>
-                </div>
-
-                <div className='maps_view_more_info_card_item'>
-                  <div className='normal_flex_card'>
-                    <PhoneOutlined
-                      style={{
-                        color: colors.textColor,
-                      }}
-                      className='dashboard_last_data_icons'
-                    />
-
-                    <h4>
-                      {t("stationsPageData.stationsMoreInfo.devicePhoneNum")}:
-                    </h4>
-                  </div>
-
-                  <h4 className='dashboard_view_more_import_data'>
-                    {item.devicePhoneNum}
-                  </h4>
-                </div>
-              </div> */}
 
               <div className='data_page_aggrigate_container'>
                 {item.electricalEnergyLastData?.map((itemAg, indexAg) => (
