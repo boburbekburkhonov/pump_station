@@ -19,10 +19,10 @@ import {
   getTodayDataByStationId,
   getDailyStationsIdData,
   getWeeklyStationsIdData,
-  getTenDayAggregateIDData,
-  getMonthlyAggregateIDData,
-  getSelectDateAggregateIDData,
-  getRangeAggregateIDData,
+  getTenDayStationsIdData,
+  getMonthlyStationsIdData,
+  getSelectStationsIdData,
+  getDataRangeStationsIdData,
 } from "../../redux/actions/dashboardActions";
 import Loading from "../../components/loading";
 
@@ -119,7 +119,7 @@ function AgrigateAndElectricalMoreData() {
               lang,
               pageData.page,
               pageData.perPage,
-              month,
+              String(month + 1).padStart(2, "0"),
               year
             )
           );
@@ -132,14 +132,14 @@ function AgrigateAndElectricalMoreData() {
               lang,
               pageData.page,
               pageData.perPage,
-              month + 1,
+              String(month + 1).padStart(2, "0"),
               year
             )
           );
           break;
         case "section5":
           dispatch(
-            getTenDayAggregateIDData(
+            getTenDayStationsIdData(
               id,
               token,
               lang,
@@ -151,7 +151,7 @@ function AgrigateAndElectricalMoreData() {
           break;
         case "section6":
           dispatch(
-            getMonthlyAggregateIDData(
+            getMonthlyStationsIdData(
               id,
               token,
               lang,
@@ -163,7 +163,7 @@ function AgrigateAndElectricalMoreData() {
           break;
         case "section7":
           dispatch(
-            getSelectDateAggregateIDData(
+            getSelectStationsIdData(
               id,
               token,
               lang,
@@ -175,7 +175,7 @@ function AgrigateAndElectricalMoreData() {
           break;
         case "section8":
           dispatch(
-            getRangeAggregateIDData(
+            getDataRangeStationsIdData(
               id,
               token,
               lang,
@@ -190,16 +190,7 @@ function AgrigateAndElectricalMoreData() {
           break;
       }
     });
-  }, [
-    activeSection,
-    i18n.language,
-    params.id,
-    token,
-    pageData.page,
-    pageData.perPage,
-    daylyDate,
-    dateRange,
-  ]);
+  }, [activeSection, i18n.language, params.id, token, daylyDate, dateRange]);
 
   useEffect(() => {
     changeDataTime();
@@ -386,6 +377,78 @@ function AgrigateAndElectricalMoreData() {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+        />
+      )}
+
+      {activeSection === "section5" && !isPending && (
+        <FiveThSections
+          expandDataSource={pumpDataWithStationId?.expandData}
+          dataSource={pumpDataWithStationId?.dataSource}
+          colors={colors}
+          t={t}
+          changeDataViewType={changeDataViewType}
+          theme={theme}
+          lineChartData={lineStationId}
+          isActiveTable={isActiveTable}
+          totalColumns={columnsName}
+          totalDataSource={totalValueData}
+          onChange={onChangeMonthYear}
+          dateFormat={dateFormat}
+          valueInput={daylyDate}
+        />
+      )}
+
+      {activeSection === "section6" && !isPending && (
+        <SixThSections
+          expandDataSource={pumpDataWithStationId?.expandData}
+          dataSource={pumpDataWithStationId?.dataSource}
+          colors={colors}
+          t={t}
+          changeDataViewType={changeDataViewType}
+          theme={theme}
+          lineChartData={lineStationId}
+          isActiveTable={isActiveTable}
+          totalColumns={columnsName}
+          totalDataSource={totalValueData}
+          onChange={onChangeMonthYear}
+          dateFormat={dateFormat}
+          valueInput={daylyDate}
+        />
+      )}
+
+      {activeSection === "section7" && !isPending && (
+        <SevenThSections
+          expandDataSource={pumpDataWithStationId?.expandData}
+          dataSource={pumpDataWithStationId?.dataSource}
+          colors={colors}
+          t={t}
+          changeDataViewType={changeDataViewType}
+          theme={theme}
+          lineChartData={lineStationId}
+          isActiveTable={isActiveTable}
+          totalColumns={columnsName}
+          totalDataSource={totalValueData}
+          onChange={onChangeMonthYear}
+          dateFormat={dateFormat}
+          valueInput={daylyDate}
+        />
+      )}
+
+      {activeSection === "section8" && !isPending && (
+        <EightThSections
+          expandDataSource={pumpDataWithStationId?.expandData}
+          dataSource={pumpDataWithStationId?.dataSource}
+          colors={colors}
+          t={t}
+          changeDataViewType={changeDataViewType}
+          theme={theme}
+          lineChartData={lineStationId}
+          isActiveTable={isActiveTable}
+          totalColumns={columnsName}
+          totalDataSource={totalValueData}
+          dateFormat={dateFormat}
+          valueInput={dateRange}
+          onChange={onChangeDateRange}
         />
       )}
     </section>

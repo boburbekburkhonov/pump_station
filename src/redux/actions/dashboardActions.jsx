@@ -154,55 +154,113 @@ const months = {
   ],
 };
 
-const processAndCombineData = (pumpData, electricalData) => {
-  const pumpDataMap = {};
-  pumpData.forEach((item) => {
-    item.aggregateData.forEach((data) => {
-      const date = data.date;
-      if (!pumpDataMap[date]) {
-        pumpDataMap[date] = { totalVolume: 0 };
-      }
-      pumpDataMap[date].totalVolume += data.volume || 0;
-    });
-  });
+const daysValues = {
+  uz: [
+    "Birinchi o'n kunlik",
+    "Ikkinchi o'n kunlik",
+    "Uchunchi o'n kunlik",
+    "To'rtinchi o'n kunlik",
+  ],
+  en: [
+    "The first ten days",
+    "Second ten days",
+    "Third decade",
+    "Fourth decade",
+  ],
+  ru: [
+    "Первые десять дней",
+    "Вторая декада",
+    "Третье десятилетие",
+    "Четвертая декада",
+  ],
+};
 
-  const electricalDataMap = {};
-  electricalData.forEach((item) => {
-    item.electricalEnergyData.forEach((data) => {
-      const date = data.date;
-      if (!electricalDataMap[date]) {
-        electricalDataMap[date] = { totalEnergyActive: 0 };
-      }
-      electricalDataMap[date].totalEnergyActive += data.energyActive || 0;
-    });
-  });
+const processAndCombineData = (pumpData, electricalData, lang) => {
+  const aggregateData = (data, typeKey, valueKey) => {
+    return data.reduce((map, item) => {
+      item[typeKey]?.forEach((entry) => {
+        const date =
+          entry.date?.split("T")[0] ||
+          entry.date ||
+          `${entry?.year || " "}${" "}${months[lang][entry?.month - 1]} ${
+            entry?.week ? String(entry?.week) : " "
+          }${" "}${entry?.week ? aggregateDataType[lang]?.weekName : " "}`;
 
-  const combinedData = [];
+        if (!map[date]) {
+          map[date] = { total: 0 };
+        }
+
+        map[date].total += entry[valueKey] || 0;
+      });
+
+      return map;
+    }, {});
+  };
+
+  const pumpDataMap = aggregateData(pumpData, "aggregateData", "volume");
+
+  const electricalDataMap = aggregateData(
+    electricalData,
+    "electricalEnergyData",
+    "energyActive"
+  );
+
   const allDates = new Set([
     ...Object.keys(pumpDataMap),
     ...Object.keys(electricalDataMap),
   ]);
 
-  allDates.forEach((date) => {
-    combinedData.push({
-      date,
-      totalVolume: pumpDataMap[date]?.totalVolume || 0,
-      totalEnergyActive: electricalDataMap[date]?.totalEnergyActive || 0,
-      key: Math.random(),
-    });
-  });
+  const combinedData = Array.from(allDates).map((date) => ({
+    date,
+    totalVolume: +(pumpDataMap[date]?.total || 0).toFixed(2),
+    totalEnergyActive: +(electricalDataMap[date]?.total || 0).toFixed(2),
+    key: Math.random(),
+  }));
 
   combinedData.sort((a, b) => new Date(a.date) - new Date(b.date));
 
   return combinedData;
 };
 
-const mergeDataByDate = (pumpData, electricalData) => {
+const mergeDataByDate = (pumpData, electricalData, lang) => {
+  const roundValuesInObject = (obj) => {
+    const roundedObject = {};
+    for (const key in obj) {
+      const value = obj[key];
+      if (typeof value === "number") {
+        roundedObject[key] = +value.toFixed(2);
+      } else if (Array.isArray(value)) {
+        roundedObject[key] = value.map(roundValuesInObject);
+      } else if (typeof value === "object" && value !== null) {
+        roundedObject[key] = roundValuesInObject(value);
+      } else {
+        roundedObject[key] = value;
+      }
+    }
+    return roundedObject;
+  };
+
   const formatExpandData = (data, typeKey, typeValues) =>
-    data?.map((item) => ({
-      key: item[typeKey]?.id,
-      values: item[typeValues] || [],
-    })) || [];
+    data?.map((item) => {
+      const values = item[typeValues]?.map((value) => {
+        const formattedDate =
+          value.date?.split("T")[0] ||
+          value.date ||
+          `${value?.year || " "}${" "}${months[lang][value?.month - 1]} ${
+            value?.week ? String(value?.week) : " "
+          }${" "}${value?.week ? aggregateDataType[lang]?.weekName : " "}`;
+
+        return {
+          ...value,
+          date: formattedDate,
+        };
+      });
+
+      return roundValuesInObject({
+        key: item[typeKey]?.id,
+        values: values || [],
+      });
+    }) || [];
 
   const formatDataSource = (data, typeKey, defaultName) =>
     data?.map((item) => ({
@@ -217,6 +275,116 @@ const mergeDataByDate = (pumpData, electricalData) => {
     "aggregateData"
   );
 
+  const electricalExpandData = formatExpandData(
+    electricalData,
+    "electricalEnergy",
+    "electricalEnergyData"
+  );
+
+  const dataSource = [
+    ...formatDataSource(pumpData, "aggregate", "Pump"),
+    ...formatDataSource(electricalData, "electricalEnergy", "Electrical"),
+  ];
+
+  return {
+    dataSource,
+    expandData: [...pumpExpandData, ...electricalExpandData],
+  };
+};
+
+const processAndCombineDataTenDays = (pumpData, electricalData, lang) => {
+  const processData = (data, typeKey, valueKey) => {
+    const dataMap = {};
+
+    data.forEach((items) => {
+      items[typeKey]?.forEach((item) => {
+        item?.dataMonth.forEach((entry) => {
+          const date = `${months[lang][item.month - 1]} ${
+            daysValues[lang][entry.tenDayNumber - 1] || "-"
+          }`;
+
+          if (!dataMap[date]) {
+            dataMap[date] = 0;
+          }
+
+          dataMap[date] += entry[valueKey] || 0;
+        });
+      });
+    });
+
+    return dataMap;
+  };
+
+  const pumpDataMap = processData(pumpData, "aggregateData", "volume");
+  const electricalDataMap = processData(
+    electricalData,
+    "electricalEnergyData",
+    "energyActive"
+  );
+
+  const allDates = new Set([
+    ...Object.keys(pumpDataMap),
+    ...Object.keys(electricalDataMap),
+  ]);
+
+  const combinedData = Array.from(allDates).map((date) => ({
+    date,
+    totalVolume: +(pumpDataMap[date] || 0).toFixed(2),
+    totalEnergyActive: +(electricalDataMap[date] || 0).toFixed(2),
+    key: Math.random(),
+  }));
+
+  return combinedData;
+};
+
+const mergeDataByDateTenDays = (pumpData, electricalData, lang) => {
+  const roundValuesInObject = (obj) => {
+    if (Array.isArray(obj)) {
+      return obj.map(roundValuesInObject);
+    }
+    if (typeof obj === "object" && obj !== null) {
+      return Object.fromEntries(
+        Object.entries(obj).map(([key, value]) => [
+          key,
+          typeof value === "number"
+            ? +value.toFixed(2)
+            : roundValuesInObject(value),
+        ])
+      );
+    }
+    return obj;
+  };
+
+  const formatExpandData = (data, typeKey, dataKey) =>
+    data?.map((items) => {
+      const values =
+        items[dataKey]?.flatMap((entry) =>
+          entry.dataMonth?.map((value) => ({
+            ...value,
+            date: `${months[lang][entry.month - 1]} ${
+              daysValues[lang][value.tenDayNumber - 1] || "-"
+            }`,
+          }))
+        ) || [];
+
+      return roundValuesInObject({
+        key: items[typeKey]?.id,
+        values,
+      });
+    }) || [];
+
+  const formatDataSource = (data, typeKey, defaultName) =>
+    data?.map((item) => ({
+      name: item[typeKey]?.name || defaultName,
+      key: item[typeKey]?.id,
+      dataType: typeKey,
+    })) || [];
+
+  const pumpExpandData = formatExpandData(
+    pumpData,
+    "aggregate",
+    "aggregateData"
+  );
   const electricalExpandData = formatExpandData(
     electricalData,
     "electricalEnergy",
@@ -260,9 +428,13 @@ export const getTodayDataByStationId =
       const pumpData = res1.data.data.data;
       const electricalData = res2.data.data.data;
 
-      const combinedData = processAndCombineData(pumpData, electricalData);
+      const combinedData = processAndCombineData(
+        pumpData,
+        electricalData,
+        lang
+      );
 
-      const dataByDate = mergeDataByDate(pumpData, electricalData);
+      const dataByDate = mergeDataByDate(pumpData, electricalData, lang);
 
       const lineChartData = {
         date: combinedData?.map((item) => item.date.split(" ")[1]),
@@ -295,8 +467,6 @@ export const getTodayDataByStationId =
         payload: dataByDate,
       });
     } catch (err) {
-      console.log(err);
-
       const errorMessage =
         err.response?.data?.message ||
         err.response?.statusText ||
@@ -338,9 +508,13 @@ export const getYesterdayStationIdData =
       const pumpData = res1.data.data.data;
       const electricalData = res2.data.data.data;
 
-      const combinedData = processAndCombineData(pumpData, electricalData);
+      const combinedData = processAndCombineData(
+        pumpData,
+        electricalData,
+        lang
+      );
 
-      const dataByDate = mergeDataByDate(pumpData, electricalData);
+      const dataByDate = mergeDataByDate(pumpData, electricalData, lang);
 
       const lineChartData = {
         date: combinedData?.map((item) => item.date.split(" ")[1]),
@@ -373,8 +547,6 @@ export const getYesterdayStationIdData =
         payload: dataByDate,
       });
     } catch (err) {
-      console.log(err);
-
       const errorMessage =
         err.response?.data?.message ||
         err.response?.statusText ||
@@ -396,6 +568,7 @@ export const getDailyStationsIdData =
         type: GLOBALTYPES.LOADING,
         payload: true,
       });
+
       const createEndpoint = (basePath) =>
         `${basePath}?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}&month=${month}`;
 
@@ -413,12 +586,16 @@ export const getDailyStationsIdData =
       const pumpData = res1.data.data.data;
       const electricalData = res2.data.data.data;
 
-      const combinedData = processAndCombineData(pumpData, electricalData);
+      const combinedData = processAndCombineData(
+        pumpData,
+        electricalData,
+        lang
+      );
 
-      const dataByDate = mergeDataByDate(pumpData, electricalData);
+      const dataByDate = mergeDataByDate(pumpData, electricalData, lang);
 
       const lineChartData = {
-        date: combinedData?.map((item) => item.date.split(" ")[1]),
+        date: combinedData?.map((item) => item.date.split("T")[0]),
         lineData: [
           {
             name: allDataType[lang].name1,
@@ -448,8 +625,6 @@ export const getDailyStationsIdData =
         payload: dataByDate,
       });
     } catch (err) {
-      console.log(err);
-
       const errorMessage =
         err.response?.data?.message ||
         err.response?.statusText ||
@@ -472,8 +647,6 @@ export const getWeeklyStationsIdData =
         payload: true,
       });
 
-      console.log(month);
-      
       const createEndpoint = (basePath) =>
         `${basePath}?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}&month=${month}`;
 
@@ -493,12 +666,101 @@ export const getWeeklyStationsIdData =
       const pumpData = res1.data.data.data;
       const electricalData = res2.data.data.data;
 
-      console.log(res1.data.data);
-      console.log(res2.data.data);
+      const combinedData = processAndCombineData(
+        pumpData,
+        electricalData,
+        lang
+      );
 
-      const combinedData = processAndCombineData(pumpData, electricalData);
+      const dataByDate = mergeDataByDate(pumpData, electricalData, lang);
 
-      const dataByDate = mergeDataByDate(pumpData, electricalData);
+      const lineChartData = {
+        date: combinedData?.map((item) => item.date),
+        lineData: [
+          {
+            name: allDataType[lang].name1,
+            data: combinedData?.map((item) => item.totalVolume),
+            unit: "m³",
+          },
+          {
+            name: allDataType[lang].name2,
+            data: combinedData?.map((item) => item.totalEnergyActive),
+            unit: unitTranslations[lang].kwHour,
+          },
+        ],
+      };
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_ALL_DATA,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
+        payload: combinedData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
+        payload: dataByDate,
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+// * Ten days Data With Stations Id
+export const getTenDayStationsIdData =
+  (stationId, token, lang, page, perPage, year) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const createEndpoint = (basePath) =>
+        `${basePath}?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}`;
+
+      const [res1, res2] = await Promise.all([
+        getDataApi(
+          createEndpoint("pump-ten-day-data/findDataByStationIdAnfYearNumber"),
+          token
+        ),
+        getDataApi(
+          createEndpoint("electrical-energy-ten-day-data/findDataByStationId"),
+          token
+        ),
+      ]);
+
+      const pumpData = res1.data.data.data;
+      const electricalData = res2.data.data.data;
+
+      const combinedData = processAndCombineDataTenDays(
+        pumpData,
+        electricalData,
+        lang
+      );
+
+      const dataByDate = mergeDataByDateTenDays(pumpData, electricalData, lang);
 
       const lineChartData = {
         date: combinedData?.map((item) => item.date.split(" ")[1]),
@@ -531,6 +793,277 @@ export const getWeeklyStationsIdData =
         payload: dataByDate,
       });
     } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+// * Monthly Data With Stations Id
+export const getMonthlyStationsIdData =
+  (stationId, token, lang, page, perPage, year) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const createEndpoint = (basePath) =>
+        `${basePath}?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}`;
+
+      const [res1, res2] = await Promise.all([
+        getDataApi(
+          createEndpoint("pump-monthly-data/findDataByStationIdAndYearNumber"),
+          token
+        ),
+        getDataApi(
+          createEndpoint("electrical-energy-monthly-data/findDataByStationId"),
+          token
+        ),
+      ]);
+
+      const pumpData = res1.data.data.data;
+      const electricalData = res2.data.data.data;
+
+      const combinedData = processAndCombineData(
+        pumpData,
+        electricalData,
+        lang
+      );
+
+      const dataByDate = mergeDataByDate(pumpData, electricalData, lang);
+
+      const lineChartData = {
+        date: combinedData?.map((item) => item.date),
+        lineData: [
+          {
+            name: allDataType[lang].name1,
+            data: combinedData?.map((item) => item.totalVolume),
+            unit: "m³",
+          },
+          {
+            name: allDataType[lang].name2,
+            data: combinedData?.map((item) => item.totalEnergyActive),
+            unit: unitTranslations[lang].kwHour,
+          },
+        ],
+      };
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_ALL_DATA,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
+        payload: combinedData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
+        payload: dataByDate,
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+// * Select Data With Stations Id
+export const getSelectStationsIdData =
+  (stationId, token, lang, page, perPage, date) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const createEndpoint = (basePath) =>
+        `${basePath}?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&date=${date}`;
+
+      const [res1, res2] = await Promise.all([
+        getDataApi(
+          createEndpoint("pump-all-data/findDataByAggregateIdDate"),
+          token
+        ),
+        getDataApi(
+          createEndpoint(
+            "electrical-energy-all-data/findDataByStationIdAndDate"
+          ),
+          token
+        ),
+      ]);
+
+      const pumpData = res1.data.data.data;
+      const electricalData = res2.data.data.data;
+
+      const combinedData = processAndCombineData(
+        pumpData,
+        electricalData,
+        lang
+      );
+
+      const dataByDate = mergeDataByDate(pumpData, electricalData, lang);
+
+      const lineChartData = {
+        date: combinedData?.map((item) => item.date),
+        lineData: [
+          {
+            name: allDataType[lang].name1,
+            data: combinedData?.map((item) => item.totalVolume),
+            unit: "m³",
+          },
+          {
+            name: allDataType[lang].name2,
+            data: combinedData?.map((item) => item.totalEnergyActive),
+            unit: unitTranslations[lang].kwHour,
+          },
+        ],
+      };
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_ALL_DATA,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
+        payload: combinedData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
+        payload: dataByDate,
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+// * Data Range Data With Stations Id
+export const getDataRangeStationsIdData =
+  (stationId, token, lang, page, perPage, startDate, endDate) =>
+  async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const createEndpoint = (basePath) =>
+        `${basePath}?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&startDate=${startDate}&endDate=${endDate}`;
+
+      const [res1, res2] = await Promise.all([
+        getDataApi(
+          createEndpoint("pump-all-data/findDataByStationIdAndDateRange"),
+          token
+        ),
+        getDataApi(
+          createEndpoint(
+            "electrical-energy-all-data/findDataByStationIdAndDateRange"
+          ),
+          token
+        ),
+      ]);
+
+      const pumpData = res1.data.data.data;
+      const electricalData = res2.data.data.data;
+
+      const combinedData = processAndCombineData(
+        pumpData,
+        electricalData,
+        lang
+      );
+
+      const dataByDate = mergeDataByDate(pumpData, electricalData, lang);
+
+      const lineChartData = {
+        date: combinedData?.map((item) => item.date),
+        lineData: [
+          {
+            name: allDataType[lang].name1,
+            data: combinedData?.map((item) => item.totalVolume),
+            unit: "m³",
+          },
+          {
+            name: allDataType[lang].name2,
+            data: combinedData?.map((item) => item.totalEnergyActive),
+            unit: unitTranslations[lang].kwHour,
+          },
+        ],
+      };
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_ALL_DATA,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
+        payload: combinedData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
+        payload: dataByDate,
+      });
+    } catch (err) {
+      console.log(err);
+
       if (!err.response) {
         dispatch({
           type: GLOBALTYPES.ALERT,
@@ -1759,8 +2292,6 @@ export const findTenDayDataElectricityId =
         payload: res.data.data,
       });
     } catch (err) {
-      console.log(err);
-
       if (!err.response) {
         dispatch({
           type: GLOBALTYPES.ALERT,

@@ -236,6 +236,38 @@
       { "title": "Selected Date" },
       { "title": "Selected Date Range" }
     ],
+    "selectAllDataButtonNames": [
+      { "title": "Today's general data" },
+      { "title": "Yesterday's general data" },
+      { "title": "Daily general data" },
+      { "title": "Weekly general data" },
+      { "title": "10-day general data" },
+      { "title": "Monthly general data" },
+      { "title": "General data by date" },
+      { "title": "General data for the selected range" }
+    ],
+    "selectMoreDataButtonNames": [
+      { "title": "Today's detailed data" },
+      { "title": "Yesterday's detailed data" },
+      { "title": "Daily detailed data" },
+      { "title": "Weekly detailed data" },
+      { "title": "10-day detailed data" },
+      { "title": "Monthly detailed data" },
+      { "title": "Detailed data by date" },
+      { "title": "Detailed data for the selected range" }
+    ],
+    "selectGraphicDataButtonNames": [
+      { "title": "Today's data chart" },
+      { "title": "Yesterday's data chart" },
+      { "title": "Daily data chart" },
+      { "title": "Weekly data chart" },
+      { "title": "10-day data chart" },
+      { "title": "Monthly data chart" },
+      { "title": "Data chart by date" },
+      { "title": "Data chart for the selected range" }
+    ],
+    "dataTypeButton1": "General data",
+    "dataTypeButton2": "Detailed data",
     "dataPagesTitle": "Station aggregates data",
     "dataHeaderTitle": "Stations' last data",
     "moreButton": "More",

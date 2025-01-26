@@ -32,9 +32,16 @@ const FirstSections = memo(
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
           {
-            t("dataPagesInformation.selectButtonNames", {
-              returnObjects: true,
-            })[0].title
+            t(
+              isActiveTable === "all_data"
+                ? "dataPagesInformation.selectAllDataButtonNames"
+                : isActiveTable === "full_data"
+                ? "dataPagesInformation.selectMoreDataButtonNames"
+                : "dataPagesInformation.selectGraphicDataButtonNames",
+              {
+                returnObjects: true,
+              }
+            )[0].title
           }
         </h1>
 
@@ -42,13 +49,13 @@ const FirstSections = memo(
           <Button
             type={isActiveTable === "all_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("all_data")}>
-            Umumiy ma'lumot
+            {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
           <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("full_data")}>
-            To'liq ma'lumot
+            {t("dataPagesInformation.dataTypeButton2")}
           </Button>
 
           <Button
@@ -115,9 +122,16 @@ const SecondSections = memo(
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
           {
-            t("dataPagesInformation.selectButtonNames", {
-              returnObjects: true,
-            })[1].title
+            t(
+              isActiveTable === "all_data"
+                ? "dataPagesInformation.selectAllDataButtonNames"
+                : isActiveTable === "full_data"
+                ? "dataPagesInformation.selectMoreDataButtonNames"
+                : "dataPagesInformation.selectGraphicDataButtonNames",
+              {
+                returnObjects: true,
+              }
+            )[1].title
           }
         </h1>
 
@@ -125,13 +139,13 @@ const SecondSections = memo(
           <Button
             type={isActiveTable === "all_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("all_data")}>
-            Umumiy ma'lumot
+            {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
           <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("full_data")}>
-            To'liq ma'lumot
+            {t("dataPagesInformation.dataTypeButton2")}
           </Button>
 
           <Button
@@ -205,9 +219,16 @@ const ThirdSections = memo(
           {t("dataPagesInformation.dateSelectDay")}
           {"\t"}
           {
-            t("dataPagesInformation.selectButtonNames", {
-              returnObjects: true,
-            })[2].title
+            t(
+              isActiveTable === "all_data"
+                ? "dataPagesInformation.selectAllDataButtonNames"
+                : isActiveTable === "full_data"
+                ? "dataPagesInformation.selectMoreDataButtonNames"
+                : "dataPagesInformation.selectGraphicDataButtonNames",
+              {
+                returnObjects: true,
+              }
+            )[2].title
           }
         </h1>
 
@@ -222,13 +243,13 @@ const ThirdSections = memo(
           <Button
             type={isActiveTable === "all_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("all_data")}>
-            Umumiy ma'lumot
+            {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
           <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("full_data")}>
-            To'liq ma'lumot
+            {t("dataPagesInformation.dataTypeButton2")}
           </Button>
 
           <Button
@@ -302,9 +323,16 @@ const FourThSections = memo(
           {t("dataPagesInformation.dateSelectDay")}
           {"\t"}
           {
-            t("dataPagesInformation.selectButtonNames", {
-              returnObjects: true,
-            })[3].title
+            t(
+              isActiveTable === "all_data"
+                ? "dataPagesInformation.selectAllDataButtonNames"
+                : isActiveTable === "full_data"
+                ? "dataPagesInformation.selectMoreDataButtonNames"
+                : "dataPagesInformation.selectGraphicDataButtonNames",
+              {
+                returnObjects: true,
+              }
+            )[3].title
           }
         </h1>
 
@@ -320,13 +348,13 @@ const FourThSections = memo(
           <Button
             type={isActiveTable === "all_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("all_data")}>
-            Umumiy ma'lumot
+            {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
           <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("full_data")}>
-            To'liq ma'lumot
+            {t("dataPagesInformation.dataTypeButton2")}
           </Button>
 
           <Button
@@ -339,7 +367,6 @@ const FourThSections = memo(
           </span>
         </div>
       </div>
-
 
       {isActiveTable === "graphic" && lineChartData && (
         <SolarEmploymentChart
@@ -374,16 +401,17 @@ const FourThSections = memo(
 const FiveThSections = memo(
   ({
     dataSource,
-    columns,
-    currentPage,
-    pageSize,
-    totalPage,
-    handlePaginationChange,
+    expandDataSource,
     colors,
     t,
     changeDataViewType,
-    isType,
     lineChartData,
+    isActiveTable,
+    totalColumns,
+    totalDataSource,
+    handlePaginationChange,
+    page,
+    perPage,
     onChange,
     valueInput,
   }) => (
@@ -399,9 +427,16 @@ const FiveThSections = memo(
           {t("dataPagesInformation.dateSelectYear")}
           {"\t"}
           {
-            t("dataPagesInformation.selectButtonNames", {
-              returnObjects: true,
-            })[4].title
+            t(
+              isActiveTable === "all_data"
+                ? "dataPagesInformation.selectAllDataButtonNames"
+                : isActiveTable === "full_data"
+                ? "dataPagesInformation.selectMoreDataButtonNames"
+                : "dataPagesInformation.selectGraphicDataButtonNames",
+              {
+                returnObjects: true,
+              }
+            )[4].title
           }
         </h1>
 
@@ -415,14 +450,20 @@ const FiveThSections = memo(
           />
 
           <Button
-            type={isType ? "default" : "primary"}
-            onClick={() => changeDataViewType(false)}>
-            {t("dataPagesInformation.buttonDataType1")}
+            type={isActiveTable === "all_data" ? "primary" : "default"}
+            onClick={() => changeDataViewType("all_data")}>
+            {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
           <Button
-            type={isType ? "primary" : "default"}
-            onClick={() => changeDataViewType(true)}>
+            type={isActiveTable === "full_data" ? "primary" : "default"}
+            onClick={() => changeDataViewType("full_data")}>
+            {t("dataPagesInformation.dataTypeButton2")}
+          </Button>
+
+          <Button
+            type={isActiveTable === "graphic" ? "primary" : "default"}
+            onClick={() => changeDataViewType("graphic")}>
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
@@ -430,22 +471,31 @@ const FiveThSections = memo(
           </span>
         </div>
       </div>
-      {isType ? (
-        lineChartData && (
-          <SolarEmploymentChart
-            data={lineChartData}
-            theme={colors}
-            lineStatus={true}
-          />
-        )
-      ) : (
+
+      {isActiveTable === "graphic" && lineChartData && (
+        <SolarEmploymentChart
+          data={lineChartData}
+          theme={colors}
+          lineStatus={true}
+        />
+      )}
+
+      {isActiveTable === "all_data" && (
         <TableComponent
-          columns={columns}
-          dataSource={dataSource}
-          currentPage={currentPage}
-          pageSize={pageSize}
-          totalPage={totalPage}
+          columns={totalColumns}
+          dataSource={totalDataSource}
+          currentPage={page}
+          pageSize={perPage}
+          totalPage={totalDataSource?.length || 0}
           handlePaginationChange={handlePaginationChange}
+        />
+      )}
+
+      {isActiveTable === "full_data" && (
+        <TableAggrigateAndElectryData
+          expandDataSource={expandDataSource}
+          t={t}
+          dataSource={dataSource}
         />
       )}
     </div>
@@ -455,18 +505,18 @@ const FiveThSections = memo(
 const SixThSections = memo(
   ({
     dataSource,
-    columns,
-    currentPage,
-    pageSize,
-    totalPage,
-    handlePaginationChange,
+    expandDataSource,
     colors,
     t,
     changeDataViewType,
-    isType,
     lineChartData,
+    isActiveTable,
+    totalColumns,
+    totalDataSource,
+    handlePaginationChange,
+    page,
+    perPage,
     onChange,
-    dateFormat,
     valueInput,
   }) => (
     <div
@@ -481,9 +531,16 @@ const SixThSections = memo(
           {t("dataPagesInformation.dateSelectYear")}
           {"\t"}
           {
-            t("dataPagesInformation.selectButtonNames", {
-              returnObjects: true,
-            })[5].title
+            t(
+              isActiveTable === "all_data"
+                ? "dataPagesInformation.selectAllDataButtonNames"
+                : isActiveTable === "full_data"
+                ? "dataPagesInformation.selectMoreDataButtonNames"
+                : "dataPagesInformation.selectGraphicDataButtonNames",
+              {
+                returnObjects: true,
+              }
+            )[5].title
           }
         </h1>
 
@@ -497,14 +554,20 @@ const SixThSections = memo(
           />
 
           <Button
-            type={isType ? "default" : "primary"}
-            onClick={() => changeDataViewType(false)}>
-            {t("dataPagesInformation.buttonDataType1")}
+            type={isActiveTable === "all_data" ? "primary" : "default"}
+            onClick={() => changeDataViewType("all_data")}>
+            {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
           <Button
-            type={isType ? "primary" : "default"}
-            onClick={() => changeDataViewType(true)}>
+            type={isActiveTable === "full_data" ? "primary" : "default"}
+            onClick={() => changeDataViewType("full_data")}>
+            {t("dataPagesInformation.dataTypeButton2")}
+          </Button>
+
+          <Button
+            type={isActiveTable === "graphic" ? "primary" : "default"}
+            onClick={() => changeDataViewType("graphic")}>
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
@@ -512,22 +575,31 @@ const SixThSections = memo(
           </span>
         </div>
       </div>
-      {isType ? (
-        lineChartData && (
-          <SolarEmploymentChart
-            data={lineChartData}
-            theme={colors}
-            lineStatus={true}
-          />
-        )
-      ) : (
+
+      {isActiveTable === "graphic" && lineChartData && (
+        <SolarEmploymentChart
+          data={lineChartData}
+          theme={colors}
+          lineStatus={true}
+        />
+      )}
+
+      {isActiveTable === "all_data" && (
         <TableComponent
-          columns={columns}
-          dataSource={dataSource}
-          currentPage={currentPage}
-          pageSize={pageSize}
-          totalPage={totalPage}
+          columns={totalColumns}
+          dataSource={totalDataSource}
+          currentPage={page}
+          pageSize={perPage}
+          totalPage={totalDataSource?.length || 0}
           handlePaginationChange={handlePaginationChange}
+        />
+      )}
+
+      {isActiveTable === "full_data" && (
+        <TableAggrigateAndElectryData
+          expandDataSource={expandDataSource}
+          t={t}
+          dataSource={dataSource}
         />
       )}
     </div>
@@ -537,18 +609,18 @@ const SixThSections = memo(
 const SevenThSections = memo(
   ({
     dataSource,
-    columns,
-    currentPage,
-    pageSize,
-    totalPage,
-    handlePaginationChange,
+    expandDataSource,
     colors,
     t,
     changeDataViewType,
-    isType,
     lineChartData,
+    isActiveTable,
+    totalColumns,
+    totalDataSource,
+    handlePaginationChange,
+    page,
+    perPage,
     onChange,
-    dateFormat,
     valueInput,
   }) => (
     <div
@@ -559,9 +631,16 @@ const SevenThSections = memo(
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
           {
-            t("dataPagesInformation.selectButtonNames", {
-              returnObjects: true,
-            })[6].title
+            t(
+              isActiveTable === "all_data"
+                ? "dataPagesInformation.selectAllDataButtonNames"
+                : isActiveTable === "full_data"
+                ? "dataPagesInformation.selectMoreDataButtonNames"
+                : "dataPagesInformation.selectGraphicDataButtonNames",
+              {
+                returnObjects: true,
+              }
+            )[6].title
           }
           {"\t"}
           {valueInput.format("YYYY-MM-DD")}
@@ -576,14 +655,20 @@ const SevenThSections = memo(
           />
 
           <Button
-            type={isType ? "default" : "primary"}
-            onClick={() => changeDataViewType(false)}>
-            {t("dataPagesInformation.buttonDataType1")}
+            type={isActiveTable === "all_data" ? "primary" : "default"}
+            onClick={() => changeDataViewType("all_data")}>
+            {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
           <Button
-            type={isType ? "primary" : "default"}
-            onClick={() => changeDataViewType(true)}>
+            type={isActiveTable === "full_data" ? "primary" : "default"}
+            onClick={() => changeDataViewType("full_data")}>
+            {t("dataPagesInformation.dataTypeButton2")}
+          </Button>
+
+          <Button
+            type={isActiveTable === "graphic" ? "primary" : "default"}
+            onClick={() => changeDataViewType("graphic")}>
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
@@ -591,22 +676,31 @@ const SevenThSections = memo(
           </span>
         </div>
       </div>
-      {isType ? (
-        lineChartData && (
-          <SolarEmploymentChart
-            data={lineChartData}
-            theme={colors}
-            lineStatus={true}
-          />
-        )
-      ) : (
+
+      {isActiveTable === "graphic" && lineChartData && (
+        <SolarEmploymentChart
+          data={lineChartData}
+          theme={colors}
+          lineStatus={true}
+        />
+      )}
+
+      {isActiveTable === "all_data" && (
         <TableComponent
-          columns={columns}
-          dataSource={dataSource}
-          currentPage={currentPage}
-          pageSize={pageSize}
-          totalPage={totalPage}
+          columns={totalColumns}
+          dataSource={totalDataSource}
+          currentPage={page}
+          pageSize={perPage}
+          totalPage={totalDataSource?.length || 0}
           handlePaginationChange={handlePaginationChange}
+        />
+      )}
+
+      {isActiveTable === "full_data" && (
+        <TableAggrigateAndElectryData
+          expandDataSource={expandDataSource}
+          t={t}
+          dataSource={dataSource}
         />
       )}
     </div>
@@ -616,19 +710,20 @@ const SevenThSections = memo(
 const EightThSections = memo(
   ({
     dataSource,
-    columns,
-    currentPage,
-    pageSize,
-    totalPage,
-    handlePaginationChange,
+    expandDataSource,
     colors,
     t,
     changeDataViewType,
-    isType,
     lineChartData,
+    isActiveTable,
+    totalColumns,
+    totalDataSource,
+    handlePaginationChange,
+    page,
+    perPage,
+    valueInput,
     onChange,
     dateFormat,
-    valueInput,
   }) => (
     <div
       style={{
@@ -638,9 +733,16 @@ const EightThSections = memo(
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
           {
-            t("dataPagesInformation.selectButtonNames", {
-              returnObjects: true,
-            })[7].title
+            t(
+              isActiveTable === "all_data"
+                ? "dataPagesInformation.selectAllDataButtonNames"
+                : isActiveTable === "full_data"
+                ? "dataPagesInformation.selectMoreDataButtonNames"
+                : "dataPagesInformation.selectGraphicDataButtonNames",
+              {
+                returnObjects: true,
+              }
+            )[7].title
           }
           {"\t"}
           {valueInput[0].format("YYYY-MM-DD")}
@@ -659,14 +761,20 @@ const EightThSections = memo(
           />
 
           <Button
-            type={isType ? "default" : "primary"}
-            onClick={() => changeDataViewType(false)}>
-            {t("dataPagesInformation.buttonDataType1")}
+            type={isActiveTable === "all_data" ? "primary" : "default"}
+            onClick={() => changeDataViewType("all_data")}>
+            {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
           <Button
-            type={isType ? "primary" : "default"}
-            onClick={() => changeDataViewType(true)}>
+            type={isActiveTable === "full_data" ? "primary" : "default"}
+            onClick={() => changeDataViewType("full_data")}>
+            {t("dataPagesInformation.dataTypeButton2")}
+          </Button>
+
+          <Button
+            type={isActiveTable === "graphic" ? "primary" : "default"}
+            onClick={() => changeDataViewType("graphic")}>
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
@@ -674,22 +782,31 @@ const EightThSections = memo(
           </span>
         </div>
       </div>
-      {isType ? (
-        lineChartData && (
-          <SolarEmploymentChart
-            data={lineChartData}
-            theme={colors}
-            lineStatus={true}
-          />
-        )
-      ) : (
+
+      {isActiveTable === "graphic" && lineChartData && (
+        <SolarEmploymentChart
+          data={lineChartData}
+          theme={colors}
+          lineStatus={true}
+        />
+      )}
+
+      {isActiveTable === "all_data" && (
         <TableComponent
-          columns={columns}
-          dataSource={dataSource}
-          currentPage={currentPage}
-          pageSize={pageSize}
-          totalPage={totalPage}
+          columns={totalColumns}
+          dataSource={totalDataSource}
+          currentPage={page}
+          pageSize={perPage}
+          totalPage={totalDataSource?.length || 0}
           handlePaginationChange={handlePaginationChange}
+        />
+      )}
+
+      {isActiveTable === "full_data" && (
+        <TableAggrigateAndElectryData
+          expandDataSource={expandDataSource}
+          t={t}
+          dataSource={dataSource}
         />
       )}
     </div>

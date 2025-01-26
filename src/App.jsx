@@ -1,8 +1,5 @@
-/** @format */
-
-import React, { memo, useCallback, useEffect } from "react";
+import React, { memo, useCallback, useEffect, useTransition, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { motion } from "framer-motion";
 
 import ScrollToTop from "./components/scrollTop";
 import "./index.css";
@@ -11,50 +8,15 @@ import LayoutComponent from "./components/layout";
 import Root from "./pages/root";
 import { refresh_token } from "./redux/actions/authActions";
 import AuthRootPages from "./pages/resetPages";
-
-const pageVariants = {
-  initial: {
-    opacity: 0,
-    x: "-100vw",
-  },
-  in: {
-    opacity: 1,
-    x: 0,
-  },
-  out: {
-    opacity: 0,
-    x: "100vw",
-  },
-};
-
-const pageTransition = {
-  type: "tween",
-  ease: "anticipate",
-  duration: 0.8,
-};
+import Loading from "./components/loading";
 
 const ConditionalContent = memo(({ isAuthenticated }) => {
-
   return (
     <>
       {isAuthenticated ? (
-        <motion.div
-          initial='initial'
-          animate='in'
-          exit='out'
-          variants={pageVariants}
-          transition={pageTransition}>
-          <LayoutComponent childrenComponent={<Root />} />
-        </motion.div>
+        <LayoutComponent childrenComponent={<Root />} />
       ) : (
-        <motion.div
-          initial='initial'
-          animate='in'
-          exit='out'
-          variants={pageVariants}
-          transition={pageTransition}>
-          <AuthRootPages />
-        </motion.div>
+        <AuthRootPages />
       )}
     </>
   );
@@ -62,18 +24,21 @@ const ConditionalContent = memo(({ isAuthenticated }) => {
 
 const App = () => {
   const { colors, theme } = useSelector((state) => state.theme);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const isAuthenticated = localStorage.getItem("access_token");
+  const [isPending, startTransition] = useTransition();
 
   const refreshedTokenFunction = useCallback(() => {
     if (isAuthenticated) {
-      dispatch(refresh_token())
+      dispatch(refresh_token());
     }
-  }, [dispatch, isAuthenticated])
+  }, [dispatch, isAuthenticated]);
 
   useEffect(() => {
-    refreshedTokenFunction()
-  }, [refreshedTokenFunction])
+    startTransition(() => {
+      refreshedTokenFunction();
+    });
+  }, [refreshedTokenFunction]);
 
   useEffect(() => {
     const logoLink = document.querySelector('link[rel="icon"]');
@@ -92,11 +57,18 @@ const App = () => {
         background: colors.background,
         color: `${colors.text}`,
       }}
-      className='App'>
+      className="App"
+    >
       <ScrollToTop />
-      <div className='main'>
+      <div className="main">
         <Notif />
-        <ConditionalContent isAuthenticated={isAuthenticated} />
+        {isPending ? (
+          <div className="loading">
+            <Loading />
+          </div>
+        ) : (
+          <ConditionalContent isAuthenticated={isAuthenticated} />
+        )}
       </div>
     </div>
   );

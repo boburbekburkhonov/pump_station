@@ -650,7 +650,7 @@ function UserDashboard() {
   const dispatch = useDispatch();
   const { i18n, t } = useTranslation();
   const { colors } = useSelector((state) => state.theme);
-  const { statisticData, stationsId } = useSelector((state) => state.dashboard);
+  const { statisticData, stationsId, loadingStatistic } = useSelector((state) => state.dashboard);
   const { totalData, loadingData, firstPieData, secondPieData } = useSelector(
     (state) => state.pie
   );
@@ -681,12 +681,14 @@ function UserDashboard() {
     const lang = i18n.language;
 
     try {
-      await Promise.all([
-        dispatch(getStatisticsDashboard(regionId, lang, token)),
-        dispatch(findLastStationsData(lang, token)),
-        dispatch(getAllStationsId(lang, token)),
-        startTransition(() => dispatch(findTodayStatisticData(lang, token))),
-      ]);
+      startTransition(async () => {
+        await Promise.all([
+          dispatch(getStatisticsDashboard(regionId, lang, token)),
+          dispatch(findLastStationsData(lang, token)),
+          dispatch(getAllStationsId(lang, token)),
+          dispatch(findTodayStatisticData(lang, token)),
+        ]);
+      });
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -706,14 +708,26 @@ function UserDashboard() {
   }, [stationsId]);
 
   useEffect(() => {
-    if (selectStationsId) {
+    if (!selectStationsId) return;
+
+    const statisticsFetchers = {
+      0: findTodayLineStatisticData,
+      1: findYesterdayLineStatisticData,
+      2: findWeeklyLineStatisticData,
+      3: findMonthlyLineStatisticData,
+      4: findYearLineStatisticData,
+    };
+
+    const fetcher = statisticsFetchers[selectDataType];
+
+    if (fetcher) {
       startTransitionLine(() => {
-        dispatch(
-          findTodayLineStatisticData(i18n.language, selectStationsId, token)
-        );
+        dispatch(fetcher(i18n.language, selectStationsId, token));
       });
+    } else {
+      console.warn(i18n.t("Invalid statistic key: {{key}}", { key: selectDataType }));
     }
-  }, [selectStationsId, dispatch, i18n.language, token]);
+  }, [selectDataType, selectStationsId, dispatch, i18n.language, token]);
 
   const cardStyle = {
     background: colors.layoutBackground,
@@ -795,55 +809,7 @@ function UserDashboard() {
   };
 
   const handleChangeLineStatistics = (key) => {
-    switch (key) {
-      case 0:
-        startTransitionLine(() => {
-          dispatch(
-            findTodayLineStatisticData(i18n.language, selectStationsId, token)
-          );
-          setSelectDataType(key);
-        });
-        break;
-      case 1:
-        startTransitionLine(() => {
-          dispatch(
-            findYesterdayLineStatisticData(
-              i18n.language,
-              selectStationsId,
-              token
-            )
-          );
-          setSelectDataType(key);
-        });
-        break;
-      case 2:
-        startTransitionLine(() => {
-          dispatch(
-            findWeeklyLineStatisticData(i18n.language, selectStationsId, token)
-          );
-          setSelectDataType(key);
-        });
-        break;
-      case 3:
-        startTransitionLine(() => {
-          dispatch(
-            findMonthlyLineStatisticData(i18n.language, selectStationsId, token)
-          );
-          setSelectDataType(key);
-        });
-        break;
-      case 4:
-        startTransitionLine(() => {
-          dispatch(
-            findYearLineStatisticData(i18n.language, selectStationsId, token)
-          );
-          setSelectDataType(key);
-        });
-        break;
-      default:
-        console.warn(i18n.t("Invalid statistic key: {{key}}", { key }));
-        break;
-    }
+    setSelectDataType(key);
   };
 
   const handleOpenStatusStations = (index) => {
@@ -855,57 +821,70 @@ function UserDashboard() {
 
   return (
     <section className='global_sections_style'>
-      <div className='user_dashboard_content_container'>
-        <div className='first_all_stations_statistic_cards'>
-          {firstThreeCards.map((item, index) => (
-            <StatisticCard
-              key={index}
-              icon={iconData[index]}
-              color={colors}
-              status={item.status}
-              countValue={`${statisticData[index]}`}
-              cardStyle={cardStyle}
-              onChangeModalData={() => handleOpenStatusStations(index)}
-            />
-          ))}
-        </div>
-      </div>
+      {loadingStatistic ? (
+        <Card
+          style={{
+            width: "100%",
+            height: 600,
+          }}
+          loading={loadingStatistic}
+        />
+      ) : (
+        <>
+          <div className='user_dashboard_content_container'>
+            <div className='first_all_stations_statistic_cards'>
+              {firstThreeCards.map((item, index) => (
+                <StatisticCard
+                  key={index}
+                  icon={iconData[index]}
+                  color={colors}
+                  status={item.status}
+                  countValue={`${statisticData[index]}`}
+                  cardStyle={cardStyle}
+                  onChangeModalData={() => handleOpenStatusStations(index)}
+                />
+              ))}
+            </div>
+          </div>
 
-      <div className='filter_container_dashboard'>
-        <h1>{t("dashboardPageData.titleStationsDetails1")}</h1>
-      </div>
+          <div className='filter_container_dashboard'>
+            <h1>{t("dashboardPageData.titleStationsDetails1")}</h1>
+          </div>
 
-      <div className='card_container_dashboard'>
-        {secondThreeCards.map((item, index) => (
-          <StatisticCard
-            key={index + STATISTIC_CARDS_CHUNK}
-            icon={iconData[index + STATISTIC_CARDS_CHUNK]}
-            color={colors}
-            status={item.status}
-            countValue={`${statisticData[index + STATISTIC_CARDS_CHUNK]}`}
-            cardStyle={cardStyle}
-            onChangeModalData={() => handleOpenStatusStations(index)}
-          />
-        ))}
-      </div>
+          <div className='card_container_dashboard'>
+            {secondThreeCards.map((item, index) => (
+              <StatisticCard
+                key={index + STATISTIC_CARDS_CHUNK}
+                icon={iconData[index + STATISTIC_CARDS_CHUNK]}
+                color={colors}
+                status={item.status}
+                countValue={`${statisticData[index + STATISTIC_CARDS_CHUNK]}`}
+                cardStyle={cardStyle}
+                onChangeModalData={() => handleOpenStatusStations(index)}
+              />
+            ))}
+          </div>
 
-      <div className='filter_container_dashboard'>
-        <h1>{t("dashboardPageData.titleStationsDetails2")}</h1>
-      </div>
+          <div className='filter_container_dashboard'>
+            <h1>{t("dashboardPageData.titleStationsDetails2")}</h1>
+          </div>
 
-      <div className='card_container_dashboard'>
-        {thirdThreeCards.map((item, index) => (
-          <StatisticCard
-            key={index + STATISTIC_CARDS_CHUNK_NEXT}
-            icon={iconData[index + STATISTIC_CARDS_CHUNK_NEXT]}
-            color={colors}
-            status={item.status}
-            countValue={`${statisticData[index + STATISTIC_CARDS_CHUNK_NEXT]}`}
-            cardStyle={cardStyle}
-            onChangeModalData={() => handleOpenStatusStations(index)}
-          />
-        ))}
-      </div>
+          <div className='card_container_dashboard'>
+            {thirdThreeCards.map((item, index) => (
+              <StatisticCard
+                key={index + STATISTIC_CARDS_CHUNK_NEXT}
+                icon={iconData[index + STATISTIC_CARDS_CHUNK_NEXT]}
+                color={colors}
+                status={item.status}
+                countValue={`${statisticData[index + STATISTIC_CARDS_CHUNK_NEXT]
+                  }`}
+                cardStyle={cardStyle}
+                onChangeModalData={() => handleOpenStatusStations(index)}
+              />
+            ))}
+          </div>
+        </>
+      )}
 
       <div className='filter_container_dashboard'>
         <h1>{t("dashboardPageData.filterTitle")}</h1>
@@ -1147,19 +1126,24 @@ function UserDashboard() {
         )}
       </div>
 
-      <ViewMoreLastData
-        colors={colors}
-        openModalData={isOpenModal}
-        closeModal={closeModal}
-        data={modalViewData}
-        t={t}
-      />
+      {isOpenModal && (
+        <ViewMoreLastData
+          colors={colors}
+          openModalData={isOpenModal}
+          closeModal={closeModal}
+          data={modalViewData}
+          t={t}
+        />
+      )}
 
-      <ViewStationModal
-        status={isStationsStatus}
-        isOpenStationModal={isOpenModalStation}
-        closeModal={() => setIsOpenModalStation(false)}
-      />
+      {isOpenModalStation && (
+        <ViewStationModal
+          status={isStationsStatus}
+          isOpenStationModal={isOpenModalStation}
+          closeModal={() => setIsOpenModalStation(false)}
+        />
+      )}
+
     </section>
   );
 }

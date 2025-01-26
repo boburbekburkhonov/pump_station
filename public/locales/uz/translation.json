@@ -236,6 +236,38 @@
       { "title": "Tanlangan sana" },
       { "title": "Tanlangan sana oralig'i" }
     ],
+    "selectAllDataButtonNames": [
+      { "title": "Bugungi umumiy ma'lumotlar" },
+      { "title": "Kechagi umumiy ma'lumotlar" },
+      { "title": "Kundalik umumiy ma'lumotlar" },
+      { "title": "Haftalik umumiy ma'lumotlar" },
+      { "title": "10 kunlik umumiy ma'lumotlar" },
+      { "title": "Oylik umumiy ma'lumotlar" },
+      { "title": "Sanadagi umumiy ma'lumotlari" },
+      { "title": "Tanlangan sana oralig'i umumiy ma'lumotlar" }
+    ],
+    "selectMoreDataButtonNames": [
+      { "title": "Bugungi to'liq ma'lumotlar" },
+      { "title": "Kechagi to'liq ma'lumotlar" },
+      { "title": "Kundalik to'liq ma'lumotlar" },
+      { "title": "Haftalik to'liq ma'lumotlar" },
+      { "title": "10 kunlik to'liq ma'lumotlar" },
+      { "title": "Oylik to'liq ma'lumotlar" },
+      { "title": "Sanadagi to'liq ma'lumotlari" },
+      { "title": "Tanlangan sana oralig'i to'liq ma'lumotlar" }
+    ],
+    "selectGraphicDataButtonNames": [
+      { "title": "Bugungi ma'lumotlar grafigi" },
+      { "title": "Kechagi ma'lumotlar grafigi" },
+      { "title": "Kundalik  ma'lumotlar grafigi" },
+      { "title": "Haftalik  ma'lumotlar grafigi" },
+      { "title": "10 kunlik  ma'lumotlar grafigi" },
+      { "title": "Oylik  ma'lumotlar grafigi" },
+      { "title": "Sanadagi ma'lumotlari grafigi" },
+      { "title": "Tanlangan sana oralig'i ma'lumotlar grafigi" }
+    ],
+    "dataTypeButton1": "Umumiy ma'lumotlar",
+    "dataTypeButton2": "To'liq ma'lumotlar",
     "dataPagesTitle": "Stansiya agrigatlarining ma'lumotlari",
     "dataHeaderTitle": "Stansiyalarning so'ngi ma'lumotlari",
     "moreButton": "Ko'proq",
