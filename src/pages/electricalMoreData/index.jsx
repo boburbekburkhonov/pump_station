@@ -53,11 +53,78 @@ dayjs.extend(weekYear);
 
 const dateFormat = "YYYY-MM";
 
+const daysValues = {
+  uz: [
+    "Birinchi o'n kunlik",
+    "Ikkinchi o'n kunlik",
+    "Uchunchi o'n kunlik",
+    "To'rtinchi o'n kunlik",
+  ],
+  en: [
+    "The first ten days",
+    "Second ten days",
+    "Third decade",
+    "Fourth decade",
+  ],
+  ru: [
+    "Первые десять дней",
+    "Вторая декада",
+    "Третье десятилетие",
+    "Четвертая декада",
+  ],
+};
+
+const months = {
+  uz: [
+    "Yanvar",
+    "Fevral",
+    "Mart",
+    "Aprel",
+    "May",
+    "Iyun",
+    "Iyul",
+    "Avgust",
+    "Sentabr",
+    "Oktabr",
+    "Noyabr",
+    "Dekabr",
+  ],
+  en: [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ],
+  ru: [
+    "Январь",
+    "Февраль",
+    "Март",
+    "Апрель",
+    "Май",
+    "Июнь",
+    "Июль",
+    "Август",
+    "Сентябрь",
+    "Октябрь",
+    "Ноябрь",
+    "Декабрь",
+  ],
+};
+
 const ElectricalMoreData = () => {
   const dispatch = useDispatch();
   const { i18n, t } = useTranslation();
   const params = useParams();
   const token = localStorage.getItem("access_token");
+  const lang = i18n.language;
 
   const { loading } = useSelector((state) => state.alert);
   const { colors, theme } = useSelector((state) => state.theme);
@@ -391,9 +458,9 @@ const ElectricalMoreData = () => {
           dataSource={
             Array.isArray(electryIdData.data)
               ? electryIdData.data?.map((item, index) => ({
-                  ...item,
-                  key: item.id || `temp-key1-${index}`,
-                }))
+                ...item,
+                key: item.id || `temp-key1-${index}`,
+              }))
               : []
           }
           currentPage={pageData.page}
@@ -415,9 +482,9 @@ const ElectricalMoreData = () => {
           dataSource={
             Array.isArray(electryIdData.data)
               ? electryIdData.data?.map((item, index) => ({
-                  ...item,
-                  key: item.id || `temp-key2-${index}`,
-                }))
+                ...item,
+                key: item.id || `temp-key2-${index}`,
+              }))
               : []
           }
           currentPage={pageData.page}
@@ -438,20 +505,20 @@ const ElectricalMoreData = () => {
           dataSource={
             Array.isArray(electryIdData?.data?.electricalEnergyData)
               ? electryIdData.data.electricalEnergyData.map((item, index) => ({
-                  ...item,
-                  key: item.id || `temp-key3-${index}`,
-                  date: item.date?.split("T")[0] || item.date,
-                  current1: item.current1.toFixed(2),
-                  current2: item.current2.toFixed(2),
-                  current3: item.current3.toFixed(2),
-                  energyActive: item.energyActive.toFixed(2),
-                  energyReactive: item.energyReactive.toFixed(2),
-                  powerActive: item.powerActive.toFixed(2),
-                  powerReactive: item.powerReactive.toFixed(2),
-                  voltage1: item.voltage1.toFixed(2),
-                  voltage2: item.voltage2.toFixed(2),
-                  voltage3: item.voltage3.toFixed(2),
-                }))
+                ...item,
+                key: item.id || `temp-key3-${index}`,
+                date: item.date?.split("T")[0] || item.date,
+                current1: item.current1?.toFixed(2),
+                current2: item.current2?.toFixed(2),
+                current3: item.current3?.toFixed(2),
+                energyActive: item.energyActive?.toFixed(2),
+                energyReactive: item.energyReactive?.toFixed(2),
+                powerActive: item.powerActive?.toFixed(2),
+                powerReactive: item.powerReactive?.toFixed(2),
+                voltage1: item.voltage1?.toFixed(2),
+                voltage2: item.voltage2?.toFixed(2),
+                voltage3: item.voltage3?.toFixed(2),
+              }))
               : []
           }
           currentPage={pageData.page}
@@ -475,19 +542,19 @@ const ElectricalMoreData = () => {
           dataSource={
             Array.isArray(electryIdData)
               ? electryIdData?.map((item, index) => ({
-                  ...item,
-                  key: item.id || `temp-key4-${index}`,
-                  current1: item.current1.toFixed(2),
-                  current2: item.current2.toFixed(2),
-                  current3: item.current3.toFixed(2),
-                  energyActive: item.energyActive.toFixed(2),
-                  energyReactive: item.energyReactive.toFixed(2),
-                  powerActive: item.powerActive.toFixed(2),
-                  powerReactive: item.powerReactive.toFixed(2),
-                  voltage1: item.voltage1.toFixed(2),
-                  voltage2: item.voltage2.toFixed(2),
-                  voltage3: item.voltage3.toFixed(2),
-                }))
+                ...item,
+                key: item.id || `temp-key4-${index}`,
+                current1: item.current1?.toFixed(2),
+                current2: item.current2?.toFixed(2),
+                current3: item.current3?.toFixed(2),
+                energyActive: item.energyActive?.toFixed(2),
+                energyReactive: item.energyReactive?.toFixed(2),
+                powerActive: item.powerActive?.toFixed(2),
+                powerReactive: item.powerReactive?.toFixed(2),
+                voltage1: item.voltage1?.toFixed(2),
+                voltage2: item.voltage2?.toFixed(2),
+                voltage3: item.voltage3?.toFixed(2),
+              }))
               : []
           }
           currentPage={pageData.page}
@@ -511,20 +578,20 @@ const ElectricalMoreData = () => {
           dataSource={
             Array.isArray(electryIdData?.data && electryIdData?.data[0]?.data)
               ? electryIdData?.data[0]?.data?.map((item, index) => ({
-                  ...item,
-                  key: item.id || `temp-key5-${index}`,
-                  date: item.tenDayNumber,
-                  current1: item.current1.toFixed(2),
-                  current2: item.current2.toFixed(2),
-                  current3: item.current3.toFixed(2),
-                  energyActive: item.energyActive.toFixed(2),
-                  energyReactive: item.energyReactive.toFixed(2),
-                  powerActive: item.powerActive.toFixed(2),
-                  powerReactive: item.powerReactive.toFixed(2),
-                  voltage1: item.voltage1.toFixed(2),
-                  voltage2: item.voltage2.toFixed(2),
-                  voltage3: item.voltage3.toFixed(2),
-                }))
+                ...item,
+                key: item.id || `temp-key5-${index}`,
+                date: `${months[lang][electryIdData.data[0]?.month]} ${daysValues[lang][item.tenDayNumber - 1]}`,
+                current1: item.current1?.toFixed(2),
+                current2: item.current2?.toFixed(2),
+                current3: item.current3?.toFixed(2),
+                energyActive: item.energyActive?.toFixed(2),
+                energyReactive: item.energyReactive?.toFixed(2),
+                powerActive: item.powerActive?.toFixed(2),
+                powerReactive: item.powerReactive?.toFixed(2),
+                voltage1: item.voltage1?.toFixed(2),
+                voltage2: item.voltage2?.toFixed(2),
+                voltage3: item.voltage3?.toFixed(2),
+              }))
               : []
           }
           currentPage={pageData.page}
@@ -548,20 +615,20 @@ const ElectricalMoreData = () => {
           dataSource={
             Array.isArray(electryIdData)
               ? electryIdData?.map((item, index) => ({
-                  ...item,
-                  key: item.id || `temp-key6-${index}`,
-                  date: item.date,
-                  current1: item.current1.toFixed(2),
-                  current2: item.current2.toFixed(2),
-                  current3: item.current3.toFixed(2),
-                  energyActive: item.energyActive.toFixed(2),
-                  energyReactive: item.energyReactive.toFixed(2),
-                  powerActive: item.powerActive.toFixed(2),
-                  powerReactive: item.powerReactive.toFixed(2),
-                  voltage1: item.voltage1.toFixed(2),
-                  voltage2: item.voltage2.toFixed(2),
-                  voltage3: item.voltage3.toFixed(2),
-                }))
+                ...item,
+                key: item.id || `temp-key6-${index}`,
+                date: item.date,
+                current1: item.current1?.toFixed(2),
+                current2: item.current2?.toFixed(2),
+                current3: item.current3?.toFixed(2),
+                energyActive: item.energyActive?.toFixed(2),
+                energyReactive: item.energyReactive?.toFixed(2),
+                powerActive: item.powerActive?.toFixed(2),
+                powerReactive: item.powerReactive?.toFixed(2),
+                voltage1: item.voltage1?.toFixed(2),
+                voltage2: item.voltage2?.toFixed(2),
+                voltage3: item.voltage3?.toFixed(2),
+              }))
               : []
           }
           currentPage={pageData.page}
@@ -585,10 +652,10 @@ const ElectricalMoreData = () => {
           dataSource={
             Array.isArray(electryIdData?.data)
               ? electryIdData.data?.map((item, index) => ({
-                  ...item,
-                  key: item.id || `temp-key7-${index}`,
-                  date: item.date,
-                }))
+                ...item,
+                key: item.id || `temp-key7-${index}`,
+                date: item.date,
+              }))
               : []
           }
           currentPage={pageData.page}
@@ -612,10 +679,10 @@ const ElectricalMoreData = () => {
           dataSource={
             Array.isArray(electryIdData?.data)
               ? electryIdData.data?.map((item, index) => ({
-                  ...item,
-                  key: item.id || `temp-key8-${index}`,
-                  date: item.date,
-                }))
+                ...item,
+                key: item.id || `temp-key8-${index}`,
+                date: item.date,
+              }))
               : []
           }
           currentPage={pageData.page}

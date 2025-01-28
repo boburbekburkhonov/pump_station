@@ -53,11 +53,78 @@ dayjs.extend(weekYear);
 
 const dateFormat = "YYYY-MM";
 
+const daysValues = {
+  uz: [
+    "Birinchi o'n kunlik",
+    "Ikkinchi o'n kunlik",
+    "Uchunchi o'n kunlik",
+    "To'rtinchi o'n kunlik",
+  ],
+  en: [
+    "The first ten days",
+    "Second ten days",
+    "Third decade",
+    "Fourth decade",
+  ],
+  ru: [
+    "Первые десять дней",
+    "Вторая декада",
+    "Третье десятилетие",
+    "Четвертая декада",
+  ],
+};
+
+const months = {
+  uz: [
+    "Yanvar",
+    "Fevral",
+    "Mart",
+    "Aprel",
+    "May",
+    "Iyun",
+    "Iyul",
+    "Avgust",
+    "Sentabr",
+    "Oktabr",
+    "Noyabr",
+    "Dekabr",
+  ],
+  en: [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ],
+  ru: [
+    "Январь",
+    "Февраль",
+    "Март",
+    "Апрель",
+    "Май",
+    "Июнь",
+    "Июль",
+    "Август",
+    "Сентябрь",
+    "Октябрь",
+    "Ноябрь",
+    "Декабрь",
+  ],
+};
+
 const AggrigateMoreData = memo(() => {
   const dispatch = useDispatch();
   const { i18n, t } = useTranslation();
   const params = useParams();
   const token = localStorage.getItem("access_token");
+  const lang = i18n.language;
 
   const { loading } = useSelector((state) => state.alert);
   const { colors, theme } = useSelector((state) => state.theme);
@@ -313,12 +380,12 @@ const AggrigateMoreData = memo(() => {
           dataSource={
             Array.isArray(pumpIdData.data)
               ? pumpIdData.data?.map((item, index) => ({
-                  ...item,
-                  key: item.id || `temp-key1-${index}`,
-                  volume: item.volume.toFixed(2),
-                  velocity: item.velocity.toFixed(2),
-                  flow: item.flow.toFixed(2)
-                }))
+                ...item,
+                key: item.id || `temp-key1-${index}`,
+                volume: item.volume?.toFixed(2),
+                velocity: item.velocity?.toFixed(2),
+                flow: item.flow?.toFixed(2)
+              }))
               : []
           }
           currentPage={pageData.page}
@@ -340,12 +407,12 @@ const AggrigateMoreData = memo(() => {
           dataSource={
             Array.isArray(pumpIdData.data)
               ? pumpIdData.data?.map((item, index) => ({
-                  ...item,
-                  key: item.id || `temp-key2-${index}`,
-                  volume: item.volume.toFixed(2),
-                  velocity: item.velocity.toFixed(2),
-                  flow: item.flow.toFixed(2)
-                }))
+                ...item,
+                key: item.id || `temp-key2-${index}`,
+                volume: item.volume?.toFixed(2),
+                velocity: item.velocity?.toFixed(2),
+                flow: item.flow?.toFixed(2)
+              }))
               : []
           }
           currentPage={pageData.page}
@@ -366,13 +433,13 @@ const AggrigateMoreData = memo(() => {
           dataSource={
             Array.isArray(pumpIdData?.data?.aggregateData)
               ? pumpIdData.data.aggregateData.map((item, index) => ({
-                  ...item,
-                  key: item.id || `temp-key3-${index}`,
-                  date: item.date?.split("T")[0] || item.date,
-                  volume: item.volume.toFixed(2),
-                  velocity: item.velocity.toFixed(2),
-                  flow: item.flow.toFixed(2)
-                }))
+                ...item,
+                key: item.id || `temp-key3-${index}`,
+                date: item.date?.split("T")[0] || item.date,
+                volume: item.volume?.toFixed(2),
+                velocity: item.velocity?.toFixed(2),
+                flow: item.flow?.toFixed(2)
+              }))
               : []
           }
           currentPage={pageData.page}
@@ -396,13 +463,13 @@ const AggrigateMoreData = memo(() => {
           dataSource={
             Array.isArray(pumpIdData)
               ? pumpIdData?.map((item, index) => ({
-                  ...item,
-                  key: item.id || `temp-key4-${index}`,
-                  date: item.date?.split("T")[0] || item.date,
-                  volume: item.volume.toFixed(2),
-                  velocity: item.velocity.toFixed(2),
-                  flow: item.flow.toFixed(2)
-                }))
+                ...item,
+                key: item.id || `temp-key4-${index}`,
+                date: item.date?.split("T")[0] || item.date,
+                volume: item.volume?.toFixed(2),
+                velocity: item.velocity?.toFixed(2),
+                flow: item.flow?.toFixed(2)
+              }))
               : []
           }
           currentPage={pageData.page}
@@ -426,13 +493,13 @@ const AggrigateMoreData = memo(() => {
           dataSource={
             Array.isArray(pumpIdData?.data?.aggregateData)
               ? pumpIdData.data.aggregateData[0].data?.map((item, index) => ({
-                  ...item,
-                  key: item.id || `temp-key5-${index}`,
-                  date: item.tenDayNumber,
-                  volume: item.volume.toFixed(2),
-                  velocity: item.velocity.toFixed(2),
-                  flow: item.flow.toFixed(2)
-                }))
+                ...item,
+                key: item.id || `temp-key5-${index}`,
+                date: `${months[lang][pumpIdData.data.aggregateData[0]?.month]} ${daysValues[lang][item.tenDayNumber - 1]}`,
+                volume: item.volume?.toFixed(2),
+                velocity: item.velocity?.toFixed(2),
+                flow: item.flow?.toFixed(2)
+              }))
               : []
           }
           currentPage={pageData.page}
@@ -456,13 +523,13 @@ const AggrigateMoreData = memo(() => {
           dataSource={
             Array.isArray(pumpIdData?.data)
               ? pumpIdData.data?.map((item, index) => ({
-                  ...item,
-                  key: item.id || `temp-key6-${index}`,
-                  date: item.date,
-                  volume: item.volume.toFixed(2),
-                  velocity: item.velocity.toFixed(2),
-                  flow: item.flow.toFixed(2)
-                }))
+                ...item,
+                key: item.id || `temp-key6-${index}`,
+                date: item.date,
+                volume: item.volume?.toFixed(2),
+                velocity: item.velocity?.toFixed(2),
+                flow: item.flow?.toFixed(2)
+              }))
               : []
           }
           currentPage={pageData.page}
@@ -486,13 +553,13 @@ const AggrigateMoreData = memo(() => {
           dataSource={
             Array.isArray(pumpIdData?.data)
               ? pumpIdData.data?.map((item, index) => ({
-                  ...item,
-                  key: item.id || `temp-key7-${index}`,
-                  date: item.date,
-                  volume: item.volume.toFixed(2),
-                  velocity: item.velocity.toFixed(2),
-                  flow: item.flow.toFixed(2)
-                }))
+                ...item,
+                key: item.id || `temp-key7-${index}`,
+                date: item.date,
+                volume: item.volume?.toFixed(2),
+                velocity: item.velocity?.toFixed(2),
+                flow: item.flow?.toFixed(2)
+              }))
               : []
           }
           currentPage={pageData.page}
@@ -516,13 +583,13 @@ const AggrigateMoreData = memo(() => {
           dataSource={
             Array.isArray(pumpIdData?.data)
               ? pumpIdData.data?.map((item, index) => ({
-                  ...item,
-                  key: item.id || `temp-key8-${index}`,
-                  date: item.date,
-                  volume: item.volume.toFixed(2),
-                  velocity: item.velocity.toFixed(2),
-                  flow: item.flow.toFixed(2)
-                }))
+                ...item,
+                key: item.id || `temp-key8-${index}`,
+                date: item.date,
+                volume: item.volume?.toFixed(2),
+                velocity: item.velocity?.toFixed(2),
+                flow: item.flow?.toFixed(2)
+              }))
               : []
           }
           currentPage={pageData.page}

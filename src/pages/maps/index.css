@@ -69,3 +69,8 @@
 .stations_maps_header h1 {
     font-size: 1rem;
 }
+
+.leaflet-popup-content {
+    margin: 13px;
+    width: max-content !important;
+}

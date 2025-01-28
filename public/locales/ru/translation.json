@@ -223,7 +223,9 @@
       "stationsMoreInfoElectr": "Самая актуальная информация по электрооборудованию станции"
     },
     "titleStationsDetails1": "Состояние всех узлов станции",
-    "titleStationsDetails2": "Состояние всех станционных счетчиков электроэнергии"
+    "titleStationsDetails2": "Состояние всех станционных счетчиков электроэнергии",
+    "buttonAggregate": "Объем воды",
+    "buttonElectr": "Потребление энергии"
   },
   "dataPagesInformation": {
     "selectButtonNames": [

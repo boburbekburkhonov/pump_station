@@ -12,9 +12,11 @@ function Notif() {
   const dispatch = useDispatch();
 
   const closeAlert = useCallback(() => {
-    dispatch({ type: GLOBALTYPES.ALERT, payload: {
-      loading: false
-    } });
+    dispatch({
+      type: GLOBALTYPES.ALERT, payload: {
+        loading: false
+      }
+    });
   });
 
   return (
@@ -26,7 +28,7 @@ function Notif() {
           showIcon
           type='error'
           action={
-            <Button size='small' danger onClick={closeAlert}>
+            <Button size="large" danger onClick={closeAlert}>
               <CloseCircleFilled size='small' twoToneColor='#eb2f96' />
             </Button>
           }

@@ -214,10 +214,6 @@ const ThirdSections = memo(
       className='pump_selected_data_with_today'>
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
-          {valueInput.format("YYYY-MM")}
-          {"\t"}
-          {t("dataPagesInformation.dateSelectDay")}
-          {"\t"}
           {
             t(
               isActiveTable === "all_data"
@@ -230,6 +226,9 @@ const ThirdSections = memo(
               }
             )[2].title
           }
+          {"\t"}({"\t"}
+          {valueInput.format("YYYY-MM")}
+          {"\t"})
         </h1>
 
         <div className='header_more_aggregate_data'>
@@ -318,10 +317,6 @@ const FourThSections = memo(
       className='pump_selected_data_with_today'>
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
-          {valueInput.format("YYYY-MM")}
-          {"\t"}
-          {t("dataPagesInformation.dateSelectDay")}
-          {"\t"}
           {
             t(
               isActiveTable === "all_data"
@@ -334,6 +329,9 @@ const FourThSections = memo(
               }
             )[3].title
           }
+          {"\t"}({"\t"}
+          {valueInput.format("YYYY-MM")}
+          {"\t"})
         </h1>
 
         <div className='header_more_aggregate_data'>
@@ -423,7 +421,7 @@ const FiveThSections = memo(
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
           {valueInput.format("YYYY")}
-          {"\t"}
+          {"\t"}-{"\t"}
           {t("dataPagesInformation.dateSelectYear")}
           {"\t"}
           {
@@ -527,7 +525,7 @@ const SixThSections = memo(
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
           {valueInput.format("YYYY")}
-          {"\t"}
+          {"\t"}-{"\t"}
           {t("dataPagesInformation.dateSelectYear")}
           {"\t"}
           {
@@ -642,8 +640,8 @@ const SevenThSections = memo(
               }
             )[6].title
           }
-          {"\t"}
-          {valueInput.format("YYYY-MM-DD")}
+          {"\t"}({"\t"}
+          {valueInput.format("YYYY-MM-DD")}{"\t"})
         </h1>
 
         <div className='header_more_aggregate_data'>
@@ -744,12 +742,6 @@ const EightThSections = memo(
               }
             )[7].title
           }
-          {"\t"}
-          {valueInput[0].format("YYYY-MM-DD")}
-          {"\t"}
-          {"-"}
-          {"\t"}
-          {valueInput[1].format("YYYY-MM-DD")}
         </h1>
 
         <div className='header_more_aggregate_data'>

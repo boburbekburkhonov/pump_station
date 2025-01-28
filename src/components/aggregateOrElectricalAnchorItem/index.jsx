@@ -30,7 +30,7 @@ const FirstSections = memo(
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
           {
-            t("dataPagesInformation.selectButtonNames", {
+            t("dataPagesInformation.selectMoreDataButtonNames", {
               returnObjects: true,
             })[0].title
           }
@@ -97,7 +97,7 @@ const SecondSections = memo(
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
           {
-            t("dataPagesInformation.selectButtonNames", {
+            t("dataPagesInformation.selectMoreDataButtonNames", {
               returnObjects: true,
             })[1].title
           }
@@ -166,15 +166,13 @@ const ThirdSections = memo(
       className='pump_selected_data_with_today'>
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
-          {valueInput.format("YYYY-MM")}
-          {"\t"}
-          {t("dataPagesInformation.dateSelectDay")}
-          {"\t"}
           {
-            t("dataPagesInformation.selectButtonNames", {
+            t("dataPagesInformation.selectMoreDataButtonNames", {
               returnObjects: true,
             })[2].title
           }
+          {" "}
+          ({valueInput.format("YYYY-MM")})
         </h1>
 
         <div className='header_more_aggregate_data'>
@@ -247,15 +245,13 @@ const FourThSections = memo(
       className='pump_selected_data_with_today'>
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
-          {valueInput.format("YYYY-MM")}
-          {"\t"}
-          {t("dataPagesInformation.dateSelectDay")}
-          {"\t"}
           {
-            t("dataPagesInformation.selectButtonNames", {
+            t("dataPagesInformation.selectMoreDataButtonNames", {
               returnObjects: true,
             })[3].title
           }
+          {"\t"}
+          ({valueInput.format("YYYY-MM")})
         </h1>
 
         <div className='header_more_aggregate_data'>
@@ -329,11 +325,11 @@ const FiveThSections = memo(
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
           {valueInput.format("YYYY")}
-          {"\t"}
+          {"\t"}-{"\t"}
           {t("dataPagesInformation.dateSelectYear")}
           {"\t"}
           {
-            t("dataPagesInformation.selectButtonNames", {
+            t("dataPagesInformation.selectMoreDataButtonNames", {
               returnObjects: true,
             })[4].title
           }
@@ -411,11 +407,11 @@ const SixThSections = memo(
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
           {valueInput.format("YYYY")}
-          {"\t"}
+          {"\t"}-{"\t"}
           {t("dataPagesInformation.dateSelectYear")}
           {"\t"}
           {
-            t("dataPagesInformation.selectButtonNames", {
+            t("dataPagesInformation.selectMoreDataButtonNames", {
               returnObjects: true,
             })[5].title
           }
@@ -493,12 +489,12 @@ const SevenThSections = memo(
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
           {
-            t("dataPagesInformation.selectButtonNames", {
+            t("dataPagesInformation.selectMoreDataButtonNames", {
               returnObjects: true,
             })[6].title
           }
           {"\t"}
-          {valueInput.format("YYYY-MM-DD")}
+          ( {valueInput.format("YYYY-MM-DD")})
         </h1>
 
         <div className='header_more_aggregate_data'>
@@ -572,14 +568,10 @@ const EightThSections = memo(
       <div className='header_more_aggregate_data'>
         <h1 className='head_title_data'>
           {
-            t("dataPagesInformation.selectButtonNames", {
+            t("dataPagesInformation.selectMoreDataButtonNames", {
               returnObjects: true,
             })[7].title
-          }{"\t"}
-          {valueInput[0].format("YYYY-MM-DD")}
-          {"\t"}{"-"}{"\t"}
-          {valueInput[1].format("YYYY-MM-DD")}
-          
+          }
         </h1>
 
         <div className='header_more_aggregate_data'>

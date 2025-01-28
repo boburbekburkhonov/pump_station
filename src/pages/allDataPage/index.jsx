@@ -232,7 +232,7 @@ function AllDatapPage() {
                             :{" "}
                           </h4>
                         </div>
-                        <h4 className='dashboard_view_more_import_data'>
+                        <h4 className='all_stations_data_item_import_data'>
                           {allAgrigateData.totalsVolume} m³
                         </h4>
                       </div>
@@ -289,7 +289,7 @@ function AllDatapPage() {
                             :{" "}
                           </h4>
                         </div>
-                        <h4 className='dashboard_view_more_import_data'>
+                        <h4 className='all_stations_data_item_import_data'>
                           {allElectrData.energyActiveTotal} kw
                         </h4>
                       </div>

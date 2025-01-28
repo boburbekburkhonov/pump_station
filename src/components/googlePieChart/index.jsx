@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, memo, useRef } from "react";
+import React, { useEffect, memo, useRef, useMemo } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
@@ -57,8 +57,19 @@ const modernColors = [
   "#FAD7A0",
 ];
 
-const PieChart = ({ theme, data, title, centerText }) => {
+const PieChart = ({
+  theme,
+  data,
+  title,
+  centerText,
+  handleonIsOpenStationModal,
+  widthSize,
+  heightSize,
+}) => {
   const chartRef = useRef(null);
+
+  const memoizedData = useMemo(() => data.map((item) => ({ ...item })), [data]);
+
   useEffect(() => {
     if (chartRef.current?.chart) {
       const chart = chartRef.current.chart;
@@ -94,8 +105,8 @@ const PieChart = ({ theme, data, title, centerText }) => {
     chart: {
       type: "pie",
       backgroundColor: theme.backgroundColor,
-      width: centerText ? 800 : 600,
-      height: centerText ? 500 : 300,
+      width: widthSize,
+      height: heightSize,
     },
     tooltip: {
       headerFormat: "",
@@ -112,16 +123,33 @@ const PieChart = ({ theme, data, title, centerText }) => {
     colors: modernColors,
     plotOptions: {
       pie: {
-        innerSize: centerText ? "40%" : '0',
+        innerSize: centerText ? "40%" : "0",
         borderRadius: 8,
         borderWidth: 2,
-
         allowPointSelect: true,
+        cursor: "pointer",
         dataLabels: {
           enabled: true,
           distance: 20,
           color: theme.text,
           format: `<b>{point.name}</b><br>{point.y} {point.unit}`,
+        },
+        point: {
+          events: {
+            click: function () {
+              const clickedColor = this.color;
+
+              const newData = data.map((item) => ({ ...item }));
+              const clickedPoint = newData.find(
+                (item) => item.name === this.name
+              );
+              if (clickedPoint) {
+                clickedPoint.sliced = !clickedPoint.sliced;
+              }
+
+              handleonIsOpenStationModal(this.name, clickedColor);
+            },
+          },
         },
       },
     },
@@ -134,7 +162,7 @@ const PieChart = ({ theme, data, title, centerText }) => {
           duration: 1500,
         },
         colorByPoint: true,
-        data: data,
+        data: memoizedData,
       },
     ],
   };

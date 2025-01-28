@@ -223,7 +223,9 @@
       "stationsMoreInfoElectr": "Stansiya elektr qurilmasining so'ngi ma'lumotlari"
     },
     "titleStationsDetails1": "Barcha stansiya agrigatlarining holati",
-    "titleStationsDetails2": "Barcha stansiya elektr hisoblagichlarning holati"
+    "titleStationsDetails2": "Barcha stansiya elektr hisoblagichlarning holati",
+    "buttonAggregate": "Suv hajmi",
+    "buttonElectr": "Energiya sarfi"
   },
   "dataPagesInformation": {
     "selectButtonNames": [
@@ -242,19 +244,19 @@
       { "title": "Kundalik umumiy ma'lumotlar" },
       { "title": "Haftalik umumiy ma'lumotlar" },
       { "title": "10 kunlik umumiy ma'lumotlar" },
-      { "title": "Oylik umumiy ma'lumotlar" },
-      { "title": "Sanadagi umumiy ma'lumotlari" },
-      { "title": "Tanlangan sana oralig'i umumiy ma'lumotlar" }
+      { "title": "oylik umumiy ma'lumotlar" },
+      { "title": "Belgilangan sanadagi umumiy ma'lumotlari" },
+      { "title": "Tanlangan sana oralig'idagi umumiy ma'lumotlar" }
     ],
     "selectMoreDataButtonNames": [
-      { "title": "Bugungi to'liq ma'lumotlar" },
-      { "title": "Kechagi to'liq ma'lumotlar" },
-      { "title": "Kundalik to'liq ma'lumotlar" },
-      { "title": "Haftalik to'liq ma'lumotlar" },
-      { "title": "10 kunlik to'liq ma'lumotlar" },
-      { "title": "Oylik to'liq ma'lumotlar" },
-      { "title": "Sanadagi to'liq ma'lumotlari" },
-      { "title": "Tanlangan sana oralig'i to'liq ma'lumotlar" }
+      { "title": "Bugungi batafsil ma'lumotlar" },
+      { "title": "Kechagi batafsil ma'lumotlar" },
+      { "title": "Kundalik batafsil ma'lumotlar" },
+      { "title": "Haftalik batafsil ma'lumotlar" },
+      { "title": "10 kunlik batafsil ma'lumotlar" },
+      { "title": "oylik batafsil ma'lumotlar" },
+      { "title": "Belgilangan sanadagi batafsil ma'lumotlari" },
+      { "title": "Tanlangan sana oralig'idagi batafsil ma'lumotlar" }
     ],
     "selectGraphicDataButtonNames": [
       { "title": "Bugungi ma'lumotlar grafigi" },
@@ -262,12 +264,12 @@
       { "title": "Kundalik  ma'lumotlar grafigi" },
       { "title": "Haftalik  ma'lumotlar grafigi" },
       { "title": "10 kunlik  ma'lumotlar grafigi" },
-      { "title": "Oylik  ma'lumotlar grafigi" },
-      { "title": "Sanadagi ma'lumotlari grafigi" },
+      { "title": "oylik  ma'lumotlar grafigi" },
+      { "title": "Belgilangan sanadagi ma'lumotlari grafigi" },
       { "title": "Tanlangan sana oralig'i ma'lumotlar grafigi" }
     ],
     "dataTypeButton1": "Umumiy ma'lumotlar",
-    "dataTypeButton2": "To'liq ma'lumotlar",
+    "dataTypeButton2": "Batafsil ma'lumotlar",
     "dataPagesTitle": "Stansiya agrigatlarining ma'lumotlari",
     "dataHeaderTitle": "Stansiyalarning so'ngi ma'lumotlari",
     "moreButton": "Ko'proq",

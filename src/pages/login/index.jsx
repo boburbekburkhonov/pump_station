@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "./index.css";
 import { signInAction } from "../../redux/actions/authActions";
 import { Link } from "react-router-dom";
+import logo from "../../assets/output-onlinepngtools__1_-removebg-preview.png";
 
 const { Text, Title } = Typography;
 
@@ -22,115 +23,139 @@ function Login() {
   };
 
   return (
-    <section className='login_page_section'>
-      <div
-        style={{
-          background: colors.layoutBackground,
-          boxShadow: `0px 0px 10px 2px ${colors.boxShadow}`,
-        }}
-        className='login_page_container'>
-        <div className='login_page_header'>
-          <Title
-            style={{
-              color: colors.text,
-            }}
-            className='login_page_title'>
-            {t("loginData.header")}
-          </Title>
-          <Text
-            style={{
-              color: colors.textLight,
-            }}
-            className='login_page_description'>
-            {t("loginData.description")}
-          </Text>
+    <section style={{
+      background: colors.layoutBackground
+    }} className='login_page_section'>
+      <div className='container'>
+        <div className='left'>
+          <div className='square'></div>
+          <div className='square'></div>
+          <div className='square'></div>
+          <div className='square'></div>
+          <div className='square'></div>
+          <div className='square'></div>
+          <div id='video-container'></div>
+          <div className='welcome-message'>
+            <img src={logo} alt='logo' width={220} height={220} />
+            <p className='welcome-message_desc'>{t("loginData.description")}</p>
+          </div>
         </div>
-
-        <Form
-          className='login_page_form'
-          name='normal_login'
-          initialValues={{
-            remember: rememberValue,
-          }}
-          onFinish={onFinish}
-          layout='vertical'
-          requiredMark='optional'>
-          <Form.Item
-            name='username'
-            rules={[
-              {
-                required: true,
-                message: t("loginData.usernameDetectMessage"),
-              },
-            ]}>
-            <Input
-              size='large'
-              prefix={
-                <UserOutlined
-                  style={{
-                    marginRight: ".5rem",
-                  }}
-                />
-              }
-              placeholder={t("loginData.userPlaceholder")}
-            />
-          </Form.Item>
-
-          <Form.Item
-            name='password'
-            rules={[
-              {
-                required: true,
-                message: t("loginData.passwordDetectMessage"),
-              },
-            ]}>
-            <Input.Password
-              size='large'
-              prefix={
-                <LockOutlined
-                  style={{
-                    marginRight: ".5rem",
-                  }}
-                />
-              }
-              type='password'
-              placeholder={t("loginData.passPlaceholder")}
-            />
-          </Form.Item>
-
-          <Form.Item className='remember_box'>
-            <Form.Item name='remember' valuePropName='checked' noStyle>
-              <Checkbox
+        
+        <div
+          className='right'
+          style={{
+            background: colors.background,
+          }}>
+          <div
+            style={{
+              background: colors.layoutBackground,
+              boxShadow: `0px 0px 10px 2px ${colors.boxShadow}`,
+            }}
+            className='login_page_container'>
+            <div className='login_page_header'>
+              <Title
                 style={{
                   color: colors.text,
                 }}
-                onChange={(e) => {
-                  setRememberValue(e.target.checked);
-                }}>
-                {t("loginData.rememberMessage")}
-              </Checkbox>
-            </Form.Item>
+                className='login_page_title'>
+                {t("loginData.header")}
+              </Title>
+              <Text
+                style={{
+                  color: colors.textLight,
+                }}
+                className='login_page_description'>
+                {t("loginData.description")}
+              </Text>
+            </div>
 
-            <Link className="reset_link" to="/reset/password">
-              {t("loginData.resetPassword")}
-            </Link>
-          </Form.Item>
-
-          <Form.Item className='login_page_button_carton'>
-            <Button
-              size='large'
-              style={{
-                background: colors.buttonColor,
-                color: colors.textWhite,
+            <Form
+              className='login_page_form'
+              name='normal_login'
+              initialValues={{
+                remember: rememberValue,
               }}
-              className='login_page_button'
-              block='true'
-              type='primary'
-              htmlType='submit'>
-              {t("loginData.loginButton")}
-            </Button>
-          </Form.Item>
-        </Form>
+              onFinish={onFinish}
+              layout='vertical'
+              requiredMark='optional'>
+              <Form.Item
+                name='username'
+                rules={[
+                  {
+                    required: true,
+                    message: t("loginData.usernameDetectMessage"),
+                  },
+                ]}>
+                <Input
+                  size='large'
+                  prefix={
+                    <UserOutlined
+                      style={{
+                        marginRight: ".5rem",
+                      }}
+                    />
+                  }
+                  placeholder={t("loginData.userPlaceholder")}
+                />
+              </Form.Item>
+
+              <Form.Item
+                name='password'
+                rules={[
+                  {
+                    required: true,
+                    message: t("loginData.passwordDetectMessage"),
+                  },
+                ]}>
+                <Input.Password
+                  size='large'
+                  prefix={
+                    <LockOutlined
+                      style={{
+                        marginRight: ".5rem",
+                      }}
+                    />
+                  }
+                  type='password'
+                  placeholder={t("loginData.passPlaceholder")}
+                />
+              </Form.Item>
+
+              <Form.Item className='remember_box'>
+                <Form.Item name='remember' valuePropName='checked' noStyle>
+                  <Checkbox
+                    style={{
+                      color: colors.text,
+                    }}
+                    onChange={(e) => {
+                      setRememberValue(e.target.checked);
+                    }}>
+                    {t("loginData.rememberMessage")}
+                  </Checkbox>
+                </Form.Item>
+
+                <Link className='reset_link' to='/reset/password'>
+                  {t("loginData.resetPassword")}
+                </Link>
+              </Form.Item>
+
+              <Form.Item className='login_page_button_carton'>
+                <Button
+                  size='large'
+                  style={{
+                    background: colors.buttonColor,
+                    color: colors.textWhite,
+                  }}
+                  className='login_page_button'
+                  block='true'
+                  type='primary'
+                  htmlType='submit'>
+                  {t("loginData.loginButton")}
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
+        </div>
       </div>
     </section>
   );

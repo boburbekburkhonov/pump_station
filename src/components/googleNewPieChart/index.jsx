@@ -18,15 +18,20 @@ const SolarEmploymentChart = ({ theme, data, lineStatus }) => {
     },
 
     yAxis: {
-      title: {
-        text: data.name ? data.name : "",
-        style: {
-          color: theme.text,
-        },
-      },
+      title: data.unit
+        ? {
+            text: `${data.name} (${data.unit})`,
+            style: {
+              color: theme.text,
+            },
+          }
+        : null,
       labels: {
         style: {
           color: theme.text,
+        },
+        formatter: function () {
+          return data.unit ? `${this.value} ${data.unit}` : this.value;
         },
       },
     },

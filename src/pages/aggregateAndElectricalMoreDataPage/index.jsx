@@ -14,6 +14,13 @@ import { useParams } from "react-router-dom";
 import { Anchor } from "antd";
 import dayjs from "dayjs";
 
+import advancedFormat from "dayjs/plugin/advancedFormat";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import localeData from "dayjs/plugin/localeData";
+import weekday from "dayjs/plugin/weekday";
+import weekOfYear from "dayjs/plugin/weekOfYear";
+import weekYear from "dayjs/plugin/weekYear";
+
 import {
   getYesterdayStationIdData,
   getTodayDataByStationId,
@@ -30,12 +37,6 @@ import "../dashboard/index.css";
 import "../aggrigateMoreData/index.css";
 import "../allDataPage/index.css";
 
-import advancedFormat from "dayjs/plugin/advancedFormat";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import localeData from "dayjs/plugin/localeData";
-import weekday from "dayjs/plugin/weekday";
-import weekOfYear from "dayjs/plugin/weekOfYear";
-import weekYear from "dayjs/plugin/weekYear";
 import {
   FirstSections,
   SecondSections,
@@ -340,6 +341,7 @@ function AgrigateAndElectricalMoreData() {
           lineChartData={lineStationId}
           isActiveTable={isActiveTable}
           totalColumns={columnsName}
+          handlePaginationChange={handlePaginationChange}
           totalDataSource={totalValueData}
         />
       )}
@@ -359,6 +361,7 @@ function AgrigateAndElectricalMoreData() {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          handlePaginationChange={handlePaginationChange}
         />
       )}
 
@@ -377,6 +380,7 @@ function AgrigateAndElectricalMoreData() {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          handlePaginationChange={handlePaginationChange}
         />
       )}
 
@@ -395,6 +399,7 @@ function AgrigateAndElectricalMoreData() {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          handlePaginationChange={handlePaginationChange}
         />
       )}
 
@@ -413,6 +418,7 @@ function AgrigateAndElectricalMoreData() {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          handlePaginationChange={handlePaginationChange}
         />
       )}
 
@@ -431,6 +437,7 @@ function AgrigateAndElectricalMoreData() {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          handlePaginationChange={handlePaginationChange}
         />
       )}
 
@@ -449,6 +456,7 @@ function AgrigateAndElectricalMoreData() {
           dateFormat={dateFormat}
           valueInput={dateRange}
           onChange={onChangeDateRange}
+          handlePaginationChange={handlePaginationChange}
         />
       )}
     </section>

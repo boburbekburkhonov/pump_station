@@ -223,7 +223,9 @@
       "stationsMoreInfoElectr": "Final data of the station electrical device"
     },
     "titleStationsDetails1": "Status of all station units",
-    "titleStationsDetails2": "Status of all station electricity meters"
+    "titleStationsDetails2": "Status of all station electricity meters",
+    "buttonAggregate": "Water volume",
+    "buttonElectr": "Потребление энергии"
   },
   "dataPagesInformation": {
     "selectButtonNames": [
