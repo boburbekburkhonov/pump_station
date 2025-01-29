@@ -8,81 +8,21 @@ import {
     ApartmentOutlined,
 } from "@ant-design/icons";
 
-export const iconData = [
-    <AppstoreOutlined
-        style={{
-            fontSize: "24px",
-            color: "#405FF2"
-        }}
-    />,
-
-    <CheckCircleOutlined
-        style={{
-            fontSize: "24px",
-            color: "#405FF2"
-        }}
-    />,
-
-    <ExclamationCircleOutlined
-        style={{
-            fontSize: "24px",
-            color: "#405FF2"
-        }}
-    />,
-
-    <ApartmentOutlined
-        style={{
-            fontSize: "24px",
-            color: "#405FF2"
-        }}
-    />,
-
-    <CarryOutOutlined
-        style={{
-            fontSize: "24px",
-            color: "#405FF2"
-        }}
-    />,
-
-    <WarningOutlined
-        style={{
-            fontSize: "24px",
-            color: "#405FF2"
-        }}
-    />,
-
-    <InteractionOutlined
-        style={{
-            fontSize: "24px",
-            color: "#405FF2"
-        }}
-    />,
-
-    <CarryOutOutlined
-        style={{
-            fontSize: "24px",
-            color: "#405FF2"
-        }}
-    />,
-
-    <WarningOutlined
-        style={{
-            fontSize: "24px",
-            color: "#405FF2"
-        }}
-    />,
-
-    <InteractionOutlined
-        style={{
-            fontSize: "24px",
-            color: "#405FF2"
-        }}
-    />,
-
-    <WarningOutlined
-        style={{
-            fontSize: "24px",
-            color: "#405FF2"
-        }}
-    />,
+const iconComponents = [
+    AppstoreOutlined,
+    CheckCircleOutlined,
+    ExclamationCircleOutlined,
+    ApartmentOutlined,
+    CarryOutOutlined,
+    WarningOutlined,
+    InteractionOutlined,
+    CarryOutOutlined,
+    WarningOutlined,
+    InteractionOutlined,
+    WarningOutlined
 ];
+
+export const getIcon = (index, color) => {
+    const IconComponent = iconComponents[index % iconComponents.length];
+    return <IconComponent style={{ fontSize: "40px", color }} />;
+};

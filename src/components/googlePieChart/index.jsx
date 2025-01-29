@@ -63,8 +63,6 @@ const PieChart = ({
   title,
   centerText,
   handleonIsOpenStationModal,
-  widthSize,
-  heightSize,
 }) => {
   const chartRef = useRef(null);
 
@@ -105,8 +103,8 @@ const PieChart = ({
     chart: {
       type: "pie",
       backgroundColor: theme.backgroundColor,
-      width: widthSize,
-      height: heightSize,
+      width: 700,
+      weight: 550
     },
     tooltip: {
       headerFormat: "",

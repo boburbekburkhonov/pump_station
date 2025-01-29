@@ -42,7 +42,7 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
       return initialAggValue;
     }
     return aggregate.reduce(
-      (agg, currentValue) => agg + currentValue?.pumpLastData?.totalsVolume,
+      (agg, currentValue) => agg + currentValue?.pumpLastData?.volume,
       initialAggValue
     );
   };
@@ -55,7 +55,7 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
     }
     return electr.reduce(
       (agg, currentValue) =>
-        agg + currentValue?.electricalEnergyLastData?.energyActiveTotal,
+        agg + currentValue?.electricalEnergyLastData?.energyActive,
       initialElectrValue
     );
   };
@@ -161,7 +161,9 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
                 };">
                 </div>
 
-                <h3 style=" padding: 8px;">${totalAggregateData?.toFixed(2)}m³</h3> 
+                <h3 style=" padding: 8px;">${totalAggregateData?.toFixed(
+                  2
+                )}m³</h3> 
               </div>
 
               <div style="width: 100%; justify-content: space-between; display: flex; gap: 0.75rem; align-items: center; border: 2px solid ${

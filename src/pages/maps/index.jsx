@@ -96,6 +96,9 @@ function MapsPage() {
     setDataStations({});
   };
 
+  console.log(stationsMap);
+  
+
   return (
     <section className='map_container'>
       <MapWithPolygon

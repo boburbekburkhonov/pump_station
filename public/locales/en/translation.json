@@ -99,58 +99,47 @@
     "cardData": [
       {
         "status": "All stations",
-        "color": "#11A9FF",
-        "countValue": "Number of devices"
+        "color": "#405FF2"
       },
       {
         "status": "Active stations",
-        "color": "#3652AD",
-        "countValue": "Number of devices"
+        "color": "#28a745"
       },
       {
         "status": "Inactive stations",
-        "color": "#F76500",
-        "countValue": "Number of devices"
+        "color": "#dc3545"
       },
       {
-        "status": "All aggregates",
-        "color": "#00AB6A",
-        "countValue": "Number of devices"
+        "status": "All units",
+        "color": "#28a745"
       },
       {
-        "status": "Active aggregates",
-        "color": "#03845C",
-        "countValue": "Number of devices"
+        "status": "Active units",
+        "color": "#17a2b8"
       },
       {
-        "status": "Broken aggregates",
-        "color": "#FF9445",
-        "countValue": "Number of devices"
+        "status": "Broken units",
+        "color": "#dc3545"
       },
       {
-        "status": "Faulty aggregates",
-        "color": "#FB0015",
-        "countValue": "Number of devices"
+        "status": "Faulty units",
+        "color": "#ffcc00"
       },
       {
-        "status": "All counters",
-        "color": "#03845C",
-        "countValue": "Number of devices"
+        "status": "All meters",
+        "color": "#28a745"
       },
       {
-        "status": "Active counters",
-        "color": "#85A1D0",
-        "countValue": "Number of devices"
+        "status": "Active meters",
+        "color": "#17a2b8"
       },
       {
-        "status": "Faulty counters",
-        "color": "#C91B21",
-        "countValue": "Number of devices"
+        "status": "Faulty meters",
+        "color": "#dc3545"
       },
       {
-        "status": "Broken counters",
-        "color": "#E2C11E",
-        "countValue": "Number of devices"
+        "status": "Broken meters",
+        "color": "#ffcc00"
       }
     ],
     "filterCardData": [

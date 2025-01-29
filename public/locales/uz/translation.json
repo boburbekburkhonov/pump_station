@@ -99,58 +99,47 @@
     "cardData": [
       {
         "status": "Barcha stansiyalar",
-        "color": "#11A9FF",
-        "countValue": "Qurilmalar soni"
+        "color": "#405FF2"
       },
       {
         "status": "Faol stansiyalar",
-        "color": "#3652AD",
-        "countValue": "Qurilmalar soni"
+        "color": "#28a745"
       },
       {
         "status": "Faolmas stansiyalar",
-        "color": "#F76500",
-        "countValue": "Qurilmalar soni"
+        "color": "#dc3545"
       },
       {
-        "status": "Barcha agrigatlar",
-        "color": "#00AB6A",
-        "countValue": "Qurilmalar soni"
+        "status": "Barcha agregatlar",
+        "color": "#28a745"
       },
       {
-        "status": "Faol agrigatlar",
-        "color": "#03845C",
-        "countValue": "Qurilmalar soni"
+        "status": "Faol agregatlar",
+        "color": "#17a2b8"
       },
       {
-        "status": "Buzilgan agrigatlar",
-        "color": "#FF9445",
-        "countValue": "Qurilmalar soni"
+        "status": "Buzilgan agregatlar",
+        "color": "#dc3545"
       },
       {
-        "status": "Nosoz agrigatlar",
-        "color": "#FB0015",
-        "countValue": "Qurilmalar soni"
+        "status": "Nosoz agregatlar",
+        "color": "#ffcc00"
       },
       {
         "status": "Barcha hisoblagichlar",
-        "color": "#03845C",
-        "countValue": "Qurilmalar soni"
+        "color": "#28a745"
       },
       {
         "status": "Faol hisoblagichlar",
-        "color": "#85A1D0",
-        "countValue": "Qurilmalar soni"
+        "color": "#17a2b8"
       },
       {
         "status": "Nosoz hisoblagichlar",
-        "color": "#C91B21",
-        "countValue": "Qurilmalar soni"
+        "color": "#dc3545"
       },
       {
         "status": "Buzilgan hisoblagichlar",
-        "color": "#E2C11E",
-        "countValue": "Qurilmalar soni"
+        "color": "#ffcc00"
       }
     ],
     "filterCardData": [

@@ -64,6 +64,10 @@
   cursor: pointer;
 }
 
+.dashbord_card_element .ant-card-body {
+  gap: 1.1rem !important;
+}
+
 .card_container_dashboard .ant-card-body {
   display: flex;
   flex-direction: row;
@@ -132,11 +136,11 @@
 }
 
 .dashboard_pie_chart_container {
-  display: grid;
+  display: flex;
   width: 100%;
   margin-top: 20px;
   gap: 0.75rem;
-  grid-template-columns: repeat(2, 1fr);
+  justify-content: space-around;
 }
 
 .dashboard_secont_chart_container {
@@ -352,7 +356,7 @@
 }
 
 .border_color_class {
-  border: 2px solid #405ff2;
+  border: 2px solid #fff;
   padding: 5px 10px;
   border-radius: 0.25rem;
 }

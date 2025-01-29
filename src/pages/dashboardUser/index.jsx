@@ -11,7 +11,7 @@ import React, {
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import { Card, Select, Button, Modal, Grid } from "antd";
+import { Card, Select, Button, Modal } from "antd";
 import { formatDate } from "../../utils/inputElementHandler";
 
 import {
@@ -38,7 +38,7 @@ import {
 } from "../../redux/actions/dashboard";
 import "../dashboard/index.css";
 import { findLastStationsData } from "../../redux/actions/stationsActions";
-import { iconData } from "../../data";
+import { getIcon } from "../../data";
 import {
   findTodayStatisticData,
   findYesterdayStatisticData,
@@ -62,26 +62,25 @@ import ViewMoreStationModal from "../../components/viewMoreStationModal";
 const STATISTIC_CARDS_CHUNK = 3;
 const STATISTIC_CARDS_CHUNK_NEXT = 7;
 
-const { useBreakpoint } = Grid;
-
-const StatisticCard = memo(
-  ({ icon, color, status, countValue, cardStyle, onChangeModalData }) => (
-    <Card
-      bordered={false}
-      style={cardStyle}
-      type='inner'
-      onClick={onChangeModalData}
-      className='dashbord_card_element'>
-      <div className='icon_box_card' style={{ background: color.blurBgColor }}>
-        {icon}
-      </div>
-
-      <div>
-        <h3>{countValue}</h3>
-        <p>{status}</p>
-      </div>
-    </Card>
-  )
+const StatisticCard = ({
+  icon,
+  status,
+  countValue,
+  cardStyle,
+  onChangeModalData,
+}) => (
+  <Card
+    bordered={false}
+    style={cardStyle}
+    type='inner'
+    onClick={onChangeModalData}
+    className='dashbord_card_element'>
+    {icon}
+    <div>
+      <p>{status}</p>
+      <h3>{countValue}</h3>
+    </div>
+  </Card>
 );
 
 const ViewMoreLastData = memo(
@@ -326,11 +325,11 @@ const ViewMoreLastData = memo(
                         <h4 className='dashboard_view_more_import_data'>
                           {item.workingStatus
                             ? t(
-                              "dashboardPageData.lastStationsData.agrigateStatus"
-                            )
+                                "dashboardPageData.lastStationsData.agrigateStatus"
+                              )
                             : t(
-                              "dashboardPageData.lastStationsData.agrigateStatus2"
-                            )}
+                                "dashboardPageData.lastStationsData.agrigateStatus2"
+                              )}
                         </h4>
                       </div>
 
@@ -718,11 +717,10 @@ function UserDashboard() {
   const [isStationsStatus, setIsStationsStatus] = useState("");
   const [isOpenMoreViewData, setIsOpenMoreViewData] = useState(false);
   const [getSelectStationDate, setGetSelectStationData] = useState("");
-  const [selectedColor, setSelectedColor] = useState("")
+  const [selectedColor, setSelectedColor] = useState("");
 
   const regionId = Cookies.get("regionId");
   const token = localStorage.getItem("access_token");
-  const screens = useBreakpoint();
 
   const fetchAllData = useCallback(async () => {
     const lang = i18n.language;
@@ -861,12 +859,12 @@ function UserDashboard() {
     setSelectDataType(key);
   };
 
-  const handleOpenStatusStations = (index) => {
+  const handleOpenStatusStations = useCallback((index) => {
     setIsOpenModalStation(true);
     const newStationStatus = index === 0 ? "" : index === 1 ? true : false;
 
     setIsStationsStatus(newStationStatus);
-  };
+  }, []);
 
   const sortStationId = (stationName) => {
     const station = totalData?.stationData?.find(
@@ -879,18 +877,12 @@ function UserDashboard() {
     const stationId = sortStationId(stationName);
     setGetSelectStationData(stationId);
     setIsOpenMoreViewData(true);
-    setSelectedColor(selecteColor)
+    setSelectedColor(selecteColor);
   };
 
   const handleCloseViewModal = () => {
     setIsOpenMoreViewData(false);
   };
-
-  const chartSize = useMemo(() => {
-    if (screens.xxl) return { width: window.innerWidth / 2 - 260, height: 700 };
-    if (screens.xl) return { width: window.innerWidth / 2 - 200, height: 500 };
-    return { width: window.innerWidth / 2 - 200, height: 300 };
-  }, [screens]);
 
   return (
     <section className='global_sections_style'>
@@ -909,12 +901,12 @@ function UserDashboard() {
               {firstThreeCards.map((item, index) => (
                 <StatisticCard
                   key={index}
-                  icon={iconData[index]}
+                  icon={getIcon(index, item.color)}
                   color={colors}
                   status={item.status}
                   countValue={`${statisticData[index]}`}
                   cardStyle={cardStyle}
-                  onChangeModalData={() => handleOpenStatusStations(index)}
+                  onChangeModalData={handleOpenStatusStations.bind(null, index)}
                 />
               ))}
             </div>
@@ -928,12 +920,12 @@ function UserDashboard() {
             {secondThreeCards.map((item, index) => (
               <StatisticCard
                 key={index + STATISTIC_CARDS_CHUNK}
-                icon={iconData[index + STATISTIC_CARDS_CHUNK]}
+                icon={getIcon(index + STATISTIC_CARDS_CHUNK, item.color)}
                 color={colors}
                 status={item.status}
                 countValue={`${statisticData[index + STATISTIC_CARDS_CHUNK]}`}
                 cardStyle={cardStyle}
-                onChangeModalData={() => handleOpenStatusStations(index)}
+                onChangeModalData={handleOpenStatusStations.bind(null, index)}
               />
             ))}
           </div>
@@ -946,13 +938,14 @@ function UserDashboard() {
             {thirdThreeCards.map((item, index) => (
               <StatisticCard
                 key={index + STATISTIC_CARDS_CHUNK_NEXT}
-                icon={iconData[index + STATISTIC_CARDS_CHUNK_NEXT]}
+                icon={getIcon(index + STATISTIC_CARDS_CHUNK_NEXT, item.color)}
                 color={colors}
                 status={item.status}
-                countValue={`${statisticData[index + STATISTIC_CARDS_CHUNK_NEXT]
-                  }`}
+                countValue={`${
+                  statisticData[index + STATISTIC_CARDS_CHUNK_NEXT]
+                }`}
                 cardStyle={cardStyle}
-                onChangeModalData={() => handleOpenStatusStations(index)}
+                onChangeModalData={handleOpenStatusStations.bind(null, index)}
               />
             ))}
           </div>
@@ -1096,8 +1089,6 @@ function UserDashboard() {
                     )}`}
                     title={t("dashboardPageData.statisticsTitle2")}
                     handleonIsOpenStationModal={handleViewMoreStationData}
-                    widthSize={chartSize.width}
-                    heightSize={chartSize.height}
                   />
                 )}
               </div>
@@ -1110,8 +1101,6 @@ function UserDashboard() {
                     centerText={`${totalData?.totalVolumeToday || 0}\nm³`}
                     title={t("dashboardPageData.statisticsTitle1")}
                     handleonIsOpenStationModal={handleViewMoreStationData}
-                    widthSize={chartSize.width}
-                    heightSize={chartSize.height}
                   />
                 )}
               </div>
@@ -1146,20 +1135,16 @@ function UserDashboard() {
 
               <div className='filter_select_box'>
                 <Button
-                  type={selectAggregateLineChart ? 'primary' : "default"}
+                  type={selectAggregateLineChart ? "primary" : "default"}
                   size='large'
-                  onClick={() =>
-                    setSelectAggregateLineChart(true)
-                  }>
+                  onClick={() => setSelectAggregateLineChart(true)}>
                   {t("dashboardPageData.buttonAggregate")}
                 </Button>
 
                 <Button
-                  type={!selectAggregateLineChart ? 'primary' : "default"}
+                  type={!selectAggregateLineChart ? "primary" : "default"}
                   size='large'
-                  onClick={() =>
-                    setSelectAggregateLineChart(false)
-                  }>
+                  onClick={() => setSelectAggregateLineChart(false)}>
                   {t("dashboardPageData.buttonElectr")}
                 </Button>
 
