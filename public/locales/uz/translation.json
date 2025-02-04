@@ -14,7 +14,14 @@
     "codeSendButton": "Tasdiqlash",
     "resetPassword": "Parolni unutdingiz",
     "notFoundTitle": "Mavjud bo'lmagan sahifaga kelib qoldingiz",
-    "notFoundLink": "Bosh sahifaga qaytish"
+    "notFoundLink": "Bosh sahifaga qaytish",
+    "resetPasswordHear": "Raqamni tasdiqlash",
+    "resetPasswordHear2": "Yangi parol",
+    "resetPasswordRoles": "Parolni unitgan bo'lsangiz ro'yxatdan o'tgan raqamingizni va foydalanuvchi nomini kiriting.",
+    "resetPasswordRoles2": "Yuborilgan sms kodni kiriting 1 daqiqada habar kelmasa qaytadan sms kodni olishingiz mumkin.",
+    "resetPasswordRoles3": "Yangi parol kiritishingiz mumkin va yodda turing ushbu parol bilan qaytadan tizimga kirasiz.",
+    "buttonResendCode": "Qayta yuborish",
+    "contextSuccess": "Tabriklaymiz parolni muoffaqiyatli o'zgartirdingiz. Bosh saxifadan qayta tizimga kirishingiz mumkin."
   },
   "layoutData": {
     "navLink1": "Bosh sahifa",

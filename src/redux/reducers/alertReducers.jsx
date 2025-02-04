@@ -1,7 +1,8 @@
 import { GLOBALTYPES } from '../actions/globalTypes'
 
 const initialState = {
-    loading: false
+    loading: false,
+    codeData: {}
 }
 
 const alertReducer = (state = initialState, action) => {
@@ -12,6 +13,11 @@ const alertReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: action.payload
+            };
+        case GLOBALTYPES.STATUS:
+            return {
+                ...state,
+                codeData: action.payload
             };
         default:
             return state;

@@ -4,40 +4,78 @@ import React, { memo, useEffect, useState } from "react";
 import { Button, Form, Input, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { LockOutlined } from "@ant-design/icons";
 
 import "./index.css";
-import { PhoneOutlined, UserOutlined } from "@ant-design/icons";
-import { sendCodePhoneNumber } from "../../redux/actions/authActions";
+import { createNewPassword } from "../../redux/actions/authActions";
 import { GLOBALTYPES } from "../../redux/actions/globalTypes";
 
 const { Text, Title } = Typography;
 
-function SendCodePages() {
-  const { i18n, t } = useTranslation();
+function UpdatePassword() {
+  const { t } = useTranslation();
   const { colors } = useSelector((state) => state.theme);
   const { codeData } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    if (codeData?.statusCode === "Xz1@k9Lm#Pq") {
-      navigate("/confire/code");
+    if (codeData?.statusCode === "Qw$8Xp&Jd5Yr") {
       setLoading(false);
+      setIsOpenAlert(true);
       dispatch({
         type: GLOBALTYPES.STATUS,
-        payload: ""
-      })
+        payload: {
+          statusCode: "",
+        },
+      });
     } else {
       setLoading(false);
     }
   }, [codeData]);
 
   const onFinish = (values) => {
-    dispatch(sendCodePhoneNumber(values, i18n.language));
+    dispatch(createNewPassword(values));
     setLoading(true);
   };
+
+  if (isOpenAlert) {
+    return (
+      <div className='login_page_section'>
+        <div
+          style={{
+            background: colors.layoutBackground,
+            boxShadow: `0px 0px 10px 2px ${colors.boxShadow}`,
+          }}
+          className='custom_alert'>
+          <h4
+            style={{
+              color: colors.text,
+            }}
+            className='custom_alert_title'>
+            Parolingiz muoffaqiyatli o'zgardi
+          </h4>
+
+          <Text
+            style={{
+              color: colors.textLight,
+            }}
+            className='login_page_description'>
+            Yangi parol yordamida tizimga kirishingiz mumkin.
+          </Text>
+
+          <Button
+            onClick={() => {
+              window.location.href = "/";
+            }}
+            type='primary'>
+            Tushunarli
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <section className='login_page_section'>
@@ -71,60 +109,28 @@ function SendCodePages() {
           layout='vertical'
           requiredMark='optional'>
           <Form.Item
-            name='username'
+            name='newPassword'
             rules={[
               {
                 required: true,
-                message: t("loginData.usernameDetectMessage"),
+                message: t("loginData.passwordDetectMessage"),
               },
             ]}>
-            <Input
+            <Input.Password
               size='large'
               prefix={
-                <UserOutlined
+                <LockOutlined
                   style={{
                     marginRight: ".5rem",
                   }}
                 />
               }
-              placeholder={t("loginData.userPlaceholder")}
+              type='password'
+              placeholder={t("loginData.passPlaceholder")}
             />
           </Form.Item>
 
-          <Form.Item
-            name='phone'
-            rules={[
-              {
-                required: true,
-                message: t("loginData.phoneDetectMessage"),
-              },
-            ]}>
-            <Input
-              size='large'
-              prefix={
-                <PhoneOutlined
-                  style={{
-                    marginRight: ".5rem",
-                  }}
-                />
-              }
-              placeholder={t("loginData.phonePlaceholder")}
-            />
-          </Form.Item>
-
-          <Form.Item className='login_page_button_carton_two'>
-            <Button
-              onClick={() => navigate("/")}
-              size='large'
-              style={{
-                color: colors.textWhite,
-              }}
-              className='login_page_button'
-              danger
-              type='primary'>
-              {t("dataPagesInformation.allStationsDataModalCancelButton")}
-            </Button>
-
+          <Form.Item className='login_page_button_carton'>
             <Button
               size='large'
               loading={loading}
@@ -145,4 +151,4 @@ function SendCodePages() {
   );
 }
 
-export default memo(SendCodePages);
+export default memo(UpdatePassword);

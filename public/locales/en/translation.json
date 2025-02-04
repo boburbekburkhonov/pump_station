@@ -14,7 +14,14 @@
     "codeSendButton": "Confirmation",
     "resetPassword": "Forgot password",
     "notFoundTitle": "You have reached a page that does not exist.",
-    "notFoundLink": "Return to homepage"
+    "notFoundLink": "Return to homepage",
+    "resetPasswordHear": "Confirm Number",
+    "resetPasswordHear2": "New Password",
+    "resetPasswordRoles": "If you forgot your password, enter your registered phone number and username.",
+    "resetPasswordRoles2": "Enter the SMS code sent to you. If you don’t receive it within 1 minute, you can request a new code.",
+    "resetPasswordRoles3": "You can enter a new password. Remember, you will use this password to log in again.",
+    "buttonResendCode": "Resend Code",
+    "contextSuccess": "Congratulations, you have successfully changed your password! You can now log in from the homepage."
   },
   "layoutData": {
     "navLink1": "Dashboard",

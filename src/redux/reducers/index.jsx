@@ -13,10 +13,12 @@ import line from './lineStatisticsReducer'
 import notifications from "./notificationReducer";
 import pumps from './dashboardDataReducer'
 import reports from './reports'
+import auth from "./authReducer";
 
 export default combineReducers({
   theme,
   alert,
+  auth,
   stations,
   region,
   district,
