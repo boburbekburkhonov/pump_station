@@ -27,8 +27,8 @@ function SendCodePages() {
       setLoading(false);
       dispatch({
         type: GLOBALTYPES.STATUS,
-        payload: ""
-      })
+        payload: "",
+      });
     } else {
       setLoading(false);
     }
@@ -60,7 +60,7 @@ function SendCodePages() {
               color: colors.textLight,
             }}
             className='login_page_description'>
-            {t("loginData.description")}
+            {t("loginData.resetPasswordRoles")}
           </Text>
         </div>
 

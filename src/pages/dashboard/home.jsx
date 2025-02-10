@@ -11,13 +11,12 @@ import {
 } from "@ant-design/icons";
 import { Card, Calendar, theme } from "antd";
 import { useSelector } from "react-redux";
-// import DemoMemo from "../../components/pieChart";
 
 function Home() {
   const { t } = useTranslation();
   const { colors } = useSelector((state) => state.theme);
   const { token } = theme.useToken();
-  
+
   const iconData = [
     <CarryOutOutlined
       style={{
@@ -83,19 +82,6 @@ function Home() {
             )
           )}
         </div>
-
-        {/* <div className='dashboard_chart_container' style={{
-          background: colors.layoutBackground,
-          color: colors.text
-        }}>
-          <div className='first_chart_data'>
-            <DemoMemo color={colors.buttonColor} />
-          </div>
-
-          <div className='second_chart_data'>
-            
-          </div>
-        </div> */}
       </div>
 
       <div
@@ -107,9 +93,7 @@ function Home() {
           <Calendar fullscreen={false} onPanelChange={onPanelChange} />
         </div>
 
-        <div className='right_chart_data'>
-          
-        </div>
+        <div className='right_chart_data'></div>
       </div>
     </section>
   );

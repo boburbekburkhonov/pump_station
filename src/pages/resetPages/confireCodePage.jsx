@@ -66,8 +66,8 @@ function ConfireCodePage() {
     );
 
     setTimeout(() => {
-        setDissableButton(false)
-    }, 1000*60)
+      setDissableButton(false)
+    }, 1000 * 60)
   };
 
   return (
@@ -84,14 +84,15 @@ function ConfireCodePage() {
               color: colors.text,
             }}
             className='login_page_title'>
-            {t("loginData.header2")}
+            {t("loginData.resetPasswordHear")}
           </Title>
+
           <Text
             style={{
               color: colors.textLight,
             }}
             className='login_page_description'>
-            {t("loginData.description")}
+            {t("loginData.resetPasswordRoles2")}
           </Text>
         </div>
 
@@ -130,8 +131,8 @@ function ConfireCodePage() {
               danger
               type='primary'
               disabled={dissableButton}
-              >
-              {t("dataPagesInformation.allStationsDataModalCancelButton")}
+            >
+              {t("loginData.buttonResendCode")}
             </Button>
 
             <Button

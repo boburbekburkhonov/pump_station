@@ -91,14 +91,14 @@ function UpdatePassword() {
               color: colors.text,
             }}
             className='login_page_title'>
-            {t("loginData.header2")}
+            {t("loginData.resetPasswordHear2")}
           </Title>
           <Text
             style={{
               color: colors.textLight,
             }}
             className='login_page_description'>
-            {t("loginData.description")}
+            {t("loginData.resetPasswordRoles3")}
           </Text>
         </div>
 

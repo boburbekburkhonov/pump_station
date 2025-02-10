@@ -21,7 +21,7 @@ import {
   getPumpYesterdayDataByStationId,
 } from "../../redux/actions/reports";
 import dayjs from "dayjs";
-import { Button, DatePicker, Empty, Modal, Pagination, Select, Spin, Table } from "antd";
+import { DatePicker, Modal, Pagination, Select, Table } from "antd";
 import "./index.css";
 import { BeatLoader } from "react-spinners";
 import xlsImage from "../../assets/xls.d451c295.png";
@@ -51,7 +51,7 @@ import weekday from "dayjs/plugin/weekday";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import weekYear from "dayjs/plugin/weekYear";
 import moment from "moment";
-import { iconData } from "../../data";
+import { getIcon } from "../../data";
 import { q } from "framer-motion/client";
 import { AppstoreOutlined, CheckCircleOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import Loading from "../../components/loading";

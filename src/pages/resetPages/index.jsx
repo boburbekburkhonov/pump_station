@@ -12,7 +12,7 @@ const UpdatePassword = lazy(() => import("./updatePassword"));
 const AuthRootPages = memo(() => {
 
   const isSendCode = localStorage.getItem("user_name_code")
-  const isHaveToken = true ||  localStorage.getItem("access_token")
+  const isHaveToken = localStorage.getItem("access_token")
 
   return (
     <Routes>
