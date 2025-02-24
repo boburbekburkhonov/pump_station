@@ -1,6 +1,5 @@
-h1, h2 {
+.settings_right_information_container h1, h2 {
   font-size: 20px;
-  font-family: "Poppins", serif;
 }
 .settings_right_information_download_links {
   margin-top: 20px;

@@ -73,7 +73,7 @@ const SettingsPrivacy = () => {
         </h2>
         <div
           className="settings_right_privacy_contact"
-          style={{ borderLeft: `5px solid ${colors.loginHeadingColor}`, background: colors.layoutBackground }}
+          style={{ borderLeft: `5px solid ${colors.buttonColor}`, background: colors.layoutBackground }}
 
         >
           <p>{t("settingNavbar.privacy.item29")}</p>

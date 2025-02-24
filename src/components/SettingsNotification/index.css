@@ -10,7 +10,10 @@
   margin-bottom: 20px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
-h3 {
+.settings_right_notification_container > h3 {
+  font-size: 20px;
+}
+.settings_right_notification_info-card > h3 {
   font-size: 20px;
   margin-bottom: 10px;
 }

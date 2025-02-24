@@ -9,17 +9,6 @@ import imageInformationSite from "../../assets/information-site.webp";
 import imageLogOut from "../../assets/logout.svg";
 import imageDeleteUser from "../../assets/delete-user.png";
 import { Route, Routes, useNavigate } from "react-router-dom";
-// import SettingsProfile from "../../components/SettingsProfile";
-// import SettingsNotification from "../../components/SettingsNotification";
-// import SettingsPassword from "../../components/SettingsPassword";
-// import SettingsLanguage from "../../components/SettingsLanguage";
-// import SettingsTheme from "../../components/SettingsTheme";
-// import SettingsPrivacy from "../../components/SettingsPrivacy";
-// import SettingsInformations from "../../components/SettingsInformation";
-// import { useTranslation } from "react-i18next";
-// import SettingsDeleteUser from "../../components/SettingsDeleteUser";
-// import SettingsLogout from "../../components/SettingsLogout";
-import "./index.css";
 import { useTranslation } from "react-i18next";
 import SettingsProfile from "../../components/SettingsProfile";
 import { useSelector } from "react-redux";
@@ -29,6 +18,7 @@ import SettingsLanguage from "../../components/SettingsLanguage";
 import SettingsTheme from "../../components/SettingsTheme";
 import SettingsPrivacy from "../../components/SettingsPrivacy";
 import SettingsInformations from "../../components/SettingsInformation";
+import "./index.css";
 
 const index = () => {
   const { i18n, t } = useTranslation();

@@ -9,7 +9,6 @@
   margin-bottom: 20px;
 }
 
-/* Card container styling */
 .settings_right_language_cards_container {
   display: flex;
   justify-content: space-between;
@@ -17,7 +16,6 @@
   margin-top: 40px;
 }
 
-/* Individual card styling */
 .card {
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -28,25 +26,21 @@
   transition: transform 0.3s ease;
 }
 
-/* Hover effect for cards */
 .card:hover {
   transform: translateY(-10px);
 }
 
-/* Card title styling */
 .card h3 {
   font-size: 20px;
   color: #333;
   margin-bottom: 15px;
 }
 
-/* Card text styling */
 .card p, .card ul {
   font-size: 16px;
   color: #666;
 }
 
-/* Card list styling */
 .card ul {
   padding: 0 20px;
 }
@@ -55,7 +49,6 @@
   margin-bottom: 8px;
 }
 
-/* Fade-in animation */
 @keyframes fadeIn {
   0% {
       opacity: 0;

@@ -1,4 +1,3 @@
-
 .settings_container {
   display: flex;
   width: 100%;
@@ -27,16 +26,16 @@
   margin-right: 10px;
 }
 
-nav ul {
+.settings_sidebar nav ul {
   list-style: none;
   padding: 0;
 }
 
-nav ul li {
+.settings_sidebar nav ul li {
   padding: 10px 0;
 }
 
-nav ul li a {
+.settings_sidebar nav ul li a {
   text-decoration: none;
   color: #333;
   display: flex;
@@ -71,17 +70,17 @@ nav ul li a {
   margin-right: 20px;
 }
 
-form {
+.settings_sidebar form {
   flex: 1;
 }
 
-label, input {
+.settings_sidebar label, input {
   display: block;
   width: 100%;
   margin-bottom: 10px;
 }
 
-input {
+.settings_sidebar input {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;

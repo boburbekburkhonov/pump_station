@@ -12,7 +12,7 @@ const SettingsInformations = () => {
       background: colors.layoutBackground
     }}>
       <div className="settings_right_information_container">
-        <h1 style={{ color: colors.loginHeadingColor }}>
+        <h1 style={{ color: colors.loginHeadingColor, fontWeight: 'bolder' }}>
         {t("settingNavbar.about.item2")}
         </h1>
         <p>
