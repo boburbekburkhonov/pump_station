@@ -35,6 +35,7 @@ import {
   BellFilled,
   UserOutlined,
   DeleteFilled,
+  SettingOutlined,
 } from "@ant-design/icons";
 
 import { toggleTheme } from "../../redux/actions/themeType";
@@ -250,6 +251,15 @@ const LayoutComponent = memo(({ childrenComponent }) => {
         },
       ],
     },
+    {
+      key: "settings",
+      icon: <SettingOutlined style={{ fontSize: "16px" }} />,
+      label: (
+        <Link className="layout_links" to="/settings">
+          {t("layoutData.navLink18")}
+        </Link>
+      ),
+    },
   ];
 
   const menuItemsUsers = [
@@ -359,6 +369,15 @@ const LayoutComponent = memo(({ childrenComponent }) => {
         </Link>
       ),
     },
+    {
+      key: "settings",
+      icon: <SettingOutlined style={{ fontSize: "16px" }} />,
+      label: (
+        <Link className="layout_links" to="/settings">
+          {t("layoutData.navLink18")}
+        </Link>
+      ),
+    },
   ];
 
   const changeLanguage = (lng) => i18n.changeLanguage(lng);
@@ -438,7 +457,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
             background: colors.background
           }}>
             <img src={theme === "light" ? Logo : Logo2} alt='logo' className="logo_image_styles" />
- 
+
             {!collapsed && <h1 className='logo_name' style={{
               color: colors.logoColor
             }} >Smart Pump Station</h1>}
@@ -540,49 +559,6 @@ const LayoutComponent = memo(({ childrenComponent }) => {
                   overflowCount={10}>
                   <Button type='primary' icon={<BellFilled />} />
                 </Badge>
-              </div>
-
-              <div className='switch-container'>
-                <input
-                  onChange={handleToggleTheme}
-                  checked={theme === "light"}
-                  type='checkbox'
-                  id='switch'
-                />
-                <label htmlFor='switch'>
-                  <MoonFilled className='fa-moon' />
-                  <SunFilled className='fa-sun' />
-                  <span className='ball'></span>
-                </label>
-              </div>
-
-              <div className='language_change_container'>
-                <Select
-                  defaultValue='uz'
-                  value={i18n.language}
-                  dropdownStyle={{
-                    background: colors.layoutBackground,
-                    color: colors.buttonText,
-                  }}
-                  style={{
-                    width: 120,
-                  }}
-                  onChange={changeLanguage}
-                  options={[
-                    {
-                      value: "uz",
-                      label: t("layoutData.oz"),
-                    },
-                    {
-                      value: "ru",
-                      label: t("layoutData.rus"),
-                    },
-                    {
-                      value: "en",
-                      label: t("layoutData.eng"),
-                    },
-                  ]}
-                />
               </div>
             </div>
           </Header>

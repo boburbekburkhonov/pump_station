@@ -1,0 +1,68 @@
+.settings_right_language_container_select {
+  max-width: 500px;
+  width: 100%;
+}
+
+.language-switcher h2 {
+  font-size: 22px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Card container styling */
+.settings_right_language_cards_container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 40px;
+}
+
+/* Individual card styling */
+.card {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 30%;
+  text-align: left;
+  transition: transform 0.3s ease;
+}
+
+/* Hover effect for cards */
+.card:hover {
+  transform: translateY(-10px);
+}
+
+/* Card title styling */
+.card h3 {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* Card text styling */
+.card p, .card ul {
+  font-size: 16px;
+  color: #666;
+}
+
+/* Card list styling */
+.card ul {
+  padding: 0 20px;
+}
+
+.card ul li {
+  margin-bottom: 8px;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  0% {
+      opacity: 0;
+      transform: translateY(-30px);
+  }
+  100% {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}

@@ -1,0 +1,13 @@
+h1, h2 {
+  font-size: 20px;
+  font-family: "Poppins", serif;
+}
+.settings_right_information_download_links {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f1f1f1;
+}
+.download-settings_right_information_download_links a {
+  display: inline-block;
+  margin: 10px;
+}

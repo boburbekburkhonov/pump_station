@@ -25,7 +25,8 @@ const pages = {
   Notifications: lazy(() => import("./notifications")),
   NotFound: lazy(() => import("./notFound")),
   AllDataPage: lazy(() => import("./allDataPage")),
-  MoreAllDataPage: lazy(() => import("./aggregateAndElectricalMoreDataPage"))
+  MoreAllDataPage: lazy(() => import("./aggregateAndElectricalMoreDataPage")),
+  Settings: lazy(() => import("./settingsPage"))
 };
 
 const isAdmin = () =>
@@ -55,6 +56,10 @@ function Root() {
       <Route
         path="/electrical/infos/:id"
         element={<pages.ElectricalMoreData />}
+      />
+      <Route
+        path="/settings/*"
+        element={<pages.Settings />}
       />
 
       {isAdmin() && (

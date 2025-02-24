@@ -1,0 +1,48 @@
+.settings_right_theme_header {
+  margin-bottom: 40px;
+}
+.settings_right_theme_header h1 {
+  font-family: "Poppins", serif;
+  font-size: 20px;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.settings_right_theme_header p {
+  font-size: 16px;
+  color: var(--secondary-color);
+}
+
+.settings_right_theme_content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 90%;
+  max-width: 1200px;
+}
+
+.settings_right_theme_card, .settings_right_theme_info_card, .settings_right_theme_extra_card, .footer {
+  background-color: var(--card-background);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 300px;
+  transition: all 0.3s ease;
+}
+
+.settings_right_theme_card h2, .settings_right_theme_info_card h3, .settings_right_theme_extra_card h3 {
+  font-family: "Poppins", serif;
+  font-size: 20px;
+  color: var(--text-color);
+  margin-bottom: 15px;
+}
+
+.settings_right_theme_card p, .settings_right_theme_info_card ul, .settings_right_theme_extra_card p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: var(--text-color);
+}

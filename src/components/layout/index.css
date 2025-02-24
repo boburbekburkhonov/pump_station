@@ -156,3 +156,7 @@
 .switch-container input:checked + label .fa-moon {
   transform: translateX(0), rotate(0);
 }
+
+.ant-menu-title-content > p {
+  margin: 0 !important;
+}

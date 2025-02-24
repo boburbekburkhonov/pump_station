@@ -4,11 +4,43 @@ import { GLOBALTYPES } from "./globalTypes";
 import { getDataApi } from "../../utils";
 
 export const DASHBOARD_DATAS = {
+  GET_USER_INFORMATION_BY_ID: "GET_USER_INFORMATION_BY_ID",
+  UPDATED_USER_INFORMATION_BY_ID: "UPDATE_USER_INFORMATION_BY_ID",
   GET_COUNT_STATIONS_STATISTICS: "GET_COUNT_STATIONS_STATISTICS",
   GET_STATISTIC_DATA_LOADING: "GET_STATISTIC_DATA_LOADING",
   GET_COUNT_STATIONS_STATISTICS_FOR_ADMIN:
     "GET_COUNT_STATIONS_STATISTICS_FOR_ADMIN",
   FIND_ALL_STATIONS_ID: "FIND_ALL_STATIONS_ID",
+};
+
+export const getUserInformationById = (userId, token) => async (dispatch) => {
+  try {
+    dispatch({
+      type: GLOBALTYPES.LOADING,
+      payload: true,
+    });
+
+    const res = await getDataApi(`users/getById?id=${userId}`, token);
+
+    if (res.data.statusCode == 200) {
+      dispatch({
+        type: DASHBOARD_DATAS.GET_USER_INFORMATION_BY_ID,
+        payload: res.data.data,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: {
+        error: err.response.data.message,
+      },
+    });
+  } finally {
+    dispatch({
+      type: GLOBALTYPES.LOADING,
+      payload: false,
+    });
+  }
 };
 
 export const getStatisticsDashboard =
@@ -97,7 +129,16 @@ export const getStatisticsDashboardForAdmin =
         });
       }
     }
-  };
+};
+
+export const isUserUpdated = () => async (dispatch) => {
+  dispatch({
+    type: DASHBOARD_DATAS.UPDATED_USER_INFORMATION_BY_ID,
+    payload: {
+      statusCode: 200,
+    },
+  });
+};
 
 export const getAllStationsId = (lang, token) => async (dispatch) => {
   try {
