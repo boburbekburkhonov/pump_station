@@ -18,8 +18,11 @@
 .all_stations_data_main_section {
   width: 100%;
   padding: 0.5rem;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  /* display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); */
   gap: 0.5rem;
   border-radius: 0.5rem;
 }

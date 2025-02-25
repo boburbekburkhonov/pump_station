@@ -132,36 +132,31 @@ function AllDatapPage() {
             const allAgrigateData = item.aggregate?.reduce(
               (acc, itemAg) => {
                 const totalsVolume = itemAg?.pumpLastData?.totalsVolume;
-                const todayTotalFlow = itemAg?.pumpLastData?.todayTotalFlow;
+                const velocity = itemAg?.pumpLastData?.velocity;
 
                 return {
                   totalsVolume:
-                    acc.totalsVolume + (totalsVolume ? +totalsVolume : 0),
-                  todayTotalFlow:
-                    acc.todayTotalFlow + (todayTotalFlow ? +todayTotalFlow : 0)/item?.aggregate?.length,
+                    acc.totalsVolume + (totalsVolume ? +totalsVolume : 0)/item?.aggregate?.length,
+                  velocity:
+                    acc.velocity + (velocity ? +velocity : 0)/item?.aggregate?.length,
                 };
               },
-              { totalsVolume: 0, todayTotalFlow: 0 }
-            ) || { totalsVolume: 0, todayTotalFlow: 0 };
+              { totalsVolume: 0, velocity: 0 }
+            ) || { totalsVolume: 0, velocity: 0 };
 
             const allElectrData = item.electricalEnergyLastData?.reduce(
               (acc, itemAg) => {
                 const energyActiveTotal =
                   itemAg?.electricalEnergyLastData?.energyActiveTotal;
-                const energyReactiveTotal =
-                  itemAg?.electricalEnergyLastData?.energyReactiveTotal;
 
                 return {
                   energyActiveTotal:
                     acc.energyActiveTotal +
-                    (energyActiveTotal ? +energyActiveTotal : 0),
-                  energyReactiveTotal:
-                    acc.energyReactiveTotal +
-                    (energyReactiveTotal ? +energyReactiveTotal : 0),
+                    (energyActiveTotal ? +energyActiveTotal : 0) / item?.electricalEnergyLastData?.length,
                 };
               },
-              { energyActiveTotal: 0, energyReactiveTotal: 0 }
-            ) || { energyActiveTotal: 0, energyReactiveTotal: 0 };
+              { energyActiveTotal: 0}
+            ) || { energyActiveTotal: 0};
 
             return (
               <Card
@@ -170,6 +165,7 @@ function AllDatapPage() {
                 className='all_stations_data_paga_card_element'
                 style={{
                   background: colors.blurBgColor2,
+                  width: '19vw'
                 }}>
                 <div className='all_stations_data_page_card_header'>
                   <h1>{item.name}</h1>
@@ -210,11 +206,11 @@ function AllDatapPage() {
                     style={{
                       backgroundColor: colors.backgroundColor,
                     }}>
-                    <div className='all_stations_data_page_aggrigate_card_item_header_wrapper'>
+                    {/* <div className='all_stations_data_page_aggrigate_card_item_header_wrapper'>
                       <h3>
                         {t("dataPagesInformation.allStationsAgrigateTitle")}
                       </h3>
-                    </div>
+                    </div> */}
 
                     <div className='all_stations_data_page_aggrigate_item'>
                       <div className='all_stations_data_item'>
@@ -233,7 +229,7 @@ function AllDatapPage() {
                           </h4>
                         </div>
                         <h4 className='all_stations_data_item_import_data'>
-                          {allAgrigateData.totalsVolume} m³
+                          {allAgrigateData.totalsVolume?.toFixed(2)} m³
                         </h4>
                       </div>
 
@@ -253,7 +249,7 @@ function AllDatapPage() {
                           </h4>
                         </div>
                         <h4 className='all_stations_data_item_import_data'>
-                          {allAgrigateData.todayTotalFlow?.toFixed(2)  }{" "}
+                          {allAgrigateData.velocity?.toFixed(2)  }{" "}
                           {t(
                             "dashboardPageData.lastStationsData.aggrigateSpeedConst"
                           )}
@@ -267,11 +263,11 @@ function AllDatapPage() {
                     style={{
                       backgroundColor: colors.backgroundColor,
                     }}>
-                    <div className='all_stations_data_page_aggrigate_card_item_header_wrapper'>
+                    {/* <div className='all_stations_data_page_aggrigate_card_item_header_wrapper'>
                       <h3>
                         {t("dataPagesInformation.allStationsElectrTitle")}
                       </h3>
-                    </div>
+                    </div> */}
 
                     <div className='all_stations_data_page_aggrigate_item'>
                       <div className='all_stations_data_item'>
@@ -291,26 +287,6 @@ function AllDatapPage() {
                         </div>
                         <h4 className='all_stations_data_item_import_data'>
                           {allElectrData.energyActiveTotal} kw
-                        </h4>
-                      </div>
-
-                      <div className='all_stations_data_item'>
-                        <div className='normal_flex_card'>
-                          <PieChartFilled
-                            style={{
-                              color: colors.textColor,
-                            }}
-                            className='dashboard_last_data_icons'
-                          />
-                          <h4>
-                            {t(
-                              "dataPagesInformation.allStationsElektrReactiveEnergy"
-                            )}
-                            :{" "}
-                          </h4>
-                        </div>
-                        <h4 className='all_stations_data_item_import_data'>
-                          {allElectrData.energyReactiveTotal} kw
                         </h4>
                       </div>
                     </div>
