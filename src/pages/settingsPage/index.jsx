@@ -4,11 +4,11 @@ import imageNotification from "../../assets/notification.svg";
 import imageUnlock from "../../assets/unlock.svg";
 import imagelanguageChange from "../../assets/language-change.webp";
 import imageModeChange from "../../assets/mode-change.png";
-import imagePrivatePolicy from "../../assets/private-policy.jpg";
+import imagePrivatePolicy from "../../assets/private-policy.webp";
 import imageInformationSite from "../../assets/information-site.webp";
 import imageLogOut from "../../assets/logout.svg";
 import imageDeleteUser from "../../assets/delete-user.png";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import SettingsProfile from "../../components/SettingsProfile";
 import { useSelector } from "react-redux";
@@ -24,10 +24,11 @@ import SettingsLogout from "../../components/SettingsLogout";
 
 const index = () => {
   const { i18n, t } = useTranslation();
-  const [activeItem, setActiveItem] = useState("profile");
   const navigate = useNavigate();
   const { colors, theme } = useSelector((state) => state.theme);
   const mode = window.localStorage.getItem("theme");
+  const location = useLocation()
+  const activeItem = location.pathname.split('/')[2]
 
   return (
     <div className="settings_container">
@@ -41,16 +42,15 @@ const index = () => {
           <ul className="settings_sidebar_list">
             <li
               className={
-                activeItem == "profile"
+                activeItem == undefined
                   ? "settings_sidebar_item d-flex align-items-center p-2 active_sidebar text-dark"
                   : "settings_sidebar_item d-flex align-items-center p-2"
               }
               onClick={() => {
-                setActiveItem("profile");
                 navigate("/settings");
               }}
             >
-              {activeItem == "profile" ? (
+              {activeItem == undefined ? (
                 <img
                   src={imageProfile}
                   alt="imageProfile"
@@ -71,7 +71,14 @@ const index = () => {
                   }
                 />
               )}
-              <p className="m-0 settings_sidebar_item_desc ms-1 p-2">
+              <p
+                style={
+                  activeItem == undefined
+                    ? { color: "#000" }
+                    : { color: colors.text }
+                }
+                className="m-0 settings_sidebar_item_desc ms-1 p-2"
+              >
                 {t("settingNavbar.profile.item1")}
               </p>
             </li>
@@ -82,7 +89,6 @@ const index = () => {
                   : "settings_sidebar_item d-flex align-items-center p-2"
               }
               onClick={() => {
-                setActiveItem("notification");
                 navigate("/settings/notification");
               }}
             >
@@ -108,22 +114,28 @@ const index = () => {
                 />
               )}
 
-              <p className="m-0 settings_sidebar_item_desc ms-1 p-2">
+              <p
+                style={
+                  activeItem == "notification"
+                    ? { color: "#000" }
+                    : { color: colors.text }
+                }
+                className="m-0 settings_sidebar_item_desc ms-1 p-2"
+              >
                 {t("settingNavbar.notification.item1")}
               </p>
             </li>
             <li
               className={
-                activeItem == "change-password"
+                activeItem == "password"
                   ? "settings_sidebar_item d-flex align-items-center p-2 active_sidebar text-dark"
                   : "settings_sidebar_item d-flex align-items-center p-2"
               }
               onClick={() => {
-                setActiveItem("change-password");
                 navigate("/settings/password");
               }}
             >
-              {activeItem == "change-password" ? (
+              {activeItem == "password" ? (
                 <img
                   src={imageUnlock}
                   alt="imageProfile"
@@ -145,30 +157,34 @@ const index = () => {
                 />
               )}
 
-              <p className="m-0 settings_sidebar_item_desc ms-1 p-2">
+              <p
+                style={
+                  activeItem == "password"
+                    ? { color: "#000" }
+                    : { color: colors.text }
+                }
+                className="m-0 settings_sidebar_item_desc ms-1 p-2"
+              >
                 {t("settingNavbar.password.item1")}
               </p>
             </li>
             <li
               className={
-                activeItem == "change-language"
+                activeItem == "language"
                   ? "settings_sidebar_item d-flex align-items-center p-2 active_sidebar text-dark"
                   : "settings_sidebar_item d-flex align-items-center p-2"
               }
               onClick={() => {
-                setActiveItem("change-language");
                 navigate("/settings/language");
               }}
             >
-              {activeItem == "change-language" ? (
+              {activeItem == "language" ? (
                 <img
                   src={imagelanguageChange}
                   alt="imageProfile"
                   width={20}
                   height={20}
-                  style={
-                  { filter: "invert(100%) brightness(0%)" }
-                  }
+                  style={{ filter: "invert(100%) brightness(0%)" }}
                 />
               ) : (
                 <img
@@ -184,22 +200,28 @@ const index = () => {
                 />
               )}
 
-              <p className="m-0 settings_sidebar_item_desc ms-1 p-2">
+              <p
+                style={
+                  activeItem == "language"
+                    ? { color: "#000" }
+                    : { color: colors.text }
+                }
+                className="m-0 settings_sidebar_item_desc ms-1 p-2"
+              >
                 {t("settingNavbar.language.item1")}
               </p>
             </li>
             <li
               className={
-                activeItem == "change-theme"
+                activeItem == "theme"
                   ? "settings_sidebar_item d-flex align-items-center p-2 active_sidebar text-dark"
                   : "settings_sidebar_item d-flex align-items-center p-2"
               }
               onClick={() => {
-                setActiveItem("change-theme");
                 navigate("/settings/theme");
               }}
             >
-              {activeItem == "change-theme" ? (
+              {activeItem == "theme" ? (
                 <img
                   src={imageModeChange}
                   alt="imageProfile"
@@ -221,7 +243,14 @@ const index = () => {
                 />
               )}
 
-              <p className="m-0 settings_sidebar_item_desc ms-1 p-2">
+              <p
+                style={
+                  activeItem == "theme"
+                    ? { color: "#000" }
+                    : { color: colors.text }
+                }
+                className="m-0 settings_sidebar_item_desc ms-1 p-2"
+              >
                 {t("settingNavbar.mode.item1")}
               </p>
             </li>
@@ -232,23 +261,39 @@ const index = () => {
                   : "settings_sidebar_item d-flex align-items-center p-2"
               }
               onClick={() => {
-                setActiveItem("privacy");
                 navigate("/settings/privacy");
               }}
             >
-              <img
-                src={imagePrivatePolicy}
-                alt="imageProfile"
-                width={20}
-                height={20}
-                style={
-                  activeItem != "privacy"
-                    ? { filter: "invert(100%) brightness(150%)" }
-                    : {}
-                }
-              />
+              {activeItem == "privacy" ? (
+                <img
+                  src={imagePrivatePolicy}
+                  alt="imageProfile"
+                  width={20}
+                  height={20}
+                  style={{ filter: "invert(100%) brightness(0%)" }}
+                />
+              ) : (
+                <img
+                  src={imagePrivatePolicy}
+                  alt="imageProfile"
+                  width={20}
+                  height={20}
+                  style={
+                    mode == "light"
+                      ? { filter: "invert(100%) brightness(0%)" }
+                      : { filter: "invert(100%) brightness(150%)" }
+                  }
+                />
+              )}
 
-              <p className="m-0 settings_sidebar_item_desc ms-1 p-2">
+              <p
+                style={
+                  activeItem == "privacy"
+                    ? { color: "#000" }
+                    : { color: colors.text }
+                }
+                className="m-0 settings_sidebar_item_desc ms-1 p-2"
+              >
                 {t("settingNavbar.privacy.item1")}
               </p>
             </li>
@@ -259,7 +304,6 @@ const index = () => {
                   : "settings_sidebar_item d-flex align-items-center p-2"
               }
               onClick={() => {
-                setActiveItem("information");
                 navigate("/settings/information");
               }}
             >
@@ -285,7 +329,14 @@ const index = () => {
                 />
               )}
 
-              <p className="m-0 settings_sidebar_item_desc ms-1 p-2">
+              <p
+                style={
+                  activeItem == "information"
+                    ? { color: "#000" }
+                    : { color: colors.text }
+                }
+                className="m-0 settings_sidebar_item_desc ms-1 p-2"
+              >
                 {t("settingNavbar.about.item1")}
               </p>
             </li>
@@ -297,7 +348,6 @@ const index = () => {
                   : "settings_sidebar_item d-flex align-items-center p-2"
               }
               onClick={() => {
-                setActiveItem("delete-user");
                 navigate("/settings/delete-user");
               }}
             >
@@ -307,9 +357,7 @@ const index = () => {
                   alt="imageProfile"
                   width={20}
                   height={20}
-                  style={
-                  { filter: "invert(100%) brightness(0%)" }
-                  }
+                  style={{ filter: "invert(100%) brightness(0%)" }}
                 />
               ) : (
                 <img
@@ -325,7 +373,14 @@ const index = () => {
                 />
               )}
 
-              <p className="m-0 settings_sidebar_item_desc ms-1 p-2">
+              <p
+                style={
+                  activeItem == "delete-user"
+                    ? { color: "#000" }
+                    : { color: colors.text }
+                }
+                className="m-0 settings_sidebar_item_desc ms-1 p-2"
+              >
                 {t("settingNavbar.deleteUser.item1")}
               </p>
             </li>
@@ -337,7 +392,6 @@ const index = () => {
                   : "settings_sidebar_item d-flex align-items-center p-2"
               }
               onClick={() => {
-                setActiveItem("logout");
                 navigate("/settings/logout");
               }}
             >
@@ -363,7 +417,14 @@ const index = () => {
                 />
               )}
 
-              <p className="m-0 settings_sidebar_item_desc ms-1 p-2">
+              <p
+                style={
+                  activeItem == "logout"
+                    ? { color: "#000" }
+                    : { color: colors.text }
+                }
+                className="m-0 settings_sidebar_item_desc ms-1 p-2"
+              >
                 {t("settingNavbar.logOut.item1")}
               </p>
             </li>
@@ -380,7 +441,10 @@ const index = () => {
         <Route path="/privacy" element={<SettingsPrivacy />} />
         <Route path="/information" element={<SettingsInformations />} />
         <Route path="/logout" element={<SettingsLogout />} />
-        <Route path="/delete-user" element={<SettingsDeleteUser setActiveItem={setActiveItem} />} />
+        <Route
+          path="/delete-user"
+          element={<SettingsDeleteUser  />}
+        />
       </Routes>
     </div>
   );

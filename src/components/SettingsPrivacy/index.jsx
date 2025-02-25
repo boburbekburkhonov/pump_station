@@ -36,7 +36,7 @@ const SettingsPrivacy = () => {
           <li>{t("settingNavbar.privacy.item10")}</li>
         </ul>
 
-        <h2 style={{ color: colors.loginHeadingColor }}>
+        <h2 className="heading_privacy_content" style={{ color: colors.loginHeadingColor }}>
           {t("settingNavbar.privacy.item11")}
         </h2>
         <p>{t("settingNavbar.privacy.item12")}</p>
@@ -47,7 +47,7 @@ const SettingsPrivacy = () => {
           <li>{t("settingNavbar.privacy.item16")}</li>
         </ul>
 
-        <h2 style={{ color: colors.loginHeadingColor }}>
+        <h2 className="heading_privacy_content" style={{ color: colors.loginHeadingColor }}>
           {t("settingNavbar.privacy.item17")}
         </h2>
         <p>{t("settingNavbar.privacy.item18")}</p>
@@ -68,7 +68,7 @@ const SettingsPrivacy = () => {
           <li>{t("settingNavbar.privacy.item27")}</li>
         </ul>
 
-        <h2 style={{ color: colors.loginHeadingColor }}>
+        <h2 className="heading_privacy_content" style={{ color: colors.loginHeadingColor }}>
           {t("settingNavbar.privacy.item28")}
         </h2>
         <div

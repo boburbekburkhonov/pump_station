@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import imageProfile from "../../assets/profile.svg";
 import imageAlertDelete from "../../assets/alert-delete.png";
 import { useSelector } from "react-redux";
@@ -7,8 +7,9 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import "./index.css";
 import { postDataApi } from "../../utils";
+import { Modal } from "antd";
 
-const SettingsDeleteUser = ({ setActiveItem }) => {
+const SettingsDeleteUser = () => {
   const { userInformationById } = useSelector((state) => state.dashboard);
   const { colors, theme } = useSelector((state) => state.theme);
   const { i18n, t } = useTranslation();
@@ -16,7 +17,7 @@ const SettingsDeleteUser = ({ setActiveItem }) => {
   const navigate = useNavigate();
   const userId = Cookies.get("userId");
   const accessToken = localStorage.getItem("access_token");
-
+  const [modalOpen, setModalOpen] = useState(false);
 
   const deleteUserFunc = async () => {
     try {
@@ -55,50 +56,40 @@ const SettingsDeleteUser = ({ setActiveItem }) => {
       }}
     >
       {/* MODAL */}
-      <div
-        className="modal fade"
-        id="staticBackdrop"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
+      <Modal
+        centered
+        open={modalOpen}
+        onOk={() => {
+          setModalOpen(false)
+          deleteUserFunc()
+        }}
+        onCancel={() => setModalOpen(false)}
+        okText={t("settingNavbar.deleteUser.item14")}
+        cancelText={t("settingNavbar.deleteUser.item13")}
+        okButtonProps={{ style: { backgroundColor: "#dc3545", borderColor: "#dc3545" } }}
       >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header w-100">
-              <img
-                className="m-auto"
-                width={90}
-                height={90}
-                src={imageAlertDelete}
-                alt="imageAlertDelete"
-              />
-            </div>
-            <div className="modal-body text-center">
-              <p className="m-0 fs-5" style={{
-              color: '#000',
-            }}>{t("settingNavbar.deleteUser.item12")}</p>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                {t("settingNavbar.deleteUser.item13")}
-              </button>
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => deleteUserFunc()}
-              >
-                {t("settingNavbar.deleteUser.item14")}
-              </button>
-            </div>
-          </div>
+        <div className="modal-header w-100" style={{ width: "100%" }}>
+          <img
+            style={{ display: "flex", margin: "auto", marginBottom: "20px" }}
+            width={90}
+            height={90}
+            src={imageAlertDelete}
+            alt="imageAlertDelete"
+          />
         </div>
-      </div>
+        <div className="modal-body text-center">
+          <p
+            className="m-0 fs-5"
+            style={{
+              color: colors.text,
+              textAlign: "center",
+              fontSize: "16px",
+            }}
+          >
+            {t("settingNavbar.deleteUser.item12")}
+          </p>
+        </div>
+      </Modal>
 
       <div
         className="settings_right_delete_user-page"
@@ -168,13 +159,14 @@ const SettingsDeleteUser = ({ setActiveItem }) => {
             <h3 style={{ color: colors.buttonColor }}>
               {t("settingNavbar.deleteUser.item8")}
             </h3>
-            <p style={{
-              color: colors.text,
-            }}>
+            <p
+              style={{
+                color: colors.text,
+              }}
+            >
               {t("settingNavbar.deleteUser.item9")}{" "}
               <span
                 onClick={() => {
-                  setActiveItem("logout");
                   navigate(`/settings/logout`);
                 }}
                 className="text-primary cursor_pointer"
@@ -189,8 +181,7 @@ const SettingsDeleteUser = ({ setActiveItem }) => {
             <button
               className="settings_right_delete_user-delete"
               type="button"
-              data-bs-toggle="modal"
-              data-bs-target="#staticBackdrop"
+              onClick={() => setModalOpen(true)}
             >
               {t("settingNavbar.deleteUser.item2")}
             </button>

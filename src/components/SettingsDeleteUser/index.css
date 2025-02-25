@@ -117,3 +117,14 @@
 .cursor_pointer {
   cursor: pointer;
 }
+
+.settings_right_delete_user-details > p {
+  margin: 0;
+}
+
+.settings_right_delete_user-info > p > span {
+  display: inline-block;
+  color: #405FF2;
+  font-weight: 500;
+  text-decoration: underline;
+}

@@ -64,3 +64,7 @@
 .settings_right_notification_input:checked + .settings_right_notification_slider:before {
   transform: translateX(20px);
 }
+
+.settings_right_notification_setting-item-header {
+  margin-bottom: 28px;
+}

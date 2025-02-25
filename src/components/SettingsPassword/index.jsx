@@ -117,7 +117,7 @@ const SettingsPassword = () => {
           </div>
           <button
             type="submit"
-            className="btn btn-success login-btn"
+            className="btn-primary-pump login-btn"
             style={{ background: colors.buttonColor }}
           >
             {t("settingNavbar.password.item6")}

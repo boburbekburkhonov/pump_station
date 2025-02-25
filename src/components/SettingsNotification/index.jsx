@@ -22,7 +22,7 @@ const SettingsNotification = () => {
           <h3>{t("settingNavbar.notification.item2")}</h3>
           <p>{t("settingNavbar.notification.item3")}</p>
         </div>
-        <h3 className="mb-3">{t("settingNavbar.notification.item4")}</h3>
+        <h3 className="settings_right_notification_setting-item-header">{t("settingNavbar.notification.item4")}</h3>
         <div className="settings_right_notification_setting-item">
           <span style={{ color: '#000000' }}>
             {t("settingNavbar.notification.item5")}

@@ -477,35 +477,6 @@ const LayoutComponent = memo(({ childrenComponent }) => {
                 : menuItemsUsers
             }
           />
-
-          <div
-            style={{
-              width: "100%",
-              padding: "0 5px",
-              display: "flex",
-              alignItems: "center",
-              position: "absolute",
-              bottom: "10px",
-            }}>
-            <Button
-              onClick={onChangeLogout}
-              icon={
-                <PoweroffOutlined
-                  className='menu-icon'
-                  style={{ fontSize: "16px", fontWeight: "600" }}
-                />
-              }
-              style={{
-                background: colors.buttonColor,
-                width: "100%",
-                height: 45,
-                fontWeight: "bold",
-                fontSize: "16px",
-              }}
-              type='primary'>
-              {!collapsed && t("layoutData.navLink6")}
-            </Button>
-          </div>
         </Sider>
 
         <Layout

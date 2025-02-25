@@ -45,3 +45,11 @@
   color: red;
   width: 100%;
 }
+
+.settings_right_password_form-group {
+  margin: 0;
+}
+
+.settings_right_password_form-group > label {
+  font-size: 16px;
+}

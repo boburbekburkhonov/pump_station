@@ -1,4 +1,8 @@
 .header-select-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin-left: 40px;
   margin-left: auto;
   margin-right: 30px;
 }

@@ -28,7 +28,6 @@ const Language = () => {
   return (
     <div className="language_change_container header-select-wrapper d-flex align-items-center justify-content-end ms-4">
       <Select
-      className="w-100"
         defaultValue="uz"
         value={i18n.language}
         dropdownStyle={{
@@ -36,7 +35,7 @@ const Language = () => {
           color: colors.buttonText,
         }}
         style={{
-          width: 120,
+          width: "100%",
         }}
         onChange={changeLanguage}
         options={[

@@ -3,6 +3,7 @@
 import React, { memo } from "react";
 import { Modal } from "antd";
 import { DashboardFilled, ExperimentOutlined } from "@ant-design/icons";
+import './index.css'
 
 const ViewMoreStationModal = ({
   openModalData,

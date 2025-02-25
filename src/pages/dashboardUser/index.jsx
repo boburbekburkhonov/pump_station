@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { Card, Select, Button, Modal } from "antd";
 import { formatDate } from "../../utils/inputElementHandler";
+import './index.css'
 
 import {
   EnvironmentOutlined,

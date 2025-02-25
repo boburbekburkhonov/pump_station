@@ -42,15 +42,13 @@ const SettingsProfile = () => {
 
     const formData = new FormData(e.target);
     const firstName = formData.get("firstName");
-    const lastName = formData.get("lastName");
     const username = formData.get("username");
     const email = formData.get("email");
     const phone = formData.get("phone");
 
     const data = {
       id: userInformationById.id,
-      firstName: firstName,
-      lastName: lastName,
+      name: firstName,
       username: username,
       phone: phone,
       email: email,
@@ -61,11 +59,10 @@ const SettingsProfile = () => {
     };
 
     try {
-      const res = await postDataApi(`users/update?lang=${lang}`, data);
+      const res = await postDataApi(`users/update`, data, accessToken);
 
       if (res.data.statusCode === 200) {
         toast.success(t("toast.successProfile"));
-        localStorage.setItem("firstName", data.firstName);
         dispatch(isUserUpdated());
         setIsActiveChangedBtn(!isActiveChangedBtn);
       }
@@ -97,16 +94,16 @@ const SettingsProfile = () => {
         draggable
         pauseOnHover
       />
-      <div className="d-flex justify-content-between align-items-end mb-5">
-        <div className="d-flex align-items-center">
+      <div className="settings_right_wrapper d-flex justify-content-between align-items-end mb-5">
+        <div className="settings_right_header d-flex align-items-center">
           <img className="profile-pic" src={imageProfile} alt="User Avatar" />
-          <h3 className="profile_pic_heading ms-4">
+          <h3 className="settings_right_profile_pic_heading ms-4">
             {userInformationById.name}
           </h3>
         </div>
 
         <button
-          className="btn btn-success"
+          className="btn-primary-pump"
           style={{ background: colors.buttonColor }}
           onClick={() => setIsActiveChangedBtn(true)}
         >
@@ -116,7 +113,7 @@ const SettingsProfile = () => {
       <div className="settings-content">
         <form onSubmit={changeUserInformation}>
           <div
-            className="d-flex flex-wrap justify-content-between align-items-center mb-4"
+            className="settings_right_form_wrapper d-flex flex-wrap justify-content-between align-items-center mb-4"
             style={{ gap: "20px" }}
           >
             <div>
@@ -338,10 +335,10 @@ const SettingsProfile = () => {
             </div>
           </div>
           {isActiveChangedBtn ? (
-            <div className="d-flex justify-content-end align-items-center">
+            <div className="settings_right_btn_wrapper d-flex justify-content-end align-items-center">
               <button
                 type="button"
-                className="btn btn-light"
+                className="btn-light-pump"
                 style={{ background: "#F2F2F2" }}
                 onClick={() => setIsActiveChangedBtn(!isActiveChangedBtn)}
               >
@@ -349,7 +346,7 @@ const SettingsProfile = () => {
               </button>
               <button
                 type="submit"
-                className="btn btn-success ms-3"
+                className="btn-primary-pump settings_right_btn_wrapper_right"
                 style={{ background: colors.buttonColor }}
               >
                 {t("settingNavbar.profile.item11")}
