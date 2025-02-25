@@ -1,0 +1,140 @@
+.settings_right-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* Log Out bloki */
+.settings_right-container {
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+/* Sarlavha */
+h1 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+/* Matn */
+p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+/* Profil ma’lumoti */
+.settings_right-profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 144, 255, 0.2);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Profil rasmi */
+.settings_right-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+/* Profil ma'lumotlari */
+.settings_right-details h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.settings_right-details p {
+  margin: 5px 0 0;
+  font-size: 16px;
+}
+
+/* Ma’lumot bloki */
+.settings_right-info {
+  background: rgba(163, 163, 163, 0.15);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.settings_right-info h3 {
+  font-size: 20px;
+  margin: 0 0 10px;
+  color: #ffdd57;
+}
+
+.settings_right-info ul {
+  list-style-type: disc;
+  margin-left: 20px;
+  padding: 0;
+}
+
+.settings_right-info ul li {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.settings_right-info a {
+  color: #ffdd57;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.settings_right-info a:hover {
+  text-decoration: underline;
+}
+
+/* Tugmalar konteyneri */
+.settings_right-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Chiqish tugmasi */
+.settings_right-logout {
+  background-color: #D84343 ;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.settings_right-logout::before {
+  content: url('');
+  background-image: url('../../assets/logout.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
+}
+
+.settings_right-logout:hover {
+  background-color: #c0392b;
+}
+
+/* Responsiv dizayn */
+@media (max-width: 450px) {
+  .settings_right-container {
+      width: 90%;
+  }
+  .settings_right-buttons {
+      flex-direction: column;
+  }
+  .settings_right-cancel, .settings_right-logout {
+      width: 100%;
+      margin: 5px 0;
+  }
+}

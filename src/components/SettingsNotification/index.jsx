@@ -17,7 +17,7 @@ const SettingsNotification = () => {
       <div className="settings_right_notification_container">
         <div
           className="settings_right_notification_info-card"
-          style={{ background: colors.layoutBackground, color: colors.text }}
+          style={{ background: colors.buttonColor, color: '#ffffff' }}
         >
           <h3>{t("settingNavbar.notification.item2")}</h3>
           <p>{t("settingNavbar.notification.item3")}</p>

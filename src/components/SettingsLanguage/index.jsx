@@ -26,36 +26,36 @@ const SettingsLanguage = () => {
         <div className="settings_right_language_cards_container">
           <div
             className="card"
-            style={{ background: colors.layoutBackground, color: colors.text }}
+            style={{ background: colors.buttonColor}}
           >
-            <h3 style={{ color: colors.text }}>
+            <h3 style={{ color: "#fff" }}>
               {t("settingNavbar.language.item3")}
             </h3>
-            <p style={{ color: colors.text }}>
+            <p style={{ color: "#fff" }}>
               {t("settingNavbar.language.item4")}
             </p>
           </div>
           <div
             className="card"
-            style={{ background: colors.layoutBackground, color: colors.text }}
+            style={{ background: colors.buttonColor }}
           >
-            <h3 style={{ color: colors.text }}>
+            <h3 style={{ color: "#fff" }}>
               {t("settingNavbar.language.item5")}
             </h3>
             <ul>
-              <li style={{ color: colors.text }}>{t("layoutData.oz")}</li>
-              <li style={{ color: colors.text }}>{t("layoutData.rus")}</li>
-              <li style={{ color: colors.text }}>{t("layoutData.eng")}</li>
+              <li style={{ color: "#fff" }}>{t("layoutData.oz")}</li>
+              <li style={{ color: "#fff" }}>{t("layoutData.rus")}</li>
+              <li style={{ color: "#fff" }}>{t("layoutData.eng")}</li>
             </ul>
           </div>
           <div
             className="card"
-            style={{ background: colors.layoutBackground, color: colors.text }}
+            style={{ background: colors.buttonColor, color: "#fff" }}
           >
-            <h3 style={{ color: colors.text }}>
+            <h3 style={{ color: "#fff" }}>
               {t("settingNavbar.language.item6")}
             </h3>
-            <p style={{ color: colors.text }}>
+            <p style={{ color: "#fff" }}>
               {t("settingNavbar.language.item7")}
             </p>
           </div>

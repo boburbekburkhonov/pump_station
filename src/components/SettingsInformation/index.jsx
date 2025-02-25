@@ -31,7 +31,7 @@ const SettingsInformations = () => {
         <h2 style={{ color: colors.loginHeadingColor }}>{t("settingNavbar.about.item10")}</h2>
         <div
           className="settings_right_information_download_links"
-          style={{ borderLeft: `5px solid ${colors.loginHeadingColor}`, background: colors.layoutBackground }}
+          style={{ borderLeft: `5px solid ${colors.loginHeadingColor}`, background: '#d4d4d4', color: '#000000', borderRadius: '10px' }}
         >
           <p>{t("settingNavbar.about.item11")}:</p>
           <a

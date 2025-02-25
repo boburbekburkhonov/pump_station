@@ -19,6 +19,8 @@ import SettingsTheme from "../../components/SettingsTheme";
 import SettingsPrivacy from "../../components/SettingsPrivacy";
 import SettingsInformations from "../../components/SettingsInformation";
 import "./index.css";
+import SettingsDeleteUser from "../../components/SettingsDeleteUser";
+import SettingsLogout from "../../components/SettingsLogout";
 
 const index = () => {
   const { i18n, t } = useTranslation();
@@ -377,8 +379,8 @@ const index = () => {
         <Route path="/theme" element={<SettingsTheme />} />
         <Route path="/privacy" element={<SettingsPrivacy />} />
         <Route path="/information" element={<SettingsInformations />} />
-        {/* <Route path="/logout" element={<SettingsLogout />} />
-        <Route path="/delete-user" element={<SettingsDeleteUser setActiveItem={setActiveItem} />} /> */}
+        <Route path="/logout" element={<SettingsLogout />} />
+        <Route path="/delete-user" element={<SettingsDeleteUser setActiveItem={setActiveItem} />} />
       </Routes>
     </div>
   );

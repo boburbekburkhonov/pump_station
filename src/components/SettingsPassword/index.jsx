@@ -66,7 +66,7 @@ const SettingsPassword = () => {
       >
         <div
           className="settings_right_password_info-card"
-          style={{ background: colors.layoutBackground, color: colors.text }}
+          style={{ background: colors.buttonColor, color: '#ffffff' }}
         >
           <h3>{t("settingNavbar.password.item1")}</h3>
           <p>{t("settingNavbar.password.item2")}</p>

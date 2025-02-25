@@ -540,7 +540,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
             <div className='header_controller_component'>
               <div>
                 <Avatar
-                  onClick={() => navigate("/profile")}
+                  onClick={() => navigate("/settings")}
                   shape='square'
                   style={{
                     marginBottom: "8px",

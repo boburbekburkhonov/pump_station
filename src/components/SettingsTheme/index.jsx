@@ -24,7 +24,7 @@ const SettingsTheme = () => {
         <div className="settings_right_theme_content">
           <div
             className="settings_right_theme_card"
-            style={{ background: colors.layoutBackground, color: colors.text }}
+            style={{ background: colors.buttonColor, color: "#fff" }}
           >
             <h2>{t("settingNavbar.mode.item4")}</h2>
             <p>{t("settingNavbar.mode.item5")}</p>
@@ -44,7 +44,7 @@ const SettingsTheme = () => {
           </div>
           <div
             className="settings_right_theme_info_card"
-            style={{ background: colors.layoutBackground, color: colors.text }}
+            style={{ background: colors.buttonColor, color: "#fff" }}
           >
             <h3>{t("settingNavbar.mode.item6")}</h3>
             <ul>
@@ -62,7 +62,7 @@ const SettingsTheme = () => {
 
           <div
             className="settings_right_theme_extra_card"
-            style={{ background: colors.layoutBackground, color: colors.text }}
+            style={{ background: colors.buttonColor, color: "#fff" }}
           >
             <h3>{t("settingNavbar.mode.item10")}</h3>
             <p>{t("settingNavbar.mode.item11")}</p>

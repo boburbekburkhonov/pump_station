@@ -123,7 +123,7 @@ const SettingsProfile = () => {
               <label htmlFor="firstName">
                 {t("settingNavbar.profile.item3")}
               </label>
-              <div className="input-group">
+              <div className="input-group mt-3">
                 <input
                   type="text"
                   name="firstName"
@@ -154,7 +154,7 @@ const SettingsProfile = () => {
               <label htmlFor="username">
                 {t("settingNavbar.profile.item5")}
               </label>
-              <div className="input-group">
+              <div className="input-group mt-3">
                 <input
                   type="text"
                   name="username"
@@ -185,7 +185,7 @@ const SettingsProfile = () => {
             <div>
               <label htmlFor="email">{t("settingNavbar.profile.item6")}</label>
 
-              <div className="input-group">
+              <div className="input-group mt-3">
                 <input
                   type="email"
                   name="email"
@@ -216,7 +216,7 @@ const SettingsProfile = () => {
             <div>
               <label htmlFor="phone">{t("settingNavbar.profile.item7")}</label>
 
-              <div className="input-group">
+              <div className="input-group mt-3">
                 <input
                   type="text"
                   name="phone"
@@ -249,7 +249,7 @@ const SettingsProfile = () => {
                 {t("settingNavbar.profile.item8")}
               </label>
 
-              <div className="input-group">
+              <div className="input-group mt-3">
                 <input
                   type="text"
                   name="regionName"
@@ -273,7 +273,7 @@ const SettingsProfile = () => {
                 {t("settingNavbar.profile.item13")}
               </label>
 
-              <div className="input-group">
+              <div className="input-group mt-3">
                 <input
                   type="text"
                   name="districtName"
@@ -297,7 +297,7 @@ const SettingsProfile = () => {
                 {t("settingNavbar.profile.item14")}
               </label>
 
-              <div className="input-group">
+              <div className="input-group mt-3">
                 <input
                   type="text"
                   name="organizationName"
@@ -318,7 +318,7 @@ const SettingsProfile = () => {
 
             <div>
               <label htmlFor="role">{t("settingNavbar.profile.item9")}</label>
-              <div className="input-group">
+              <div className="input-group mt-3">
                 <input
                   type="text"
                   name="role"
