@@ -15,7 +15,7 @@ const SettingsInformations = () => {
         <h1 style={{ color: colors.loginHeadingColor, fontWeight: 'bolder' }}>
         {t("settingNavbar.about.item2")}
         </h1>
-        <p>
+        <p style={{color: colors.text}}>
         {t("settingNavbar.about.item3")}
         </p>
 

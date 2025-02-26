@@ -74,7 +74,7 @@ const SettingsLogout = () => {
               <h2>
                 {userInformationById.name}
               </h2>
-              <p>{userInformationById.email}</p>
+              <p className="m-0" style={{ color: "#fff" }}>{userInformationById.email}</p>
             </div>
           </div>
 
@@ -93,7 +93,7 @@ const SettingsLogout = () => {
             <h3 style={{ color: colors.buttonColor }}>
               {t("settingNavbar.logOut.item7")}
             </h3>
-            <p>{t("settingNavbar.logOut.item8")}</p>
+            <p style={{ color: colors.text }}>{t("settingNavbar.logOut.item8")}</p>
           </div>
 
           <div className="settings_right-buttons">

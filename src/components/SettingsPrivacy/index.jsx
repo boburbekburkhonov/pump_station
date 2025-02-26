@@ -19,7 +19,7 @@ const SettingsPrivacy = () => {
         <h1 style={{ color: colors.loginHeadingColor }}>
           {t("settingNavbar.privacy.item2")}
         </h1>
-        <p>
+        <p style={{ color: colors.text }}>
           <strong>{t("settingNavbar.privacy.item3")}</strong>{" "}
           {`${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`}
         </p>
@@ -27,7 +27,7 @@ const SettingsPrivacy = () => {
         <h2 style={{ color: colors.loginHeadingColor }}>
           {t("settingNavbar.privacy.item4")}
         </h2>
-        <p>{t("settingNavbar.privacy.item5")}</p>
+        <p style={{ color: colors.text }}>{t("settingNavbar.privacy.item5")}</p>
         <ul>
           <li>{t("settingNavbar.privacy.item6")}</li>
           <li>{t("settingNavbar.privacy.item7")}</li>
@@ -39,7 +39,7 @@ const SettingsPrivacy = () => {
         <h2 className="heading_privacy_content" style={{ color: colors.loginHeadingColor }}>
           {t("settingNavbar.privacy.item11")}
         </h2>
-        <p>{t("settingNavbar.privacy.item12")}</p>
+        <p style={{ color: colors.text }}>{t("settingNavbar.privacy.item12")}</p>
         <ul>
           <li>{t("settingNavbar.privacy.item13")}</li>
           <li>{t("settingNavbar.privacy.item14")}</li>
@@ -50,18 +50,18 @@ const SettingsPrivacy = () => {
         <h2 className="heading_privacy_content" style={{ color: colors.loginHeadingColor }}>
           {t("settingNavbar.privacy.item17")}
         </h2>
-        <p>{t("settingNavbar.privacy.item18")}</p>
+        <p style={{ color: colors.text }}>{t("settingNavbar.privacy.item18")}</p>
         <ul>
           <li>{t("settingNavbar.privacy.item19")}</li>
           <li>{t("settingNavbar.privacy.item20")}</li>
           <li>{t("settingNavbar.privacy.item21")}</li>
         </ul>
-        <p>{t("settingNavbar.privacy.item22")}</p>
+        <p style={{ color: colors.text }}>{t("settingNavbar.privacy.item22")}</p>
 
         <h2 style={{ color: colors.loginHeadingColor }}>
           {t("settingNavbar.privacy.item23")}
         </h2>
-        <p>{t("settingNavbar.privacy.item24")}</p>
+        <p style={{ color: colors.text }}>{t("settingNavbar.privacy.item24")}</p>
         <ul>
           <li>{t("settingNavbar.privacy.item25")}</li>
           <li>{t("settingNavbar.privacy.item26")}</li>
@@ -76,7 +76,7 @@ const SettingsPrivacy = () => {
           style={{ borderLeft: `5px solid ${colors.buttonColor}`, background: '#d4d4d4', color: '#000' }}
 
         >
-          <p>{t("settingNavbar.privacy.item29")}</p>
+          <p style={{ color: colors.text }}>{t("settingNavbar.privacy.item29")}</p>
           <p>
             <strong>{t("settingNavbar.privacy.item30")}</strong>{" "}
             {t("settingNavbar.privacy.item31")}

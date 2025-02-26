@@ -51,7 +51,7 @@
   gap: 0.5rem;
   margin-bottom: 0.25rem;
   padding-bottom: 10px;
-  transition: .5s;
+  transition: 0.5s;
 }
 
 .all_stations_data_page_card_header > img {
@@ -65,7 +65,6 @@
 .all_stations_data_page_card_header > img:active {
   opacity: 0.3;
 }
-
 
 .all_stations_data_page_card_header h1 {
   padding-bottom: 0.25rem;
@@ -128,7 +127,7 @@
 .modal_aggregate_wrapper {
   max-width: 320px;
   width: 100%;
-  background-color: #EAEEFE;
+  background-color: #eaeefe;
   padding: 20px;
   border-radius: 10px;
 }
@@ -139,7 +138,15 @@
   justify-content: space-between;
   margin-top: 15px;
 }
-.modal_aggregate_wrapper_item > h2, p {
+
+.modal_aggregate_wrapper_item_heading {
+  font-size: 16px;
+  margin: 0;
+  color: #000000;
+  font-weight: 600;
+}
+
+.modal_aggregate_wrapper_item_desc {
   font-size: 16px;
   margin: 0;
   color: #000000;
@@ -147,17 +154,23 @@
 }
 
 .modal_aggregate_wrapper_item_name {
-  border-bottom: 3px solid #405FF2;
+  border-bottom: 3px solid #405ff2;
   padding-bottom: 10px;
   margin-top: 0;
 }
 
 .modal_aggregate_wrapper_item_name_heading {
-  color: #405FF2 !important;
+  color: #405ff2 !important;
+  font-size: 16px;
+  margin: 0;
+  font-weight: 600;
 }
 
 .modal_aggregate_wrapper_item_name_desc {
-  color: #405FF2;
+  color: #405ff2;
+  font-size: 16px;
+  margin: 0;
+  font-weight: 600;
 }
 
 .modal_aggregate_wrapper_item_left_wrapper {
@@ -165,10 +178,15 @@
   align-items: center;
 }
 
-.modal_aggregate_wrapper_item_left_wrapper > h2, p {
+.modal_aggregate_wrapper_item_left_wrapper > h2,
+p {
   font-size: 16px;
 }
 
 .modal_aggregate_wrapper_item_left_wrapper > h2 {
   margin-left: 8px;
+}
+
+.m-0 {
+  margin: 0;
 }

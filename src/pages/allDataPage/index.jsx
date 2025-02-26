@@ -28,6 +28,7 @@ import Loading from "../../components/loading/index";
 import CheckBookmark from "../../assets/bookmark.svg";
 import UnCheckBookmark from "../../assets/bookmarkCheck.svg";
 import { useNavigate } from "react-router-dom";
+import EmptyCard from "../../components/emptyCard";
 
 function AllDatapPage() {
   const dispatch = useDispatch();
@@ -162,10 +163,13 @@ function AllDatapPage() {
               textAlign: "center",
               borderBottom: "3px solid rgb(209, 209, 209)",
               paddingBottom: "15px",
-              fontWeight: '600'
+              fontWeight: "600",
             }}
           >
-           {`${oneStationLastData?.name} ${t("dashboardPageData.filterTitle").split(' ').slice(2).join(' ')}`}
+            {`${oneStationLastData?.name} ${t("dashboardPageData.filterTitle")
+              .split(" ")
+              .slice(2)
+              .join(" ")}`}
           </div>
         }
         centered
@@ -177,114 +181,179 @@ function AllDatapPage() {
             OK
           </Button>,
         ]}
-        styles={{ body: { maxHeight: "60vh", overflowY: "scroll", display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', justifyContent: 'center', placeItems: 'center', gap: '15px', paddingTop: '15px'} }}
-        width='60vw'
+        width="60vw"
+        styles={{
+          body: {
+            maxHeight: "60vh",
+            overflowY: "scroll",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
+            justifyContent: "center",
+            placeItems: "center",
+            gap: "15px",
+            paddingTop: "15px",
+          },
+        }}
       >
-        {oneStationLastData?.aggregate.map((e, i) => {
-          return (
-            <div className="modal_aggregate_wrapper" key={i}>
-              <div className="modal_aggregate_wrapper_item modal_aggregate_wrapper_item_name">
-                <h2 className="modal_aggregate_wrapper_item_name_heading">
-                  {t("dashboardPageData.lastStationsData.agrigateName")}:
-                </h2>
+        <div className="modal_wrapper_of_aggregate" style={{width: '100%'}}>
+          <h2>Nasos malumotlari</h2>
+          <div
+            className="modal_wrapper_of_body_aggregate"
+            style={{
+              width: "100%",
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
+              justifyContent: "center",
+              placeItems: "center",
+              gap: "15px",
+              paddingTop: "15px",
+            }}
+          >
+            {oneStationLastData?.aggregate.map((e, i) => {
+              return (
+                <div className="modal_aggregate_wrapper" key={i}>
+                  <div className="modal_aggregate_wrapper_item modal_aggregate_wrapper_item_name">
+                    <h2 className="modal_aggregate_wrapper_item_name_heading">
+                      {t("dashboardPageData.lastStationsData.agrigateName")}:
+                    </h2>
 
-                <p className="modal_aggregate_wrapper_item_name_desc">
-                  {e?.name}
-                </p>
-              </div>
+                    <p className="modal_aggregate_wrapper_item_name_desc">
+                      {e?.name}
+                    </p>
+                  </div>
 
-              <div className="modal_aggregate_wrapper_item">
-                <div className="modal_aggregate_wrapper_item_left_wrapper">
-                  <AreaChartOutlined
-                    style={{
-                      color: colors.textColor,
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
+                  <div className="modal_aggregate_wrapper_item">
+                    <div className="modal_aggregate_wrapper_item_left_wrapper">
+                      <AreaChartOutlined
+                        style={{
+                          color: "#000000",
+                        }}
+                        className="dashboard_last_data_icons"
+                      />
 
-                  <h2>{t("dashboardPageData.lastStationsData.agrigateVolume")}:</h2>
+                      <h2 className="modal_aggregate_wrapper_item_heading">
+                        {t("dashboardPageData.lastStationsData.agrigateVolume")}
+                        :
+                      </h2>
+                    </div>
+
+                    <p className="modal_aggregate_wrapper_item_desc">
+                      {e.pumpLastData?.volume} m³
+                    </p>
+                  </div>
+
+                  <div className="modal_aggregate_wrapper_item">
+                    <div className="modal_aggregate_wrapper_item_left_wrapper">
+                      <LineChartOutlined
+                        style={{
+                          color: "#000000",
+                        }}
+                        className="dashboard_last_data_icons"
+                      />
+
+                      <h2 className="modal_aggregate_wrapper_item_heading">
+                        {t(
+                          "dashboardPageData.lastStationsData.agrigateVelocity"
+                        )}
+                        :
+                      </h2>
+                    </div>
+
+                    <p className="modal_aggregate_wrapper_item_desc">
+                      {e.pumpLastData?.velocity} m/s
+                    </p>
+                  </div>
+
+                  <div className="modal_aggregate_wrapper_item">
+                    <div className="modal_aggregate_wrapper_item_left_wrapper">
+                      <ExperimentOutlined
+                        style={{
+                          color: "#000000",
+                        }}
+                        className="dashboard_last_data_icons"
+                      />
+
+                      <h2 className="modal_aggregate_wrapper_item_heading">
+                        {t("dashboardPageData.lastStationsData.agrigateSpeed")}:
+                      </h2>
+                    </div>
+
+                    <p className="modal_aggregate_wrapper_item_desc">
+                      {e.pumpLastData?.flow} m³/s
+                    </p>
+                  </div>
+
+                  <div className="modal_aggregate_wrapper_item">
+                    <div className="modal_aggregate_wrapper_item_left_wrapper">
+                      <BgColorsOutlined
+                        style={{
+                          color: "#000000",
+                        }}
+                        className="dashboard_last_data_icons"
+                      />
+
+                      <h2 className="modal_aggregate_wrapper_item_heading">
+                        {t(
+                          "dashboardPageData.lastStationsData.agrigateDailyVolume"
+                        )}
+                        :
+                      </h2>
+                    </div>
+
+                    <p className="modal_aggregate_wrapper_item_desc">
+                      {e.pumpLastData?.todayTotalFlow} m³
+                    </p>
+                  </div>
+
+                  <div className="modal_aggregate_wrapper_item">
+                    <div className="modal_aggregate_wrapper_item_left_wrapper">
+                      <DotChartOutlined
+                        style={{
+                          color: "#000000",
+                        }}
+                        className="dashboard_last_data_icons"
+                      />
+
+                      <h2 className="modal_aggregate_wrapper_item_heading">
+                        {t(
+                          "dashboardPageData.lastStationsData.agrigateTotalsVolume"
+                        )}
+                        :
+                      </h2>
+                    </div>
+
+                    <p className="modal_aggregate_wrapper_item_desc">
+                      {e.pumpLastData?.totalsVolume} m³
+                    </p>
+                  </div>
+
+                  <div className="modal_aggregate_wrapper_item">
+                    <div className="modal_aggregate_wrapper_item_left_wrapper">
+                      <ClockCircleOutlined
+                        style={{
+                          color: "#000000",
+                        }}
+                        className="dashboard_last_data_icons"
+                      />
+
+                      <h2 className="modal_aggregate_wrapper_item_heading">
+                        {t("dashboardPageData.lastStationsData.aggrigateTime")}:
+                      </h2>
+                    </div>
+
+                    <p className="modal_aggregate_wrapper_item_desc">
+                      {fixDate(e.pumpLastData?.date)}
+                    </p>
+                  </div>
                 </div>
+              );
+            })}
+          </div>
+        </div>
 
-                <p>{e.pumpLastData?.volume} m³</p>
-              </div>
+        {/* <div className="modal_wrapper">
 
-              <div className="modal_aggregate_wrapper_item">
-                <div className="modal_aggregate_wrapper_item_left_wrapper">
-                  <LineChartOutlined
-                    style={{
-                      color: colors.textColor,
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-
-                  <h2>{t("dashboardPageData.lastStationsData.agrigateVelocity")}:</h2>
-                </div>
-
-                <p>{e.pumpLastData?.velocity} m/s</p>
-              </div>
-
-              <div className="modal_aggregate_wrapper_item">
-                <div className="modal_aggregate_wrapper_item_left_wrapper">
-                  <ExperimentOutlined
-                    style={{
-                      color: colors.textColor,
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-
-                  <h2>{t("dashboardPageData.lastStationsData.agrigateSpeed")}:</h2>
-                </div>
-
-                <p>{e.pumpLastData?.flow} m³/s</p>
-              </div>
-
-              <div className="modal_aggregate_wrapper_item">
-                <div className="modal_aggregate_wrapper_item_left_wrapper">
-                  <BgColorsOutlined
-                    style={{
-                      color: colors.textColor,
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-
-                  <h2>{t("dashboardPageData.lastStationsData.agrigateDailyVolume")}:</h2>
-                </div>
-
-                <p>{e.pumpLastData?.todayTotalFlow} m³</p>
-              </div>
-
-              <div className="modal_aggregate_wrapper_item">
-                <div className="modal_aggregate_wrapper_item_left_wrapper">
-                  <DotChartOutlined
-                    style={{
-                      color: colors.textColor,
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-
-                  <h2>{t("dashboardPageData.lastStationsData.agrigateTotalsVolume")}:</h2>
-                </div>
-
-                <p>{e.pumpLastData?.totalsVolume} m³</p>
-              </div>
-
-              <div className="modal_aggregate_wrapper_item">
-                <div className="modal_aggregate_wrapper_item_left_wrapper">
-                  <ClockCircleOutlined
-                    style={{
-                      color: colors.textColor,
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-
-                  <h2>{t("dashboardPageData.lastStationsData.aggrigateTime")}:</h2>
-                </div>
-
-                <p>{fixDate(e.pumpLastData?.date)}</p>
-              </div>
-            </div>
-          );
-        })}
+        </div> */}
       </Modal>
 
       <div className="header_all_stations_data">
@@ -364,24 +433,7 @@ function AllDatapPage() {
                     onClick={() => handleChangeSelectStationData(item?.id)}
                   />
 
-                  <h1>{item.name}</h1>
-
-                  {/* <div
-                    style={{
-                      display: "flex",
-                    }}
-                  >
-                    {item.status ? (
-                      <span className="active_indicator">
-                        {t("dataPagesInformation.active_indicator")}
-                      </span>
-                    ) : (
-                      <span className="not_active_indicator">
-                        {t("dataPagesInformation.not_active_indicator")}
-                      </span>
-                    )}
-                  </div> */}
-
+                  <h1 className="m-0">{item.name}</h1>
                   <img
                     className="more_info__action_data"
                     src={moreInfo}

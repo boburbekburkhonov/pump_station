@@ -69,7 +69,7 @@ const SettingsPassword = () => {
           style={{ background: colors.buttonColor, color: '#ffffff' }}
         >
           <h3>{t("settingNavbar.password.item1")}</h3>
-          <p>{t("settingNavbar.password.item2")}</p>
+          <p style={{ color: '#ffffff' }}>{t("settingNavbar.password.item2")}</p>
         </div>
         <Form form={form} onFinish={changePasswordUser}>
           <Form.Item name="currentPassword">
