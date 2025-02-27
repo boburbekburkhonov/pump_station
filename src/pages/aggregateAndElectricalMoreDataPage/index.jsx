@@ -242,14 +242,14 @@ function AgrigateAndElectricalMoreData() {
       },
       {
         title: t("dataPagesInformation.dataTableInformation.totalEnergy"),
-        dataIndex: "totalEnergyActive",
-        key: "totalEnergyActive",
+        dataIndex: "energyActive",
+        key: "energyActive",
         align: "center",
       },
       {
         title: t("dataPagesInformation.dataTableInformation.totalValume"),
-        dataIndex: "totalVolume",
-        key: "totalVolume",
+        dataIndex: "volume",
+        key: "volume",
         align: "center",
       },
     ],

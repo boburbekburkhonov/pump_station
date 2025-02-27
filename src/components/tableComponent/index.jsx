@@ -12,7 +12,7 @@ function TableComponentData({
   handlePaginationChange,
 }) {
   return (
-    <div className='stations_container'>
+    <div className="stations_container">
       <Table
         style={{ width: "100%" }}
         scroll={{ x: "max-content", y: 90 * 9 }}
@@ -24,8 +24,8 @@ function TableComponentData({
           total: totalPage,
           onChange: handlePaginationChange,
           style: {
-            padding: "0 0.75rem"
-          }
+            padding: "0 0.75rem",
+          },
         }}
       />
     </div>
