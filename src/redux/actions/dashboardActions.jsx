@@ -860,42 +860,50 @@ export const getTenDayStationsIdData =
         payload: true,
       });
 
-      const createEndpoint = (basePath) =>
-        `${basePath}?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}`;
+      const resTotalData = await getDataApi(
+        `stations/findTenDayDataAllByStationId?lang=${lang}&stationId=${stationId}&year=${year}`,
+        token
+      );
 
-      const [res1, res2] = await Promise.all([
-        getDataApi(
-          createEndpoint("pump-ten-day-data/findDataByStationIdAnfYearNumber"),
-          token
-        ),
-        getDataApi(
-          createEndpoint("electrical-energy-ten-day-data/findDataByStationId"),
-          token
-        ),
-      ]);
+      const resAggregateData = await getDataApi(
+        `pump-ten-day-data/findDataByStationIdAnfYearNumber?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}`,
+        token
+      );
 
-      const pumpData = res1.data.data.data;
-      const electricalData = res2.data.data.data;
+      const resElecrtEnergyData = await getDataApi(
+        `electrical-energy-ten-day-data/findDataByStationId?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}`,
+        token
+      );
 
-      const combinedData = processAndCombineDataTenDays(
-        pumpData,
-        electricalData,
+      const dataByDate = mergeDataByDateTenDays(
+        resAggregateData.data.data.data,
+        resElecrtEnergyData.data.data.data,
         lang
       );
 
-      const dataByDate = mergeDataByDateTenDays(pumpData, electricalData, lang);
+      const resultTotalData = [];
+
+      resTotalData.data.data.forEach((e) => {
+        resultTotalData.push({
+          date: `${months[lang][e.month - 1]} ${
+            daysValues[lang][e.tenDayNumber - 1]
+          }`,
+          volume: e.volume,
+          energyActive: e.energyActive,
+        });
+      });
 
       const lineChartData = {
-        date: combinedData?.map((item) => item.date.split(" ")[1]),
+        date: resultTotalData?.map((item) => item.date.split(" ")[1]),
         lineData: [
           {
             name: allDataType[lang].name1,
-            data: combinedData?.map((item) => item.totalVolume),
+            data: resultTotalData?.map((item) => item.volume),
             unit: "m³",
           },
           {
             name: allDataType[lang].name2,
-            data: combinedData?.map((item) => item.totalEnergyActive),
+            data: resultTotalData?.map((item) => item.energyActive),
             unit: unitTranslations[lang].kwHour,
           },
         ],
@@ -908,7 +916,7 @@ export const getTenDayStationsIdData =
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
-        payload: combinedData,
+        payload: resultTotalData,
       });
 
       dispatch({
@@ -948,42 +956,48 @@ export const getMonthlyStationsIdData =
         payload: true,
       });
 
-      const createEndpoint = (basePath) =>
-        `${basePath}?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}`;
+      const resTotalData = await getDataApi(
+        `stations/findMonthlyDataAllByStationId?lang=${lang}&stationId=${stationId}&year=${year}`,
+        token
+      );
 
-      const [res1, res2] = await Promise.all([
-        getDataApi(
-          createEndpoint("pump-monthly-data/findDataByStationIdAndYearNumber"),
-          token
-        ),
-        getDataApi(
-          createEndpoint("electrical-energy-monthly-data/findDataByStationId"),
-          token
-        ),
-      ]);
+      const resAggregateData = await getDataApi(
+        `pump-monthly-data/findDataByStationIdAndYearNumber?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}`,
+        token
+      );
 
-      const pumpData = res1.data.data.data;
-      const electricalData = res2.data.data.data;
+      const resElecrtEnergyData = await getDataApi(
+        `electrical-energy-monthly-data/findDataByStationId?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&year=${year}`,
+        token
+      );
 
-      const combinedData = processAndCombineData(
-        pumpData,
-        electricalData,
+      const dataByDate = mergeDataByDate(
+        resAggregateData.data.data.data,
+        resElecrtEnergyData.data.data.data,
         lang
       );
 
-      const dataByDate = mergeDataByDate(pumpData, electricalData, lang);
+      const resultTotalData = [];
+
+      resTotalData.data.data.forEach((e) => {
+        resultTotalData.push({
+          date: `${months[lang][e.month - 1]}`,
+          volume: e.volume,
+          energyActive: e.energyActive,
+        });
+      });
 
       const lineChartData = {
-        date: combinedData?.map((item) => item.date),
+        date: resultTotalData?.map((item) => item.date),
         lineData: [
           {
             name: allDataType[lang].name1,
-            data: combinedData?.map((item) => item.totalVolume),
+            data: resultTotalData?.map((item) => item.totalVolume),
             unit: "m³",
           },
           {
             name: allDataType[lang].name2,
-            data: combinedData?.map((item) => item.totalEnergyActive),
+            data: resultTotalData?.map((item) => item.totalEnergyActive),
             unit: unitTranslations[lang].kwHour,
           },
         ],
@@ -996,7 +1010,7 @@ export const getMonthlyStationsIdData =
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
-        payload: combinedData,
+        payload: resultTotalData,
       });
 
       dispatch({
@@ -1038,44 +1052,66 @@ export const getSelectStationsIdData =
         payload: true,
       });
 
-      const createEndpoint = (basePath) =>
-        `${basePath}?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&date=${date}`;
-
-      const [res1, res2] = await Promise.all([
-        getDataApi(
-          createEndpoint("pump-all-data/findDataByAggregateIdDate"),
-          token
-        ),
-        getDataApi(
-          createEndpoint(
-            "electrical-energy-all-data/findDataByStationIdAndDate"
-          ),
-          token
-        ),
-      ]);
-
-      const pumpData = res1.data.data.data;
-      const electricalData = res2.data.data.data;
-
-      const combinedData = processAndCombineData(
-        pumpData,
-        electricalData,
-        lang
+      const resTotalData = await getDataApi(
+        `stations/findDateDataAllByStationId?lang=${lang}&stationId=${stationId}&date=${date}`,
+        token
       );
 
-      const dataByDate = mergeDataByDate(pumpData, electricalData, lang);
+      const resAggregateData = await getDataApi(
+        `pump-all-data/findDataByStationIdDate?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&date=${date}`,
+        token
+      );
+
+      const resElecrtEnergyData = await getDataApi(
+        `electrical-energy-all-data/findDataByStationIdAndDate?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&date=${date}`,
+        token
+      );
+
+      const dataSource = [];
+      const expandedData = [];
+
+      resAggregateData.data.data.data.forEach((e) => {
+        dataSource.push({
+          name: e.aggregate.name,
+          key: e.aggregate.id,
+          dataType: "aggregate",
+        });
+
+        expandedData.push({
+          key: e.aggregate.id,
+          values: e.aggregateData,
+        });
+      });
+
+      resElecrtEnergyData.data.data.data.forEach((e) => {
+        dataSource.push({
+          name: e.electricalEnergy.name,
+          key: e.electricalEnergy.id,
+          dataType: "electricalEnergy",
+        });
+
+        expandedData.push({
+          key: e.electricalEnergy.id,
+          values: e.electricalEnergyData,
+        });
+      });
+
+      const dataByDate = {
+        dataSource: dataSource,
+        expandData: expandedData,
+      };
 
       const lineChartData = {
-        date: combinedData?.map((item) => item.date),
+        date: resTotalData.data.data?.map((item) => item.date),
         lineData: [
           {
             name: allDataType[lang].name1,
-            data: combinedData?.map((item) => item.totalVolume),
+            data: resTotalData.data.data?.map((item) => item.volume),
             unit: "m³",
           },
           {
             name: allDataType[lang].name2,
-            data: combinedData?.map((item) => item.totalEnergyActive),
+            data: resTotalData.data.data?.map((item) => item.energyActive),
             unit: unitTranslations[lang].kwHour,
           },
         ],
@@ -1088,7 +1124,7 @@ export const getSelectStationsIdData =
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
-        payload: combinedData,
+        payload: resTotalData.data.data,
       });
 
       dispatch({
@@ -1129,44 +1165,66 @@ export const getDataRangeStationsIdData =
         payload: true,
       });
 
-      const createEndpoint = (basePath) =>
-        `${basePath}?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&startDate=${startDate}&endDate=${endDate}`;
-
-      const [res1, res2] = await Promise.all([
-        getDataApi(
-          createEndpoint("pump-all-data/findDataByStationIdAndDateRange"),
-          token
-        ),
-        getDataApi(
-          createEndpoint(
-            "electrical-energy-all-data/findDataByStationIdAndDateRange"
-          ),
-          token
-        ),
-      ]);
-
-      const pumpData = res1.data.data.data;
-      const electricalData = res2.data.data.data;
-
-      const combinedData = processAndCombineData(
-        pumpData,
-        electricalData,
-        lang
+      const resTotalData = await getDataApi(
+        `stations/findDateRangeDataAllByStationId?lang=${lang}&stationId=${stationId}&startDate=${startDate}&endDate=${endDate}`,
+        token
       );
 
-      const dataByDate = mergeDataByDate(pumpData, electricalData, lang);
+      const resAggregateData = await getDataApi(
+        `pump-all-data/findDataByStationIdAndDateRange?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&startDate=${startDate}&endDate=${endDate}`,
+        token
+      );
+
+      const resElecrtEnergyData = await getDataApi(
+        `electrical-energy-all-data/findDataByStationIdAndDateRange?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&startDate=${startDate}&endDate=${endDate}`,
+        token
+      );
+
+      const dataSource = [];
+      const expandedData = [];
+
+      resAggregateData.data.data.data.forEach((e) => {
+        dataSource.push({
+          name: e.aggregate.name,
+          key: e.aggregate.id,
+          dataType: "aggregate",
+        });
+
+        expandedData.push({
+          key: e.aggregate.id,
+          values: e.aggregateData,
+        });
+      });
+
+      resElecrtEnergyData.data.data.data.forEach((e) => {
+        dataSource.push({
+          name: e.electricalEnergy.name,
+          key: e.electricalEnergy.id,
+          dataType: "electricalEnergy",
+        });
+
+        expandedData.push({
+          key: e.electricalEnergy.id,
+          values: e.electricalEnergyData,
+        });
+      });
+
+      const dataByDate = {
+        dataSource: dataSource,
+        expandData: expandedData,
+      };
 
       const lineChartData = {
-        date: combinedData?.map((item) => item.date),
+        date: resTotalData.data.data?.map((item) => item.date),
         lineData: [
           {
             name: allDataType[lang].name1,
-            data: combinedData?.map((item) => item.totalVolume),
+            data: resTotalData.data.data?.map((item) => item.volume),
             unit: "m³",
           },
           {
             name: allDataType[lang].name2,
-            data: combinedData?.map((item) => item.totalEnergyActive),
+            data: resTotalData.data.data?.map((item) => item.energyActive),
             unit: unitTranslations[lang].kwHour,
           },
         ],
@@ -1179,7 +1237,7 @@ export const getDataRangeStationsIdData =
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
-        payload: combinedData,
+        payload: resTotalData.data.data,
       });
 
       dispatch({
