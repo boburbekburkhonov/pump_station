@@ -51,6 +51,7 @@ function AllDatapPage() {
   const [localStationsId, setLocalStationsId] = useState([...stationsId]);
   const [modalOpen, setModalOpen] = useState(false);
   const [oneStationLastData, setOneStationLastData] = useState();
+  const localStorageStationsId = JSON.parse(localStorage.getItem('localStationsId'))
 
   const fetchAllData = useCallback(() => {
     const lang = i18n.language;
@@ -76,21 +77,22 @@ function AllDatapPage() {
     }
   }, [stationsId]);
 
-  const filterStationsId = (id) => localStationsId.includes(id);
+  const filterStationsId = (id) => localStorageStationsId.includes(id);
 
   const handleChangeSelectStationData = (id) => {
     const userId = Cookies.get("userId");
     const lang = i18n.language;
+    const local = JSON.parse(localStorage.getItem('localStationsId')) || [];
 
-    let existingIds = [...localStationsId];
+    let existingIds = [...local];
 
     if (existingIds.includes(id)) {
-      existingIds = existingIds.filter((existingId) => existingId !== id);
+        existingIds = existingIds.filter((existingId) => existingId !== id);
     } else {
-      existingIds = [...existingIds, id];
+        existingIds.push(id);
     }
 
-    setLocalStationsId(existingIds);
+    localStorage.setItem('localStationsId', JSON.stringify(existingIds));
 
     dispatch(
       createNewLastDataStation(

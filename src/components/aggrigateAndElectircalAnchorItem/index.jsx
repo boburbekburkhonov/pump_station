@@ -6,6 +6,7 @@ import Excel from "../../assets/xls.d451c295.png";
 import TableComponent from "../tableComponent";
 import SolarEmploymentChart from "../googleNewPieChart";
 import TableAggrigateAndElectryData from "../aggrigateAndElectricalTable";
+import { useTranslation } from "react-i18next";
 
 const { RangePicker } = DatePicker;
 
@@ -28,9 +29,10 @@ const FirstSections = memo(
       style={{
         background: colors.layoutBackground,
       }}
-      className='pump_selected_data_with_today'>
-      <div className='header_more_aggregate_data'>
-        <h1 className='head_title_data'>
+      className="pump_selected_data_with_today"
+    >
+      <div className="header_more_aggregate_data">
+        <h1 className="head_title_data">
           {
             t(
               isActiveTable === "all_data"
@@ -45,26 +47,29 @@ const FirstSections = memo(
           }
         </h1>
 
-        <div className='header_more_aggregate_data'>
+        <div className="header_more_aggregate_data">
           <Button
             type={isActiveTable === "all_data" ? "primary" : "default"}
-            onClick={() => changeDataViewType("all_data")}>
+            onClick={() => changeDataViewType("all_data")}
+          >
             {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
           <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
-            onClick={() => changeDataViewType("full_data")}>
+            onClick={() => changeDataViewType("full_data")}
+          >
             {t("dataPagesInformation.dataTypeButton2")}
           </Button>
 
           <Button
             type={isActiveTable === "graphic" ? "primary" : "default"}
-            onClick={() => changeDataViewType("graphic")}>
+            onClick={() => changeDataViewType("graphic")}
+          >
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
-            <img alt='download_excel' src={Excel} />
+            <img alt="download_excel" src={Excel} />
           </span>
         </div>
       </div>
@@ -118,9 +123,10 @@ const SecondSections = memo(
       style={{
         background: colors.layoutBackground,
       }}
-      className='pump_selected_data_with_today'>
-      <div className='header_more_aggregate_data'>
-        <h1 className='head_title_data'>
+      className="pump_selected_data_with_today"
+    >
+      <div className="header_more_aggregate_data">
+        <h1 className="head_title_data">
           {
             t(
               isActiveTable === "all_data"
@@ -135,26 +141,29 @@ const SecondSections = memo(
           }
         </h1>
 
-        <div className='header_more_aggregate_data'>
+        <div className="header_more_aggregate_data">
           <Button
             type={isActiveTable === "all_data" ? "primary" : "default"}
-            onClick={() => changeDataViewType("all_data")}>
+            onClick={() => changeDataViewType("all_data")}
+          >
             {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
           <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
-            onClick={() => changeDataViewType("full_data")}>
+            onClick={() => changeDataViewType("full_data")}
+          >
             {t("dataPagesInformation.dataTypeButton2")}
           </Button>
 
           <Button
             type={isActiveTable === "graphic" ? "primary" : "default"}
-            onClick={() => changeDataViewType("graphic")}>
+            onClick={() => changeDataViewType("graphic")}
+          >
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
-            <img alt='download_excel' src={Excel} />
+            <img alt="download_excel" src={Excel} />
           </span>
         </div>
       </div>
@@ -189,6 +198,75 @@ const SecondSections = memo(
   )
 );
 
+const months = {
+  uz: [
+    "Yanvar",
+    "Fevral",
+    "Mart",
+    "Aprel",
+    "May",
+    "Iyun",
+    "Iyul",
+    "Avgust",
+    "Sentabr",
+    "Oktabr",
+    "Noyabr",
+    "Dekabr",
+    "yil",
+  ],
+  en: [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+    "year",
+  ],
+  ru: [
+    "Январь",
+    "Февраль",
+    "Март",
+    "Апрель",
+    "Май",
+    "Июнь",
+    "Июль",
+    "Август",
+    "Сентябрь",
+    "Октябрь",
+    "Ноябрь",
+    "Декабрь",
+    "год",
+  ],
+};
+
+const fixDateHeading = (time) => {
+  const { i18n, t } = useTranslation();
+  const lang = i18n.language;
+  const monthYear = Number(time.split("-")[0]);
+  const monthNumber = Number(time.split("-")[1]);
+  const month = months[lang][monthNumber - 1];
+
+  return `${monthYear} ${months[lang][12]} ${month}`;
+};
+
+const fixDateHeadingForDateRange = (time) => {
+  const { i18n, t } = useTranslation();
+  const lang = i18n.language;
+  const monthYear = Number(time.split("-")[0]);
+  const monthNumber = Number(time.split("-")[1]);
+  const monthDate = Number(time.split("-")[2]);
+  const month = months[lang][monthNumber - 1];
+
+  return `${monthYear} ${months[lang][12]} ${monthDate} ${month}`;
+};
+
 const ThirdSections = memo(
   ({
     dataSource,
@@ -211,9 +289,10 @@ const ThirdSections = memo(
       style={{
         background: colors.layoutBackground,
       }}
-      className='pump_selected_data_with_today'>
-      <div className='header_more_aggregate_data'>
-        <h1 className='head_title_data'>
+      className="pump_selected_data_with_today"
+    >
+      <div className="header_more_aggregate_data">
+        <h1 className="head_title_data">
           {
             t(
               isActiveTable === "all_data"
@@ -227,13 +306,13 @@ const ThirdSections = memo(
             )[2].title
           }
           {"\t"}({"\t"}
-          {valueInput.format("YYYY-MM")}
+          {fixDateHeading(valueInput.format("YYYY-MM"))}
           {"\t"})
         </h1>
 
-        <div className='header_more_aggregate_data'>
+        <div className="header_more_aggregate_data">
           <DatePicker
-            picker='month'
+            picker="month"
             onChange={onChange}
             format={dateFormat}
             value={valueInput}
@@ -241,23 +320,26 @@ const ThirdSections = memo(
 
           <Button
             type={isActiveTable === "all_data" ? "primary" : "default"}
-            onClick={() => changeDataViewType("all_data")}>
+            onClick={() => changeDataViewType("all_data")}
+          >
             {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
           <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
-            onClick={() => changeDataViewType("full_data")}>
+            onClick={() => changeDataViewType("full_data")}
+          >
             {t("dataPagesInformation.dataTypeButton2")}
           </Button>
 
           <Button
             type={isActiveTable === "graphic" ? "primary" : "default"}
-            onClick={() => changeDataViewType("graphic")}>
+            onClick={() => changeDataViewType("graphic")}
+          >
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
-            <img alt='download_excel' src={Excel} />
+            <img alt="download_excel" src={Excel} />
           </span>
         </div>
       </div>
@@ -314,9 +396,10 @@ const FourThSections = memo(
       style={{
         background: colors.layoutBackground,
       }}
-      className='pump_selected_data_with_today'>
-      <div className='header_more_aggregate_data'>
-        <h1 className='head_title_data'>
+      className="pump_selected_data_with_today"
+    >
+      <div className="header_more_aggregate_data">
+        <h1 className="head_title_data">
           {
             t(
               isActiveTable === "all_data"
@@ -330,13 +413,13 @@ const FourThSections = memo(
             )[3].title
           }
           {"\t"}({"\t"}
-          {valueInput.format("YYYY-MM")}
+          {fixDateHeading(valueInput.format("YYYY-MM"))}
           {"\t"})
         </h1>
 
-        <div className='header_more_aggregate_data'>
+        <div className="header_more_aggregate_data">
           <DatePicker
-            picker='month'
+            picker="month"
             onChange={onChange}
             format={dateFormat}
             value={valueInput}
@@ -345,23 +428,26 @@ const FourThSections = memo(
 
           <Button
             type={isActiveTable === "all_data" ? "primary" : "default"}
-            onClick={() => changeDataViewType("all_data")}>
+            onClick={() => changeDataViewType("all_data")}
+          >
             {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
           <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
-            onClick={() => changeDataViewType("full_data")}>
+            onClick={() => changeDataViewType("full_data")}
+          >
             {t("dataPagesInformation.dataTypeButton2")}
           </Button>
 
           <Button
             type={isActiveTable === "graphic" ? "primary" : "default"}
-            onClick={() => changeDataViewType("graphic")}>
+            onClick={() => changeDataViewType("graphic")}
+          >
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
-            <img alt='download_excel' src={Excel} />
+            <img alt="download_excel" src={Excel} />
           </span>
         </div>
       </div>
@@ -417,9 +503,10 @@ const FiveThSections = memo(
       style={{
         background: colors.layoutBackground,
       }}
-      className='pump_selected_data_with_today'>
-      <div className='header_more_aggregate_data'>
-        <h1 className='head_title_data'>
+      className="pump_selected_data_with_today"
+    >
+      <div className="header_more_aggregate_data">
+        <h1 className="head_title_data">
           {valueInput.format("YYYY")}
           {"\t"}-{"\t"}
           {t("dataPagesInformation.dateSelectYear")}
@@ -438,34 +525,37 @@ const FiveThSections = memo(
           }
         </h1>
 
-        <div className='header_more_aggregate_data'>
+        <div className="header_more_aggregate_data">
           <DatePicker
-            picker='year'
+            picker="year"
             onChange={onChange}
-            format='YYYY'
+            format="YYYY"
             value={valueInput}
             defaultValue={valueInput}
           />
 
           <Button
             type={isActiveTable === "all_data" ? "primary" : "default"}
-            onClick={() => changeDataViewType("all_data")}>
+            onClick={() => changeDataViewType("all_data")}
+          >
             {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
           <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
-            onClick={() => changeDataViewType("full_data")}>
+            onClick={() => changeDataViewType("full_data")}
+          >
             {t("dataPagesInformation.dataTypeButton2")}
           </Button>
 
           <Button
             type={isActiveTable === "graphic" ? "primary" : "default"}
-            onClick={() => changeDataViewType("graphic")}>
+            onClick={() => changeDataViewType("graphic")}
+          >
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
-            <img alt='download_excel' src={Excel} />
+            <img alt="download_excel" src={Excel} />
           </span>
         </div>
       </div>
@@ -521,9 +611,10 @@ const SixThSections = memo(
       style={{
         background: colors.layoutBackground,
       }}
-      className='pump_selected_data_with_today'>
-      <div className='header_more_aggregate_data'>
-        <h1 className='head_title_data'>
+      className="pump_selected_data_with_today"
+    >
+      <div className="header_more_aggregate_data">
+        <h1 className="head_title_data">
           {valueInput.format("YYYY")}
           {"\t"}-{"\t"}
           {t("dataPagesInformation.dateSelectYear")}
@@ -542,34 +633,37 @@ const SixThSections = memo(
           }
         </h1>
 
-        <div className='header_more_aggregate_data'>
+        <div className="header_more_aggregate_data">
           <DatePicker
-            picker='year'
+            picker="year"
             onChange={onChange}
-            format='YYYY'
+            format="YYYY"
             value={valueInput}
             defaultValue={valueInput}
           />
 
           <Button
             type={isActiveTable === "all_data" ? "primary" : "default"}
-            onClick={() => changeDataViewType("all_data")}>
+            onClick={() => changeDataViewType("all_data")}
+          >
             {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
           <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
-            onClick={() => changeDataViewType("full_data")}>
+            onClick={() => changeDataViewType("full_data")}
+          >
             {t("dataPagesInformation.dataTypeButton2")}
           </Button>
 
           <Button
             type={isActiveTable === "graphic" ? "primary" : "default"}
-            onClick={() => changeDataViewType("graphic")}>
+            onClick={() => changeDataViewType("graphic")}
+          >
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
-            <img alt='download_excel' src={Excel} />
+            <img alt="download_excel" src={Excel} />
           </span>
         </div>
       </div>
@@ -625,9 +719,10 @@ const SevenThSections = memo(
       style={{
         background: colors.layoutBackground,
       }}
-      className='pump_selected_data_with_today'>
-      <div className='header_more_aggregate_data'>
-        <h1 className='head_title_data'>
+      className="pump_selected_data_with_today"
+    >
+      <div className="header_more_aggregate_data">
+        <h1 className="head_title_data">
           {
             t(
               isActiveTable === "all_data"
@@ -641,36 +736,40 @@ const SevenThSections = memo(
             )[6].title
           }
           {"\t"}({"\t"}
-          {valueInput.format("YYYY-MM-DD")}{"\t"})
+          {fixDateHeadingForDateRange(valueInput.format("YYYY-MM-DD"))}
+          {"\t"})
         </h1>
 
-        <div className='header_more_aggregate_data'>
+        <div className="header_more_aggregate_data">
           <DatePicker
             onChange={onChange}
-            format='YYYY-MM-DD'
+            format="YYYY-MM-DD"
             value={valueInput}
             defaultValue={valueInput}
           />
 
           <Button
             type={isActiveTable === "all_data" ? "primary" : "default"}
-            onClick={() => changeDataViewType("all_data")}>
+            onClick={() => changeDataViewType("all_data")}
+          >
             {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
           <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
-            onClick={() => changeDataViewType("full_data")}>
+            onClick={() => changeDataViewType("full_data")}
+          >
             {t("dataPagesInformation.dataTypeButton2")}
           </Button>
 
           <Button
             type={isActiveTable === "graphic" ? "primary" : "default"}
-            onClick={() => changeDataViewType("graphic")}>
+            onClick={() => changeDataViewType("graphic")}
+          >
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
-            <img alt='download_excel' src={Excel} />
+            <img alt="download_excel" src={Excel} />
           </span>
         </div>
       </div>
@@ -727,9 +826,10 @@ const EightThSections = memo(
       style={{
         background: colors.layoutBackground,
       }}
-      className='pump_selected_data_with_today'>
-      <div className='header_more_aggregate_data'>
-        <h1 className='head_title_data'>
+      className="pump_selected_data_with_today"
+    >
+      <div className="header_more_aggregate_data">
+        <h1 className="head_title_data">
           {
             t(
               isActiveTable === "all_data"
@@ -744,33 +844,36 @@ const EightThSections = memo(
           }
         </h1>
 
-        <div className='header_more_aggregate_data'>
+        <div className="header_more_aggregate_data">
           <RangePicker
             onChange={onChange}
-            format='YYYY-MM-DD'
+            format="YYYY-MM-DD"
             value={valueInput}
             defaultValue={valueInput}
           />
 
           <Button
             type={isActiveTable === "all_data" ? "primary" : "default"}
-            onClick={() => changeDataViewType("all_data")}>
+            onClick={() => changeDataViewType("all_data")}
+          >
             {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
           <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
-            onClick={() => changeDataViewType("full_data")}>
+            onClick={() => changeDataViewType("full_data")}
+          >
             {t("dataPagesInformation.dataTypeButton2")}
           </Button>
 
           <Button
             type={isActiveTable === "graphic" ? "primary" : "default"}
-            onClick={() => changeDataViewType("graphic")}>
+            onClick={() => changeDataViewType("graphic")}
+          >
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
-            <img alt='download_excel' src={Excel} />
+            <img alt="download_excel" src={Excel} />
           </span>
         </div>
       </div>
