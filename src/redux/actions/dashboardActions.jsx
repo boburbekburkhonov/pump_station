@@ -223,53 +223,6 @@ const daysValues = {
   ],
 };
 
-const processAndCombineData = (pumpData, electricalData, lang) => {
-  const aggregateData = (data, typeKey, valueKey) => {
-    return data.reduce((map, item) => {
-      item[typeKey]?.forEach((entry) => {
-        const date =
-          entry.date?.split("T")[0] ||
-          entry.date ||
-          `${months[lang][entry?.month - 1]} ${
-            entry?.week ? String(entry?.week) : " "
-          }${" "}${entry?.week ? aggregateDataType[lang]?.weekName : " "}`;
-
-        if (!map[date]) {
-          map[date] = { total: 0 };
-        }
-
-        map[date].total += entry[valueKey] || 0;
-      });
-
-      return map;
-    }, {});
-  };
-
-  const pumpDataMap = aggregateData(pumpData, "aggregateData", "volume");
-
-  const electricalDataMap = aggregateData(
-    electricalData,
-    "electricalEnergyData",
-    "energyActive"
-  );
-
-  const allDates = new Set([
-    ...Object.keys(pumpDataMap),
-    ...Object.keys(electricalDataMap),
-  ]);
-
-  const combinedData = Array.from(allDates).map((date) => ({
-    date,
-    totalVolume: +(pumpDataMap[date]?.total || 0)?.toFixed(2),
-    totalEnergyActive: +(electricalDataMap[date]?.total || 0)?.toFixed(2),
-    key: Math.random(),
-  }));
-
-  combinedData.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-  return combinedData;
-};
-
 const mergeDataByDate = (pumpData, electricalData, lang) => {
   const roundValuesInObject = (obj) => {
     const roundedObject = {};
@@ -338,53 +291,6 @@ const mergeDataByDate = (pumpData, electricalData, lang) => {
     dataSource,
     expandData: [...pumpExpandData, ...electricalExpandData],
   };
-};
-
-const processAndCombineDataTenDays = (pumpData, electricalData, lang) => {
-  const processData = (data, typeKey, valueKey) => {
-    const dataMap = {};
-
-    data.forEach((items) => {
-      items[typeKey]?.forEach((item) => {
-        item?.dataMonth.forEach((entry) => {
-          const date = `${months[lang][item.month - 1]} ${
-            daysValues[lang][entry.tenDayNumber - 1] || "-"
-          }`;
-
-          if (!dataMap[date]) {
-            dataMap[date] = 0;
-          }
-
-          dataMap[date] += entry[valueKey] || 0;
-        });
-      });
-    });
-
-    return dataMap;
-  };
-
-  const pumpDataMap = processData(pumpData, "aggregateData", "volume");
-  const electricalDataMap = processData(
-    electricalData,
-    "electricalEnergyData",
-    "energyActive"
-  );
-
-  const allDates = new Set([
-    ...Object.keys(pumpDataMap),
-    ...Object.keys(electricalDataMap),
-  ]);
-
-  const combinedData = Array.from(allDates).map((date) => ({
-    date,
-    totalVolume: +(pumpDataMap[date] || 0)?.toFixed(2),
-    totalEnergyActive: +(electricalDataMap[date] || 0)?.toFixed(2),
-    key: Math.random(),
-  }));
-
-  combinedData.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-  return combinedData;
 };
 
 const mergeDataByDateTenDays = (pumpData, electricalData, lang) => {
