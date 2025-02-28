@@ -7,15 +7,22 @@ const EmptyCard = () => {
   const { colors, theme } = useSelector((state) => state.theme);
   const { t } = useTranslation();
 
-  return <ConfigProvider
-  theme={{
-    components: {
-      Empty: {
-        colorTextDescription: '#000000',
-      },
-    },
-  }}
-><Empty description={t("dashboardPageData.emptyData")} style={{fontWeight: '500'}} /></ConfigProvider>
+  return (
+    <ConfigProvider
+      theme={{
+        components: {
+          Empty: {
+            colorTextDescription: colors.text,
+            colorBgLayout: "red",
+          },
+        },
+      }}
+    >
+      <Empty
+        description={t("dashboardPageData.emptyData")}
+      />
+    </ConfigProvider>
+  );
 };
 
 export default memo(EmptyCard);
