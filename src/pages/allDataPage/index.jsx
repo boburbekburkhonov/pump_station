@@ -701,6 +701,8 @@ function AllDatapPage() {
       <div
         style={{
           background: colors.layoutBackground,
+          minHeight: '85vh',
+          paddingBottom: '40px'
         }}
         className="all_stations_data_stations_info"
       >
@@ -792,12 +794,6 @@ function AllDatapPage() {
                       backgroundColor: colors.backgroundColor,
                     }}
                   >
-                    {/* <div className='all_stations_data_page_aggrigate_card_item_header_wrapper'>
-                      <h3>
-                        {t("dataPagesInformation.allStationsAgrigateTitle")}
-                      </h3>
-                    </div> */}
-
                     <div className="all_stations_data_page_aggrigate_item">
                       <div className="all_stations_data_item">
                         <div className="normal_flex_card">
@@ -850,12 +846,6 @@ function AllDatapPage() {
                       backgroundColor: colors.backgroundColor,
                     }}
                   >
-                    {/* <div className='all_stations_data_page_aggrigate_card_item_header_wrapper'>
-                      <h3>
-                        {t("dataPagesInformation.allStationsElectrTitle")}
-                      </h3>
-                    </div> */}
-
                     <div className="all_stations_data_page_aggrigate_item">
                       <div className="all_stations_data_item">
                         <div className="normal_flex_card">

@@ -268,6 +268,7 @@ function AgrigateAndElectricalMoreData() {
     <section
       style={{
         background: colors.layoutBackground,
+        minHeight: '90vh'
       }}
       className='more_info_sections'>
       <Anchor
