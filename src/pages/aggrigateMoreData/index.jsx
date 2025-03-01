@@ -54,24 +54,9 @@ dayjs.extend(weekYear);
 const dateFormat = "YYYY-MM";
 
 const daysValues = {
-  uz: [
-    "Birinchi o'n kunlik",
-    "Ikkinchi o'n kunlik",
-    "Uchunchi o'n kunlik",
-    "To'rtinchi o'n kunlik",
-  ],
-  en: [
-    "The first ten days",
-    "Second ten days",
-    "Third decade",
-    "Fourth decade",
-  ],
-  ru: [
-    "Первые десять дней",
-    "Вторая декада",
-    "Третье десятилетие",
-    "Четвертая декада",
-  ],
+  uz: ["1 o'n kunlik", "2 o'n kunlik", "3 o'n kunlik", "4 o'n kunlik"],
+  en: ["1 ten days", "2 ten days", "3 decade", "4 decade"],
+  ru: ["1 десять дней", "2 декада", "3 десятилетие", "4 декада"],
 };
 
 const months = {
@@ -324,17 +309,23 @@ const AggrigateMoreData = memo(() => {
 
   if (loading || isPending) {
     return (
-      <section className='more_info_sections'>
+      <section className="more_info_sections">
         <Loading />
       </section>
     );
   }
 
   return (
-    <section className='more_info_sections'>
+    <section
+      className="more_info_sections"
+      style={{
+        background: colors.layoutBackground,
+        minHeight: "90vh",
+      }}
+    >
       <Anchor
-        className='anchor-items-container'
-        direction='horizontal'
+        className="anchor-items-container"
+        direction="horizontal"
         items={t("dataPagesInformation.selectButtonNames", {
           returnObjects: true,
         }).map((item, index) => ({
@@ -363,7 +354,8 @@ const AggrigateMoreData = memo(() => {
                 paddingTop: 5,
                 paddingBottom: 5,
                 borderRadius: 5,
-              }}>
+              }}
+            >
               {item.title}
             </p>
           ),
@@ -380,12 +372,12 @@ const AggrigateMoreData = memo(() => {
           dataSource={
             Array.isArray(pumpIdData.data)
               ? pumpIdData.data?.map((item, index) => ({
-                ...item,
-                key: item.id || `temp-key1-${index}`,
-                volume: item.volume?.toFixed(2),
-                velocity: item.velocity?.toFixed(2),
-                flow: item.flow?.toFixed(2)
-              }))
+                  ...item,
+                  key: item.id || `temp-key1-${index}`,
+                  volume: item.volume?.toFixed(2),
+                  velocity: item.velocity?.toFixed(2),
+                  flow: item.flow?.toFixed(2),
+                }))
               : []
           }
           currentPage={pageData.page}
@@ -407,12 +399,12 @@ const AggrigateMoreData = memo(() => {
           dataSource={
             Array.isArray(pumpIdData.data)
               ? pumpIdData.data?.map((item, index) => ({
-                ...item,
-                key: item.id || `temp-key2-${index}`,
-                volume: item.volume?.toFixed(2),
-                velocity: item.velocity?.toFixed(2),
-                flow: item.flow?.toFixed(2)
-              }))
+                  ...item,
+                  key: item.id || `temp-key2-${index}`,
+                  volume: item.volume?.toFixed(2),
+                  velocity: item.velocity?.toFixed(2),
+                  flow: item.flow?.toFixed(2),
+                }))
               : []
           }
           currentPage={pageData.page}
@@ -431,15 +423,15 @@ const AggrigateMoreData = memo(() => {
         <ThirdSections
           columns={columnsUser}
           dataSource={
-            Array.isArray(pumpIdData?.data?.aggregateData)
-              ? pumpIdData.data.aggregateData.map((item, index) => ({
-                ...item,
-                key: item.id || `temp-key3-${index}`,
-                date: item.date?.split("T")[0] || item.date,
-                volume: item.volume?.toFixed(2),
-                velocity: item.velocity?.toFixed(2),
-                flow: item.flow?.toFixed(2)
-              }))
+            Array.isArray(pumpIdData)
+              ? pumpIdData.map((item, index) => ({
+                  ...item,
+                  key: item.id || `temp-key3-${index}`,
+                  date: item.date?.split("T")[0] || item.date,
+                  volume: item.volume?.toFixed(2),
+                  velocity: item.velocity?.toFixed(2),
+                  flow: item.flow?.toFixed(2),
+                }))
               : []
           }
           currentPage={pageData.page}
@@ -463,13 +455,13 @@ const AggrigateMoreData = memo(() => {
           dataSource={
             Array.isArray(pumpIdData)
               ? pumpIdData?.map((item, index) => ({
-                ...item,
-                key: item.id || `temp-key4-${index}`,
-                date: item.date?.split("T")[0] || item.date,
-                volume: item.volume?.toFixed(2),
-                velocity: item.velocity?.toFixed(2),
-                flow: item.flow?.toFixed(2)
-              }))
+                  ...item,
+                  key: item.id || `temp-key4-${index}`,
+                  date: item.date?.split("T")[0] || item.date,
+                  volume: item.volume?.toFixed(2),
+                  velocity: item.velocity?.toFixed(2),
+                  flow: item.flow?.toFixed(2),
+                }))
               : []
           }
           currentPage={pageData.page}
@@ -491,15 +483,17 @@ const AggrigateMoreData = memo(() => {
         <FiveThSections
           columns={columnsUser}
           dataSource={
-            Array.isArray(pumpIdData?.data?.aggregateData)
-              ? pumpIdData.data.aggregateData[0].data?.map((item, index) => ({
-                ...item,
-                key: item.id || `temp-key5-${index}`,
-                date: `${months[lang][pumpIdData.data.aggregateData[0]?.month]} ${daysValues[lang][item.tenDayNumber - 1]}`,
-                volume: item.volume?.toFixed(2),
-                velocity: item.velocity?.toFixed(2),
-                flow: item.flow?.toFixed(2)
-              }))
+            Array.isArray(pumpIdData)
+              ? pumpIdData?.map((item, index) => ({
+                  ...item,
+                  key: item.id || `temp-key5-${index}`,
+                  date: `${months[lang][item.month - 1]} ${
+                    daysValues[lang][item.tenDayNumber - 1]
+                  }`,
+                  volume: item.volume?.toFixed(2),
+                  velocity: item.velocity?.toFixed(2),
+                  flow: item.flow?.toFixed(2),
+                }))
               : []
           }
           currentPage={pageData.page}
@@ -523,13 +517,13 @@ const AggrigateMoreData = memo(() => {
           dataSource={
             Array.isArray(pumpIdData?.data)
               ? pumpIdData.data?.map((item, index) => ({
-                ...item,
-                key: item.id || `temp-key6-${index}`,
-                date: item.date,
-                volume: item.volume?.toFixed(2),
-                velocity: item.velocity?.toFixed(2),
-                flow: item.flow?.toFixed(2)
-              }))
+                  ...item,
+                  key: item.id || `temp-key6-${index}`,
+                  date: item.date,
+                  volume: item.volume?.toFixed(2),
+                  velocity: item.velocity?.toFixed(2),
+                  flow: item.flow?.toFixed(2),
+                }))
               : []
           }
           currentPage={pageData.page}
@@ -553,13 +547,13 @@ const AggrigateMoreData = memo(() => {
           dataSource={
             Array.isArray(pumpIdData?.data)
               ? pumpIdData.data?.map((item, index) => ({
-                ...item,
-                key: item.id || `temp-key7-${index}`,
-                date: item.date,
-                volume: item.volume?.toFixed(2),
-                velocity: item.velocity?.toFixed(2),
-                flow: item.flow?.toFixed(2)
-              }))
+                  ...item,
+                  key: item.id || `temp-key7-${index}`,
+                  date: item.date,
+                  volume: item.volume?.toFixed(2),
+                  velocity: item.velocity?.toFixed(2),
+                  flow: item.flow?.toFixed(2),
+                }))
               : []
           }
           currentPage={pageData.page}
@@ -583,13 +577,13 @@ const AggrigateMoreData = memo(() => {
           dataSource={
             Array.isArray(pumpIdData?.data)
               ? pumpIdData.data?.map((item, index) => ({
-                ...item,
-                key: item.id || `temp-key8-${index}`,
-                date: item.date,
-                volume: item.volume?.toFixed(2),
-                velocity: item.velocity?.toFixed(2),
-                flow: item.flow?.toFixed(2)
-              }))
+                  ...item,
+                  key: item.id || `temp-key8-${index}`,
+                  date: item.date,
+                  volume: item.volume?.toFixed(2),
+                  velocity: item.velocity?.toFixed(2),
+                  flow: item.flow?.toFixed(2),
+                }))
               : []
           }
           currentPage={pageData.page}

@@ -235,6 +235,7 @@ export const findLastStationsData = (lang, token) => async (dispatch) => {
     );
 
     const stationsId = res.data.data.map((item) => item.id)
+    console.log(res.data.data, 1);
 
     dispatch({
       type: STATIONS_TYPES.FIND_LAST_DATA_AND_STATIONS,

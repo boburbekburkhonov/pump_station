@@ -49,6 +49,7 @@ function AllDatapPage() {
     perPage: 10,
   });
   const [localStationsId, setLocalStationsId] = useState([...stationsId]);
+  const [count, setCount] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
   const [oneStationLastData, setOneStationLastData] = useState();
   const localStorageStationsId = JSON.parse(
@@ -60,7 +61,7 @@ function AllDatapPage() {
     const { page, perPage } = pageData;
 
     dispatch(findInMapsLastData(lang, token, page, perPage));
-  }, [dispatch, token, i18n.language, pageData]);
+  }, [dispatch, token, i18n.language, pageData, count]);
 
   useEffect(() => {
     fetchAllData();
@@ -76,10 +77,9 @@ function AllDatapPage() {
   useEffect(() => {
     if (stationsId) {
       setLocalStationsId([...stationsId]);
+      localStorage.setItem("localStationsId", JSON.stringify([...stationsId]));
     }
   }, [stationsId]);
-
-  const filterStationsId = (id) => localStorageStationsId.includes(id);
 
   const handleChangeSelectStationData = (id) => {
     const userId = Cookies.get("userId");
@@ -106,6 +106,8 @@ function AllDatapPage() {
         token
       )
     );
+
+    setCount(count + 1)
   };
 
   const handlePaginationChange = (page, size) => {
@@ -172,6 +174,7 @@ function AllDatapPage() {
         <Loading />
       </section>
     );
+    console.log(stationsMap);
 
   return (
     <section className="all_stations_data_view">
@@ -206,18 +209,12 @@ function AllDatapPage() {
         width={
           oneStationLastData?.aggregate[0]?.pumpLastData == undefined
             ? "30vw"
-            :
-            oneStationLastData?.aggregate.length == 1
-            ?
-            "22vw"
-            :
-            oneStationLastData?.aggregate.length == 2
-            ?
-            "40vw"
-            :
-            oneStationLastData?.aggregate.length > 2
-            ?
-            "60vw"
+            : oneStationLastData?.aggregate.length == 1
+            ? "22vw"
+            : oneStationLastData?.aggregate.length == 2
+            ? "40vw"
+            : oneStationLastData?.aggregate.length > 2
+            ? "60vw"
             : {
                 xs: "90vw",
                 sm: "80vw",
@@ -701,8 +698,8 @@ function AllDatapPage() {
       <div
         style={{
           background: colors.layoutBackground,
-          minHeight: '85vh',
-          paddingBottom: '40px'
+          minHeight: "85vh",
+          paddingBottom: "40px",
         }}
         className="all_stations_data_stations_info"
       >
@@ -765,7 +762,7 @@ function AllDatapPage() {
                     }}
                     className="save_action_data"
                     src={
-                      filterStationsId(item?.id)
+                      item.selectionDashboard
                         ? CheckBookmark
                         : UnCheckBookmark
                     }
@@ -886,6 +883,7 @@ function AllDatapPage() {
         </div>
 
         <Pagination
+          className="data_pagination_info"
           current={pageData.page}
           onChange={handlePaginationChange}
           total={stationsMap?.totalDocuments}

@@ -511,7 +511,7 @@ function ElectrPage() {
   return (
     <section className='data_main_sections'>
       <div className='data_main_header'>
-        <h1>{t("dataPagesInformation.dataHeaderTitle")}</h1>
+        <h1>{t("dataPagesInformation.dataHeaderElecrtTitle")}</h1>
       </div>
 
       <div

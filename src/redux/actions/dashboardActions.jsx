@@ -1728,11 +1728,9 @@ export const getWeeklyAggregateIDData =
         token
       );
 
-      const data = res.data.data?.aggregateData;
+      res.data.data.sort((a, b) => b.week - a.week);
 
-      const weekName = aggregateDataType[lang]?.weekName || "Unknown Week";
-
-      const newData = data?.map((item) => ({
+      const newData = res.data.data?.map((item) => ({
         ...item,
         date: `${months[lang][item.month - 1]}${" "}${item.week}-${
           aggregateDataType[lang].weekName
@@ -1740,7 +1738,7 @@ export const getWeeklyAggregateIDData =
       }));
 
       const lineChartData = {
-        date: data?.map(
+        date: res.data.data?.map(
           (item) =>
             `${months[lang][item.month - 1]}${" "}${item.week}-${
               aggregateDataType[lang].weekName
@@ -1749,17 +1747,17 @@ export const getWeeklyAggregateIDData =
         lineData: [
           {
             name: aggregateDataType[lang].name1,
-            data: data?.map((item) => item.flow),
+            data: res.data.data?.map((item) => item.flow),
             unit: "m³/s",
           },
           {
             name: aggregateDataType[lang].name2,
-            data: data?.map((item) => item.velocity),
+            data: res.data.data?.map((item) => item.velocity),
             unit: "m/s",
           },
           {
             name: aggregateDataType[lang].name3,
-            data: data?.map((item) => item.volume),
+            data: res.data.data?.map((item) => item.volume),
             unit: "m³",
           },
         ],
@@ -1931,28 +1929,34 @@ export const getTenDayAggregateIDData =
         token
       );
 
-      const data = Array.isArray(res.data.data.data?.aggregateData)
-        ? res.data.data.data?.aggregateData[0]?.data
-        : [];
+      let formattedData = res.data.data.data.flatMap((record) =>
+        record.data.map((entry) => ({
+          ...entry,
+          month: record.month,
+          year: record.year,
+        }))
+      );
 
-      console.log(res.data.data);
+      formattedData.sort((a, b) => b.month - a.month);
 
       const lineChartData = {
-        date: data?.map((item) => item.tenDayNumber),
+        date: formattedData?.map((item) => `${months[lang][item.month - 1]} ${
+            daysValues[lang][item.tenDayNumber - 1]
+          }`),
         lineData: [
           {
             name: aggregateDataType[lang].name1,
-            data: data?.map((item) => item.flow),
+            data: formattedData?.map((item) => item.flow),
             unit: "m³/s",
           },
           {
             name: aggregateDataType[lang].name2,
-            data: data?.map((item) => item.velocity),
+            data: formattedData?.map((item) => item.velocity),
             unit: "m/s",
           },
           {
             name: aggregateDataType[lang].name3,
-            data: data?.map((item) => item.volume),
+            data: formattedData?.map((item) => item.volume),
             unit: "m³",
           },
         ],
@@ -1965,7 +1969,7 @@ export const getTenDayAggregateIDData =
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
-        payload: res.data.data,
+        payload: formattedData,
       });
     } catch (err) {
       if (!err.response) {
@@ -2121,7 +2125,7 @@ export const getMonthlyAggregateIDData =
         nextPages: data.nextPages,
         totalDocuments: data.totalDocuments,
         totalPages: data.totalPages,
-        data: data?.data.aggregateData?.map((item) => {
+        data: data?.data?.map((item) => {
           return {
             id: item.id,
             velocity: item.velocity,
@@ -2133,23 +2137,23 @@ export const getMonthlyAggregateIDData =
       };
 
       const lineChartData = {
-        date: data?.data.aggregateData?.map(
+        date: data?.data?.map(
           (item) => `${item.year}- ${months[lang][item.month - 1]}`
         ),
         lineData: [
           {
             name: aggregateDataType[lang].name1,
-            data: data?.data.aggregateData?.map((item) => item.flow),
+            data: data?.data?.map((item) => item.flow),
             unit: "m³/s",
           },
           {
             name: aggregateDataType[lang].name2,
-            data: data?.data.aggregateData?.map((item) => item.velocity),
+            data: data?.data?.map((item) => item.velocity),
             unit: "m/s",
           },
           {
             name: aggregateDataType[lang].name3,
-            data: data?.data.aggregateData?.map((item) => item.volume),
+            data: data?.data?.map((item) => item.volume),
             unit: "m³",
           },
         ],
@@ -2489,28 +2493,28 @@ export const getDailyAggregateIDData =
       });
 
       const res = await getDataApi(
-        `pump-daily-data/findDataByAggregateId?lang=${lang}&aggregateId=${aggregateId}&page=${page}&perPage=${perPage}&month=${month}&year=${year}`,
+        `pump-daily-data/findDataByAggregateId?lang=${lang}&aggregateId=${aggregateId}&page=${page}&perPage=${perPage}&month=${
+          month + 1
+        }&year=${year}`,
         token
       );
 
-      const data = res.data.data.data?.aggregateData;
-
       const lineChartData = {
-        date: data?.map((item) => item.date.split("T")[0]),
+        date: res.data.data.data?.map((item) => item.date.split("T")[0]),
         lineData: [
           {
             name: aggregateDataType[lang].name1,
-            data: data?.map((item) => item.flow),
+            data: res.data.data.data?.map((item) => item.flow),
             unit: "m³/s",
           },
           {
             name: aggregateDataType[lang].name2,
-            data: data?.map((item) => item.velocity),
+            data: res.data.data.data?.map((item) => item.velocity),
             unit: "m/s",
           },
           {
             name: aggregateDataType[lang].name3,
-            data: data?.map((item) => item.volume),
+            data: res.data.data.data?.map((item) => item.volume),
             unit: "m³",
           },
         ],
@@ -2523,7 +2527,7 @@ export const getDailyAggregateIDData =
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
-        payload: res.data.data,
+        payload: res.data.data.data,
       });
     } catch (err) {
       if (!err.response) {
