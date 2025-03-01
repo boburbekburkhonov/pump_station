@@ -203,24 +203,9 @@ const monthNames = {
 };
 
 const daysValues = {
-  uz: [
-    "Birinchi o'n kunlik",
-    "Ikkinchi o'n kunlik",
-    "Uchunchi o'n kunlik",
-    "To'rtinchi o'n kunlik",
-  ],
-  en: [
-    "The first ten days",
-    "Second ten days",
-    "Third decade",
-    "Fourth decade",
-  ],
-  ru: [
-    "Первые десять дней",
-    "Вторая декада",
-    "Третье десятилетие",
-    "Четвертая декада",
-  ],
+  uz: ["1-o'n kunlik", "2-o'n kunlik", "3-o'n kunlik", "4-o'n kunlik"],
+  en: ["1 ten days", "2 ten days", "3 decade", "4 decade"],
+  ru: ["1 десять дней", "2 декада", "3 десятилетие", "4 декада"],
 };
 
 const mergeDataByDate = (pumpData, electricalData, lang) => {
@@ -384,6 +369,18 @@ export const getTodayDataByStationId =
       const dataSource = [];
       const expandedData = [];
 
+      resAggregateData.data.data.data.forEach((aggregate) => {
+        aggregate.aggregateData.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+      });
+
+      resElecrtEnergyData.data.data.data.forEach((elecrt) => {
+        elecrt.electricalEnergyData.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+      });
+
       resAggregateData.data.data.data.forEach((e) => {
         dataSource.push({
           name: e.aggregate.name,
@@ -414,6 +411,10 @@ export const getTodayDataByStationId =
         dataSource: dataSource,
         expandData: expandedData,
       };
+
+      resTotalData.data.data.sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
 
       const lineChartData = {
         date: resTotalData.data.data?.map((item) => item.date.split(" ")[1]),
@@ -486,6 +487,18 @@ export const getYesterdayStationIdData =
       const dataSource = [];
       const expandedData = [];
 
+      resAggregateData.data.data.data.forEach((aggregate) => {
+        aggregate.aggregateData.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+      });
+
+      resElecrtEnergyData.data.data.data.forEach((elecrt) => {
+        elecrt.electricalEnergyData.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+      });
+
       resAggregateData.data.data.data.forEach((e) => {
         dataSource.push({
           name: e.aggregate.name,
@@ -511,6 +524,10 @@ export const getYesterdayStationIdData =
           values: e.electricalEnergyData,
         });
       });
+
+      resTotalData.data.data.sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
 
       const dataByDate = {
         dataSource: dataSource,
@@ -588,6 +605,26 @@ export const getDailyStationsIdData =
       const dataSource = [];
       const expandedData = [];
 
+      resAggregateData.data.data.data.forEach((aggregate) => {
+        aggregate.aggregateData.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+
+        aggregate.aggregateData.forEach((data) => {
+          data.date = data.date.split("T")[0];
+        });
+      });
+
+      resElecrtEnergyData.data.data.data.forEach((elecrt) => {
+        elecrt.electricalEnergyData.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+
+        elecrt.electricalEnergyData.forEach((data) => {
+          data.date = data.date.split("T")[0];
+        });
+      });
+
       resAggregateData.data.data.data.forEach((e) => {
         dataSource.push({
           name: e.aggregate.name,
@@ -613,6 +650,10 @@ export const getDailyStationsIdData =
           values: e.electricalEnergyData,
         });
       });
+
+      resTotalData.data.data.sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
 
       const dataByDate = {
         dataSource: dataSource,
@@ -687,6 +728,14 @@ export const getWeeklyStationsIdData =
         token
       );
 
+      resAggregateData.data.data.data.forEach((aggregate) => {
+        aggregate.aggregateData.sort((a, b) => b.week - a.week);
+      });
+
+      resElecrtEnergyData.data.data.data.forEach((elecrt) => {
+        elecrt.electricalEnergyData.sort((a, b) => b.week - a.week);
+      });
+
       const dataByDate = mergeDataByDate(
         resAggregateData.data.data.data,
         resElecrtEnergyData.data.data.data,
@@ -694,6 +743,8 @@ export const getWeeklyStationsIdData =
       );
 
       const resultTotalData = [];
+
+      resTotalData.data.data.sort((a, b) => b.week - a.week);
 
       resTotalData.data.data.forEach((e) => {
         resultTotalData.push({
@@ -781,6 +832,14 @@ export const getTenDayStationsIdData =
         token
       );
 
+      resAggregateData.data.data.data.forEach((aggregate) => {
+        aggregate.aggregateData.sort((a, b) => b.month - a.month);
+      });
+
+      resElecrtEnergyData.data.data.data.forEach((elecrt) => {
+        elecrt.electricalEnergyData.sort((a, b) => b.month - a.month);
+      });
+
       const dataByDate = mergeDataByDateTenDays(
         resAggregateData.data.data.data,
         resElecrtEnergyData.data.data.data,
@@ -788,6 +847,8 @@ export const getTenDayStationsIdData =
       );
 
       const resultTotalData = [];
+
+      resTotalData.data.data.sort((a, b) => b.month - a.month);
 
       resTotalData.data.data.forEach((e) => {
         resultTotalData.push({
@@ -877,6 +938,14 @@ export const getMonthlyStationsIdData =
         token
       );
 
+      resAggregateData.data.data.data.forEach((aggregate) => {
+        aggregate.aggregateData.sort((a, b) => b.month - a.month);
+      });
+
+      resElecrtEnergyData.data.data.data.forEach((elecrt) => {
+        elecrt.electricalEnergyData.sort((a, b) => b.month - a.month);
+      });
+
       const dataByDate = mergeDataByDate(
         resAggregateData.data.data.data,
         resElecrtEnergyData.data.data.data,
@@ -884,6 +953,8 @@ export const getMonthlyStationsIdData =
       );
 
       const resultTotalData = [];
+
+      resTotalData.data.data.sort((a, b) => b.month - a.month);
 
       resTotalData.data.data.forEach((e) => {
         resultTotalData.push({
@@ -976,6 +1047,18 @@ export const getSelectStationsIdData =
       const dataSource = [];
       const expandedData = [];
 
+      resAggregateData.data.data.data.forEach((aggregate) => {
+        aggregate.aggregateData.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+      });
+
+      resElecrtEnergyData.data.data.data.forEach((elecrt) => {
+        elecrt.electricalEnergyData.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+      });
+
       resAggregateData.data.data.data.forEach((e) => {
         dataSource.push({
           name: e.aggregate.name,
@@ -1006,6 +1089,10 @@ export const getSelectStationsIdData =
         dataSource: dataSource,
         expandData: expandedData,
       };
+
+      resTotalData.data.data.sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
 
       const lineChartData = {
         date: resTotalData.data.data?.map((item) => item.date),
@@ -1089,6 +1176,18 @@ export const getDataRangeStationsIdData =
       const dataSource = [];
       const expandedData = [];
 
+      resAggregateData.data.data.data.forEach((aggregate) => {
+        aggregate.aggregateData.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+      });
+
+      resElecrtEnergyData.data.data.data.forEach((elecrt) => {
+        elecrt.electricalEnergyData.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+      });
+
       resAggregateData.data.data.data.forEach((e) => {
         dataSource.push({
           name: e.aggregate.name,
@@ -1119,6 +1218,10 @@ export const getDataRangeStationsIdData =
         dataSource: dataSource,
         expandData: expandedData,
       };
+
+      resTotalData.data.data.sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
 
       const lineChartData = {
         date: resTotalData.data.data?.map((item) => item.date),
