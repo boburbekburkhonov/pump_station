@@ -174,7 +174,6 @@ function AllDatapPage() {
         <Loading />
       </section>
     );
-    console.log(stationsMap);
 
   return (
     <section className="all_stations_data_view">

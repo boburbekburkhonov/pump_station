@@ -6,6 +6,8 @@ import { Alert, Button } from "antd";
 import { GLOBALTYPES } from "../../redux/actions/globalTypes";
 import { CloseOutlined, CloseCircleFilled } from "@ant-design/icons";
 import "./index.css";
+import Swal from "sweetalert2";
+import { showMessage } from "./alert";
 
 function Notif() {
   const alert = useSelector((state) => state.alert);
@@ -13,41 +15,18 @@ function Notif() {
 
   const closeAlert = useCallback(() => {
     dispatch({
-      type: GLOBALTYPES.ALERT, payload: {
-        loading: false
-      }
+      type: GLOBALTYPES.ALERT,
+      payload: {
+        loading: false,
+      },
     });
   });
 
   return (
     <>
-      {alert.error && (
-        <Alert
-          className='alert_component_style'
-          message={alert.error}
-          showIcon
-          type='error'
-          action={
-            <Button size="large" danger onClick={closeAlert}>
-              <CloseCircleFilled size='small' twoToneColor='#eb2f96' />
-            </Button>
-          }
-        />
-      )}
+      {alert.error && showMessage(alert.error, "error")}
 
-      {alert.success && (
-        <Alert
-          className='alert_component_style'
-          message={alert.success}
-          type='success'
-          showIcon
-          action={
-            <Button onClick={closeAlert} size='small' type='text'>
-              <CloseOutlined size={10} />
-            </Button>
-          }
-        />
-      )}
+      {alert.success && showMessage(alert.success, "success")}
     </>
   );
 }
