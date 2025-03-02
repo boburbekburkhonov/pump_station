@@ -13,15 +13,6 @@ function Notif() {
   const alert = useSelector((state) => state.alert);
   const dispatch = useDispatch();
 
-  const closeAlert = useCallback(() => {
-    dispatch({
-      type: GLOBALTYPES.ALERT,
-      payload: {
-        loading: false,
-      },
-    });
-  });
-
   return (
     <>
       {alert.error && showMessage(alert.error, "error")}
