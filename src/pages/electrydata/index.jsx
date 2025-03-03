@@ -450,11 +450,9 @@ function ElectrPage() {
     page: 1,
     perPage: 10,
   });
+  const [count, setCount] = useState(1);
   const [oneStationLastData, setOneStationLastData] = useState();
   const [modalOpen, setModalOpen] = useState(false);
-  const [openModalData, setOpenModaldata] = useState(false);
-  const [modalData, setModalData] = useState({});
-  const [localStationsId, setLocalStationsId] = useState([...stationsId]);
   const navigate = useNavigate();
 
   const fetchAllData = useCallback(() => {
@@ -463,7 +461,7 @@ function ElectrPage() {
 
     dispatch(findInMapsLastData(lang, token, page, perPage));
     dispatch(findLastStationsData(lang, token));
-  }, [dispatch, token, i18n.language, pageData]);
+  }, [dispatch, token, i18n.language, pageData, count]);
 
   useEffect(() => {
     fetchAllData();
@@ -478,25 +476,24 @@ function ElectrPage() {
 
   useEffect(() => {
     if (stationsId) {
-      setLocalStationsId([...stationsId]);
+      localStorage.setItem("localStationsId", JSON.stringify([...stationsId]));
     }
   }, [stationsId]);
-
-  const filterStationsId = (id) => localStationsId.includes(id);
 
   const handleChangeSelectStationData = (id) => {
     const userId = Cookies.get("userId");
     const lang = i18n.language;
+    const local = JSON.parse(localStorage.getItem("localStationsId")) || [];
 
-    let existingIds = [...localStationsId];
+    let existingIds = [...local];
 
     if (existingIds.includes(id)) {
       existingIds = existingIds.filter((existingId) => existingId !== id);
     } else {
-      existingIds = [...existingIds, id];
+      existingIds.push(id);
     }
 
-    setLocalStationsId(existingIds);
+    localStorage.setItem("localStationsId", JSON.stringify(existingIds));
 
     dispatch(
       createNewLastDataStation(
@@ -508,6 +505,7 @@ function ElectrPage() {
         token
       )
     );
+    setCount(count + 1);
   };
 
   const handlePaginationChange = (page, size) => {
@@ -601,7 +599,8 @@ function ElectrPage() {
           </Button>,
         ]}
         width={
-          oneStationLastData?.electricalEnergyLastData[0]?.electricalEnergyLastData == undefined
+          oneStationLastData?.electricalEnergyLastData[0]
+            ?.electricalEnergyLastData == undefined
             ? "30vw"
             : oneStationLastData?.electricalEnergyLastData.length == 1
             ? "22vw"
@@ -625,7 +624,8 @@ function ElectrPage() {
           },
         }}
       >
-        {oneStationLastData?.electricalEnergyLastData[0]?.electricalEnergyLastData == undefined ? (
+        {oneStationLastData?.electricalEnergyLastData[0]
+          ?.electricalEnergyLastData == undefined ? (
           <EmptyCard />
         ) : (
           <>
@@ -651,11 +651,15 @@ function ElectrPage() {
               >
                 {oneStationLastData?.electricalEnergyLastData.map((e, i) => {
                   return (
-                    <div className="modal_aggregate_wrapper" key={i} onClick={() =>
-                      navigate(
-                        `/electrical/infos/${e?.electricalEnergyLastData?.electricalEnergyId}`
-                      )
-                    }>
+                    <div
+                      className="modal_aggregate_wrapper"
+                      key={i}
+                      onClick={() =>
+                        navigate(
+                          `/electrical/infos/${e?.electricalEnergyLastData?.electricalEnergyId}`
+                        )
+                      }
+                    >
                       <div
                         className="modal_aggregate_wrapper_item modal_aggregate_wrapper_item_name"
                         style={{
@@ -968,9 +972,7 @@ function ElectrPage() {
                     }}
                     className="save_action_data"
                     src={
-                      filterStationsId(item?.id)
-                        ? CheckBookmark
-                        : UnCheckBookmark
+                      item.selectionDashboard ? CheckBookmark : UnCheckBookmark
                     }
                     alt="Images"
                     onClick={() => handleChangeSelectStationData(item?.id)}
@@ -1019,7 +1021,10 @@ function ElectrPage() {
                         </h4>
                       </div>
 
-                      <div className="all_stations_data_item" style={{marginTop: '8px'}}>
+                      <div
+                        className="all_stations_data_item"
+                        style={{ marginTop: "8px" }}
+                      >
                         <div className="normal_flex_card">
                           <BulbOutlined
                             style={{

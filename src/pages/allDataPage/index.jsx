@@ -48,13 +48,9 @@ function AllDatapPage() {
     page: 1,
     perPage: 10,
   });
-  const [localStationsId, setLocalStationsId] = useState([...stationsId]);
   const [count, setCount] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
   const [oneStationLastData, setOneStationLastData] = useState();
-  const localStorageStationsId = JSON.parse(
-    localStorage.getItem("localStationsId")
-  );
 
   const fetchAllData = useCallback(() => {
     const lang = i18n.language;
@@ -76,7 +72,6 @@ function AllDatapPage() {
 
   useEffect(() => {
     if (stationsId) {
-      setLocalStationsId([...stationsId]);
       localStorage.setItem("localStationsId", JSON.stringify([...stationsId]));
     }
   }, [stationsId]);
