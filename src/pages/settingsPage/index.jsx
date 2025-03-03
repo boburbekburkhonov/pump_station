@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import imageProfile from "../../assets/profile.svg";
-import imageNotification from "../../assets/notification.svg";
-import imageUnlock from "../../assets/unlock.svg";
-import imagelanguageChange from "../../assets/language-change.webp";
-import imageModeChange from "../../assets/mode-change.png";
-import imagePrivatePolicy from "../../assets/private-policy.webp";
-import imageInformationSite from "../../assets/information-site.webp";
-import imageLogOut from "../../assets/logout.svg";
-import imageDeleteUser from "../../assets/delete-user.png";
+import imageProfile from "../../assets/user-settings.png";
+import imageNotification from "../../assets/notification-settings.png";
+import imageUnlock from "../../assets/padlock-settings.png";
+import imagelanguageChange from "../../assets/language-settings.png";
+import imageModeChange from "../../assets/night-mode-settings.png";
+import imagePrivatePolicy from "../../assets/privacy-policy-settings.png";
+import imageInformationSite from "../../assets/information-settings.png";
+import imageLogOut from "../../assets/logout-settings.png";
+import imageDeleteUser from "../../assets/delete-user-settings.png";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import SettingsProfile from "../../components/SettingsProfile";
@@ -27,8 +27,8 @@ const index = () => {
   const navigate = useNavigate();
   const { colors, theme } = useSelector((state) => state.theme);
   const mode = window.localStorage.getItem("theme");
-  const location = useLocation()
-  const activeItem = location.pathname.split('/')[2]
+  const location = useLocation();
+  const activeItem = location.pathname.split("/")[2];
 
   return (
     <div className="settings_container">
@@ -50,7 +50,13 @@ const index = () => {
                 navigate("/settings");
               }}
             >
-              {activeItem == undefined ? (
+              <img
+                src={imageProfile}
+                alt="imageProfile"
+                width={19}
+                height={19}
+              />
+              {/* {activeItem == undefined ? (
                 <img
                   src={imageProfile}
                   alt="imageProfile"
@@ -70,7 +76,7 @@ const index = () => {
                       : { filter: "invert(100%) brightness(150%)" }
                   }
                 />
-              )}
+              )} */}
               <p
                 style={
                   activeItem == undefined
@@ -92,7 +98,13 @@ const index = () => {
                 navigate("/settings/notification");
               }}
             >
-              {activeItem == "notification" ? (
+              <img
+                src={imageNotification}
+                alt="imageProfile"
+                width={19}
+                height={19}
+              />
+              {/* {activeItem == "notification" ? (
                 <img
                   src={imageNotification}
                   alt="imageProfile"
@@ -112,7 +124,7 @@ const index = () => {
                       : { filter: "invert(100%) brightness(150%)" }
                   }
                 />
-              )}
+              )} */}
 
               <p
                 style={
@@ -135,7 +147,13 @@ const index = () => {
                 navigate("/settings/password");
               }}
             >
-              {activeItem == "password" ? (
+              <img
+                src={imageUnlock}
+                alt="imageProfile"
+                width={20}
+                height={20}
+              />
+              {/* {activeItem == "password" ? (
                 <img
                   src={imageUnlock}
                   alt="imageProfile"
@@ -155,7 +173,7 @@ const index = () => {
                       : { filter: "invert(100%) brightness(150%)" }
                   }
                 />
-              )}
+              )} */}
 
               <p
                 style={
@@ -178,7 +196,13 @@ const index = () => {
                 navigate("/settings/language");
               }}
             >
-              {activeItem == "language" ? (
+              <img
+                src={imagelanguageChange}
+                alt="imageProfile"
+                width={20}
+                height={20}
+              />
+              {/* {activeItem == "language" ? (
                 <img
                   src={imagelanguageChange}
                   alt="imageProfile"
@@ -198,7 +222,7 @@ const index = () => {
                       : { filter: "invert(100%) brightness(150%)" }
                   }
                 />
-              )}
+              )} */}
 
               <p
                 style={
@@ -221,7 +245,13 @@ const index = () => {
                 navigate("/settings/theme");
               }}
             >
-              {activeItem == "theme" ? (
+              <img
+                src={imageModeChange}
+                alt="imageProfile"
+                width={22}
+                height={22}
+              />
+              {/* {activeItem == "theme" ? (
                 <img
                   src={imageModeChange}
                   alt="imageProfile"
@@ -241,7 +271,7 @@ const index = () => {
                       : { filter: "invert(100%) brightness(150%)" }
                   }
                 />
-              )}
+              )} */}
 
               <p
                 style={
@@ -264,7 +294,13 @@ const index = () => {
                 navigate("/settings/privacy");
               }}
             >
-              {activeItem == "privacy" ? (
+              <img
+                src={imagePrivatePolicy}
+                alt="imageProfile"
+                width={20}
+                height={20}
+              />
+              {/* {activeItem == "privacy" ? (
                 <img
                   src={imagePrivatePolicy}
                   alt="imageProfile"
@@ -284,7 +320,7 @@ const index = () => {
                       : { filter: "invert(100%) brightness(150%)" }
                   }
                 />
-              )}
+              )} */}
 
               <p
                 style={
@@ -307,7 +343,13 @@ const index = () => {
                 navigate("/settings/information");
               }}
             >
-              {activeItem == "information" ? (
+              <img
+                src={imageInformationSite}
+                alt="imageProfile"
+                width={20}
+                height={20}
+              />
+              {/* {activeItem == "information" ? (
                 <img
                   src={imageInformationSite}
                   alt="imageProfile"
@@ -327,7 +369,7 @@ const index = () => {
                       : { filter: "invert(100%) brightness(150%)" }
                   }
                 />
-              )}
+              )} */}
 
               <p
                 style={
@@ -351,7 +393,13 @@ const index = () => {
                 navigate("/settings/delete-user");
               }}
             >
-              {activeItem == "delete-user" ? (
+              <img
+                src={imageDeleteUser}
+                alt="imageProfile"
+                width={22}
+                height={22}
+              />
+              {/* {activeItem == "delete-user" ? (
                 <img
                   src={imageDeleteUser}
                   alt="imageProfile"
@@ -371,7 +419,7 @@ const index = () => {
                       : { filter: "invert(100%) brightness(150%)" }
                   }
                 />
-              )}
+              )} */}
 
               <p
                 style={
@@ -395,7 +443,13 @@ const index = () => {
                 navigate("/settings/logout");
               }}
             >
-              {activeItem == "logout" ? (
+              <img
+                src={imageLogOut}
+                alt="imageProfile"
+                width={20}
+                height={20}
+              />
+              {/* {activeItem == "logout" ? (
                 <img
                   src={imageLogOut}
                   alt="imageProfile"
@@ -415,7 +469,7 @@ const index = () => {
                       : { filter: "invert(100%) brightness(150%)" }
                   }
                 />
-              )}
+              )} */}
 
               <p
                 style={
@@ -441,10 +495,7 @@ const index = () => {
         <Route path="/privacy" element={<SettingsPrivacy />} />
         <Route path="/information" element={<SettingsInformations />} />
         <Route path="/logout" element={<SettingsLogout />} />
-        <Route
-          path="/delete-user"
-          element={<SettingsDeleteUser  />}
-        />
+        <Route path="/delete-user" element={<SettingsDeleteUser />} />
       </Routes>
     </div>
   );
