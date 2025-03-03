@@ -23,6 +23,7 @@ import {
   findMonthlyDataElectricityId,
   findSelectDateElectricityId,
   findRangeDataElectricityId,
+  findElectrEnergyById,
 } from "../../redux/actions/dashboardActions";
 import Loading from "../../components/loading";
 import "../dashboard/index.css";
@@ -55,22 +56,22 @@ const dateFormat = "YYYY-MM";
 
 const daysValues = {
   uz: [
-    "Birinchi o'n kunlik",
-    "Ikkinchi o'n kunlik",
-    "Uchunchi o'n kunlik",
-    "To'rtinchi o'n kunlik",
+    "1 o'n kunlik",
+    "2 o'n kunlik",
+    "3 o'n kunlik",
+    "4 o'n kunlik",
   ],
   en: [
-    "The first ten days",
-    "Second ten days",
-    "Third decade",
-    "Fourth decade",
+    "1 ten days",
+    "2 ten days",
+    "3 decade",
+    "4 decade",
   ],
   ru: [
-    "Первые десять дней",
-    "Вторая декада",
-    "Третье десятилетие",
-    "Четвертая декада",
+    "1 десять дней",
+    "2 декада",
+    "3 десятилетие",
+    "4 декада",
   ],
 };
 
@@ -128,7 +129,7 @@ const ElectricalMoreData = () => {
 
   const { loading } = useSelector((state) => state.alert);
   const { colors, theme } = useSelector((state) => state.theme);
-  const { electryLineChartData, electryIdData } = useSelector(
+  const { electryLineChartData, electryIdData, foundElectryById } = useSelector(
     (state) => state.pumps
   );
 
@@ -276,6 +277,10 @@ const ElectricalMoreData = () => {
     };
   }, [changeDataTime, i18n]);
 
+  useEffect(() => {
+    dispatch(findElectrEnergyById(params.id, token, lang));
+  }, []);
+
   const columnsUser = useMemo(
     () => [
       {
@@ -331,7 +336,7 @@ const ElectricalMoreData = () => {
       {
         title: `${t(
           "dashboardPageData.lastStationsData.electryAmper"
-        )}${" "} 3 (A)`,
+        )}${" "} 2 (A)`,
         dataIndex: "current2",
         key: "current2",
         align: "center",
@@ -356,7 +361,7 @@ const ElectricalMoreData = () => {
       {
         title: `${t(
           "dashboardPageData.lastStationsData.electryVolt"
-        )}${" "} 3 (V)`,
+        )}${" "} 2 (V)`,
         dataIndex: "voltage2",
         key: "voltage2",
         align: "center",
@@ -402,17 +407,17 @@ const ElectricalMoreData = () => {
 
   if (loading || isPending) {
     return (
-      <section className='more_info_sections'>
+      <section className="more_info_sections">
         <Loading />
       </section>
     );
   }
 
   return (
-    <section className='more_info_sections'>
+    <section className="more_info_sections">
       <Anchor
-        className='anchor-items-container'
-        direction='horizontal'
+        className="anchor-items-container"
+        direction="horizontal"
         items={t("dataPagesInformation.selectButtonNames", {
           returnObjects: true,
         }).map((item, index) => ({
@@ -441,7 +446,8 @@ const ElectricalMoreData = () => {
                 paddingTop: 5,
                 paddingBottom: 5,
                 borderRadius: 5,
-              }}>
+              }}
+            >
               {item.title}
             </p>
           ),
@@ -458,9 +464,9 @@ const ElectricalMoreData = () => {
           dataSource={
             Array.isArray(electryIdData.data)
               ? electryIdData.data?.map((item, index) => ({
-                ...item,
-                key: item.id || `temp-key1-${index}`,
-              }))
+                  ...item,
+                  key: item.id || `temp-key1-${index}`,
+                }))
               : []
           }
           currentPage={pageData.page}
@@ -473,6 +479,7 @@ const ElectricalMoreData = () => {
           isType={isActiveGraphic}
           theme={theme}
           lineChartData={electryLineChartData}
+          electryName={{ code: "electr", name: foundElectryById.name }}
         />
       )}
 
@@ -482,9 +489,9 @@ const ElectricalMoreData = () => {
           dataSource={
             Array.isArray(electryIdData.data)
               ? electryIdData.data?.map((item, index) => ({
-                ...item,
-                key: item.id || `temp-key2-${index}`,
-              }))
+                  ...item,
+                  key: item.id || `temp-key2-${index}`,
+                }))
               : []
           }
           currentPage={pageData.page}
@@ -497,28 +504,29 @@ const ElectricalMoreData = () => {
           isType={isActiveGraphic}
           theme={theme}
           lineChartData={electryLineChartData}
+          electryName={{ code: "electr", name: foundElectryById.name }}
         />
       )}
       {activeSection === "section3" && !isPending && (
         <ThirdSections
           columns={columnsUser}
           dataSource={
-            Array.isArray(electryIdData?.data?.electricalEnergyData)
-              ? electryIdData.data.electricalEnergyData.map((item, index) => ({
-                ...item,
-                key: item.id || `temp-key3-${index}`,
-                date: item.date?.split("T")[0] || item.date,
-                current1: item.current1?.toFixed(2),
-                current2: item.current2?.toFixed(2),
-                current3: item.current3?.toFixed(2),
-                energyActive: item.energyActive?.toFixed(2),
-                energyReactive: item.energyReactive?.toFixed(2),
-                powerActive: item.powerActive?.toFixed(2),
-                powerReactive: item.powerReactive?.toFixed(2),
-                voltage1: item.voltage1?.toFixed(2),
-                voltage2: item.voltage2?.toFixed(2),
-                voltage3: item.voltage3?.toFixed(2),
-              }))
+            Array.isArray(electryIdData)
+              ? electryIdData.map((item, index) => ({
+                  ...item,
+                  key: item.id || `temp-key3-${index}`,
+                  date: item.date?.split("T")[0] || item.date,
+                  current1: item.current1?.toFixed(2),
+                  current2: item.current2?.toFixed(2),
+                  current3: item.current3?.toFixed(2),
+                  energyActive: item.energyActive?.toFixed(2),
+                  energyReactive: item.energyReactive?.toFixed(2),
+                  powerActive: item.powerActive?.toFixed(2),
+                  powerReactive: item.powerReactive?.toFixed(2),
+                  voltage1: item.voltage1?.toFixed(2),
+                  voltage2: item.voltage2?.toFixed(2),
+                  voltage3: item.voltage3?.toFixed(2),
+                }))
               : []
           }
           currentPage={pageData.page}
@@ -534,6 +542,7 @@ const ElectricalMoreData = () => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          electryName={{ code: "electr", name: foundElectryById.name }}
         />
       )}
       {activeSection === "section4" && !isPending && (
@@ -542,19 +551,19 @@ const ElectricalMoreData = () => {
           dataSource={
             Array.isArray(electryIdData)
               ? electryIdData?.map((item, index) => ({
-                ...item,
-                key: item.id || `temp-key4-${index}`,
-                current1: item.current1?.toFixed(2),
-                current2: item.current2?.toFixed(2),
-                current3: item.current3?.toFixed(2),
-                energyActive: item.energyActive?.toFixed(2),
-                energyReactive: item.energyReactive?.toFixed(2),
-                powerActive: item.powerActive?.toFixed(2),
-                powerReactive: item.powerReactive?.toFixed(2),
-                voltage1: item.voltage1?.toFixed(2),
-                voltage2: item.voltage2?.toFixed(2),
-                voltage3: item.voltage3?.toFixed(2),
-              }))
+                  ...item,
+                  key: item.id || `temp-key4-${index}`,
+                  current1: item.current1?.toFixed(2),
+                  current2: item.current2?.toFixed(2),
+                  current3: item.current3?.toFixed(2),
+                  energyActive: item.energyActive?.toFixed(2),
+                  energyReactive: item.energyReactive?.toFixed(2),
+                  powerActive: item.powerActive?.toFixed(2),
+                  powerReactive: item.powerReactive?.toFixed(2),
+                  voltage1: item.voltage1?.toFixed(2),
+                  voltage2: item.voltage2?.toFixed(2),
+                  voltage3: item.voltage3?.toFixed(2),
+                }))
               : []
           }
           currentPage={pageData.page}
@@ -570,28 +579,31 @@ const ElectricalMoreData = () => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          electryName={{ code: "electr", name: foundElectryById.name }}
         />
       )}
       {activeSection === "section5" && !isPending && (
         <FiveThSections
           columns={columnsUser}
           dataSource={
-            Array.isArray(electryIdData?.data && electryIdData?.data[0]?.data)
-              ? electryIdData?.data[0]?.data?.map((item, index) => ({
-                ...item,
-                key: item.id || `temp-key5-${index}`,
-                date: `${months[lang][electryIdData.data[0]?.month]} ${daysValues[lang][item.tenDayNumber - 1]}`,
-                current1: item.current1?.toFixed(2),
-                current2: item.current2?.toFixed(2),
-                current3: item.current3?.toFixed(2),
-                energyActive: item.energyActive?.toFixed(2),
-                energyReactive: item.energyReactive?.toFixed(2),
-                powerActive: item.powerActive?.toFixed(2),
-                powerReactive: item.powerReactive?.toFixed(2),
-                voltage1: item.voltage1?.toFixed(2),
-                voltage2: item.voltage2?.toFixed(2),
-                voltage3: item.voltage3?.toFixed(2),
-              }))
+            Array.isArray(electryIdData)
+              ? electryIdData?.map((item, index) => ({
+                  ...item,
+                  key: item.id || `temp-key5-${index}`,
+                  date: `${months[lang][item.month - 1]} ${
+                    daysValues[lang][item.tenDayNumber - 1]
+                  }`,
+                  current1: item.current1?.toFixed(2),
+                  current2: item.current2?.toFixed(2),
+                  current3: item.current3?.toFixed(2),
+                  energyActive: item.energyActive?.toFixed(2),
+                  energyReactive: item.energyReactive?.toFixed(2),
+                  powerActive: item.powerActive?.toFixed(2),
+                  powerReactive: item.powerReactive?.toFixed(2),
+                  voltage1: item.voltage1?.toFixed(2),
+                  voltage2: item.voltage2?.toFixed(2),
+                  voltage3: item.voltage3?.toFixed(2),
+                }))
               : []
           }
           currentPage={pageData.page}
@@ -607,6 +619,7 @@ const ElectricalMoreData = () => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          electryName={{ code: "electr", name: foundElectryById.name }}
         />
       )}
       {activeSection === "section6" && !isPending && (
@@ -615,20 +628,20 @@ const ElectricalMoreData = () => {
           dataSource={
             Array.isArray(electryIdData)
               ? electryIdData?.map((item, index) => ({
-                ...item,
-                key: item.id || `temp-key6-${index}`,
-                date: item.date,
-                current1: item.current1?.toFixed(2),
-                current2: item.current2?.toFixed(2),
-                current3: item.current3?.toFixed(2),
-                energyActive: item.energyActive?.toFixed(2),
-                energyReactive: item.energyReactive?.toFixed(2),
-                powerActive: item.powerActive?.toFixed(2),
-                powerReactive: item.powerReactive?.toFixed(2),
-                voltage1: item.voltage1?.toFixed(2),
-                voltage2: item.voltage2?.toFixed(2),
-                voltage3: item.voltage3?.toFixed(2),
-              }))
+                  ...item,
+                  key: item.id || `temp-key6-${index}`,
+                  date: item.date,
+                  current1: item.current1?.toFixed(2),
+                  current2: item.current2?.toFixed(2),
+                  current3: item.current3?.toFixed(2),
+                  energyActive: item.energyActive?.toFixed(2),
+                  energyReactive: item.energyReactive?.toFixed(2),
+                  powerActive: item.powerActive?.toFixed(2),
+                  powerReactive: item.powerReactive?.toFixed(2),
+                  voltage1: item.voltage1?.toFixed(2),
+                  voltage2: item.voltage2?.toFixed(2),
+                  voltage3: item.voltage3?.toFixed(2),
+                }))
               : []
           }
           currentPage={pageData.page}
@@ -644,18 +657,19 @@ const ElectricalMoreData = () => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          electryName={{ code: "electr", name: foundElectryById.name }}
         />
       )}
       {activeSection === "section7" && !isPending && (
         <SevenThSections
           columns={columnsUser}
           dataSource={
-            Array.isArray(electryIdData?.data)
-              ? electryIdData.data?.map((item, index) => ({
-                ...item,
-                key: item.id || `temp-key7-${index}`,
-                date: item.date,
-              }))
+            Array.isArray(electryIdData)
+              ? electryIdData?.map((item, index) => ({
+                  ...item,
+                  key: item.id || `temp-key7-${index}`,
+                  date: item.date,
+                }))
               : []
           }
           currentPage={pageData.page}
@@ -671,18 +685,19 @@ const ElectricalMoreData = () => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          electryName={{ code: "electr", name: foundElectryById.name }}
         />
       )}
       {activeSection === "section8" && !isPending && (
         <EightThSections
           columns={columnsUser}
           dataSource={
-            Array.isArray(electryIdData?.data)
-              ? electryIdData.data?.map((item, index) => ({
-                ...item,
-                key: item.id || `temp-key8-${index}`,
-                date: item.date,
-              }))
+            Array.isArray(electryIdData)
+              ? electryIdData?.map((item, index) => ({
+                  ...item,
+                  key: item.id || `temp-key8-${index}`,
+                  date: item.date,
+                }))
               : []
           }
           currentPage={pageData.page}
@@ -698,6 +713,7 @@ const ElectricalMoreData = () => {
           onChange={onChangeDateRange}
           dateFormat={dateFormat}
           valueInput={dateRange}
+          electryName={{ code: "electr", name: foundElectryById.name }}
         />
       )}
     </section>

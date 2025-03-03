@@ -89,6 +89,7 @@ const FirstSections = memo(
     changeDataViewType,
     isType,
     lineChartData,
+    electryName,
   }) => (
     <div
       style={{
@@ -96,6 +97,22 @@ const FirstSections = memo(
       }}
       className="pump_selected_data_with_today"
     >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <h1 style={{ color: "#405FF2" }}>
+          {electryName.code == "aggregate"
+            ? `${t("dashboardPageData.lastStationsData.agrigateName")}:`
+            : `${t("dashboardPageData.lastStationsData.electryName")}:`}
+        </h1>
+
+        <h1 style={{ color: "#405FF2", marginLeft: "10px" }}>
+          {electryName.name}
+        </h1>
+      </div>
       <div className="header_more_aggregate_data">
         <h1 className="head_title_data">
           {
@@ -159,6 +176,7 @@ const SecondSections = memo(
     changeDataViewType,
     isType,
     lineChartData,
+    electryName,
   }) => (
     <div
       style={{
@@ -166,6 +184,22 @@ const SecondSections = memo(
       }}
       className="pump_selected_data_with_today"
     >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <h1 style={{ color: "#405FF2" }}>
+          {electryName.code == "aggregate"
+            ? `${t("dashboardPageData.lastStationsData.agrigateName")}:`
+            : `${t("dashboardPageData.lastStationsData.electryName")}:`}
+        </h1>
+
+        <h1 style={{ color: "#405FF2", marginLeft: "10px" }}>
+          {electryName.name}
+        </h1>
+      </div>
       <div className="header_more_aggregate_data">
         <h1 className="head_title_data">
           {
@@ -232,6 +266,7 @@ const ThirdSections = memo(
     onChange,
     dateFormat,
     valueInput,
+    electryName,
   }) => (
     <div
       style={{
@@ -239,6 +274,22 @@ const ThirdSections = memo(
       }}
       className="pump_selected_data_with_today"
     >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <h1 style={{ color: "#405FF2" }}>
+          {electryName.code == "aggregate"
+            ? `${t("dashboardPageData.lastStationsData.agrigateName")}:`
+            : `${t("dashboardPageData.lastStationsData.electryName")}:`}
+        </h1>
+
+        <h1 style={{ color: "#405FF2", marginLeft: "10px" }}>
+          {electryName.name}
+        </h1>
+      </div>
       <div className="header_more_aggregate_data">
         <h1 className="head_title_data">
           {
@@ -313,6 +364,7 @@ const FourThSections = memo(
     onChange,
     dateFormat,
     valueInput,
+    electryName,
   }) => (
     <div
       style={{
@@ -320,6 +372,22 @@ const FourThSections = memo(
       }}
       className="pump_selected_data_with_today"
     >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <h1 style={{ color: "#405FF2" }}>
+          {electryName.code == "aggregate"
+            ? `${t("dashboardPageData.lastStationsData.agrigateName")}:`
+            : `${t("dashboardPageData.lastStationsData.electryName")}:`}
+        </h1>
+
+        <h1 style={{ color: "#405FF2", marginLeft: "10px" }}>
+          {electryName.name}
+        </h1>
+      </div>
       <div className="header_more_aggregate_data">
         <h1 className="head_title_data">
           {
@@ -394,6 +462,7 @@ const FiveThSections = memo(
     lineChartData,
     onChange,
     valueInput,
+    electryName,
   }) => (
     <div
       style={{
@@ -401,6 +470,22 @@ const FiveThSections = memo(
       }}
       className="pump_selected_data_with_today"
     >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <h1 style={{ color: "#405FF2" }}>
+          {electryName.code == "aggregate"
+            ? `${t("dashboardPageData.lastStationsData.agrigateName")}:`
+            : `${t("dashboardPageData.lastStationsData.electryName")}:`}
+        </h1>
+
+        <h1 style={{ color: "#405FF2", marginLeft: "10px" }}>
+          {electryName.name}
+        </h1>
+      </div>
       <div className="header_more_aggregate_data">
         <h1 className="head_title_data">
           {valueInput.format("YYYY")}
@@ -479,6 +564,7 @@ const SixThSections = memo(
     onChange,
     dateFormat,
     valueInput,
+    electryName,
   }) => (
     <div
       style={{
@@ -486,6 +572,22 @@ const SixThSections = memo(
       }}
       className="pump_selected_data_with_today"
     >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <h1 style={{ color: "#405FF2" }}>
+          {electryName.code == "aggregate"
+            ? `${t("dashboardPageData.lastStationsData.agrigateName")}:`
+            : `${t("dashboardPageData.lastStationsData.electryName")}:`}
+        </h1>
+
+        <h1 style={{ color: "#405FF2", marginLeft: "10px" }}>
+          {electryName.name}
+        </h1>
+      </div>
       <div className="header_more_aggregate_data">
         <h1 className="head_title_data">
           {valueInput.format("YYYY")}
@@ -564,6 +666,7 @@ const SevenThSections = memo(
     onChange,
     dateFormat,
     valueInput,
+    electryName,
   }) => (
     <div
       style={{
@@ -571,6 +674,22 @@ const SevenThSections = memo(
       }}
       className="pump_selected_data_with_today"
     >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <h1 style={{ color: "#405FF2" }}>
+          {electryName.code == "aggregate"
+            ? `${t("dashboardPageData.lastStationsData.agrigateName")}:`
+            : `${t("dashboardPageData.lastStationsData.electryName")}:`}
+        </h1>
+
+        <h1 style={{ color: "#405FF2", marginLeft: "10px" }}>
+          {electryName.name}
+        </h1>
+      </div>
       <div className="header_more_aggregate_data">
         <h1 className="head_title_data">
           {
@@ -645,6 +764,7 @@ const EightThSections = memo(
     onChange,
     dateFormat,
     valueInput,
+    electryName,
   }) => (
     <div
       style={{
@@ -652,6 +772,22 @@ const EightThSections = memo(
       }}
       className="pump_selected_data_with_today"
     >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <h1 style={{ color: "#405FF2" }}>
+          {electryName.code == "aggregate"
+            ? `${t("dashboardPageData.lastStationsData.agrigateName")}:`
+            : `${t("dashboardPageData.lastStationsData.electryName")}:`}
+        </h1>
+
+        <h1 style={{ color: "#405FF2", marginLeft: "10px" }}>
+          {electryName.name}
+        </h1>
+      </div>
       <div className="header_more_aggregate_data">
         <h1 className="head_title_data">
           {

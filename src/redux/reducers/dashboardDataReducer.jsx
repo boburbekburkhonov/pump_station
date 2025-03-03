@@ -8,6 +8,8 @@ const initialState = {
   pumpIdData: {},
   pumpLineChartData: null,
   electryIdData: {},
+  foundElectryById: {},
+  foundAggregateById: {},
   electryLineChartData: null,
   pumpDataWithStationId: [],
   totalValueData: [],
@@ -55,6 +57,16 @@ const dashboardDataReducer = (state = initialState, action) => {
       return {
         ...state,
         electryIdData: action.payload,
+      };
+    case DASHBOARD_ACTIONS_TYPES.FIND_ELECTRICAL_ENERGY_FOR_NAME:
+      return {
+        ...state,
+        foundElectryById: action.payload,
+      };
+    case DASHBOARD_ACTIONS_TYPES.FIND_AGGREGATE_FOR_NAME:
+      return {
+        ...state,
+        foundAggregateById: action.payload,
       };
     case DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_ELECTY_ID:
       return {

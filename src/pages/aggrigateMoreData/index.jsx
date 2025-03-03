@@ -23,6 +23,7 @@ import {
   getMonthlyAggregateIDData,
   getSelectDateAggregateIDData,
   getRangeAggregateIDData,
+  findAggregateById,
 } from "../../redux/actions/dashboardActions";
 import Loading from "../../components/loading";
 import "../dashboard/index.css";
@@ -113,7 +114,7 @@ const AggrigateMoreData = memo(() => {
 
   const { loading } = useSelector((state) => state.alert);
   const { colors, theme } = useSelector((state) => state.theme);
-  const { pumpIdData, pumpLineChartData } = useSelector((state) => state.pumps);
+  const { pumpIdData, pumpLineChartData, foundAggregateById } = useSelector((state) => state.pumps);
 
   const [pageData, setPageData] = useState({
     page: 1,
@@ -249,6 +250,10 @@ const AggrigateMoreData = memo(() => {
     };
   }, [changeDataTime, i18n]);
 
+  useEffect(() => {
+    dispatch(findAggregateById(params.id, token, lang))
+  }, [])
+
   const columnsUser = useMemo(
     () => [
       {
@@ -374,9 +379,9 @@ const AggrigateMoreData = memo(() => {
               ? pumpIdData.data?.map((item, index) => ({
                   ...item,
                   key: item.id || `temp-key1-${index}`,
-                  volume: item.volume?.toFixed(2),
-                  velocity: item.velocity?.toFixed(2),
-                  flow: item.flow?.toFixed(2),
+                  volume: item.volume,
+                  velocity: item.velocity,
+                  flow: item.flow,
                 }))
               : []
           }
@@ -390,6 +395,7 @@ const AggrigateMoreData = memo(() => {
           isType={isActiveGraphic}
           theme={theme}
           lineChartData={pumpLineChartData}
+          electryName={{code: 'aggregate', name: foundAggregateById.name}}
         />
       )}
 
@@ -401,9 +407,9 @@ const AggrigateMoreData = memo(() => {
               ? pumpIdData.data?.map((item, index) => ({
                   ...item,
                   key: item.id || `temp-key2-${index}`,
-                  volume: item.volume?.toFixed(2),
-                  velocity: item.velocity?.toFixed(2),
-                  flow: item.flow?.toFixed(2),
+                  volume: item.volume,
+                  velocity: item.velocity,
+                  flow: item.flow,
                 }))
               : []
           }
@@ -417,6 +423,7 @@ const AggrigateMoreData = memo(() => {
           isType={isActiveGraphic}
           theme={theme}
           lineChartData={pumpLineChartData}
+          electryName={{code: 'aggregate', name: foundAggregateById.name}}
         />
       )}
       {activeSection === "section3" && !isPending && (
@@ -447,6 +454,7 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          electryName={{code: 'aggregate', name: foundAggregateById.name}}
         />
       )}
       {activeSection === "section4" && !isPending && (
@@ -477,6 +485,7 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          electryName={{code: 'aggregate', name: foundAggregateById.name}}
         />
       )}
       {activeSection === "section5" && !isPending && (
@@ -509,6 +518,7 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          electryName={{code: 'aggregate', name: foundAggregateById.name}}
         />
       )}
       {activeSection === "section6" && !isPending && (
@@ -539,6 +549,7 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          electryName={{code: 'aggregate', name: foundAggregateById.name}}
         />
       )}
       {activeSection === "section7" && !isPending && (
@@ -550,9 +561,9 @@ const AggrigateMoreData = memo(() => {
                   ...item,
                   key: item.id || `temp-key7-${index}`,
                   date: item.date,
-                  volume: item.volume?.toFixed(2),
-                  velocity: item.velocity?.toFixed(2),
-                  flow: item.flow?.toFixed(2),
+                  volume: item.volume,
+                  velocity: item.velocity,
+                  flow: item.flow,
                 }))
               : []
           }
@@ -569,6 +580,7 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          electryName={{code: 'aggregate', name: foundAggregateById.name}}
         />
       )}
       {activeSection === "section8" && !isPending && (
@@ -580,9 +592,9 @@ const AggrigateMoreData = memo(() => {
                   ...item,
                   key: item.id || `temp-key8-${index}`,
                   date: item.date,
-                  volume: item.volume?.toFixed(2),
-                  velocity: item.velocity?.toFixed(2),
-                  flow: item.flow?.toFixed(2),
+                  volume: item.volume,
+                  velocity: item.velocity,
+                  flow: item.flow,
                 }))
               : []
           }
@@ -599,6 +611,7 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeDateRange}
           dateFormat={dateFormat}
           valueInput={dateRange}
+          electryName={{code: 'aggregate', name: foundAggregateById.name}}
         />
       )}
     </section>

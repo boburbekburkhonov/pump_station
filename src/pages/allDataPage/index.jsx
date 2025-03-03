@@ -204,7 +204,6 @@ function AllDatapPage() {
             OK
           </Button>,
         ]}
-        // width="60vw"
         width={
           oneStationLastData?.aggregate[0]?.pumpLastData == undefined
             ? "30vw"
