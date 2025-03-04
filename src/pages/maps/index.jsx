@@ -87,6 +87,8 @@ function MapsPage() {
   }
 
   const showDrawer = (data) => {
+    console.log(data);
+
     setVisible(true);
     setDataStations(data);
   };
@@ -107,7 +109,7 @@ function MapsPage() {
 
       <Drawer
         title={false}
-        placement='bottom'
+        placement='right'
         closable={true}
         onClose={closeDrawer}
         open={visible}>
