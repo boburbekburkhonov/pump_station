@@ -96,8 +96,6 @@ function MapsPage() {
     setDataStations({});
   };
 
-  console.log(stationsMap);
-  
 
   return (
     <section className='map_container'>
@@ -109,7 +107,7 @@ function MapsPage() {
 
       <Drawer
         title={false}
-        placement='right'
+        placement='bottom'
         closable={true}
         onClose={closeDrawer}
         open={visible}>

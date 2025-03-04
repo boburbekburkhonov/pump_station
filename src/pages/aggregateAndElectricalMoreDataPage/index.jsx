@@ -30,6 +30,7 @@ import {
   getMonthlyStationsIdData,
   getSelectStationsIdData,
   getDataRangeStationsIdData,
+  findStationById,
 } from "../../redux/actions/dashboardActions";
 import Loading from "../../components/loading";
 
@@ -60,14 +61,18 @@ const dateFormat = "YYYY-MM";
 function AgrigateAndElectricalMoreData() {
   const dispatch = useDispatch();
   const { i18n, t } = useTranslation();
+  const lang = i18n.language;
   const params = useParams();
   const token = localStorage.getItem("access_token");
 
   const { loading } = useSelector((state) => state.alert);
   const { colors, theme } = useSelector((state) => state.theme);
-  const { totalValueData, pumpDataWithStationId, lineStationId } = useSelector(
-    (state) => state.pumps
-  );
+  const {
+    totalValueData,
+    pumpDataWithStationId,
+    lineStationId,
+    foundStationById,
+  } = useSelector((state) => state.pumps);
 
   const [pageData, setPageData] = useState({
     page: 1,
@@ -204,6 +209,10 @@ function AgrigateAndElectricalMoreData() {
     };
   }, [changeDataTime, i18n]);
 
+  useEffect(() => {
+    dispatch(findStationById(params.id, token, lang));
+  }, []);
+
   const handlePaginationChange = useCallback((page, size) => {
     setPageData({
       page,
@@ -258,7 +267,7 @@ function AgrigateAndElectricalMoreData() {
 
   if (loading || isPending) {
     return (
-      <section className='more_info_sections'>
+      <section className="more_info_sections">
         <Loading />
       </section>
     );
@@ -268,12 +277,13 @@ function AgrigateAndElectricalMoreData() {
     <section
       style={{
         background: colors.layoutBackground,
-        minHeight: '90vh'
+        minHeight: "90vh",
       }}
-      className='more_info_sections'>
+      className="more_info_sections"
+    >
       <Anchor
-        className='anchor-items-container'
-        direction='horizontal'
+        className="anchor-items-container"
+        direction="horizontal"
         items={t("dataPagesInformation.selectButtonNames", {
           returnObjects: true,
         }).map((item, index) => ({
@@ -302,7 +312,8 @@ function AgrigateAndElectricalMoreData() {
                 paddingTop: 5,
                 paddingBottom: 5,
                 borderRadius: 5,
-              }}>
+              }}
+            >
               {item.title}
             </p>
           ),
@@ -328,6 +339,7 @@ function AgrigateAndElectricalMoreData() {
           handlePaginationChange={handlePaginationChange}
           page={pageData.page}
           perPage={pageData.perPage}
+          electryName={{ code: "all", name: foundStationById.name }}
         />
       )}
 
@@ -344,6 +356,7 @@ function AgrigateAndElectricalMoreData() {
           totalColumns={columnsName}
           handlePaginationChange={handlePaginationChange}
           totalDataSource={totalValueData}
+          electryName={{ code: "all", name: foundStationById.name }}
         />
       )}
 
@@ -363,6 +376,7 @@ function AgrigateAndElectricalMoreData() {
           dateFormat={dateFormat}
           valueInput={daylyDate}
           handlePaginationChange={handlePaginationChange}
+          electryName={{ code: "all", name: foundStationById.name }}
         />
       )}
 
@@ -382,6 +396,7 @@ function AgrigateAndElectricalMoreData() {
           dateFormat={dateFormat}
           valueInput={daylyDate}
           handlePaginationChange={handlePaginationChange}
+          electryName={{ code: "all", name: foundStationById.name }}
         />
       )}
 
@@ -401,6 +416,7 @@ function AgrigateAndElectricalMoreData() {
           dateFormat={dateFormat}
           valueInput={daylyDate}
           handlePaginationChange={handlePaginationChange}
+          electryName={{ code: "all", name: foundStationById.name }}
         />
       )}
 
@@ -420,6 +436,7 @@ function AgrigateAndElectricalMoreData() {
           dateFormat={dateFormat}
           valueInput={daylyDate}
           handlePaginationChange={handlePaginationChange}
+          electryName={{ code: "all", name: foundStationById.name }}
         />
       )}
 
@@ -439,6 +456,7 @@ function AgrigateAndElectricalMoreData() {
           dateFormat={dateFormat}
           valueInput={daylyDate}
           handlePaginationChange={handlePaginationChange}
+          electryName={{ code: "all", name: foundStationById.name }}
         />
       )}
 
@@ -458,6 +476,7 @@ function AgrigateAndElectricalMoreData() {
           valueInput={dateRange}
           onChange={onChangeDateRange}
           handlePaginationChange={handlePaginationChange}
+          electryName={{ code: "all", name: foundStationById.name }}
         />
       )}
     </section>

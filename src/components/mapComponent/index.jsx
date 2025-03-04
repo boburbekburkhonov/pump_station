@@ -141,10 +141,10 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
         if (!isNaN(latitude) && !isNaN(longitude)) {
           const marker = L.marker([latitude, longitude], {
             icon: iconToUse,
-          }).addTo(mapRef.current).bindPopup(` 
-            <div style="display: flex; flex-direction: column; align-items: flex-start; width: max-content; gap: 0.75rem;"> 
-            
-              <div style="width: 100%; display: flex; gap: 0.75rem; align-items: center; justify-content: center; margin-bottom: 0.5rem"> 
+          }).addTo(mapRef.current).bindPopup(`
+            <div style="display: flex; flex-direction: column; align-items: flex-start; width: max-content; gap: 0.75rem;">
+
+              <div style="width: 100%; display: flex; gap: 0.75rem; align-items: center; justify-content: center; margin-bottom: 0.5rem">
                 <h2>${item.name}</h2>
               </div>
 
@@ -154,7 +154,7 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
 
                 <h3 style=" padding: 8px;">${t(
                   "dataPagesInformation.allStationsAggrigatetotalsVolume"
-                )}:</h3> 
+                )}:</h3>
 
                 <div style="width: 1.5px; height: 25px; background-color: ${
                   colors.buttonColor
@@ -163,7 +163,7 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
 
                 <h3 style=" padding: 8px;">${totalAggregateData?.toFixed(
                   2
-                )}m³</h3> 
+                )}m³</h3>
               </div>
 
               <div style="width: 100%; justify-content: space-between; display: flex; gap: 0.75rem; align-items: center; border: 2px solid ${
@@ -171,8 +171,8 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
               }; border-radius: 0.25rem">
                 <h3 style=" padding: 8px;">${t(
                   "dataPagesInformation.allStationsElektrActiveEnergy"
-                )}:</h3> 
-                
+                )}:</h3>
+
                 <div style="width: 1.5px; height: 25px; background-color: ${
                   colors.buttonColor
                 };">
@@ -180,9 +180,9 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
 
                 <h3 style=" padding: 8px;">${totalElectrEnegry?.toFixed(2)}${t(
             "dashboardPageData.lastStationsData.energyValueView"
-          )}</h3> 
+          )}</h3>
             </div>
-              <button 
+              <button
                 id="popup-button-${item.id}"
                 style="width: 100%; padding: 8px 12px; background-color: ${
                   colors.buttonColor

@@ -18,6 +18,7 @@ export const DASHBOARD_ACTIONS_TYPES = {
   FIND_ELECTRICAL_ENERGY_ID: "FIND_ELECTRICAL_ENERGY_ID",
   FIND_ELECTRICAL_ENERGY_FOR_NAME: "FIND_ELECTRICAL_ENERGY_FOR_NAME",
   FIND_AGGREGATE_FOR_NAME: "FIND_AGGREGATE_FOR_NAME",
+  FIND_STATION_FOR_NAME: "FIND_STATION_FOR_NAME",
 
   LINE_CHART_DATA_WITH_AGGREGATE_ID: "LINE_CHART_DATA_WITH_AGGREGATE_ID",
   LINE_CHART_DATA_WITH_ELECTY_ID: "LINE_CHART_DATA_WITH_ELECTY_ID",
@@ -414,10 +415,6 @@ export const getTodayDataByStationId =
         expandData: expandedData,
       };
 
-      resTotalData.data.data.sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-      );
-
       const lineChartData = {
         date: resTotalData.data.data?.map((item) => item.date.split(" ")[1]),
         lineData: [
@@ -441,7 +438,9 @@ export const getTodayDataByStationId =
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
-        payload: resTotalData.data.data,
+        payload: resTotalData.data.data.slice().sort(
+            (a, b) => new Date(b.date) - new Date(a.date)
+          )
       });
 
       dispatch({
@@ -527,10 +526,6 @@ export const getYesterdayStationIdData =
         });
       });
 
-      resTotalData.data.data.sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-      );
-
       const dataByDate = {
         dataSource: dataSource,
         expandData: expandedData,
@@ -559,7 +554,9 @@ export const getYesterdayStationIdData =
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
-        payload: resTotalData.data.data,
+        payload: resTotalData.data.data.slice().sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        ),
       });
 
       dispatch({
@@ -653,10 +650,6 @@ export const getDailyStationsIdData =
         });
       });
 
-      resTotalData.data.data.sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-      );
-
       const dataByDate = {
         dataSource: dataSource,
         expandData: expandedData,
@@ -685,7 +678,9 @@ export const getDailyStationsIdData =
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
-        payload: resTotalData.data.data,
+        payload: resTotalData.data.data.slice().sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        )
       });
 
       dispatch({
@@ -745,10 +740,12 @@ export const getWeeklyStationsIdData =
       );
 
       const resultTotalData = [];
+      const resultTotalDataForLineCHart = [];
 
-      resTotalData.data.data.sort((a, b) => b.week - a.week);
+     const sortTotalData = resTotalData.data.data.slice().sort((a, b) => b.week - a.week);
+     const sortTotalDataForLineChart = resTotalData.data.data.slice().sort((a, b) => a.week - b.week);
 
-      resTotalData.data.data.forEach((e) => {
+     sortTotalData.forEach((e) => {
         resultTotalData.push({
           date: `${months[lang][e.month - 1]} ${e.week} ${months[lang][12]}`,
           volume: e.volume,
@@ -756,17 +753,25 @@ export const getWeeklyStationsIdData =
         });
       });
 
+      sortTotalDataForLineChart.forEach((e) => {
+        resultTotalDataForLineCHart.push({
+          date: `${months[lang][e.month - 1]} ${e.week} ${months[lang][12]}`,
+          volume: e.volume,
+          energyActive: e.energyActive,
+        });
+      });
+
       const lineChartData = {
-        date: resultTotalData?.map((item) => item.date),
+        date: resultTotalDataForLineCHart?.map((item) => item.date),
         lineData: [
           {
             name: allDataType[lang].name1,
-            data: resultTotalData?.map((item) => item.volume),
+            data: resultTotalDataForLineCHart?.map((item) => item.volume),
             unit: "m³",
           },
           {
             name: allDataType[lang].name2,
-            data: resultTotalData?.map((item) => item.energyActive),
+            data: resultTotalDataForLineCHart?.map((item) => item.energyActive),
             unit: unitTranslations[lang].kwHour,
           },
         ],
@@ -849,10 +854,12 @@ export const getTenDayStationsIdData =
       );
 
       const resultTotalData = [];
+      const resultTotalDataForLineCHart = [];
 
-      resTotalData.data.data.sort((a, b) => b.month - a.month);
+      const sortTotalData = resTotalData.data.data.slice().sort((a, b) => b.month - a.month);
+      const sortTotalDataForLineChart = resTotalData.data.data.slice().sort((a, b) => a.month - b.month);
 
-      resTotalData.data.data.forEach((e) => {
+      sortTotalData.forEach((e) => {
         resultTotalData.push({
           date: `${months[lang][e.month - 1]} ${
             daysValues[lang][e.tenDayNumber - 1]
@@ -862,17 +869,27 @@ export const getTenDayStationsIdData =
         });
       });
 
+      sortTotalDataForLineChart.forEach((e) => {
+        resultTotalDataForLineCHart.push({
+          date: `${months[lang][e.month - 1]} ${
+            daysValues[lang][e.tenDayNumber - 1]
+          }`,
+          volume: e.volume,
+          energyActive: e.energyActive,
+        });
+      });
+
       const lineChartData = {
-        date: resultTotalData?.map((item) => item.date.split(" ")[1]),
+        date: resultTotalDataForLineCHart?.map((item) => item.date),
         lineData: [
           {
             name: allDataType[lang].name1,
-            data: resultTotalData?.map((item) => item.volume),
+            data: resultTotalDataForLineCHart?.map((item) => item.volume),
             unit: "m³",
           },
           {
             name: allDataType[lang].name2,
-            data: resultTotalData?.map((item) => item.energyActive),
+            data: resultTotalDataForLineCHart?.map((item) => item.energyActive),
             unit: unitTranslations[lang].kwHour,
           },
         ],
@@ -955,10 +972,12 @@ export const getMonthlyStationsIdData =
       );
 
       const resultTotalData = [];
+      const resultTotalDataForLineCHart = [];
 
-      resTotalData.data.data.sort((a, b) => b.month - a.month);
+      const sortTotalData = resTotalData.data.data.slice().sort((a, b) => b.month - a.month);
+      const sortTotalDataForLineChart = resTotalData.data.data.slice().sort((a, b) => a.month - b.month);
 
-      resTotalData.data.data.forEach((e) => {
+      sortTotalData.forEach((e) => {
         resultTotalData.push({
           date: `${months[lang][e.month - 1]}`,
           volume: e.volume,
@@ -966,17 +985,25 @@ export const getMonthlyStationsIdData =
         });
       });
 
+      sortTotalDataForLineChart.forEach((e) => {
+        resultTotalDataForLineCHart.push({
+          date: `${months[lang][e.month - 1]}`,
+          volume: e.volume,
+          energyActive: e.energyActive,
+        });
+      });
+
       const lineChartData = {
-        date: resultTotalData?.map((item) => item.date),
+        date: resultTotalDataForLineCHart?.map((item) => item.date),
         lineData: [
           {
             name: allDataType[lang].name1,
-            data: resultTotalData?.map((item) => item.totalVolume),
+            data: resultTotalDataForLineCHart?.map((item) => item.volume),
             unit: "m³",
           },
           {
             name: allDataType[lang].name2,
-            data: resultTotalData?.map((item) => item.totalEnergyActive),
+            data: resultTotalDataForLineCHart?.map((item) => item.energyActive),
             unit: unitTranslations[lang].kwHour,
           },
         ],
@@ -1092,7 +1119,7 @@ export const getSelectStationsIdData =
         expandData: expandedData,
       };
 
-      resTotalData.data.data.sort(
+      const sortTotalData = resTotalData.data.data.slice().sort(
         (a, b) => new Date(b.date) - new Date(a.date)
       );
 
@@ -1119,7 +1146,7 @@ export const getSelectStationsIdData =
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
-        payload: resTotalData.data.data,
+        payload: sortTotalData,
       });
 
       dispatch({
@@ -1221,7 +1248,7 @@ export const getDataRangeStationsIdData =
         expandData: expandedData,
       };
 
-      resTotalData.data.data.sort(
+      const sortTotalData = resTotalData.data.data.slice().sort(
         (a, b) => new Date(b.date) - new Date(a.date)
       );
 
@@ -1248,7 +1275,7 @@ export const getDataRangeStationsIdData =
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
-        payload: resTotalData.data.data,
+        payload: sortTotalData,
       });
 
       dispatch({
@@ -2979,6 +3006,46 @@ export const findAggregateById = (id, token, lang) => async (dispatch) => {
 
     dispatch({
       type: DASHBOARD_ACTIONS_TYPES.FIND_AGGREGATE_FOR_NAME,
+      payload: res.data.data,
+    });
+  } catch (err) {
+    if (!err.response) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: "Network Error",
+        },
+      });
+    } else {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: err.response.data.message || err.response.statusText,
+        },
+      });
+    }
+  } finally {
+    dispatch({
+      type: GLOBALTYPES.LOADING,
+      payload: false,
+    });
+  }
+};
+
+export const findStationById = (id, token, lang) => async (dispatch) => {
+  try {
+    dispatch({
+      type: GLOBALTYPES.LOADING,
+      payload: true,
+    });
+
+    const res = await getDataApi(
+      `stations/findById?lang=${lang}&id=${id}`,
+      token
+    );
+
+    dispatch({
+      type: DASHBOARD_ACTIONS_TYPES.FIND_STATION_FOR_NAME,
       payload: res.data.data,
     });
   } catch (err) {
