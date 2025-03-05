@@ -90,7 +90,6 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
             >
               <div
                 style={{
-                  maxWidth: "440px",
                   width: "400px",
                   padding: "20px",
                   paddingTop: "0",
