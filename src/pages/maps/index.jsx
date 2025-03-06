@@ -104,9 +104,9 @@ function MapsPage() {
       {isOpen && <div className="overlay" onClick={() => setIsOpen(false)}></div>}
 
       {/* Modal */}
-      <div className={`modal ${isOpen ? "open" : ""}`}>
+      <div className={`modal ${isOpen ? "open" : ""}`} style={{background: colors.layoutBackground}}>
         <div>
-          <span className="close-btn" style={{display: 'block'}} onClick={() => setIsOpen(false)}>
+          <span className="close-btn" style={{display: 'block', color: colors.text}} onClick={() => setIsOpen(false)}>
             &times;
           </span>
         </div>

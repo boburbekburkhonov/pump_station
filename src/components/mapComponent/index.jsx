@@ -94,6 +94,7 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
                   padding: "20px",
                   paddingTop: "0",
                   paddingLeft: "10px",
+                  color: '#000'
                 }}
               >
                 <h2 style={{ margin: "0", marginBottom: "20px", textAlign: "center" }}>
@@ -146,7 +147,7 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
                     }}
                   ></div>
                   <p style={{ margin: "0"}}>
-                    {selectedMarker.electricalEnergyLastData?.reduce((agg, curr) => agg + (curr?.energyActive || 0), 0)}
+                    {selectedMarker.electricalEnergyLastData?.reduce((agg, curr) => agg + (curr.electricalEnergyLastData?.energyActive || 0), 0)}
                     {t("dashboardPageData.lastStationsData.energyValueView")}
                   </p>
                 </div>
