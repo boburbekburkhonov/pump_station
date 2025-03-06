@@ -491,7 +491,16 @@ function DataPage() {
                   />
                 </div>
 
-                <div className="data_page_aggrigate_container">
+                <div
+                  className="data_page_aggrigate_container"
+                  style={{
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => {
+                    findOneStationById(item.id);
+                    setModalOpen(true);
+                  }}
+                >
                   <div
                     className="data_page_aggrigate_card_item"
                     style={{
@@ -519,7 +528,7 @@ function DataPage() {
                         </h4>
                       </div>
 
-                      <div className="data_item" style={{ marginTop: "10px" }}>
+                      <div className="data_item" style={{ marginTop: "4px" }}>
                         <div className="normal_flex_card">
                           <ExperimentOutlined
                             style={{

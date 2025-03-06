@@ -76,7 +76,7 @@ const SettingsPrivacy = () => {
           style={{ borderLeft: `5px solid ${colors.buttonColor}`, background: '#d4d4d4', color: '#000' }}
 
         >
-          <p style={{ color: colors.text }}>{t("settingNavbar.privacy.item29")}</p>
+          <p>{t("settingNavbar.privacy.item29")}</p>
           <p>
             <strong>{t("settingNavbar.privacy.item30")}</strong>{" "}
             {t("settingNavbar.privacy.item31")}

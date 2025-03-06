@@ -75,10 +75,10 @@ p {
   margin-left: 8px;
 }
 
-.modal_wrapper_of_body_electy_energy:hover {
+.modal_electr_one_energy_wrapper:hover {
   opacity: .7;
 }
 
-.modal_wrapper_of_body_electy_energy:active {
+.modal_electr_one_energy_wrapper:active {
   opacity: .3;
 }

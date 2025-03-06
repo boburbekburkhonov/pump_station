@@ -33,7 +33,7 @@ const SettingsInformations = () => {
           className="settings_right_information_download_links"
           style={{ borderLeft: `5px solid ${colors.loginHeadingColor}`, background: '#d4d4d4', color: '#000000', borderRadius: '10px' }}
         >
-          <p>{t("settingNavbar.about.item11")}:</p>
+          <p>{t("settingNavbar.about.item11")}</p>
           <a
             href="https://play.google.com/store/apps/details?id=smarttubewell"
             target="_blank"

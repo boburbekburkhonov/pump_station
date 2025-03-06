@@ -7,21 +7,13 @@ import Cookies from "js-cookie";
 import { Button, Card, Modal, Pagination } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  ArrowRightOutlined,
-  FormOutlined,
-  QrcodeOutlined,
-  SettingOutlined,
-  FieldTimeOutlined,
   ThunderboltOutlined,
   PoweroffOutlined,
   BulbOutlined,
-  LineChartOutlined,
   DashboardOutlined,
-  PieChartFilled,
   NodeIndexOutlined,
   ClockCircleOutlined,
 } from "@ant-design/icons";
-
 import "./index.css";
 import "../maps/index.css";
 import "../dashboard/index.css";
@@ -31,410 +23,11 @@ import {
   findInMapsLastData,
   findLastStationsData,
 } from "../../redux/actions/stationsActions";
-import { formatDate } from "../../utils/inputElementHandler";
 import Loading from "../../components/loading/index";
 import CheckBookmark from "../../assets/bookmark.svg";
 import UnCheckBookmark from "../../assets/bookmarkCheck.svg";
 import moreInfo from "../../assets/info.png";
 import EmptyCard from "../../components/emptyCard";
-
-const ViewMoreModal = memo(
-  ({ openModalData, closeModal, modalData, t, colors }) => {
-    return (
-      <Modal
-        key="aggregate_modal"
-        title={false}
-        open={openModalData}
-        centered
-        onCancel={closeModal}
-        footer={null}
-        style={{
-          color: colors.textColor,
-        }}
-        className="dashboard_view dashboard_view_extra_name"
-      >
-        <div className="dashboard_view_more_modal_card">
-          <div
-            className="dashboard_view_more_modal_card dashboard_view_more_modal_card_extra_name"
-            style={{
-              background: colors.background,
-              boxShadow: `0 0 5px 2px ${colors.boxShadow}`,
-            }}
-          >
-            <div className="dashboard_view_more_electr_card">
-              <div className="dashboard_view_more_modal_card_item 1">
-                <div className="normal_flex_card">
-                  <FormOutlined
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-
-                  <h4>
-                    {t("dashboardPageData.lastStationsData.electryName")}:
-                  </h4>
-                </div>
-
-                <h4 className="dashboard_view_more_import_data">
-                  {modalData.name}
-                </h4>
-              </div>
-
-              <div className="dashboard_view_more_modal_card_item 2">
-                <div className="normal_flex_card">
-                  <QrcodeOutlined
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-                  <h4>
-                    {t("dashboardPageData.lastStationsData.electryCode")}:{" "}
-                  </h4>
-                </div>
-
-                <h4 className="dashboard_view_more_import_data">
-                  {modalData.code}
-                </h4>
-              </div>
-
-              <div className="dashboard_view_more_modal_card_item 3">
-                <div className="normal_flex_card">
-                  <SettingOutlined
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-                  <h4>
-                    {t("dashboardPageData.lastStationsData.aggrigateTitle")}:{" "}
-                  </h4>
-                </div>
-                <h4 className="dashboard_view_more_import_data">
-                  {modalData.workingStatus
-                    ? t("dashboardPageData.lastStationsData.agrigateStatus")
-                    : t("dashboardPageData.lastStationsData.agrigateStatus2")}
-                </h4>
-              </div>
-
-              {/* row */}
-
-              <div className="dashboard_view_more_modal_card_item 4">
-                <div className="normal_flex_card">
-                  <ThunderboltOutlined
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-                  <h4>
-                    {t("dashboardPageData.lastStationsData.electryVolt")}:
-                  </h4>
-                </div>
-
-                <h4 className="dashboard_view_more_import_data">
-                  {modalData.electricalEnergyLastData?.voltage1} V
-                </h4>
-              </div>
-
-              <div className="dashboard_view_more_modal_card_item 5">
-                <div className="normal_flex_card">
-                  <BulbOutlined
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-
-                  <h4>
-                    {t("dashboardPageData.lastStationsData.electryAmper")}:
-                  </h4>
-                </div>
-
-                <h4 className="dashboard_view_more_import_data">
-                  {modalData.electricalEnergyLastData?.current1} A
-                </h4>
-              </div>
-
-              <div className="dashboard_view_more_modal_card_item 6">
-                <div className="normal_flex_card">
-                  <PoweroffOutlined
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-
-                  <h4>
-                    {t("dashboardPageData.lastStationsData.powerActive")}:
-                  </h4>
-                </div>
-
-                <h4 className="dashboard_view_more_import_data">
-                  {modalData.electricalEnergyLastData?.powerActive} Kw
-                </h4>
-              </div>
-
-              {/* row */}
-
-              <div className="dashboard_view_more_modal_card_item 7">
-                <div className="normal_flex_card">
-                  <ThunderboltOutlined
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-
-                  <h4>
-                    {t("dashboardPageData.lastStationsData.electryVolt")}:
-                  </h4>
-                </div>
-
-                <h4 className="dashboard_view_more_import_data">
-                  {modalData.electricalEnergyLastData?.voltage2} V
-                </h4>
-              </div>
-
-              <div className="dashboard_view_more_modal_card_item 8">
-                <div className="normal_flex_card">
-                  <BulbOutlined
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-                  <h4>
-                    {t("dashboardPageData.lastStationsData.electryAmper")}:
-                  </h4>
-                </div>
-
-                <h4 className="dashboard_view_more_import_data">
-                  {modalData.electricalEnergyLastData?.current2} A
-                </h4>
-              </div>
-
-              <div className="dashboard_view_more_modal_card_item 9">
-                <div className="normal_flex_card">
-                  <PoweroffOutlined
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-                  <h4>
-                    {t("dashboardPageData.lastStationsData.powerReactive")}:
-                  </h4>
-                </div>
-
-                <h4 className="dashboard_view_more_import_data">
-                  {modalData.electricalEnergyLastData?.powerReactive} Kw
-                </h4>
-              </div>
-
-              {/* row */}
-
-              <div className="dashboard_view_more_modal_card_item 10">
-                <div className="normal_flex_card">
-                  <ThunderboltOutlined
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-                  <h4>
-                    {t("dashboardPageData.lastStationsData.electryVolt")}:
-                  </h4>
-                </div>
-                <h4 className="dashboard_view_more_import_data">
-                  {modalData.electricalEnergyLastData?.voltage3} V
-                </h4>
-              </div>
-
-              <div className="dashboard_view_more_modal_card_item 11">
-                <div className="normal_flex_card">
-                  <BulbOutlined
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-                  <h4>
-                    {t("dashboardPageData.lastStationsData.electryAmper")}:
-                  </h4>
-                </div>
-
-                <h4 className="dashboard_view_more_import_data">
-                  {modalData.electricalEnergyLastData?.current3} A
-                </h4>
-              </div>
-
-              <div className="dashboard_view_more_modal_card_item 12">
-                <div className="normal_flex_card">
-                  <PieChartFilled
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-
-                  <h4>
-                    {t("dashboardPageData.lastStationsData.energyActiveTotal")}:
-                  </h4>
-                </div>
-
-                <h4 className="dashboard_view_more_import_data">
-                  {modalData.electricalEnergyLastData?.energyActiveTotal}{" "}
-                  {t("dashboardPageData.lastStationsData.energyValueView")}
-                </h4>
-              </div>
-
-              {/* row */}
-
-              <div className="dashboard_view_more_modal_card_item 13">
-                <div className="normal_flex_card">
-                  <DashboardOutlined
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-                  <h4>
-                    {t("dashboardPageData.lastStationsData.energyActive")}:
-                  </h4>
-                </div>
-
-                <h4 className="dashboard_view_more_import_data">
-                  {modalData.electricalEnergyLastData?.energyActive}{" "}
-                  {t("dashboardPageData.lastStationsData.energyValueView")}
-                </h4>
-              </div>
-
-              <div className="dashboard_view_more_modal_card_item 14">
-                <div className="normal_flex_card">
-                  <LineChartOutlined
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-                  <h4>
-                    {t("dashboardPageData.lastStationsData.powerActive")}:{" "}
-                  </h4>
-                </div>
-
-                <h4 className="dashboard_view_more_import_data">
-                  {modalData.electricalEnergyLastData?.powerActive} Kw
-                </h4>
-              </div>
-
-              <div className="dashboard_view_more_modal_card_item 15">
-                <div className="normal_flex_card">
-                  <PieChartFilled
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-                  <h4>
-                    {t(
-                      "dashboardPageData.lastStationsData.energyReactiveTotal"
-                    )}
-                    :{" "}
-                  </h4>
-                </div>
-
-                <h4 className="dashboard_view_more_import_data">
-                  {modalData.electricalEnergyLastData?.energyReactiveTotal}{" "}
-                  {t("dashboardPageData.lastStationsData.energyValueView")}
-                </h4>
-              </div>
-
-              {/* row */}
-
-              <div className="dashboard_view_more_modal_card_item 16">
-                <div className="normal_flex_card">
-                  <DashboardOutlined
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-                  <h4>
-                    {t("dashboardPageData.lastStationsData.energyReactive")}:
-                  </h4>
-                </div>
-
-                <h4 className="dashboard_view_more_import_data">
-                  {modalData.electricalEnergyLastData?.energyReactive}{" "}
-                  {t("dashboardPageData.lastStationsData.energyValueView")}
-                </h4>
-              </div>
-
-              <div className="dashboard_view_more_modal_card_item 17">
-                <div className="normal_flex_card">
-                  <LineChartOutlined
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-                  <h4>
-                    {t("dashboardPageData.lastStationsData.powerReactive")}:{" "}
-                  </h4>
-                </div>
-
-                <h4 className="dashboard_view_more_import_data">
-                  {modalData.electricalEnergyLastData?.powerReactive} Kw
-                </h4>
-              </div>
-
-              <div className="dashboard_view_more_modal_card_item 18">
-                <div className="normal_flex_card">
-                  <FieldTimeOutlined
-                    style={{
-                      color: "#11A9FF",
-                    }}
-                    className="dashboard_last_data_icons"
-                  />
-                  <h4>
-                    {t("dashboardPageData.lastStationsData.aggrigateTime")}:{" "}
-                  </h4>
-                </div>
-
-                <h4 className="dashboard_view_more_import_data">
-                  {formatDate(modalData.electricalEnergyLastData?.date)}
-                </h4>
-              </div>
-            </div>
-            <div className="data_page_aggrigate_item_child_row">
-              <Button
-                onClick={closeModal}
-                type="default"
-                style={{
-                  width: "110px",
-                }}
-              >
-                {t("stationsPageData.cancelButtonModal")}
-              </Button>
-              <Link
-                to={`/electrical/infos/${modalData?.electricalEnergyLastData?.electricalEnergyId}`}
-                className="read_more_data_page_card"
-                style={{
-                  width: "170px",
-                }}
-              >
-                {t("stationsPageData.table14Data")}
-                <ArrowRightOutlined className="read_more_data_page_card_button" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </Modal>
-    );
-  }
-);
 
 function ElectrPage() {
   const dispatch = useDispatch();
@@ -652,7 +245,7 @@ function ElectrPage() {
                 {oneStationLastData?.electricalEnergyLastData.map((e, i) => {
                   return (
                     <div
-                      className="modal_aggregate_wrapper"
+                      className="modal_aggregate_wrapper modal_electr_one_energy_wrapper"
                       key={i}
                       onClick={() =>
                         navigate(
@@ -913,7 +506,6 @@ function ElectrPage() {
           </>
         )}
       </Modal>
-
       <div className="data_main_header">
         <h1>{t("dataPagesInformation.dataHeaderElecrtTitle")}</h1>
       </div>
@@ -930,23 +522,25 @@ function ElectrPage() {
           {stationsMap?.data?.map((item, index) => {
             const allElectrData = item.electricalEnergyLastData?.reduce(
               (acc, itemAg) => {
-                const voltage1 = itemAg?.electricalEnergyLastData?.voltage1;
+                const energyActiveTotal =
+                  itemAg?.electricalEnergyLastData?.energyActiveTotal;
 
-                const current1 = itemAg?.electricalEnergyLastData?.current1;
+                const energyReactiveTotal =
+                  itemAg?.electricalEnergyLastData?.energyReactiveTotal;
 
                 return {
-                  voltage1:
-                    acc.voltage1 +
-                    (voltage1 ? +voltage1 : 0) /
+                  energyActiveTotal:
+                    acc.energyActiveTotal +
+                    (energyActiveTotal ? +energyActiveTotal : 0) /
                       item?.electricalEnergyLastData?.length,
-                  current1:
-                    acc.current1 +
-                    (current1 ? +current1 : 0) /
+                  energyReactiveTotal:
+                    acc.energyReactiveTotal +
+                    (energyReactiveTotal ? +energyReactiveTotal : 0) /
                       item?.electricalEnergyLastData?.length,
                 };
               },
-              { voltage1: 0, current1: 0 }
-            ) || { voltage1: 0, current1: 0 };
+              { energyActiveTotal: 0, energyReactiveTotal: 0 }
+            ) || { energyActiveTotal: 0, energyReactiveTotal: 0 };
 
             return (
               <Card
@@ -993,7 +587,16 @@ function ElectrPage() {
                   />
                 </div>
 
-                <div className="data_page_aggrigate_container">
+                <div
+                  className="data_page_aggrigate_container"
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    findOneStationById(item.id);
+                    setModalOpen(true);
+                  }}
+                >
                   <div
                     className="all_stations_data_page_aggrigate_card_item"
                     style={{
@@ -1001,9 +604,12 @@ function ElectrPage() {
                     }}
                   >
                     <div className="all_stations_data_page_aggrigate_item">
-                      <div className="all_stations_data_item">
+                      <div
+                        className="all_stations_data_item"
+                        style={{ marginTop: "10px" }}
+                      >
                         <div className="normal_flex_card">
-                          <ThunderboltOutlined
+                          <NodeIndexOutlined
                             style={{
                               color: colors.textColor,
                             }}
@@ -1011,19 +617,19 @@ function ElectrPage() {
                           />
                           <h4>
                             {t(
-                              "dashboardPageData.lastStationsData.electryVolt"
+                              "dataPagesInformation.allStationsElektrActiveEnergy"
                             )}
                             :{" "}
                           </h4>
                         </div>
                         <h4 className="all_stations_data_item_import_data">
-                          {allElectrData.voltage1} V
+                          {allElectrData.energyActiveTotal} kw
                         </h4>
                       </div>
 
                       <div
                         className="all_stations_data_item"
-                        style={{ marginTop: "8px" }}
+                        style={{ marginTop: "12px" }}
                       >
                         <div className="normal_flex_card">
                           <BulbOutlined
@@ -1034,13 +640,13 @@ function ElectrPage() {
                           />
                           <h4>
                             {t(
-                              "dashboardPageData.lastStationsData.electryAmper"
+                              "dataPagesInformation.allStationsElektrReactiveEnergy"
                             )}
                             :{" "}
                           </h4>
                         </div>
                         <h4 className="all_stations_data_item_import_data">
-                          {allElectrData.current1} A
+                          {allElectrData.energyReactiveTotal} kw
                         </h4>
                       </div>
                     </div>
@@ -1060,14 +666,6 @@ function ElectrPage() {
           align="end"
         />
       </div>
-
-      {/* <ViewMoreModal
-        openModalData={openModalData}
-        closeModal={handleCloseModal}
-        modalData={modalData}
-        colors={colors}
-        t={t}
-      /> */}
     </section>
   );
 }
