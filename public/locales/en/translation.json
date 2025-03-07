@@ -357,7 +357,7 @@
       "electryVolt": "Electric Voltage",
       "electryAmper": "Electric Current",
       "energyValueView": "kWh",
-      "energyActive": "Active Energy",
+      "energyActive": "Active Energy (kw)",
       "energyReactive": "Reactive Energy",
       "powerActive": "Active Power",
       "powerReactive": "Reactive Power",

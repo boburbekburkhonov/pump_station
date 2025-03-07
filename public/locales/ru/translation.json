@@ -357,7 +357,7 @@
       "electryVolt": "Электрическое напряжение",
       "electryAmper": "Электрический ток",
       "energyValueView": "кВт·ч",
-      "energyActive": "Активная энергия",
+      "energyActive": "Активная энергия (kw)",
       "energyReactive": "Реактивная энергия",
       "powerActive": "Активная мощность",
       "powerReactive": "Реактивная мощность",

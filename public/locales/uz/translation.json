@@ -357,7 +357,7 @@
       "electryVolt": "Elektr kuchlanish",
       "electryAmper": "Tok kuchi",
       "energyValueView": "Kw*soat",
-      "energyActive": "Aktiv energiya",
+      "energyActive": "Aktiv energiya (kw)",
       "energyReactive": "Reaktiv energiya",
       "powerActive": "Aktiv quvat",
       "powerReactive": "Reaktiv quvat",

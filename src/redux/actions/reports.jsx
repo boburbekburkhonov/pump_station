@@ -3,6 +3,7 @@ import { getDataApi } from "../../utils";
 
 export const REPORTS_TYPES = {
   GET_ALL_STATIONS: "GET_ALL_STATIONS",
+  GET_STATION_TODAY_ALL_DATA_BY_STATION_ID: "GET_STATION_TODAY_ALL_DATA_BY_STATION_ID",
   GET_PUMP_TODAY_DATA_BY_STATION_ID: "GET_PUMP_TODAY_DATA_BY_STATION_ID",
   GET_PUMP_YESTEDAY_DATA_BY_STATION_ID: "GET_PUMP_YESTEDAY_DATA_BY_STATION_ID",
   GET_PUMP_DAILY_DATA_BY_STATION_ID: "GET_PUMP_DAILY_DATA_BY_STATION_ID",
@@ -33,7 +34,7 @@ export const getAllStations = (lang, token) => async (dispatch) => {
   try {
     const res = await getDataApi(`stations/findAll?lang=${lang}`, token);
     const data = res.data.data.data;
-    
+
     dispatch({
       type: REPORTS_TYPES.GET_ALL_STATIONS,
       payload: data,
@@ -58,6 +59,49 @@ export const getAllStations = (lang, token) => async (dispatch) => {
 };
 
 // ! TODAY DATA
+
+export const getStationTodayAllDataByStationId =
+  (lang, token, stationId) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const res = await getDataApi(
+        `stations/findTodayDataAllByStationId?lang=${lang}&stationId=${stationId}`,
+        token
+      );
+      const data = res.data.data.slice()
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+
+      dispatch({
+        type: REPORTS_TYPES.GET_STATION_TODAY_ALL_DATA_BY_STATION_ID,
+        payload: data,
+      });
+
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    }
+  };
 export const getPumpTodayDataByStationId =
   (lang, token, stationId, page, perPage) => async (dispatch) => {
     try {

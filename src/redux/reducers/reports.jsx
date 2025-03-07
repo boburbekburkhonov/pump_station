@@ -2,6 +2,7 @@ import { REPORTS_TYPES } from "../actions/reports";
 
 const initialState = {
   allStations: [],
+  stationAllDataByStationId: [],
   todayDataByStationId: [],
   yesterdayDataByStationId: [],
   dailyDataByStationId: [],
@@ -25,6 +26,11 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         allStations: action.payload,
+      };
+    case REPORTS_TYPES.GET_STATION_TODAY_ALL_DATA_BY_STATION_ID:
+      return {
+        ...state,
+        stationAllDataByStationId: action.payload,
       };
     case REPORTS_TYPES.GET_PUMP_TODAY_DATA_BY_STATION_ID:
       return {

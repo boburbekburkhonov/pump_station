@@ -19,6 +19,7 @@ import {
   getPumpTodayDataByStationId,
   getPumpWeeklyDataByStationId,
   getPumpYesterdayDataByStationId,
+  getStationTodayAllDataByStationId,
 } from "../../redux/actions/reports";
 import dayjs from "dayjs";
 import { DatePicker, Modal, Pagination, Select, Table } from "antd";
@@ -71,6 +72,7 @@ function Reports() {
   const { colors } = useSelector((state) => state.theme);
   const {
     allStations,
+    stationAllDataByStationId,
     todayDataByStationId,
     yesterdayDataByStationId,
     dailyDataByStationId,
@@ -225,6 +227,13 @@ function Reports() {
       setStationNameTotalInformation(allStations[selectDataTypeForStation]?.name)
       switch (selectDataType) {
         case 0:
+          dispatch(
+            getStationTodayAllDataByStationId(
+              lang,
+              accessToken,
+              selectedStationForSort,
+            )
+          );
           dispatch(
             getPumpTodayDataByStationId(
               lang,
@@ -1883,14 +1892,17 @@ function Reports() {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
+                    {
+                      stationAllDataByStationId.map((e, i) => {
+                        return (
+                          <tr key={i}>
                         <td
                           style={{
                           fontSize: "15px",
                           textAlign: "center",
                           }}
                         >
-                          2025-01-24
+                          {e.date}
                         </td>
                         <td
                           style={{
@@ -1898,7 +1910,7 @@ function Reports() {
                           textAlign: "center",
                           }}
                         >
-                          42
+                          {e.volume}
                         </td>
                         <td
                           style={{
@@ -1906,41 +1918,7 @@ function Reports() {
                           textAlign: "center",
                           }}
                         >
-                          12
-                        </td>
-                        <td
-                          style={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          }}
-                        >
-                          19
-                        </td>
-                    </tr>
-                    <tr>
-                        <td
-                          style={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          }}
-                        >
-                          2025-01-24
-                        </td>
-                        <td
-                          style={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          }}
-                        >
-                          42
-                        </td>
-                        <td
-                          style={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          }}
-                        >
-                          12
+                          {e.energyActive}
                         </td>
                         <td
                           style={{
@@ -1951,74 +1929,9 @@ function Reports() {
                           19
                         </td>
                     </tr>
-                    <tr>
-                        <td
-                          style={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          }}
-                        >
-                          2025-01-24
-                        </td>
-                        <td
-                          style={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          }}
-                        >
-                          42
-                        </td>
-                        <td
-                          style={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          }}
-                        >
-                          12
-                        </td>
-                        <td
-                          style={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          }}
-                        >
-                          19
-                        </td>
-                    </tr>
-                    <tr>
-                        <td
-                          style={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          }}
-                        >
-                          2025-01-24
-                        </td>
-                        <td
-                          style={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          }}
-                        >
-                          42
-                        </td>
-                        <td
-                          style={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          }}
-                        >
-                          12
-                        </td>
-                        <td
-                          style={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          }}
-                        >
-                          19
-                        </td>
-                    </tr>
+                        )
+                      })
+                    }
                   </tbody>
               </table>
               </div>
