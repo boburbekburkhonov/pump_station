@@ -19,7 +19,14 @@ import {
   getPumpTodayDataByStationId,
   getPumpWeeklyDataByStationId,
   getPumpYesterdayDataByStationId,
+  getStationDailyAllDataByStationId,
+  getStationtChosenDateAllDataByStationId,
+  getStationtDateRangeAllDataByStationId,
+  getStationtMonthlyAllDataByStationId,
   getStationTodayAllDataByStationId,
+  getStationtTenDayAllDataByStationId,
+  getStationWeeklyAllDataByStationId,
+  getStationYesterdayAllDataByStationId,
 } from "../../redux/actions/reports";
 import dayjs from "dayjs";
 import { DatePicker, Modal, Pagination, Select, Table } from "antd";
@@ -54,7 +61,11 @@ import weekYear from "dayjs/plugin/weekYear";
 import moment from "moment";
 import { getIcon } from "../../data";
 import { q } from "framer-motion/client";
-import { AppstoreOutlined, CheckCircleOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+import {
+  AppstoreOutlined,
+  CheckCircleOutlined,
+  ExclamationCircleOutlined,
+} from "@ant-design/icons";
 import Loading from "../../components/loading";
 
 const { RangePicker } = DatePicker;
@@ -73,6 +84,7 @@ function Reports() {
   const {
     allStations,
     stationAllDataByStationId,
+    pumpDataByStationId,
     todayDataByStationId,
     yesterdayDataByStationId,
     dailyDataByStationId,
@@ -92,6 +104,7 @@ function Reports() {
   const { pumpLineChartData, electryLineChartData } = useSelector(
     (state) => state.pumps
   );
+
   const [selectDataType, setSelectDataType] = useState(0);
   const [selectDataTypeForStation, setSelectDataTypeForStation] = useState(0);
   const [selectValueData, setSelectValueData] = useState(0);
@@ -118,12 +131,14 @@ function Reports() {
     page: 1,
     perPage: 10,
   });
-  const [pageDataForElectricalEnergy, setPageDataForElectricalEnergy] = useState({
-    page: 1,
-    perPage: 10,
-  });
+  const [pageDataForElectricalEnergy, setPageDataForElectricalEnergy] =
+    useState({
+      page: 1,
+      perPage: 10,
+    });
   const [dateRange, setDateRange] = useState([dayjs(), dayjs()]);
-  const [stationNameTotalInformation, setStationNameTotalInformation] = useState("");
+  const [stationNameTotalInformation, setStationNameTotalInformation] =
+    useState("");
   const { loading } = useSelector((state) => state.alert);
   const [open, setOpen] = useState(false);
   const [allStationsForModal, setAllStationsForModal] = useState(allStations);
@@ -161,9 +176,9 @@ function Reports() {
   const findAllStationByActiveOrNotActive = (item) => {
     setPageDataStationsForModal({
       page: 1,
-      perPage: 10
-    })
-    if(item == 0){
+      perPage: 10,
+    });
+    if (item == 0) {
       const processedData = allStations.map((station) => ({
         key: station.id,
         name: station.name,
@@ -176,8 +191,8 @@ function Reports() {
       }));
 
       setAllStationsForModal(processedData);
-    } else if(item == 1){
-      const activeStations = allStations.filter(e => e.status == true)
+    } else if (item == 1) {
+      const activeStations = allStations.filter((e) => e.status == true);
       const processedData = activeStations.map((station) => ({
         key: station.id,
         name: station.name,
@@ -189,8 +204,8 @@ function Reports() {
         location: station.location,
       }));
       setAllStationsForModal(processedData);
-    } else if(item == 2){
-      const notActiveStations = allStations.filter(e => e.status != true)
+    } else if (item == 2) {
+      const notActiveStations = allStations.filter((e) => e.status != true);
       const processedData = notActiveStations.map((station) => ({
         key: station.id,
         name: station.name,
@@ -203,7 +218,7 @@ function Reports() {
       }));
       setAllStationsForModal(processedData);
     }
-  }
+  };
 
   const findStationBySort = useCallback(
     (e) => {
@@ -222,16 +237,18 @@ function Reports() {
         allStations[selectDataTypeForStation]?.electricalEnergy[0]?.id;
       setSelectValueDataForLineChart(0);
       setSelectValueElectricalEnergyDataForLineChart(0);
-      setPageData({page: 1, perPage: 10})
-      setPageDataForElectricalEnergy({page: 1, perPage: 10})
-      setStationNameTotalInformation(allStations[selectDataTypeForStation]?.name)
+      setPageData({ page: 1, perPage: 10 });
+      setPageDataForElectricalEnergy({ page: 1, perPage: 10 });
+      setStationNameTotalInformation(
+        allStations[selectDataTypeForStation]?.name
+      );
       switch (selectDataType) {
         case 0:
           dispatch(
             getStationTodayAllDataByStationId(
               lang,
               accessToken,
-              selectedStationForSort,
+              selectedStationForSort
             )
           );
           dispatch(
@@ -273,6 +290,13 @@ function Reports() {
           break;
         case 1:
           dispatch(
+            getStationYesterdayAllDataByStationId(
+              lang,
+              accessToken,
+              selectedStationForSort
+            )
+          );
+          dispatch(
             getPumpYesterdayDataByStationId(
               lang,
               accessToken,
@@ -310,6 +334,15 @@ function Reports() {
           );
           break;
         case 2:
+          dispatch(
+            getStationDailyAllDataByStationId(
+              lang,
+              accessToken,
+              selectedStationForSort,
+              daylyDate.year(),
+              daylyDate.month() + 1
+            )
+          );
           dispatch(
             getPumpDailyDataByStationId(
               lang,
@@ -355,7 +388,16 @@ function Reports() {
             )
           );
           break;
-          case 3:
+        case 3:
+          dispatch(
+            getStationWeeklyAllDataByStationId(
+              lang,
+              accessToken,
+              selectedStationForSort,
+              daylyDate.year(),
+              daylyDate.month() + 1
+            )
+          );
           dispatch(
             getPumpWeeklyDataByStationId(
               lang,
@@ -401,6 +443,14 @@ function Reports() {
           break;
         case 4:
           dispatch(
+            getStationtTenDayAllDataByStationId(
+              lang,
+              accessToken,
+              selectedStationForSort,
+              daylyDate.year()
+            )
+          );
+          dispatch(
             getPumpTenDayDataByStationId(
               lang,
               accessToken,
@@ -442,6 +492,14 @@ function Reports() {
           );
           break;
         case 5:
+          dispatch(
+            getStationtMonthlyAllDataByStationId(
+              lang,
+              accessToken,
+              selectedStationForSort,
+              daylyDate.year()
+            )
+          );
           dispatch(
             getPumpMonthlyDataByStationId(
               lang,
@@ -485,6 +543,14 @@ function Reports() {
           break;
         case 6:
           dispatch(
+            getStationtChosenDateAllDataByStationId(
+              lang,
+              accessToken,
+              selectedStationForSort,
+              dateForChosenDate
+            )
+          );
+          dispatch(
             getPumpChosenDateDataByStationId(
               lang,
               accessToken,
@@ -526,6 +592,15 @@ function Reports() {
           );
           break;
         case 7:
+          dispatch(
+            getStationtDateRangeAllDataByStationId(
+              lang,
+              accessToken,
+              selectedStationForSort,
+              startDate,
+              endDate
+            )
+          );
           dispatch(
             getPumpDateRangeDataByStationId(
               lang,
@@ -583,6 +658,7 @@ function Reports() {
       selectDataType,
       selectValueDataForLineChart,
       daylyDate,
+      dateRange,
     ]
   );
 
@@ -611,8 +687,8 @@ function Reports() {
       dataIndex: "energyReactive",
       key: "energyReactive",
       align: "center",
-    }
-  ]
+    },
+  ];
 
   const columnsTotalAggregateInformation = [
     {
@@ -645,7 +721,7 @@ function Reports() {
       key: "date",
       align: "center",
     },
-  ]
+  ];
 
   const columnsTotalOneAggregateInformation = [
     {
@@ -671,8 +747,8 @@ function Reports() {
       dataIndex: "flow",
       key: "flow",
       align: "center",
-    }
-  ]
+    },
+  ];
 
   const columnsTotalElectricalEnergyInformation = [
     {
@@ -747,7 +823,7 @@ function Reports() {
       key: "date",
       align: "center",
     },
-  ]
+  ];
 
   const columnsTotalOneElectricalEnergyInformation = [
     {
@@ -815,8 +891,8 @@ function Reports() {
       dataIndex: "energyReactive",
       key: "energyReactive",
       align: "center",
-    }
-  ]
+    },
+  ];
 
   const columnsUser = [
     {
@@ -940,58 +1016,59 @@ function Reports() {
   };
 
   const isEmptyData = () => {
-    if (reportTableHeading.index == 0) {
-      if (
-        todayDataByStationId.totalPages == 0 ||
-        !todayDataByStationId.data?.length
-      ) {
-        return true;
-      }
-    } else if (reportTableHeading.index == 1) {
-      if (
-        yesterdayDataByStationId.totalPages == 0 ||
-        !yesterdayDataByStationId.data?.length
-      ) {
-        return true;
-      }
-    } else if (reportTableHeading.index == 2) {
-      if (
-        dailyDataByStationId.totalPages == 0 ||
-        !dailyDataByStationId.data?.length
-      ) {
-        return true;
-      }
-    } else if (reportTableHeading.index == 3) {
-      if (
-        weeklyDataByStationId.totalPages == 0 ||
-        !weeklyDataByStationId.data?.length
-      ) {
-        return true;
-      }
-    } else if (reportTableHeading.index == 4) {
-      if (
-        tenDayDataByStationId.totalPages == 0 ||
-        !tenDayDataByStationId.data?.length
-      ) {
-        return true;
-      }
-    } else if (reportTableHeading.index == 5) {
-      if (
-        monthlyDataByStationId.totalPages == 0 ||
-        !monthlyDataByStationId.data?.length
-      ) {
-        return true;
-      }
-    } else if (reportTableHeading.index == 6) {
-      if (
-        chosenDateDataByStationId.totalPages == 0 ||
-        !chosenDateDataByStationId.data?.length
-      ) {
-        return true;
-      }
-    } else {
-      return true;
-    }
+    // if (reportTableHeading.index == 0) {
+    //   if (
+    //     todayDataByStationId.totalPages == 0 ||
+    //     !todayDataByStationId.data?.length
+    //   ) {
+    //     return true;
+    //   }
+    // } else if (reportTableHeading.index == 1) {
+    //   if (
+    //     yesterdayDataByStationId.totalPages == 0 ||
+    //     !yesterdayDataByStationId.data?.length
+    //   ) {
+    //     return true;
+    //   }
+    // } else if (reportTableHeading.index == 2) {
+    //   if (
+    //     dailyDataByStationId.totalPages == 0 ||
+    //     !dailyDataByStationId.data?.length
+    //   ) {
+    //     return true;
+    //   }
+    // } else if (reportTableHeading.index == 3) {
+    //   if (
+    //     weeklyDataByStationId.totalPages == 0 ||
+    //     !weeklyDataByStationId.data?.length
+    //   ) {
+    //     return true;
+    //   }
+    // } else if (reportTableHeading.index == 4) {
+    //   if (
+    //     tenDayDataByStationId.totalPages == 0 ||
+    //     !tenDayDataByStationId.data?.length
+    //   ) {
+    //     return true;
+    //   }
+    // } else if (reportTableHeading.index == 5) {
+    //   if (
+    //     monthlyDataByStationId.totalPages == 0 ||
+    //     !monthlyDataByStationId.data?.length
+    //   ) {
+    //     return true;
+    //   }
+    // } else if (reportTableHeading.index == 6) {
+    //   if (
+    //     chosenDateDataByStationId.totalPages == 0 ||
+    //     !chosenDateDataByStationId.data?.length
+    //   ) {
+    //     return true;
+    //   }
+    // } else {
+    //   return true;
+    // }
+    return false;
   };
 
   const isEmptyDataElectricalEnergy = () => {
@@ -1459,29 +1536,32 @@ function Reports() {
     }
   };
 
-  const returnWeekCount = () =>{
-    const weeksData = weeklyDataByStationId.data[0]?.aggregateData
-    const resultWeeksForTable = []
-    weeksData.forEach(e => {
-      if(!resultWeeksForTable.includes(e.week)){
-        resultWeeksForTable.push(e.week)
+  const returnWeekCount = () => {
+    if (weeklyDataByStationId.length > 0) {
+      const weeksData = weeklyDataByStationId[0]?.aggregateData;
+      const resultWeeksForTable = [];
+      weeksData.forEach((e) => {
+        if (!resultWeeksForTable.includes(e.week)) {
+          resultWeeksForTable.push(e.week);
+        }
+      });
+
+      return resultWeeksForTable.sort();
+    }
+  };
+
+  const returnWeekCountForElectricalEnergy = () => {
+    const weeksData =
+      electricalEnergyWeeklyDataByStationId.data[0]?.electricalEnergyData;
+    const resultWeeksForTable = [];
+    weeksData.forEach((e) => {
+      if (!resultWeeksForTable.includes(e.week)) {
+        resultWeeksForTable.push(e.week);
       }
-    })
+    });
 
-    return resultWeeksForTable.sort()
-  }
-
-  const returnWeekCountForElectricalEnergy = () =>{
-    const weeksData = electricalEnergyWeeklyDataByStationId.data[0]?.electricalEnergyData
-    const resultWeeksForTable = []
-    weeksData.forEach(e => {
-      if(!resultWeeksForTable.includes(e.week)){
-        resultWeeksForTable.push(e.week)
-      }
-    })
-
-    return resultWeeksForTable.sort()
-  }
+    return resultWeeksForTable.sort();
+  };
 
   const columnsStationsForModalTable = useMemo(
     () => [
@@ -1521,32 +1601,108 @@ function Reports() {
         align: "center",
         render: (_, key) => (
           <span
-            className={
-              key.status ? "active_indicator" : "not_active_indicator"
-            }>
+            className={key.status ? "active_indicator" : "not_active_indicator"}
+          >
             {key.status
               ? t("dataPagesInformation.active_indicator")
               : t("dataPagesInformation.not_active_indicator")}
           </span>
         ),
         width: 120,
-      }
+      },
     ],
     [t, accessToken]
   );
 
   const handlePaginationChangeForModal = (page, size) => {
-      setPageDataStationsForModal({
-        page: page,
-        perPage: size
-      })
+    setPageDataStationsForModal({
+      page: page,
+      perPage: size,
+    });
   };
-  if ( loading || allStations.length == 0)
+
+  if (loading || allStations.length == 0)
     return (
       <section className="data_main_sections">
         <Loading />
       </section>
-  );
+    );
+
+    const months = {
+      uz: [
+        "Yanvar",
+        "Fevral",
+        "Mart",
+        "Aprel",
+        "May",
+        "Iyun",
+        "Iyul",
+        "Avgust",
+        "Sentabr",
+        "Oktabr",
+        "Noyabr",
+        "Dekabr",
+        "hafta",
+      ],
+      en: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+        "week",
+      ],
+      ru: [
+        "Январь",
+        "Февраль",
+        "Март",
+        "Апрель",
+        "Май",
+        "Июнь",
+        "Июль",
+        "Август",
+        "Сентябрь",
+        "Октябрь",
+        "Ноябрь",
+        "Декабрь",
+        "неделя",
+      ],
+    };
+
+    const daysValues = {
+      uz: ["1-o'n kunlik", "2-o'n kunlik", "3-o'n kunlik", "4-o'n kunlik"],
+      en: ["1 ten days", "2 ten days", "3 decade", "4 decade"],
+      ru: ["1 десять дней", "2 декада", "3 десятилетие", "4 декада"],
+    };
+
+    const fixDatePumpData = item => {
+      if(selectDataType == 0) {
+        return item.date?.split(' ')[1]
+      }else if(selectDataType == 1) {
+        return item.date?.split(' ')[1]
+      } else if(selectDataType == 2) {
+        return item.date?.split('T')[0]
+      } else if(selectDataType == 3){
+        return `${months[i18n.language][item.month - 1]} ${item.week} ${months[i18n.language][12]}`
+      } else if(selectDataType == 4){
+        return `${months[i18n.language][item.month - 1]} ${
+          daysValues[i18n.language][item.tenDayNumber - 1]
+        }`
+      } else if(selectDataType == 5){
+        return `${months[i18n.language][item.month - 1]}`
+      } else if(selectDataType == 6){
+        return item.date
+      } else if(selectDataType == 7){
+        return item.date
+      }
+    }
 
   return (
     <section className="reports">
@@ -1559,18 +1715,19 @@ function Reports() {
         className="modalForAllStations"
       >
         <Table
-        scroll={{y: "65vh" }}
-        columns={columnsStationsForModalTable}
-        dataSource={allStationsForModal}
-         pagination={{
-          current: pageDataStationsForModal.page,
-          pageSize: pageDataStationsForModal.perPage,
-          total: allStationsForModal.length,
-          onChange: handlePaginationChangeForModal,
-          style: {
-            padding: "0 0.75rem"
-          }
-        }} />
+          scroll={{ y: "65vh" }}
+          columns={columnsStationsForModalTable}
+          dataSource={allStationsForModal}
+          pagination={{
+            current: pageDataStationsForModal.page,
+            pageSize: pageDataStationsForModal.perPage,
+            total: allStationsForModal.length,
+            onChange: handlePaginationChangeForModal,
+            style: {
+              padding: "0 0.75rem",
+            },
+          }}
+        />
       </Modal>
       <div className="reports_statistics_wrapper">
         <div className="reports_sort">
@@ -1584,7 +1741,6 @@ function Reports() {
                 style={{
                   minWidth: 300,
                 }}
-
                 value={selectDataTypeForStation}
                 className="reports_sort_select"
                 options={allStations.map((item, index) => ({
@@ -1624,18 +1780,16 @@ function Reports() {
                     value={daylyDate}
                   />
                 </>
-              ) :
-              selectDataType == 3 ? (
+              ) : selectDataType == 3 ? (
                 <>
                   <DatePicker
-                    picker="weekly"
+                    picker="month"
                     onChange={onChangeDailyData}
                     format={dateFormat}
                     value={daylyDate}
                   />
                 </>
-              )
-              : selectDataType == 4 ? (
+              ) : selectDataType == 4 ? (
                 <DatePicker
                   picker="year"
                   onChange={onChangeDailyData}
@@ -1694,27 +1848,30 @@ function Reports() {
                   color: colors.text,
                 }}
                 onClick={() => {
-                  setOpen(true)
-                  findAllStationByActiveOrNotActive(0)
+                  setOpen(true);
+                  findAllStationByActiveOrNotActive(0);
                 }}
               >
                 <div className="reports_statistics_wrapper_item_heading">
                   <div>
                     <p className="reports_statistics_wrapper_item_desc">
-                      {role == "674877fbf0a8ec5c59065cb6" ? statisticDataForAdmin.totalStations : statisticDataForAdmin.countStations}
+                      {role == "674877fbf0a8ec5c59065cb6"
+                        ? statisticDataForAdmin.totalStations
+                        : statisticDataForAdmin.countStations}
                     </p>
                     <p className="reports_statistics_wrapper_item_desc reports_statistics_wrapper_item_desc_extra_name">
                       {
-                        t("dashboardPageData.cardData", { returnObjects: true })[0]
-                          .status
+                        t("dashboardPageData.cardData", {
+                          returnObjects: true,
+                        })[0].status
                       }
                     </p>
                   </div>
 
                   <AppstoreOutlined
                     style={{
-                        fontSize: "40px",
-                        color: "#3652AD"
+                      fontSize: "40px",
+                      color: "#3652AD",
                     }}
                   />
                 </div>
@@ -1730,39 +1887,47 @@ function Reports() {
                   color: colors.text,
                 }}
                 onClick={() => {
-                  setOpen(true)
-                  findAllStationByActiveOrNotActive(1)
+                  setOpen(true);
+                  findAllStationByActiveOrNotActive(1);
                 }}
               >
                 <div className="reports_statistics_wrapper_item_heading">
                   <div>
                     <p className="reports_statistics_wrapper_item_desc">
-                      {role == "674877fbf0a8ec5c59065cb6" ? statisticDataForAdmin.totalActiveStations : statisticDataForAdmin.countActiveStations}
+                      {role == "674877fbf0a8ec5c59065cb6"
+                        ? statisticDataForAdmin.totalActiveStations
+                        : statisticDataForAdmin.countActiveStations}
                     </p>
                     <p className="reports_statistics_wrapper_item_desc reports_statistics_wrapper_item_desc_extra_name">
                       {
-                        t("dashboardPageData.cardData", { returnObjects: true })[1]
-                          .status
+                        t("dashboardPageData.cardData", {
+                          returnObjects: true,
+                        })[1].status
                       }
                     </p>
                   </div>
 
                   <CheckCircleOutlined
                     style={{
-                        fontSize: "40px",
-                        color: "limegreen",
+                      fontSize: "40px",
+                      color: "limegreen",
                     }}
                   />
                 </div>
 
-                <span className="reports_statistics_wrapper_item_span" style={{color: "limegreen"}}>
-                  {role == "674877fbf0a8ec5c59065cb6" ? (
-                    (statisticDataForAdmin.totalActiveStations * 100) /
-                    statisticDataForAdmin.totalStations
-                  ).toFixed() : (
-                    (statisticDataForAdmin.countActiveStations * 100) /
-                    statisticDataForAdmin.countStations
-                  ).toFixed()}
+                <span
+                  className="reports_statistics_wrapper_item_span"
+                  style={{ color: "limegreen" }}
+                >
+                  {role == "674877fbf0a8ec5c59065cb6"
+                    ? (
+                        (statisticDataForAdmin.totalActiveStations * 100) /
+                        statisticDataForAdmin.totalStations
+                      ).toFixed()
+                    : (
+                        (statisticDataForAdmin.countActiveStations * 100) /
+                        statisticDataForAdmin.countStations
+                      ).toFixed()}
                   %
                 </span>
               </li>
@@ -1774,38 +1939,47 @@ function Reports() {
                   color: colors.text,
                 }}
                 onClick={() => {
-                  setOpen(true)
-                  findAllStationByActiveOrNotActive(2)
+                  setOpen(true);
+                  findAllStationByActiveOrNotActive(2);
                 }}
               >
                 <div className="reports_statistics_wrapper_item_heading">
                   <div>
                     <p className="reports_statistics_wrapper_item_desc">
-                      {role == "674877fbf0a8ec5c59065cb6" ? statisticDataForAdmin.totalInactiveStations : statisticDataForAdmin.countInactiveStations}
+                      {role == "674877fbf0a8ec5c59065cb6"
+                        ? statisticDataForAdmin.totalInactiveStations
+                        : statisticDataForAdmin.countInactiveStations}
                     </p>
                     <p className="reports_statistics_wrapper_item_desc reports_statistics_wrapper_item_desc_extra_name">
                       {
-                        t("dashboardPageData.cardData", { returnObjects: true })[2]
-                          .status
+                        t("dashboardPageData.cardData", {
+                          returnObjects: true,
+                        })[2].status
                       }
                     </p>
                   </div>
 
                   <ExclamationCircleOutlined
-                      style={{
-                          fontSize: "40px",
-                          color: "red"
-                      }}
+                    style={{
+                      fontSize: "40px",
+                      color: "red",
+                    }}
                   />
                 </div>
 
-                <span className="reports_statistics_wrapper_item_span" style={{color: "red"}}>
-                  {role == "674877fbf0a8ec5c59065cb6" ? (
-                    (statisticDataForAdmin.totalInactiveStations * 100) /
-                    statisticDataForAdmin.totalStations
-                  ).toFixed() : ((statisticDataForAdmin.countInactiveStations * 100) /
-                  statisticDataForAdmin.countStations
-                ).toFixed()}
+                <span
+                  className="reports_statistics_wrapper_item_span"
+                  style={{ color: "red" }}
+                >
+                  {role == "674877fbf0a8ec5c59065cb6"
+                    ? (
+                        (statisticDataForAdmin.totalInactiveStations * 100) /
+                        statisticDataForAdmin.totalStations
+                      ).toFixed()
+                    : (
+                        (statisticDataForAdmin.countInactiveStations * 100) /
+                        statisticDataForAdmin.countStations
+                      ).toFixed()}
                   %
                 </span>
               </li>
@@ -1820,7 +1994,7 @@ function Reports() {
             color: colors.text,
           }}
         >
-        {loading ? (
+          {loading ? (
             <BeatLoader
               style={{
                 display: "flex",
@@ -1835,380 +2009,19 @@ function Reports() {
             ""
           ) : (
             <>
-            <div className="reports_table_station_total_information">
-              <div className="reports_table_heading_righthand_wrapper">
-                <h2 className="reports_table_heading" >
-                  <span className="reports_table_heading_span" style={{textTransform: "uppercase"}}>
-                    {stationNameTotalInformation}{" "}
-                  </span>
-                  stansiya umumiy ma'lumotlari
-                </h2>
-
+              <div className="reports_table_station_total_information">
                 <div className="reports_table_heading_righthand_wrapper">
-                    <img
-                      className="reports_table_heading_righthand_xls_image cursor_pointer"
-                      src={xlsImage}
-                      alt="xlsImage"
-                      width={40}
-                      height={38}
-                    />
-                    <img
-                    className="cursor_pointer"
-                      src={pdfImage}
-                      alt="xlsImage"
-                      width={30}
-                      height={37}
-                    />
-                </div>
-              </div>
+                  <h2 className="reports_table_heading">
+                    <span
+                      className="reports_table_heading_span"
+                      style={{ textTransform: "uppercase" }}
+                    >
+                      {stationNameTotalInformation}{" "}
+                    </span>
+                    stansiya umumiy ma'lumotlari
+                  </h2>
 
-              <div className="reports_table_station_total_information_table_wrapper">
-                <table
-                  border="1"
-                  cellPadding="0"
-                  cellSpacing="0"
-                  style={{
-                    maxWidth: "1000px",
-                    width: "100%",
-                    margin: "auto",
-                  }}
-                >
-                  <thead>
-                    <tr>
-                        {
-                          columnsTotalStationInformation.map((e, i) => {
-                            return(
-                              <th
-                                style={{
-                                      fontSize: "15px",
-                                }}
-                                key={i}
-                              >
-                              {e.title}
-                            </th>
-                            )
-                          })
-                        }
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {
-                      stationAllDataByStationId.map((e, i) => {
-                        return (
-                          <tr key={i}>
-                        <td
-                          style={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          }}
-                        >
-                          {e.date}
-                        </td>
-                        <td
-                          style={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          }}
-                        >
-                          {e.volume}
-                        </td>
-                        <td
-                          style={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          }}
-                        >
-                          {e.energyActive}
-                        </td>
-                        <td
-                          style={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          }}
-                        >
-                          19
-                        </td>
-                    </tr>
-                        )
-                      })
-                    }
-                  </tbody>
-              </table>
-              </div>
-            </div>
-
-          <div className="reports_table_station_total_aggregate_information">
-            <div className="reports_table_heading_righthand_wrapper">
-              <h2 className="reports_table_heading" >
-                <span className="reports_table_heading_span" style={{textTransform: "uppercase"}}>
-                  {stationNameTotalInformation}{" "}
-                </span>
-                stansiya agrigatlarining umumiy ma'lumotlari
-              </h2>
-
-              <div className="reports_table_heading_righthand_wrapper">
-                      <img
-                        className="reports_table_heading_righthand_xls_image cursor_pointer"
-                        src={xlsImage}
-                        alt="xlsImage"
-                        width={40}
-                        height={38}
-                      />
-                      <img
-                    className="cursor_pointer"
-                        src={pdfImage}
-                        alt="xlsImage"
-                        width={30}
-                        height={37}
-                      />
-              </div>
-            </div>
-
-            <div className="reports_table_station_total_information_table_wrapper">
-              <table
-                border="1"
-                cellPadding="0"
-                cellSpacing="0"
-                style={{
-                  maxWidth: "1000px",
-                  width: "100%",
-                  margin: "auto",
-                }}
-              >
-                <thead>
-                  <tr>
-                      {
-                        columnsTotalAggregateInformation.map((e, i) => {
-                          return(
-                            <th
-                              style={{
-                                    fontSize: "15px",
-                              }}
-                              key={i}
-                            >
-                            {e.title}
-                          </th>
-                          )
-                        })
-                      }
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        Agregat 4
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                  </tr>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        Agregat 2
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                  </tr>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        Agregat 3
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                  </tr>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        Agregat 1
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                  </tr>
-                </tbody>
-            </table>
-            </div>
-
-            {/* LINE CHART */}
-          <div
-            className="reports_aggrigate_line_chart_wrapper"
-            style={{
-              background: colors.layoutBackground,
-              color: colors.text,
-            }}
-          >
-            {loading ? (
-              <BeatLoader
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "33vh",
-                }}
-                size={25}
-                color={"#3652AD"}
-              />
-            ) : isEmptyData() ? (
-              ""
-            ) : (
-              <>
-                <div className="reports_aggrigate_line_chart_heading_wrapper">
-                  <div className="reports_aggrigate_line_chart_righthand_wrapper">
-                    <Select
-                      size="large"
-                      style={{
-                        minWidth: 200,
-                      }}
-                      value={selectValueDataForLineChart}
-                      options={findSortTypeDateForLineChartAggregateName()?.data?.map(
-                        (item, index) => ({
-                          value: index,
-                          label: item.aggregate.name,
-                        })
-                      )}
-                      onChange={(key, option) => {
-                        setSelectValueDataForLineChart(key);
-                        findAggregateDataByAggregateId(key);
-                      }}
-                    />
-
+                  <div className="reports_table_heading_righthand_wrapper">
                     <img
                       className="reports_table_heading_righthand_xls_image cursor_pointer"
                       src={xlsImage}
@@ -2226,1468 +2039,1555 @@ function Reports() {
                   </div>
                 </div>
 
-                {pumpLineChartData?.date?.length > 0 ? (
-                  <SolarEmploymentChart
-                    data={pumpLineChartData}
-                    theme={colors}
-                    lineStatus={true}
-                  />
-                ) : (
-                  ""
-                )}
-              </>
-            )}
-          </div>
-
-          </div>
-
-          <div className="reports_table_station_total_aggregate_information">
-            <div className="reports_table_heading_righthand_wrapper">
-              <h2 className="reports_table_heading" >
-                <span className="reports_table_heading_span" style={{textTransform: "uppercase"}}>
-                  {stationNameTotalInformation}{" "}
-                </span>
-                stansiya elektr energiyalarining umumiy ma'lumotlari
-              </h2>
-
-              <div className="reports_table_heading_righthand_wrapper">
-                <img
-                  className="reports_table_heading_righthand_xls_image cursor_pointer"
-                  src={xlsImage}
-                  alt="xlsImage"
-                  width={40}
-                  height={38}
-                />
-                <img
-                  className="cursor_pointer"
-                  src={pdfImage}
-                  alt="xlsImage"
-                  width={30}
-                  height={37}
-                />
-              </div>
-            </div>
-
-            <div className="reports_table_station_total_information_table_wrapper">
-              <table
-                border="1"
-                cellPadding="0"
-                cellSpacing="0"
-                style={{
-                  maxWidth: "1000px",
-                  width: "100%",
-                  margin: "auto",
-                }}
-              >
-                <thead>
-                  <tr>
-                      {
-                        columnsTotalElectricalEnergyInformation.map((e, i) => {
-                          return(
-                            <th
-                              style={{
-                                    fontSize: "15px",
-                              }}
-                              key={i}
-                            >
-                            {e.title}
-                          </th>
-                          )
-                        })
-                      }
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        Elektr hisoblagich
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                  </tr>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        Elektr hisoblagich
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                  </tr>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        Elektr hisoblagich
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                  </tr>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        Elektr hisoblagich
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                  </tr>
-                </tbody>
-            </table>
-
-            {/* LINE CHART */}
-            <div
-              className="reports_aggrigate_line_chart_wrapper"
-              style={{
-                background: colors.layoutBackground,
-                color: colors.text,
-              }}
-            >
-              {loading ? (
-                <BeatLoader
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "33vh",
-                  }}
-                  size={25}
-                  color={"#3652AD"}
-                />
-              ) : isEmptyData() ? (
-                ""
-              ) : (
-                <>
-                  <div className="reports_aggrigate_line_chart_heading_wrapper">
-                    <div className="reports_aggrigate_line_chart_righthand_wrapper">
-                      <Select
-                        size="large"
-                        style={{
-                          minWidth: 200,
-                        }}
-                        value={selectValueDataForLineChart}
-                        options={findSortTypeDateForLineChartAggregateName()?.data?.map(
-                          (item, index) => ({
-                            value: index,
-                            label: item.aggregate.name,
-                          })
-                        )}
-                        onChange={(key, option) => {
-                          setSelectValueDataForLineChart(key);
-                          findAggregateDataByAggregateId(key);
-                        }}
-                      />
-
-                      <img
-                        className="reports_table_heading_righthand_xls_image cursor_pointer"
-                        src={xlsImage}
-                        alt="xlsImage"
-                        width={40}
-                        height={38}
-                      />
-                      <img
-                        className="cursor_pointer"
-                        src={pdfImage}
-                        alt="xlsImage"
-                        width={30}
-                        height={37}
-                      />
-                    </div>
-                  </div>
-
-                  {pumpLineChartData?.date?.length > 0 ? (
-                    <SolarEmploymentChart
-                      data={pumpLineChartData}
-                      theme={colors}
-                      lineStatus={true}
-                    />
-                  ) : (
-                    ""
-                  )}
-                </>
-              )}
-            </div>
-            </div>
-          </div>
-
-          <div className="reports_table_station_total_aggregate_information">
-           <div className="reports_table_heading_righthand_wrapper">
-            <h2 className="reports_table_heading" >
-                <span className="reports_table_heading_span" style={{textTransform: "uppercase"}}>
-                Agregat 4
-                </span>
-                <span style={{textTransform: 'lowercase'}}>
-                {" "}{reportTableHeading.title}
-                </span>
-              </h2>
-
-              <div className="reports_table_heading_righthand_wrapper">
-                <img
-                  className="reports_table_heading_righthand_xls_image cursor_pointer"
-                  src={xlsImage}
-                  alt="xlsImage"
-                  width={40}
-                  height={38}
-                />
-                <img
-                className="cursor_pointer"
-                  src={pdfImage}
-                  alt="xlsImage"
-                  width={30}
-                  height={37}
-                />
-              </div>
-           </div>
-
-            <div className="reports_table_station_total_information_table_wrapper">
-            <table
-                border="1"
-                cellPadding="0"
-                cellSpacing="0"
-                style={{
-                  maxWidth: "1000px",
-                  width: "100%",
-                  margin: "auto",
-                }}
-              >
-                <thead>
-                  <tr>
-                      {
-                        columnsTotalOneAggregateInformation.map((e, i) => {
-                          return(
-                            <th
-                              style={{
-                                    fontSize: "15px",
-                              }}
-                              key={i}
-                            >
-                            {e.title}
-                          </th>
-                          )
-                        })
-                      }
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                  </tr>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                  </tr>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                  </tr>
-                </tbody>
-            </table>
-
-            {/* LINE CHART */}
-            <div
-              className="reports_aggrigate_line_chart_wrapper"
-              style={{
-                background: colors.layoutBackground,
-                color: colors.text,
-              }}
-            >
-              {loading ? (
-                <BeatLoader
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "33vh",
-                  }}
-                  size={25}
-                  color={"#3652AD"}
-                />
-              ) : isEmptyData() ? (
-                ""
-              ) : (
-                <>
-                  <div className="reports_aggrigate_line_chart_heading_wrapper">
-                    <div className="reports_aggrigate_line_chart_righthand_wrapper">
-                      <img
-                        className="reports_table_heading_righthand_xls_image cursor_pointer"
-                        src={xlsImage}
-                        alt="xlsImage"
-                        width={40}
-                        height={38}
-                      />
-                      <img
-                        className="cursor_pointer"
-                        src={pdfImage}
-                        alt="xlsImage"
-                        width={30}
-                        height={37}
-                      />
-                    </div>
-                  </div>
-
-                  {pumpLineChartData?.date?.length > 0 ? (
-                    <SolarEmploymentChart
-                      data={pumpLineChartData}
-                      theme={colors}
-                      lineStatus={true}
-                    />
-                  ) : (
-                    ""
-                  )}
-                </>
-              )}
-            </div>
-            </div>
-          </div>
-
-          <div className="reports_table_station_total_aggregate_information">
-            <div className="reports_table_heading_righthand_wrapper">
-              <h2 className="reports_table_heading" >
-                <span className="reports_table_heading_span" style={{textTransform: "uppercase"}}>
-                Agregat 1
-                </span>
-                <span style={{textTransform: 'lowercase'}}>
-                {" "}{reportTableHeading.title}
-                </span>
-              </h2>
-
-              <div className="reports_table_heading_righthand_wrapper">
-                <img
-                  className="reports_table_heading_righthand_xls_image cursor_pointer"
-                  src={xlsImage}
-                  alt="xlsImage"
-                  width={40}
-                  height={38}
-                />
-                <img
-                className="cursor_pointer"
-                  src={pdfImage}
-                  alt="xlsImage"
-                  width={30}
-                  height={37}
-                />
-              </div>
-            </div>
-
-            <div className="reports_table_station_total_information_table_wrapper">
-            <table
-                border="1"
-                cellPadding="0"
-                cellSpacing="0"
-                style={{
-                  maxWidth: "1000px",
-                  width: "100%",
-                  margin: "auto",
-                }}
-              >
-                <thead>
-                  <tr>
-                      {
-                        columnsTotalOneAggregateInformation.map((e, i) => {
-                          return(
-                            <th
-                              style={{
-                                    fontSize: "15px",
-                              }}
-                              key={i}
-                            >
-                            {e.title}
-                          </th>
-                          )
-                        })
-                      }
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                  </tr>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                  </tr>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                  </tr>
-                </tbody>
-            </table>
-
-            {/* LINE CHART */}
-            <div
-              className="reports_aggrigate_line_chart_wrapper"
-              style={{
-                background: colors.layoutBackground,
-                color: colors.text,
-              }}
-            >
-              {loading ? (
-                <BeatLoader
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "33vh",
-                  }}
-                  size={25}
-                  color={"#3652AD"}
-                />
-              ) : isEmptyData() ? (
-                ""
-              ) : (
-                <>
-                  <div className="reports_aggrigate_line_chart_heading_wrapper">
-                    <div className="reports_aggrigate_line_chart_righthand_wrapper">
-                      <img
-                        className="reports_table_heading_righthand_xls_image cursor_pointer"
-                        src={xlsImage}
-                        alt="xlsImage"
-                        width={40}
-                        height={38}
-                      />
-                      <img
-                        className="cursor_pointer"
-                        src={pdfImage}
-                        alt="xlsImage"
-                        width={30}
-                        height={37}
-                      />
-                    </div>
-                  </div>
-
-                  {pumpLineChartData?.date?.length > 0 ? (
-                    <SolarEmploymentChart
-                      data={pumpLineChartData}
-                      theme={colors}
-                      lineStatus={true}
-                    />
-                  ) : (
-                    ""
-                  )}
-                </>
-              )}
-            </div>
-            </div>
-          </div>
-
-          <div className="reports_table_station_total_aggregate_information">
-            <div className="reports_table_heading_righthand_wrapper">
-              <h2 className="reports_table_heading" >
-                <span className="reports_table_heading_righthand_wrapper"name="reports_table_heading_span" style={{textTransform: "uppercase"}}>
-                Elektr hisoblagich
-                </span>
-                <span style={{textTransform: 'lowercase'}}>
-                {" "}{reportTableHeading.title}
-                </span>
-              </h2>
-
-              <div className="reports_table_heading_righthand_wrapper">
-                <img
-                  className="reports_table_heading_righthand_xls_image cursor_pointer"
-                  src={xlsImage}
-                  alt="xlsImage"
-                  width={40}
-                  height={38}
-                />
-                <img
-                className="cursor_pointer"
-                  src={pdfImage}
-                  alt="xlsImage"
-                  width={30}
-                  height={37}
-                />
-              </div>
-            </div>
-
-            <div className="reports_table_station_total_information_table_wrapper">
-            <table
-                border="1"
-                cellPadding="0"
-                cellSpacing="0"
-                style={{
-                  maxWidth: "1000px",
-                  width: "100%",
-                  margin: "auto",
-                }}
-              >
-                <thead>
-                  <tr>
-                      {
-                        columnsTotalOneElectricalEnergyInformation.map((e, i) => {
-                          return(
+                <div className="reports_table_station_total_information_table_wrapper">
+                  <table
+                    border="1"
+                    cellPadding="0"
+                    cellSpacing="0"
+                    style={{
+                      maxWidth: "1000px",
+                      width: "100%",
+                      margin: "auto",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        {columnsTotalStationInformation.map((e, i) => {
+                          return (
                             <th
                               style={{
                                 fontSize: "15px",
                               }}
                               key={i}
                             >
-                            {e.title}
-                          </th>
-                          )
-                        })
-                      }
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                  </tr>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                  </tr>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                  </tr>
-                  <tr>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        2025-01-24
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        42
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        12
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                      <td
-                        style={{
-                        fontSize: "15px",
-                        textAlign: "center",
-                        }}
-                      >
-                        19
-                      </td>
-                  </tr>
-                </tbody>
-            </table>
+                              {e.title}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {stationAllDataByStationId.map((e, i) => {
+                        return (
+                          <tr key={i}>
+                            <td
+                              style={{
+                                fontSize: "15px",
+                                textAlign: "center",
+                              }}
+                            >
+                              {e.date}
+                            </td>
+                            <td
+                              style={{
+                                fontSize: "15px",
+                                textAlign: "center",
+                              }}
+                            >
+                              {e.volume}
+                            </td>
+                            <td
+                              style={{
+                                fontSize: "15px",
+                                textAlign: "center",
+                              }}
+                            >
+                              {e.energyActive}
+                            </td>
+                            <td
+                              style={{
+                                fontSize: "15px",
+                                textAlign: "center",
+                              }}
+                            >
+                              19
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
 
-            {/* LINE CHART */}
-            <div
-              className="reports_aggrigate_line_chart_wrapper"
-              style={{
-                background: colors.layoutBackground,
-                color: colors.text,
-              }}
-            >
-              {loading ? (
-                <BeatLoader
+              <div className="reports_table_station_total_aggregate_information">
+                <div className="reports_table_heading_righthand_wrapper">
+                  <h2 className="reports_table_heading">
+                    <span
+                      className="reports_table_heading_span"
+                      style={{ textTransform: "uppercase" }}
+                    >
+                      {stationNameTotalInformation}{" "}
+                    </span>
+                    stansiya agrigatlarining umumiy ma'lumotlari
+                  </h2>
+
+                  <div className="reports_table_heading_righthand_wrapper">
+                    <img
+                      className="reports_table_heading_righthand_xls_image cursor_pointer"
+                      src={xlsImage}
+                      alt="xlsImage"
+                      width={40}
+                      height={38}
+                    />
+                    <img
+                      className="cursor_pointer"
+                      src={pdfImage}
+                      alt="xlsImage"
+                      width={30}
+                      height={37}
+                    />
+                  </div>
+                </div>
+
+                <div className="reports_table_station_total_information_table_wrapper">
+                  <table
+                    border="1"
+                    cellPadding="0"
+                    cellSpacing="0"
+                    style={{
+                      maxWidth: "1000px",
+                      width: "100%",
+                      margin: "auto",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        {columnsTotalAggregateInformation.map((e, i) => {
+                          return (
+                            <th
+                              style={{
+                                fontSize: "15px",
+                              }}
+                              key={i}
+                            >
+                              {e.title}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          Agregat 4
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          2025-01-24
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          Agregat 2
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          2025-01-24
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          Agregat 3
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          2025-01-24
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          Agregat 1
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          2025-01-24
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* LINE CHART */}
+                <div
+                  className="reports_aggrigate_line_chart_wrapper"
                   style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "33vh",
+                    background: colors.layoutBackground,
+                    color: colors.text,
                   }}
-                  size={25}
-                  color={"#3652AD"}
-                />
-              ) : isEmptyData() ? (
-                ""
-              ) : (
-                <>
-                  <div className="reports_aggrigate_line_chart_heading_wrapper">
-                    <div className="reports_aggrigate_line_chart_righthand_wrapper">
-                      <img
-                        className="reports_table_heading_righthand_xls_image cursor_pointer"
-                        src={xlsImage}
-                        alt="xlsImage"
-                        width={40}
-                        height={38}
+                >
+                  {loading ? (
+                    <BeatLoader
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "33vh",
+                      }}
+                      size={25}
+                      color={"#3652AD"}
+                    />
+                  ) : isEmptyData() ? (
+                    ""
+                  ) : (
+                    <>
+                      <div className="reports_aggrigate_line_chart_heading_wrapper">
+                        <div className="reports_aggrigate_line_chart_righthand_wrapper">
+                          <Select
+                            size="large"
+                            style={{
+                              minWidth: 200,
+                            }}
+                            value={selectValueDataForLineChart}
+                            options={findSortTypeDateForLineChartAggregateName()?.data?.map(
+                              (item, index) => ({
+                                value: index,
+                                label: item.aggregate.name,
+                              })
+                            )}
+                            onChange={(key, option) => {
+                              setSelectValueDataForLineChart(key);
+                              findAggregateDataByAggregateId(key);
+                            }}
+                          />
+
+                          <img
+                            className="reports_table_heading_righthand_xls_image cursor_pointer"
+                            src={xlsImage}
+                            alt="xlsImage"
+                            width={40}
+                            height={38}
+                          />
+                          <img
+                            className="cursor_pointer"
+                            src={pdfImage}
+                            alt="xlsImage"
+                            width={30}
+                            height={37}
+                          />
+                        </div>
+                      </div>
+
+                      {pumpLineChartData?.date?.length > 0 ? (
+                        <SolarEmploymentChart
+                          data={pumpLineChartData}
+                          theme={colors}
+                          lineStatus={true}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div className="reports_table_station_total_aggregate_information">
+                <div className="reports_table_heading_righthand_wrapper">
+                  <h2 className="reports_table_heading">
+                    <span
+                      className="reports_table_heading_span"
+                      style={{ textTransform: "uppercase" }}
+                    >
+                      {stationNameTotalInformation}{" "}
+                    </span>
+                    stansiya elektr energiyalarining umumiy ma'lumotlari
+                  </h2>
+
+                  <div className="reports_table_heading_righthand_wrapper">
+                    <img
+                      className="reports_table_heading_righthand_xls_image cursor_pointer"
+                      src={xlsImage}
+                      alt="xlsImage"
+                      width={40}
+                      height={38}
+                    />
+                    <img
+                      className="cursor_pointer"
+                      src={pdfImage}
+                      alt="xlsImage"
+                      width={30}
+                      height={37}
+                    />
+                  </div>
+                </div>
+
+                <div className="reports_table_station_total_information_table_wrapper">
+                  <table
+                    border="1"
+                    cellPadding="0"
+                    cellSpacing="0"
+                    style={{
+                      maxWidth: "1000px",
+                      width: "100%",
+                      margin: "auto",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        {columnsTotalElectricalEnergyInformation.map((e, i) => {
+                          return (
+                            <th
+                              style={{
+                                fontSize: "15px",
+                              }}
+                              key={i}
+                            >
+                              {e.title}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          Elektr hisoblagich
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          2025-01-24
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          Elektr hisoblagich
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          2025-01-24
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          Elektr hisoblagich
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          2025-01-24
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          Elektr hisoblagich
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          2025-01-24
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  {/* LINE CHART */}
+                  <div
+                    className="reports_aggrigate_line_chart_wrapper"
+                    style={{
+                      background: colors.layoutBackground,
+                      color: colors.text,
+                    }}
+                  >
+                    {loading ? (
+                      <BeatLoader
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          height: "33vh",
+                        }}
+                        size={25}
+                        color={"#3652AD"}
                       />
-                      <img
-                        className="cursor_pointer"
-                        src={pdfImage}
-                        alt="xlsImage"
-                        width={30}
-                        height={37}
-                      />
+                    ) : isEmptyData() ? (
+                      ""
+                    ) : (
+                      <>
+                        <div className="reports_aggrigate_line_chart_heading_wrapper">
+                          <div className="reports_aggrigate_line_chart_righthand_wrapper">
+                            <Select
+                              size="large"
+                              style={{
+                                minWidth: 200,
+                              }}
+                              value={selectValueDataForLineChart}
+                              options={findSortTypeDateForLineChartAggregateName()?.data?.map(
+                                (item, index) => ({
+                                  value: index,
+                                  label: item.aggregate.name,
+                                })
+                              )}
+                              onChange={(key, option) => {
+                                setSelectValueDataForLineChart(key);
+                                findAggregateDataByAggregateId(key);
+                              }}
+                            />
+
+                            <img
+                              className="reports_table_heading_righthand_xls_image cursor_pointer"
+                              src={xlsImage}
+                              alt="xlsImage"
+                              width={40}
+                              height={38}
+                            />
+                            <img
+                              className="cursor_pointer"
+                              src={pdfImage}
+                              alt="xlsImage"
+                              width={30}
+                              height={37}
+                            />
+                          </div>
+                        </div>
+
+                        {pumpLineChartData?.date?.length > 0 ? (
+                          <SolarEmploymentChart
+                            data={pumpLineChartData}
+                            theme={colors}
+                            lineStatus={true}
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+              {pumpDataByStationId?.map((e, i) => {
+                return (
+                  <div className="reports_table_station_total_aggregate_information" key={i}>
+                    <div className="reports_table_heading_righthand_wrapper">
+                      <h2 className="reports_table_heading">
+                        <span
+                          className="reports_table_heading_span"
+                          style={{ textTransform: "uppercase" }}
+                        >
+                          {e?.name}
+                        </span>
+                        <span style={{ textTransform: "lowercase" }}>
+                          {" "}
+                          {reportTableHeading.title}
+                        </span>
+                      </h2>
+
+                      <div className="reports_table_heading_righthand_wrapper">
+                        <img
+                          className="reports_table_heading_righthand_xls_image cursor_pointer"
+                          src={xlsImage}
+                          alt="xlsImage"
+                          width={40}
+                          height={38}
+                        />
+                        <img
+                          className="cursor_pointer"
+                          src={pdfImage}
+                          alt="xlsImage"
+                          width={30}
+                          height={37}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="reports_table_station_total_information_table_wrapper">
+                      <table
+                        border="1"
+                        cellPadding="0"
+                        cellSpacing="0"
+                        style={{
+                          maxWidth: "1000px",
+                          width: "100%",
+                          margin: "auto",
+                        }}
+                      >
+                        <thead>
+                          <tr>
+                            {columnsTotalOneAggregateInformation.map((m, n) => {
+                              return (
+                                <th
+                                  style={{
+                                    fontSize: "15px",
+                                  }}
+                                  key={n}
+                                >
+                                  {m.title}
+                                </th>
+                              );
+                            })}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {e.aggregateData.map((r, l) => {
+                            return (
+                              <tr key={l}>
+                                <td
+                                  style={{
+                                    fontSize: "15px",
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  {fixDatePumpData(r)}
+                                </td>
+                                <td
+                                  style={{
+                                    fontSize: "15px",
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  {r.volume.toFixed(2)}
+                                </td>
+                                <td
+                                  style={{
+                                    fontSize: "15px",
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  {r.velocity.toFixed(2)}
+                                </td>
+                                <td
+                                  style={{
+                                    fontSize: "15px",
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  {r.flow.toFixed(2)}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+
+                      {/* LINE CHART */}
+                      <div
+                        className="reports_aggrigate_line_chart_wrapper"
+                        style={{
+                          background: colors.layoutBackground,
+                          color: colors.text,
+                        }}
+                      >
+                        {loading ? (
+                          <BeatLoader
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              height: "33vh",
+                            }}
+                            size={25}
+                            color={"#3652AD"}
+                          />
+                        ) : isEmptyData() ? (
+                          ""
+                        ) : (
+                          <>
+                            {/* <div className="reports_aggrigate_line_chart_heading_wrapper">
+                              <div className="reports_aggrigate_line_chart_righthand_wrapper">
+                                <img
+                                  className="reports_table_heading_righthand_xls_image cursor_pointer"
+                                  src={xlsImage}
+                                  alt="xlsImage"
+                                  width={40}
+                                  height={38}
+                                />
+                                <img
+                                  className="cursor_pointer"
+                                  src={pdfImage}
+                                  alt="xlsImage"
+                                  width={30}
+                                  height={37}
+                                />
+                              </div>
+                            </div> */}
+
+                            {e.lineChartData?.date?.length > 0 ? (
+                              <SolarEmploymentChart
+                                data={e.lineChartData}
+                                theme={colors}
+                                lineStatus={true}
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
+                );
+              })}
 
-                  {pumpLineChartData?.date?.length > 0 ? (
-                    <SolarEmploymentChart
-                      data={pumpLineChartData}
-                      theme={colors}
-                      lineStatus={true}
+              <div className="reports_table_station_total_aggregate_information">
+                <div className="reports_table_heading_righthand_wrapper">
+                  <h2 className="reports_table_heading">
+                    <span
+                      className="reports_table_heading_righthand_wrapper"
+                      name="reports_table_heading_span"
+                      style={{ textTransform: "uppercase" }}
+                    >
+                      Elektr hisoblagich
+                    </span>
+                    <span style={{ textTransform: "lowercase" }}>
+                      {" "}
+                      {reportTableHeading.title}
+                    </span>
+                  </h2>
+
+                  <div className="reports_table_heading_righthand_wrapper">
+                    <img
+                      className="reports_table_heading_righthand_xls_image cursor_pointer"
+                      src={xlsImage}
+                      alt="xlsImage"
+                      width={40}
+                      height={38}
                     />
-                  ) : (
-                    ""
-                  )}
-                </>
-              )}
-            </div>
-            </div>
-          </div>
+                    <img
+                      className="cursor_pointer"
+                      src={pdfImage}
+                      alt="xlsImage"
+                      width={30}
+                      height={37}
+                    />
+                  </div>
+                </div>
+
+                <div className="reports_table_station_total_information_table_wrapper">
+                  <table
+                    border="1"
+                    cellPadding="0"
+                    cellSpacing="0"
+                    style={{
+                      maxWidth: "1000px",
+                      width: "100%",
+                      margin: "auto",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        {columnsTotalOneElectricalEnergyInformation.map(
+                          (e, i) => {
+                            return (
+                              <th
+                                style={{
+                                  fontSize: "15px",
+                                }}
+                                key={i}
+                              >
+                                {e.title}
+                              </th>
+                            );
+                          }
+                        )}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          2025-01-24
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          2025-01-24
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          2025-01-24
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          2025-01-24
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          42
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          12
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "15px",
+                            textAlign: "center",
+                          }}
+                        >
+                          19
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  {/* LINE CHART */}
+                  <div
+                    className="reports_aggrigate_line_chart_wrapper"
+                    style={{
+                      background: colors.layoutBackground,
+                      color: colors.text,
+                    }}
+                  >
+                    {loading ? (
+                      <BeatLoader
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          height: "33vh",
+                        }}
+                        size={25}
+                        color={"#3652AD"}
+                      />
+                    ) : isEmptyData() ? (
+                      ""
+                    ) : (
+                      <>
+                        <div className="reports_aggrigate_line_chart_heading_wrapper">
+                          <div className="reports_aggrigate_line_chart_righthand_wrapper">
+                            <img
+                              className="reports_table_heading_righthand_xls_image cursor_pointer"
+                              src={xlsImage}
+                              alt="xlsImage"
+                              width={40}
+                              height={38}
+                            />
+                            <img
+                              className="cursor_pointer"
+                              src={pdfImage}
+                              alt="xlsImage"
+                              width={30}
+                              height={37}
+                            />
+                          </div>
+                        </div>
+
+                        {pumpLineChartData?.date?.length > 0 ? (
+                          <SolarEmploymentChart
+                            data={pumpLineChartData}
+                            theme={colors}
+                            lineStatus={true}
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+
             </>
           )}
 
@@ -3807,587 +3707,53 @@ function Reports() {
                       </tr>
                     </thead>
                     <tbody>
-                      {todayDataByStationId.data?.map((item, index) => {
+                      {todayDataByStationId.map((item, index) => {
                         return (
-                            <tr className="tr0" key={index}>
-                              <td
+                          <tr className="tr0" key={index}>
+                            <td
+                              style={{
+                                fontSize: "15px",
+                                textAlign: "center",
+                              }}
+                            >
+                              {index + 1}
+                            </td>
+                            <td>
+                              <div
                                 style={{
-                                  fontSize: "15px",
                                   textAlign: "center",
                                 }}
                               >
-                                {index + 1}
-                              </td>
-                              <td>
-                                <div
-                                  style={{
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  <span
-                                    style={{
-                                      fontSize: "15px",
-                                    }}
-                                  >
-                                    {item.aggregate.name}
-                                  </span>
-                                </div>
-                              </td>
-                              {valueTodayTable.map((d, w) => {
-                                const existedValue = item.aggregateData?.find(
-                                  (a) => a.date.split(" ")[1].split(":")[0] == d
-                                );
-
-                                if (existedValue) {
-                                  return (
-                                    <td
-                                      key={w}
-                                      style={{
-                                        fontSize: "15px",
-                                        textAlign: "center",
-                                      }}
-                                    >
-                                      {Number(
-                                        existedValue[selectValueForSearch]
-                                      )}
-                                    </td>
-                                  );
-                                } else {
-                                  return (
-                                    <td
-                                      key={w}
-                                      style={{
-                                        fontSize: "15px",
-                                        textAlign: "center",
-                                      }}
-                                    >
-                                      -
-                                    </td>
-                                  );
-                                }
-                              })}
-                            </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-
-                  <Pagination style={{marginTop: "10px"}} align="center" defaultCurrent={pageData.page} total={findTotalPages().totalPages} onChange={(page, size) => setPageData({page: page, perPage: size})}/>
-                </>
-              ) : reportTableHeading.index == 1 ? (
-                //! YESTERDAY REPORT
-                <>
-                <table
-                  border="1"
-                  cellPadding="0"
-                  cellSpacing="0"
-                  style={{ maxWidth: "1000px", width: "100%", margin: "auto" }}
-                >
-                  <thead>
-                    <tr>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        T/R
-                      </th>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        Stansiya nomi
-                      </th>
-                      <th
-                        colSpan="24"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        {getTableDate().toISOString().substring(0, 10)}
-                      </th>
-                    </tr>
-                    <tr>
-                      {valueTodayTable.map((r, l) => {
-                        return (
-                          <th
-                            key={l}
-                            style={{
-                              fontSize: "15px",
-                            }}
-                          >
-                            {r}
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {yesterdayDataByStationId.data?.map((item, index) => {
-                      return (
-                        <tr className="tr0" key={index}>
-                          <td
-                            style={{
-                              fontSize: "15px",
-                              textAlign: "center",
-                            }}
-                          >
-                            {index + 1}
-                          </td>
-                          <td>
-                            <div
-                              style={{
-                                textAlign: "center",
-                              }}
-                            >
-                              <span
-                                style={{
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {item.aggregate.name}
-                              </span>
-                            </div>
-                          </td>
-                          {valueTodayTable.map((d, w) => {
-                            const existedValue = item.aggregateData?.find(
-                              (a) => a.date.split(" ")[1].split(":")[0] == d
-                            );
-
-                            if (existedValue) {
-                              return (
-                                <td
-                                  key={w}
+                                <span
                                   style={{
                                     fontSize: "15px",
-                                    textAlign: "center",
                                   }}
                                 >
-                                  {Number(existedValue[selectValueForSearch])}
-                                </td>
+                                  {item.aggregate.name}
+                                </span>
+                              </div>
+                            </td>
+                            {valueTodayTable.map((d, w) => {
+                              const existedValue = item.aggregateData?.find(
+                                (a) => a.date.split(" ")[1].split(":")[0] == d
                               );
-                            } else {
-                              return (
-                                <td
-                                  key={w}
-                                  style={{
-                                    fontSize: "15px",
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  -
-                                </td>
-                              );
-                            }
-                          })}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
 
-                <Pagination style={{marginTop: "10px"}} align="center" defaultCurrent={pageData.page} total={findTotalPages().totalPages} onChange={(page, size) => setPageData({page: page, perPage: size})}/>
-                </>
-              ) : reportTableHeading.index == 2 ? (
-                //! DAILY REPORT
-                <>
-                  <table
-                  border="1"
-                  cellPadding="0"
-                  cellSpacing="0"
-                  style={{ maxWidth: "1000px", width: "100%", margin: "auto" }}
-                >
-                  <thead>
-                    <tr>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        T/R
-                      </th>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        Stansiya nomi
-                      </th>
-                      <th
-                        colSpan={lastDateOfMonth}
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        {daylyDate.year()}-
-                        {String(daylyDate.month() + 1).length == 1
-                          ? `0${daylyDate.month() + 1}`
-                          : daylyDate.month() + 1}
-                      </th>
-                    </tr>
-                    <tr>
-                      {valueMonth.map((r, l) => {
-                        return (
-                          <th
-                            key={l}
-                            style={{
-                              fontSize: "15px",
-                            }}
-                          >
-                            {r}
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {dailyDataByStationId.data?.map((item, index) => {
-                      return (
-                        <tr className="tr0" key={index}>
-                          <td
-                            style={{
-                              fontSize: "15px",
-                              textAlign: "center",
-                            }}
-                          >
-                            {index + 1}
-                          </td>
-                          <td>
-                            <div
-                              style={{
-                                textAlign: "center",
-                              }}
-                            >
-                              <span
-                                style={{
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {item.aggregate.name}
-                              </span>
-                            </div>
-                          </td>
-                          {valueMonth.map((d, w) => {
-                            const existedValue = item.aggregateData?.find(
-                              (a) => a.date.split("-")[2]?.split("T")[0] == d
-                            );
-
-                            if (existedValue) {
-                              return (
-                                <td
-                                  key={w}
-                                  style={{
-                                    fontSize: "15px",
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  {Number(
-                                    existedValue[selectValueForSearch]
-                                  ).toFixed(1)}
-                                </td>
-                              );
-                            } else {
-                              return (
-                                <td
-                                  key={w}
-                                  style={{
-                                    fontSize: "15px",
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  -
-                                </td>
-                              );
-                            }
-                          })}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-
-                <Pagination style={{marginTop: "10px"}} align="center" defaultCurrent={pageData.page} total={findTotalPages().totalPages} onChange={(page, size) => setPageData({page: page, perPage: size})}/>
-                </>
-              ) : reportTableHeading.index == 3 ? (
-                //! WEEKLY REPORT
-                <>
-                  <table
-                  border="1"
-                  cellPadding="0"
-                  cellSpacing="0"
-                  style={{ maxWidth: "1000px", width: "100%", margin: "auto" }}
-                >
-                  <thead>
-                    <tr>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        T/R
-                      </th>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        Stansiya nomi
-                      </th>
-                      <th
-                        colSpan={lastDateOfMonth}
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        {daylyDate.year()}-
-                        {String(daylyDate.month() + 1).length == 1
-                          ? `0${daylyDate.month() + 1}`
-                          : daylyDate.month() + 1}
-                      </th>
-                    </tr>
-                    <tr>
-                      {returnWeekCount().map((r, l) => {
-                        return (
-                          <th
-                            key={l}
-                            style={{
-                              fontSize: "15px",
-                            }}
-                          >
-                            {daylyDate.year()}-
-                        {String(daylyDate.month() + 1).length == 1
-                          ? `0${daylyDate.month() + 1}`
-                          : daylyDate.month() + 1} {r}-hafta
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {weeklyDataByStationId.data?.map((item, index) => {
-                      return (
-                        <tr className="tr0" key={index}>
-                          <td
-                            style={{
-                              fontSize: "15px",
-                              textAlign: "center",
-                            }}
-                          >
-                            {index + 1}
-                          </td>
-                          <td>
-                            <div
-                              style={{
-                                textAlign: "center",
-                              }}
-                            >
-                              <span
-                                style={{
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {item.aggregate.name}
-                              </span>
-                            </div>
-                          </td>
-                          {returnWeekCount().map((d, w) => {
-                            const existedValue = item.aggregateData?.find(
-                              (a) => a.week == d
-                            );
-
-                            if (existedValue) {
-                              return (
-                                <td
-                                  key={w}
-                                  style={{
-                                    fontSize: "15px",
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  {Number(
-                                    existedValue[selectValueForSearch]
-                                  ).toFixed(1)}
-                                </td>
-                              );
-                            } else {
-                              return (
-                                <td
-                                  key={w}
-                                  style={{
-                                    fontSize: "15px",
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  -
-                                </td>
-                              );
-                            }
-                          })}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-
-                <Pagination style={{marginTop: "10px"}} align="center" defaultCurrent={pageData.page} total={findTotalPages().totalPages} onChange={(page, size) => setPageData({page: page, perPage: size})}/>
-                </>
-              )
-              : reportTableHeading.index == 4 ? (
-                //! TEN DAY REPORT
-                <>
-                <table
-                  border="1"
-                  cellPadding="0"
-                  cellSpacing="0"
-                  style={{ maxWidth: "1100px", width: "100%", margin: "auto" }}
-                >
-                  <thead>
-                    <tr>
-                      <th
-                        rowSpan="3"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        T/R
-                      </th>
-                      <th
-                        rowSpan="3"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        Stansiya nomi
-                      </th>
-                      <th
-                        colSpan="36"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        {daylyDate.year()}
-                      </th>
-                    </tr>
-                    <tr>
-                      {tableRowTenDay.map((r, l) => {
-                        return (
-                          <th
-                            key={l}
-                            colSpan="3"
-                            style={{
-                              fontSize: "15px",
-                            }}
-                          >
-                            {r[i18n.language]}
-                          </th>
-                        );
-                      })}
-                    </tr>
-                    <tr>
-                      {tableRowTenDay.map((r, l) => {
-                        return (
-                          <>
-                            <th
-                              key={1}
-                              colSpan="1"
-                              style={{
-                                fontSize: "15px",
-                              }}
-                            >
-                              1
-                            </th>
-                            <th
-                              key={2}
-                              colSpan="1"
-                              style={{
-                                fontSize: "15px",
-                              }}
-                            >
-                              2
-                            </th>
-                            <th
-                              key={3}
-                              colSpan="1"
-                              style={{
-                                fontSize: "15px",
-                              }}
-                            >
-                              3
-                            </th>
-                          </>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {tenDayDataByStationId.data?.map((item, index) => {
-                      return (
-                        <tr className="tr0" key={index}>
-                          <td
-                            style={{
-                              fontSize: "15px",
-                              textAlign: "center",
-                            }}
-                          >
-                            {index + 1}
-                          </td>
-                          <td>
-                            <div
-                              style={{
-                                textAlign: "center",
-                              }}
-                            >
-                              <span
-                                style={{
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {item.aggregate.name}
-                              </span>
-                            </div>
-                          </td>
-                          {tableRowTenDay.map((d, w) => {
-                            const existedMonthValue = item.aggregateData?.find(
-                              (a) => a.month == d.month
-                            );
-
-                            if (existedMonthValue) {
-                              let result = [];
-                              for (let s of d.tenDayNumbers) {
-                                const find = existedMonthValue.dataMonth.find(
-                                  (m) => m.tenDayNumber == s
-                                );
-                                result.push(find == undefined ? "-" : find);
-                              }
-                              return result.map((t, k) => {
+                              if (existedValue) {
                                 return (
                                   <td
-                                    key={k}
+                                    key={w}
                                     style={{
                                       fontSize: "15px",
                                       textAlign: "center",
                                     }}
                                   >
-                                    {t != "-"
-                                      ? Number(t[selectValueForSearch]).toFixed(
-                                          1
-                                        )
-                                      : t}
+                                    {Number(existedValue[selectValueForSearch])}
                                   </td>
                                 );
-                              });
-                            } else {
-                              return d.tenDayNumbers.map((s, p) => {
+                              } else {
                                 return (
                                   <td
-                                    key={p}
+                                    key={w}
                                     style={{
                                       fontSize: "15px",
                                       textAlign: "center",
@@ -4396,251 +3762,864 @@ function Reports() {
                                     -
                                   </td>
                                 );
-                              });
-                            }
-                          })}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                              }
+                            })}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
 
-                <Pagination style={{marginTop: "10px"}} align="center" defaultCurrent={pageData.page} total={findTotalPages().totalPages} onChange={(page, size) => setPageData({page: page, perPage: size})}/>
+                  <Pagination
+                    style={{ marginTop: "10px" }}
+                    align="center"
+                    defaultCurrent={pageData.page}
+                    total={findTotalPages().totalPages}
+                    onChange={(page, size) =>
+                      setPageData({ page: page, perPage: size })
+                    }
+                  />
+                </>
+              ) : reportTableHeading.index == 1 ? (
+                //! YESTERDAY REPORT
+                <>
+                  <table
+                    border="1"
+                    cellPadding="0"
+                    cellSpacing="0"
+                    style={{
+                      maxWidth: "1000px",
+                      width: "100%",
+                      margin: "auto",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          T/R
+                        </th>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          Stansiya nomi
+                        </th>
+                        <th
+                          colSpan="24"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          {getTableDate().toISOString().substring(0, 10)}
+                        </th>
+                      </tr>
+                      <tr>
+                        {valueTodayTable.map((r, l) => {
+                          return (
+                            <th
+                              key={l}
+                              style={{
+                                fontSize: "15px",
+                              }}
+                            >
+                              {r}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {yesterdayDataByStationId?.map((item, index) => {
+                        return (
+                          <tr className="tr0" key={index}>
+                            <td
+                              style={{
+                                fontSize: "15px",
+                                textAlign: "center",
+                              }}
+                            >
+                              {index + 1}
+                            </td>
+                            <td>
+                              <div
+                                style={{
+                                  textAlign: "center",
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    fontSize: "15px",
+                                  }}
+                                >
+                                  {item.aggregate.name}
+                                </span>
+                              </div>
+                            </td>
+                            {valueTodayTable.map((d, w) => {
+                              const existedValue = item.aggregateData?.find(
+                                (a) => a.date.split(" ")[1].split(":")[0] == d
+                              );
+
+                              if (existedValue) {
+                                return (
+                                  <td
+                                    key={w}
+                                    style={{
+                                      fontSize: "15px",
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    {Number(existedValue[selectValueForSearch])}
+                                  </td>
+                                );
+                              } else {
+                                return (
+                                  <td
+                                    key={w}
+                                    style={{
+                                      fontSize: "15px",
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    -
+                                  </td>
+                                );
+                              }
+                            })}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+
+                  <Pagination
+                    style={{ marginTop: "10px" }}
+                    align="center"
+                    defaultCurrent={pageData.page}
+                    total={findTotalPages().totalPages}
+                    onChange={(page, size) =>
+                      setPageData({ page: page, perPage: size })
+                    }
+                  />
+                </>
+              ) : reportTableHeading.index == 2 ? (
+                //! DAILY REPORT
+                <>
+                  <table
+                    border="1"
+                    cellPadding="0"
+                    cellSpacing="0"
+                    style={{
+                      maxWidth: "1000px",
+                      width: "100%",
+                      margin: "auto",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          T/R
+                        </th>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          Stansiya nomi
+                        </th>
+                        <th
+                          colSpan={lastDateOfMonth}
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          {daylyDate.year()}-
+                          {String(daylyDate.month() + 1).length == 1
+                            ? `0${daylyDate.month() + 1}`
+                            : daylyDate.month() + 1}
+                        </th>
+                      </tr>
+                      <tr>
+                        {valueMonth.map((r, l) => {
+                          return (
+                            <th
+                              key={l}
+                              style={{
+                                fontSize: "15px",
+                              }}
+                            >
+                              {r}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {dailyDataByStationId?.map((item, index) => {
+                        return (
+                          <tr className="tr0" key={index}>
+                            <td
+                              style={{
+                                fontSize: "15px",
+                                textAlign: "center",
+                              }}
+                            >
+                              {index + 1}
+                            </td>
+                            <td>
+                              <div
+                                style={{
+                                  textAlign: "center",
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    fontSize: "15px",
+                                  }}
+                                >
+                                  {item.aggregate.name}
+                                </span>
+                              </div>
+                            </td>
+                            {valueMonth.map((d, w) => {
+                              const existedValue = item.aggregateData?.find(
+                                (a) => a.date.split("-")[2]?.split("T")[0] == d
+                              );
+
+                              if (existedValue) {
+                                return (
+                                  <td
+                                    key={w}
+                                    style={{
+                                      fontSize: "15px",
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    {Number(
+                                      existedValue[selectValueForSearch]
+                                    ).toFixed(1)}
+                                  </td>
+                                );
+                              } else {
+                                return (
+                                  <td
+                                    key={w}
+                                    style={{
+                                      fontSize: "15px",
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    -
+                                  </td>
+                                );
+                              }
+                            })}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+
+                  <Pagination
+                    style={{ marginTop: "10px" }}
+                    align="center"
+                    defaultCurrent={pageData.page}
+                    total={findTotalPages().totalPages}
+                    onChange={(page, size) =>
+                      setPageData({ page: page, perPage: size })
+                    }
+                  />
+                </>
+              ) : reportTableHeading.index == 3 ? (
+                //! WEEKLY REPORT
+                <>
+                  <table
+                    border="1"
+                    cellPadding="0"
+                    cellSpacing="0"
+                    style={{
+                      maxWidth: "1000px",
+                      width: "100%",
+                      margin: "auto",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          T/R
+                        </th>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          Stansiya nomi
+                        </th>
+                        <th
+                          colSpan={lastDateOfMonth}
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          {daylyDate.year()}-
+                          {String(daylyDate.month() + 1).length == 1
+                            ? `0${daylyDate.month() + 1}`
+                            : daylyDate.month() + 1}
+                        </th>
+                      </tr>
+                      <tr>
+                        {returnWeekCount()?.map((r, l) => {
+                          return (
+                            <th
+                              key={l}
+                              style={{
+                                fontSize: "15px",
+                              }}
+                            >
+                              {daylyDate.year()}-
+                              {String(daylyDate.month() + 1).length == 1
+                                ? `0${daylyDate.month() + 1}`
+                                : daylyDate.month() + 1}{" "}
+                              {r}-hafta
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {weeklyDataByStationId?.map((item, index) => {
+                        return (
+                          <tr className="tr0" key={index}>
+                            <td
+                              style={{
+                                fontSize: "15px",
+                                textAlign: "center",
+                              }}
+                            >
+                              {index + 1}
+                            </td>
+                            <td>
+                              <div
+                                style={{
+                                  textAlign: "center",
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    fontSize: "15px",
+                                  }}
+                                >
+                                  {item.aggregate.name}
+                                </span>
+                              </div>
+                            </td>
+                            {returnWeekCount()?.map((d, w) => {
+                              const existedValue = item.aggregateData?.find(
+                                (a) => a.week == d
+                              );
+
+                              if (existedValue) {
+                                return (
+                                  <td
+                                    key={w}
+                                    style={{
+                                      fontSize: "15px",
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    {Number(
+                                      existedValue[selectValueForSearch]
+                                    ).toFixed(1)}
+                                  </td>
+                                );
+                              } else {
+                                return (
+                                  <td
+                                    key={w}
+                                    style={{
+                                      fontSize: "15px",
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    -
+                                  </td>
+                                );
+                              }
+                            })}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+
+                  <Pagination
+                    style={{ marginTop: "10px" }}
+                    align="center"
+                    defaultCurrent={pageData.page}
+                    total={findTotalPages().totalPages}
+                    onChange={(page, size) =>
+                      setPageData({ page: page, perPage: size })
+                    }
+                  />
+                </>
+              ) : reportTableHeading.index == 4 ? (
+                //! TEN DAY REPORT
+                <>
+                  <table
+                    border="1"
+                    cellPadding="0"
+                    cellSpacing="0"
+                    style={{
+                      maxWidth: "1100px",
+                      width: "100%",
+                      margin: "auto",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          rowSpan="3"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          T/R
+                        </th>
+                        <th
+                          rowSpan="3"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          Stansiya nomi
+                        </th>
+                        <th
+                          colSpan="36"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          {daylyDate.year()}
+                        </th>
+                      </tr>
+                      <tr>
+                        {tableRowTenDay.map((r, l) => {
+                          return (
+                            <th
+                              key={l}
+                              colSpan="3"
+                              style={{
+                                fontSize: "15px",
+                              }}
+                            >
+                              {r[i18n.language]}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                      <tr>
+                        {tableRowTenDay.map((r, l) => {
+                          return (
+                            <>
+                              <th
+                                key={1}
+                                colSpan="1"
+                                style={{
+                                  fontSize: "15px",
+                                }}
+                              >
+                                1
+                              </th>
+                              <th
+                                key={2}
+                                colSpan="1"
+                                style={{
+                                  fontSize: "15px",
+                                }}
+                              >
+                                2
+                              </th>
+                              <th
+                                key={3}
+                                colSpan="1"
+                                style={{
+                                  fontSize: "15px",
+                                }}
+                              >
+                                3
+                              </th>
+                            </>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tenDayDataByStationId?.map((item, index) => {
+                        return (
+                          <tr className="tr0" key={index}>
+                            <td
+                              style={{
+                                fontSize: "15px",
+                                textAlign: "center",
+                              }}
+                            >
+                              {index + 1}
+                            </td>
+                            <td>
+                              <div
+                                style={{
+                                  textAlign: "center",
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    fontSize: "15px",
+                                  }}
+                                >
+                                  {item.aggregate.name}
+                                </span>
+                              </div>
+                            </td>
+                            {tableRowTenDay.map((d, w) => {
+                              const existedMonthValue =
+                                item.aggregateData?.find(
+                                  (a) => a.month == d.month
+                                );
+
+                              if (existedMonthValue) {
+                                let result = [];
+                                for (let s of d.tenDayNumbers) {
+                                  const find = existedMonthValue.dataMonth.find(
+                                    (m) => m.tenDayNumber == s
+                                  );
+                                  result.push(find == undefined ? "-" : find);
+                                }
+                                return result.map((t, k) => {
+                                  return (
+                                    <td
+                                      key={k}
+                                      style={{
+                                        fontSize: "15px",
+                                        textAlign: "center",
+                                      }}
+                                    >
+                                      {t != "-"
+                                        ? Number(
+                                            t[selectValueForSearch]
+                                          ).toFixed(1)
+                                        : t}
+                                    </td>
+                                  );
+                                });
+                              } else {
+                                return d.tenDayNumbers.map((s, p) => {
+                                  return (
+                                    <td
+                                      key={p}
+                                      style={{
+                                        fontSize: "15px",
+                                        textAlign: "center",
+                                      }}
+                                    >
+                                      -
+                                    </td>
+                                  );
+                                });
+                              }
+                            })}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+
+                  <Pagination
+                    style={{ marginTop: "10px" }}
+                    align="center"
+                    defaultCurrent={pageData.page}
+                    total={findTotalPages().totalPages}
+                    onChange={(page, size) =>
+                      setPageData({ page: page, perPage: size })
+                    }
+                  />
                 </>
               ) : reportTableHeading.index == 5 ? (
                 //! MONTHLY REPORT
                 <>
                   <table
-                  border="1"
-                  cellPadding="0"
-                  cellSpacing="0"
-                  style={{ maxWidth: "1000px", width: "100%", margin: "auto" }}
-                >
-                  <thead>
-                    <tr>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        T/R
-                      </th>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        Stansiya nomi
-                      </th>
-                      <th
-                        colSpan="24"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        {daylyDate.year()}
-                      </th>
-                    </tr>
-                    <tr>
-                      {tableRowTenDay.map((r, l) => {
-                        return (
-                          <th
-                            key={l}
-                            style={{
-                              fontSize: "15px",
-                            }}
-                          >
-                            {r[i18n.language]}
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {monthlyDataByStationId.data?.map((item, index) => {
-                      return (
-                        <tr className="tr0" key={index}>
-                          <td
-                            style={{
-                              fontSize: "15px",
-                              textAlign: "center",
-                            }}
-                          >
-                            {index + 1}
-                          </td>
-                          <td>
-                            <div
+                    border="1"
+                    cellPadding="0"
+                    cellSpacing="0"
+                    style={{
+                      maxWidth: "1000px",
+                      width: "100%",
+                      margin: "auto",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          T/R
+                        </th>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          Stansiya nomi
+                        </th>
+                        <th
+                          colSpan="24"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          {daylyDate.year()}
+                        </th>
+                      </tr>
+                      <tr>
+                        {tableRowTenDay.map((r, l) => {
+                          return (
+                            <th
+                              key={l}
                               style={{
+                                fontSize: "15px",
+                              }}
+                            >
+                              {r[i18n.language]}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {monthlyDataByStationId?.map((item, index) => {
+                        return (
+                          <tr className="tr0" key={index}>
+                            <td
+                              style={{
+                                fontSize: "15px",
                                 textAlign: "center",
                               }}
                             >
-                              <span
+                              {index + 1}
+                            </td>
+                            <td>
+                              <div
                                 style={{
-                                  fontSize: "15px",
+                                  textAlign: "center",
                                 }}
                               >
-                                {item.aggregate.name}
-                              </span>
-                            </div>
-                          </td>
-                          {tableRowTenDay.map((d, w) => {
-                            const existedValue = item.aggregateData.find(
-                              (a) => a.month == w + 1
-                            );
-                            if (existedValue) {
-                              return (
-                                <td
-                                  key={w}
+                                <span
                                   style={{
                                     fontSize: "15px",
-                                    textAlign: "center",
                                   }}
                                 >
-                                  {Number(
-                                    existedValue[selectValueForSearch]
-                                  ).toFixed(1)}
-                                </td>
+                                  {item.aggregate.name}
+                                </span>
+                              </div>
+                            </td>
+                            {tableRowTenDay.map((d, w) => {
+                              const existedValue = item.aggregateData.find(
+                                (a) => a.month == w + 1
                               );
-                            } else {
-                              return (
-                                <td
-                                  key={w}
-                                  style={{
-                                    fontSize: "15px",
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  -
-                                </td>
-                              );
-                            }
-                          })}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                              if (existedValue) {
+                                return (
+                                  <td
+                                    key={w}
+                                    style={{
+                                      fontSize: "15px",
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    {Number(
+                                      existedValue[selectValueForSearch]
+                                    ).toFixed(1)}
+                                  </td>
+                                );
+                              } else {
+                                return (
+                                  <td
+                                    key={w}
+                                    style={{
+                                      fontSize: "15px",
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    -
+                                  </td>
+                                );
+                              }
+                            })}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
 
-                <Pagination style={{marginTop: "10px"}} align="center" defaultCurrent={pageData.page} total={findTotalPages().totalPages} onChange={(page, size) => setPageData({page: page, perPage: size})}/>
+                  <Pagination
+                    style={{ marginTop: "10px" }}
+                    align="center"
+                    defaultCurrent={pageData.page}
+                    total={findTotalPages().totalPages}
+                    onChange={(page, size) =>
+                      setPageData({ page: page, perPage: size })
+                    }
+                  />
                 </>
               ) : reportTableHeading.index == 6 ? (
                 //! CHOSEN DATE REPORT
                 <>
                   <table
-                  border="1"
-                  cellPadding="0"
-                  cellSpacing="0"
-                  style={{ maxWidth: "1000px", width: "100%", margin: "auto" }}
-                >
-                  <thead>
-                    <tr>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        T/R
-                      </th>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        Stansiya nomi
-                      </th>
-                      <th
-                        colSpan="24"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        {dateForChosenDate}
-                      </th>
-                    </tr>
-                    <tr>
-                      {valueTodayTable.map((r, l) => {
-                        return (
-                          <th
-                            key={l}
-                            style={{
-                              fontSize: "15px",
-                            }}
-                          >
-                            {r}
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {chosenDateDataByStationId.data?.map((item, index) => {
-                      return (
-                        <tr className="tr0" key={index}>
-                          <td
-                            style={{
-                              fontSize: "15px",
-                              textAlign: "center",
-                            }}
-                          >
-                            {index + 1}
-                          </td>
-                          <td>
-                            <div
+                    border="1"
+                    cellPadding="0"
+                    cellSpacing="0"
+                    style={{
+                      maxWidth: "1000px",
+                      width: "100%",
+                      margin: "auto",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          T/R
+                        </th>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          Stansiya nomi
+                        </th>
+                        <th
+                          colSpan="24"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          {dateForChosenDate}
+                        </th>
+                      </tr>
+                      <tr>
+                        {valueTodayTable.map((r, l) => {
+                          return (
+                            <th
+                              key={l}
                               style={{
+                                fontSize: "15px",
+                              }}
+                            >
+                              {r}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {chosenDateDataByStationId?.map((item, index) => {
+                        return (
+                          <tr className="tr0" key={index}>
+                            <td
+                              style={{
+                                fontSize: "15px",
                                 textAlign: "center",
                               }}
                             >
-                              <span
+                              {index + 1}
+                            </td>
+                            <td>
+                              <div
                                 style={{
-                                  fontSize: "15px",
+                                  textAlign: "center",
                                 }}
                               >
-                                {item.aggregate.name}
-                              </span>
-                            </div>
-                          </td>
-                          {valueTodayTable.map((d, w) => {
-                            const existedValue = item.aggregateData?.find(
-                              (a) => a.date.split(" ")[1].split(":")[0] == d
-                            );
-
-                            if (existedValue) {
-                              return (
-                                <td
-                                  key={w}
+                                <span
                                   style={{
                                     fontSize: "15px",
-                                    textAlign: "center",
                                   }}
                                 >
-                                  {Number(existedValue[selectValueForSearch])}
-                                </td>
+                                  {item.aggregate.name}
+                                </span>
+                              </div>
+                            </td>
+                            {valueTodayTable.map((d, w) => {
+                              const existedValue = item.aggregateData?.find(
+                                (a) => a.date.split(" ")[1].split(":")[0] == d
                               );
-                            } else {
-                              return (
-                                <td
-                                  key={w}
-                                  style={{
-                                    fontSize: "15px",
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  -
-                                </td>
-                              );
-                            }
-                          })}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
 
-                <Pagination style={{marginTop: "10px"}} align="center" defaultCurrent={pageData.page} total={findTotalPages().totalPages} onChange={(page, size) => setPageData({page: page, perPage: size})}/>
+                              if (existedValue) {
+                                return (
+                                  <td
+                                    key={w}
+                                    style={{
+                                      fontSize: "15px",
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    {Number(existedValue[selectValueForSearch])}
+                                  </td>
+                                );
+                              } else {
+                                return (
+                                  <td
+                                    key={w}
+                                    style={{
+                                      fontSize: "15px",
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    -
+                                  </td>
+                                );
+                              }
+                            })}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+
+                  <Pagination
+                    style={{ marginTop: "10px" }}
+                    align="center"
+                    defaultCurrent={pageData.page}
+                    total={findTotalPages().totalPages}
+                    onChange={(page, size) =>
+                      setPageData({ page: page, perPage: size })
+                    }
+                  />
                 </>
               ) : (
                 ""
@@ -4782,662 +4761,112 @@ function Reports() {
                 //! TODAY REPORT ELECTRICAL ENERGY
                 <>
                   <table
-                  border="1"
-                  cellPadding="0"
-                  cellSpacing="0"
-                  style={{ maxWidth: "1000px", width: "100%", margin: "auto" }}
-                >
-                  <thead>
-                    <tr>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        T/R
-                      </th>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        Stansiya nomi
-                      </th>
-                      <th
-                        colSpan="24"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        {getTableDate().toISOString().substring(0, 10)}
-                      </th>
-                    </tr>
-                    <tr>
-                      {valueTodayTable.map((r, l) => {
-                        return (
-                          <th
-                            key={l}
-                            style={{
-                              fontSize: "15px",
-                            }}
-                          >
-                            {r}
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {electricalEnergyTodayDataByStationId.data?.map(
-                      (item, index) => {
-                        return (
-                          <tr className="tr0" key={index}>
-                            <td
-                              style={{
-                                fontSize: "15px",
-                                textAlign: "center",
-                              }}
-                            >
-                              {index + 1}
-                            </td>
-                            <td>
-                              <div
-                                style={{
-                                  textAlign: "center",
-                                }}
-                              >
-                                <span
-                                  style={{
-                                    fontSize: "15px",
-                                  }}
-                                >
-                                  {item.electricalEnergy.name}
-                                </span>
-                              </div>
-                            </td>
-                            {valueTodayTable.map((d, w) => {
-                              const existedValue =
-                                item.electricalEnergyData?.find(
-                                  (a) => a.date.split(" ")[1].split(":")[0] == d
-                                );
-
-                              if (existedValue) {
-                                return (
-                                  <td
-                                    key={w}
-                                    style={{
-                                      fontSize: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    {Number(
-                                      existedValue[
-                                        selectValueElectricalEnergyForSearch
-                                      ]
-                                    )}
-                                  </td>
-                                );
-                              } else {
-                                return (
-                                  <td
-                                    key={w}
-                                    style={{
-                                      fontSize: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    -
-                                  </td>
-                                );
-                              }
-                            })}
-                          </tr>
-                        );
-                      }
-                    )}
-                  </tbody>
-                </table>
-
-                <Pagination style={{marginTop: "10px"}} align="center" defaultCurrent={pageDataForElectricalEnergy.page} total={findTotalPagesForElectricalEnergy().totalPages} onChange={(page, size) => setPageDataForElectricalEnergy({page: page, perPage: size})}/>
-                </>
-              ) : reportTableHeading.index == 1 ? (
-                //! YESTERDAY REPORT ELECTRICAL ENERGY
-                <>
-                  <table
-                  border="1"
-                  cellPadding="0"
-                  cellSpacing="0"
-                  style={{ maxWidth: "1000px", width: "100%", margin: "auto" }}
-                >
-                  <thead>
-                    <tr>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        T/R
-                      </th>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        Stansiya nomi
-                      </th>
-                      <th
-                        colSpan="24"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        {getTableDate().toISOString().substring(0, 10)}
-                      </th>
-                    </tr>
-                    <tr>
-                      {valueTodayTable.map((r, l) => {
-                        return (
-                          <th
-                            key={l}
-                            style={{
-                              fontSize: "15px",
-                            }}
-                          >
-                            {r}
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {electricalEnergyYesterdayDataByStationId.data?.map(
-                      (item, index) => {
-                        return (
-                          <tr className="tr0" key={index}>
-                            <td
-                              style={{
-                                fontSize: "15px",
-                                textAlign: "center",
-                              }}
-                            >
-                              {index + 1}
-                            </td>
-                            <td>
-                              <div
-                                style={{
-                                  textAlign: "center",
-                                }}
-                              >
-                                <span
-                                  style={{
-                                    fontSize: "15px",
-                                  }}
-                                >
-                                  {item.electricalEnergy.name}
-                                </span>
-                              </div>
-                            </td>
-                            {valueTodayTable.map((d, w) => {
-                              const existedValue =
-                                item.electricalEnergyData?.find(
-                                  (a) => a.date.split(" ")[1].split(":")[0] == d
-                                );
-
-                              if (existedValue) {
-                                return (
-                                  <td
-                                    key={w}
-                                    style={{
-                                      fontSize: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    {Number(
-                                      existedValue[
-                                        selectValueElectricalEnergyForSearch
-                                      ]
-                                    )}
-                                  </td>
-                                );
-                              } else {
-                                return (
-                                  <td
-                                    key={w}
-                                    style={{
-                                      fontSize: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    -
-                                  </td>
-                                );
-                              }
-                            })}
-                          </tr>
-                        );
-                      }
-                    )}
-                  </tbody>
-                </table>
-
-                <Pagination style={{marginTop: "10px"}} align="center" defaultCurrent={pageDataForElectricalEnergy.page} total={findTotalPagesForElectricalEnergy().totalPages} onChange={(page, size) => setPageDataForElectricalEnergy({page: page, perPage: size})}/>
-                </>
-              ) : reportTableHeading.index == 2 ? (
-                //! DAILY REPORT ELECTRICAL ENERGY
-                <>
-                  <table
-                  border="1"
-                  cellPadding="0"
-                  cellSpacing="0"
-                  style={{ maxWidth: "1000px", width: "100%", margin: "auto" }}
-                >
-                  <thead>
-                    <tr>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        T/R
-                      </th>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        Stansiya nomi
-                      </th>
-                      <th
-                        colSpan={lastDateOfMonth}
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        {daylyDate.year()}-
-                        {String(daylyDate.month() + 1).length == 1
-                          ? `0${daylyDate.month() + 1}`
-                          : daylyDate.month() + 1}
-                      </th>
-                    </tr>
-                    <tr>
-                      {valueMonth.map((r, l) => {
-                        return (
-                          <th
-                            key={l}
-                            style={{
-                              fontSize: "15px",
-                            }}
-                          >
-                            {r}
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {electricalEnergyDailyDataByStationId.data?.map(
-                      (item, index) => {
-                        return (
-                          <tr className="tr0" key={index}>
-                            <td
-                              style={{
-                                fontSize: "15px",
-                                textAlign: "center",
-                              }}
-                            >
-                              {index + 1}
-                            </td>
-                            <td>
-                              <div
-                                style={{
-                                  textAlign: "center",
-                                }}
-                              >
-                                <span
-                                  style={{
-                                    fontSize: "15px",
-                                  }}
-                                >
-                                  {item.electricalEnergy?.name}
-                                </span>
-                              </div>
-                            </td>
-                            {valueMonth.map((d, w) => {
-                              const existedValue =
-                                item.electricalEnergyData?.find(
-                                  (a) =>
-                                    a.date.split("-")[2]?.split("T")[0] == d
-                                );
-
-                              if (existedValue) {
-                                return (
-                                  <td
-                                    key={w}
-                                    style={{
-                                      fontSize: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    {Number(
-                                      existedValue[
-                                        selectValueElectricalEnergyForSearch
-                                      ]
-                                    ).toFixed(1)}
-                                  </td>
-                                );
-                              } else {
-                                return (
-                                  <td
-                                    key={w}
-                                    style={{
-                                      fontSize: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    -
-                                  </td>
-                                );
-                              }
-                            })}
-                          </tr>
-                        );
-                      }
-                    )}
-                  </tbody>
-                </table>
-
-                <Pagination style={{marginTop: "10px"}} align="center" defaultCurrent={pageDataForElectricalEnergy.page} total={findTotalPagesForElectricalEnergy().totalPages} onChange={(page, size) => setPageDataForElectricalEnergy({page: page, perPage: size})}/>
-                </>
-              ) : reportTableHeading.index == 3 ? (
-                //! WEEKLY REPORT ELECTRICAL ENERGY
-                <>
-                  <table
-                  border="1"
-                  cellPadding="0"
-                  cellSpacing="0"
-                  style={{ maxWidth: "1000px", width: "100%", margin: "auto" }}
-                >
-                  <thead>
-                    <tr>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        T/R
-                      </th>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        Stansiya nomi
-                      </th>
-                      <th
-                        colSpan="24"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                         {daylyDate.year()}-
-                        {String(daylyDate.month() + 1).length == 1
-                          ? `0${daylyDate.month() + 1}`
-                          : daylyDate.month() + 1}
-                      </th>
-                    </tr>
-                    <tr>
-                      {returnWeekCountForElectricalEnergy().map((r, l) => {
-                        return (
-                          <th
-                            key={l}
-                            style={{
-                              fontSize: "15px",
-                            }}
-                          >
-                           {daylyDate.year()}-
-                        {String(daylyDate.month() + 1).length == 1
-                          ? `0${daylyDate.month() + 1}`
-                          : daylyDate.month() + 1} {r}-hafta
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {electricalEnergyWeeklyDataByStationId.data?.map(
-                      (item, index) => {
-                        return (
-                          <tr className="tr0" key={index}>
-                            <td
-                              style={{
-                                fontSize: "15px",
-                                textAlign: "center",
-                              }}
-                            >
-                              {index + 1}
-                            </td>
-                            <td>
-                              <div
-                                style={{
-                                  textAlign: "center",
-                                }}
-                              >
-                                <span
-                                  style={{
-                                    fontSize: "15px",
-                                  }}
-                                >
-                                  {item.electricalEnergy.name}
-                                </span>
-                              </div>
-                            </td>
-                            {returnWeekCountForElectricalEnergy().map((d, w) => {
-                              const existedValue =
-                                item.electricalEnergyData?.find(
-                                  (a) => a.week == d
-                                );
-
-                              if (existedValue) {
-                                return (
-                                  <td
-                                    key={w}
-                                    style={{
-                                      fontSize: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    {Number(
-                                      existedValue[
-                                        selectValueElectricalEnergyForSearch
-                                      ]
-                                    ).toFixed(1)}
-                                  </td>
-                                );
-                              } else {
-                                return (
-                                  <td
-                                    key={w}
-                                    style={{
-                                      fontSize: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    -
-                                  </td>
-                                );
-                              }
-                            })}
-                          </tr>
-                        );
-                      }
-                    )}
-                  </tbody>
-                </table>
-
-                <Pagination style={{marginTop: "10px"}} align="center" defaultCurrent={pageDataForElectricalEnergy.page} total={findTotalPagesForElectricalEnergy().totalPages} onChange={(page, size) => setPageDataForElectricalEnergy({page: page, perPage: size})}/>
-                </>
-              )
-              : reportTableHeading.index == 4 ? (
-                //! TEN DAY REPORT ELECTRICAL ENERGY
-                <>
-                  <table
-                  border="1"
-                  cellPadding="0"
-                  cellSpacing="0"
-                  style={{ maxWidth: "1100px", width: "100%", margin: "auto" }}
-                >
-                  <thead>
-                    <tr>
-                      <th
-                        rowSpan="3"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        T/R
-                      </th>
-                      <th
-                        rowSpan="3"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        Stansiya nomi
-                      </th>
-                      <th
-                        colSpan="36"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        {daylyDate.year()}
-                      </th>
-                    </tr>
-                    <tr>
-                      {tableRowTenDay.map((r, l) => {
-                        return (
-                          <th
-                            key={l}
-                            colSpan="3"
-                            style={{
-                              fontSize: "15px",
-                            }}
-                          >
-                            {r[[i18n.language]]}
-                          </th>
-                        );
-                      })}
-                    </tr>
-                    <tr>
-                      {tableRowTenDay.map((r, l) => {
-                        return (
-                          <>
+                    border="1"
+                    cellPadding="0"
+                    cellSpacing="0"
+                    style={{
+                      maxWidth: "1000px",
+                      width: "100%",
+                      margin: "auto",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          T/R
+                        </th>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          Stansiya nomi
+                        </th>
+                        <th
+                          colSpan="24"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          {getTableDate().toISOString().substring(0, 10)}
+                        </th>
+                      </tr>
+                      <tr>
+                        {valueTodayTable.map((r, l) => {
+                          return (
                             <th
                               key={l}
-                              colSpan="1"
                               style={{
                                 fontSize: "15px",
                               }}
                             >
-                              1
+                              {r}
                             </th>
-                            <th
-                              key={l}
-                              colSpan="1"
-                              style={{
-                                fontSize: "15px",
-                              }}
-                            >
-                              2
-                            </th>
-                            <th
-                              key={l}
-                              colSpan="1"
-                              style={{
-                                fontSize: "15px",
-                              }}
-                            >
-                              3
-                            </th>
-                          </>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {electricalEnergyTenDayDataByStationId.data?.map(
-                      (item, index) => {
-                        return (
-                          <tr className="tr0" key={index}>
-                            <td
-                              style={{
-                                fontSize: "15px",
-                                textAlign: "center",
-                              }}
-                            >
-                              {index + 1}
-                            </td>
-                            <td>
-                              <div
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {electricalEnergyTodayDataByStationId.data?.map(
+                        (item, index) => {
+                          return (
+                            <tr className="tr0" key={index}>
+                              <td
                                 style={{
+                                  fontSize: "15px",
                                   textAlign: "center",
                                 }}
                               >
-                                <span
+                                {index + 1}
+                              </td>
+                              <td>
+                                <div
                                   style={{
-                                    fontSize: "15px",
+                                    textAlign: "center",
                                   }}
                                 >
-                                  {item.electricalEnergy?.name}
-                                </span>
-                              </div>
-                            </td>
-                            {tableRowTenDay.map((d, w) => {
-                              const existedMonthValue =
-                                item.electricalEnergyData?.find(
-                                  (a) => a.month == d.month
-                                );
-
-                              if (existedMonthValue) {
-                                let result = [];
-                                for (let s of d.tenDayNumbers) {
-                                  const find = existedMonthValue.dataMonth.find(
-                                    (m) => m.tenDayNumber == s
+                                  <span
+                                    style={{
+                                      fontSize: "15px",
+                                    }}
+                                  >
+                                    {item.electricalEnergy.name}
+                                  </span>
+                                </div>
+                              </td>
+                              {valueTodayTable.map((d, w) => {
+                                const existedValue =
+                                  item.electricalEnergyData?.find(
+                                    (a) =>
+                                      a.date.split(" ")[1].split(":")[0] == d
                                   );
-                                  result.push(find == undefined ? "-" : find);
-                                }
-                                return result.map((t, k) => {
+
+                                if (existedValue) {
                                   return (
                                     <td
-                                      key={k}
+                                      key={w}
                                       style={{
                                         fontSize: "15px",
                                         textAlign: "center",
                                       }}
                                     >
-                                      {t != "-"
-                                        ? Number(
-                                            t[
-                                              selectValueElectricalEnergyForSearch
-                                            ]
-                                          ).toFixed(1)
-                                        : t}
+                                      {Number(
+                                        existedValue[
+                                          selectValueElectricalEnergyForSearch
+                                        ]
+                                      )}
                                     </td>
                                   );
-                                });
-                              } else {
-                                return d.tenDayNumbers.map((s, p) => {
+                                } else {
                                   return (
                                     <td
-                                      key={p}
+                                      key={w}
                                       style={{
                                         fontSize: "15px",
                                         textAlign: "center",
@@ -5446,264 +4875,925 @@ function Reports() {
                                       -
                                     </td>
                                   );
-                                });
-                              }
-                            })}
-                          </tr>
-                        );
-                      }
-                    )}
-                  </tbody>
-                </table>
+                                }
+                              })}
+                            </tr>
+                          );
+                        }
+                      )}
+                    </tbody>
+                  </table>
 
-                <Pagination style={{marginTop: "10px"}} align="center" defaultCurrent={pageDataForElectricalEnergy.page} total={findTotalPagesForElectricalEnergy().totalPages} onChange={(page, size) => setPageDataForElectricalEnergy({page: page, perPage: size})}/>
+                  <Pagination
+                    style={{ marginTop: "10px" }}
+                    align="center"
+                    defaultCurrent={pageDataForElectricalEnergy.page}
+                    total={findTotalPagesForElectricalEnergy().totalPages}
+                    onChange={(page, size) =>
+                      setPageDataForElectricalEnergy({
+                        page: page,
+                        perPage: size,
+                      })
+                    }
+                  />
+                </>
+              ) : reportTableHeading.index == 1 ? (
+                //! YESTERDAY REPORT ELECTRICAL ENERGY
+                <>
+                  <table
+                    border="1"
+                    cellPadding="0"
+                    cellSpacing="0"
+                    style={{
+                      maxWidth: "1000px",
+                      width: "100%",
+                      margin: "auto",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          T/R
+                        </th>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          Stansiya nomi
+                        </th>
+                        <th
+                          colSpan="24"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          {getTableDate().toISOString().substring(0, 10)}
+                        </th>
+                      </tr>
+                      <tr>
+                        {valueTodayTable.map((r, l) => {
+                          return (
+                            <th
+                              key={l}
+                              style={{
+                                fontSize: "15px",
+                              }}
+                            >
+                              {r}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {electricalEnergyYesterdayDataByStationId.data?.map(
+                        (item, index) => {
+                          return (
+                            <tr className="tr0" key={index}>
+                              <td
+                                style={{
+                                  fontSize: "15px",
+                                  textAlign: "center",
+                                }}
+                              >
+                                {index + 1}
+                              </td>
+                              <td>
+                                <div
+                                  style={{
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  <span
+                                    style={{
+                                      fontSize: "15px",
+                                    }}
+                                  >
+                                    {item.electricalEnergy.name}
+                                  </span>
+                                </div>
+                              </td>
+                              {valueTodayTable.map((d, w) => {
+                                const existedValue =
+                                  item.electricalEnergyData?.find(
+                                    (a) =>
+                                      a.date.split(" ")[1].split(":")[0] == d
+                                  );
+
+                                if (existedValue) {
+                                  return (
+                                    <td
+                                      key={w}
+                                      style={{
+                                        fontSize: "15px",
+                                        textAlign: "center",
+                                      }}
+                                    >
+                                      {Number(
+                                        existedValue[
+                                          selectValueElectricalEnergyForSearch
+                                        ]
+                                      )}
+                                    </td>
+                                  );
+                                } else {
+                                  return (
+                                    <td
+                                      key={w}
+                                      style={{
+                                        fontSize: "15px",
+                                        textAlign: "center",
+                                      }}
+                                    >
+                                      -
+                                    </td>
+                                  );
+                                }
+                              })}
+                            </tr>
+                          );
+                        }
+                      )}
+                    </tbody>
+                  </table>
+
+                  <Pagination
+                    style={{ marginTop: "10px" }}
+                    align="center"
+                    defaultCurrent={pageDataForElectricalEnergy.page}
+                    total={findTotalPagesForElectricalEnergy().totalPages}
+                    onChange={(page, size) =>
+                      setPageDataForElectricalEnergy({
+                        page: page,
+                        perPage: size,
+                      })
+                    }
+                  />
+                </>
+              ) : reportTableHeading.index == 2 ? (
+                //! DAILY REPORT ELECTRICAL ENERGY
+                <>
+                  <table
+                    border="1"
+                    cellPadding="0"
+                    cellSpacing="0"
+                    style={{
+                      maxWidth: "1000px",
+                      width: "100%",
+                      margin: "auto",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          T/R
+                        </th>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          Stansiya nomi
+                        </th>
+                        <th
+                          colSpan={lastDateOfMonth}
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          {daylyDate.year()}-
+                          {String(daylyDate.month() + 1).length == 1
+                            ? `0${daylyDate.month() + 1}`
+                            : daylyDate.month() + 1}
+                        </th>
+                      </tr>
+                      <tr>
+                        {valueMonth.map((r, l) => {
+                          return (
+                            <th
+                              key={l}
+                              style={{
+                                fontSize: "15px",
+                              }}
+                            >
+                              {r}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {electricalEnergyDailyDataByStationId.data?.map(
+                        (item, index) => {
+                          return (
+                            <tr className="tr0" key={index}>
+                              <td
+                                style={{
+                                  fontSize: "15px",
+                                  textAlign: "center",
+                                }}
+                              >
+                                {index + 1}
+                              </td>
+                              <td>
+                                <div
+                                  style={{
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  <span
+                                    style={{
+                                      fontSize: "15px",
+                                    }}
+                                  >
+                                    {item.electricalEnergy?.name}
+                                  </span>
+                                </div>
+                              </td>
+                              {valueMonth.map((d, w) => {
+                                const existedValue =
+                                  item.electricalEnergyData?.find(
+                                    (a) =>
+                                      a.date.split("-")[2]?.split("T")[0] == d
+                                  );
+
+                                if (existedValue) {
+                                  return (
+                                    <td
+                                      key={w}
+                                      style={{
+                                        fontSize: "15px",
+                                        textAlign: "center",
+                                      }}
+                                    >
+                                      {Number(
+                                        existedValue[
+                                          selectValueElectricalEnergyForSearch
+                                        ]
+                                      ).toFixed(1)}
+                                    </td>
+                                  );
+                                } else {
+                                  return (
+                                    <td
+                                      key={w}
+                                      style={{
+                                        fontSize: "15px",
+                                        textAlign: "center",
+                                      }}
+                                    >
+                                      -
+                                    </td>
+                                  );
+                                }
+                              })}
+                            </tr>
+                          );
+                        }
+                      )}
+                    </tbody>
+                  </table>
+
+                  <Pagination
+                    style={{ marginTop: "10px" }}
+                    align="center"
+                    defaultCurrent={pageDataForElectricalEnergy.page}
+                    total={findTotalPagesForElectricalEnergy().totalPages}
+                    onChange={(page, size) =>
+                      setPageDataForElectricalEnergy({
+                        page: page,
+                        perPage: size,
+                      })
+                    }
+                  />
+                </>
+              ) : reportTableHeading.index == 3 ? (
+                //! WEEKLY REPORT ELECTRICAL ENERGY
+                <>
+                  <table
+                    border="1"
+                    cellPadding="0"
+                    cellSpacing="0"
+                    style={{
+                      maxWidth: "1000px",
+                      width: "100%",
+                      margin: "auto",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          T/R
+                        </th>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          Stansiya nomi
+                        </th>
+                        <th
+                          colSpan="24"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          {daylyDate.year()}-
+                          {String(daylyDate.month() + 1).length == 1
+                            ? `0${daylyDate.month() + 1}`
+                            : daylyDate.month() + 1}
+                        </th>
+                      </tr>
+                      <tr>
+                        {returnWeekCountForElectricalEnergy().map((r, l) => {
+                          return (
+                            <th
+                              key={l}
+                              style={{
+                                fontSize: "15px",
+                              }}
+                            >
+                              {daylyDate.year()}-
+                              {String(daylyDate.month() + 1).length == 1
+                                ? `0${daylyDate.month() + 1}`
+                                : daylyDate.month() + 1}{" "}
+                              {r}-hafta
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {electricalEnergyWeeklyDataByStationId.data?.map(
+                        (item, index) => {
+                          return (
+                            <tr className="tr0" key={index}>
+                              <td
+                                style={{
+                                  fontSize: "15px",
+                                  textAlign: "center",
+                                }}
+                              >
+                                {index + 1}
+                              </td>
+                              <td>
+                                <div
+                                  style={{
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  <span
+                                    style={{
+                                      fontSize: "15px",
+                                    }}
+                                  >
+                                    {item.electricalEnergy.name}
+                                  </span>
+                                </div>
+                              </td>
+                              {returnWeekCountForElectricalEnergy().map(
+                                (d, w) => {
+                                  const existedValue =
+                                    item.electricalEnergyData?.find(
+                                      (a) => a.week == d
+                                    );
+
+                                  if (existedValue) {
+                                    return (
+                                      <td
+                                        key={w}
+                                        style={{
+                                          fontSize: "15px",
+                                          textAlign: "center",
+                                        }}
+                                      >
+                                        {Number(
+                                          existedValue[
+                                            selectValueElectricalEnergyForSearch
+                                          ]
+                                        ).toFixed(1)}
+                                      </td>
+                                    );
+                                  } else {
+                                    return (
+                                      <td
+                                        key={w}
+                                        style={{
+                                          fontSize: "15px",
+                                          textAlign: "center",
+                                        }}
+                                      >
+                                        -
+                                      </td>
+                                    );
+                                  }
+                                }
+                              )}
+                            </tr>
+                          );
+                        }
+                      )}
+                    </tbody>
+                  </table>
+
+                  <Pagination
+                    style={{ marginTop: "10px" }}
+                    align="center"
+                    defaultCurrent={pageDataForElectricalEnergy.page}
+                    total={findTotalPagesForElectricalEnergy().totalPages}
+                    onChange={(page, size) =>
+                      setPageDataForElectricalEnergy({
+                        page: page,
+                        perPage: size,
+                      })
+                    }
+                  />
+                </>
+              ) : reportTableHeading.index == 4 ? (
+                //! TEN DAY REPORT ELECTRICAL ENERGY
+                <>
+                  <table
+                    border="1"
+                    cellPadding="0"
+                    cellSpacing="0"
+                    style={{
+                      maxWidth: "1100px",
+                      width: "100%",
+                      margin: "auto",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          rowSpan="3"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          T/R
+                        </th>
+                        <th
+                          rowSpan="3"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          Stansiya nomi
+                        </th>
+                        <th
+                          colSpan="36"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          {daylyDate.year()}
+                        </th>
+                      </tr>
+                      <tr>
+                        {tableRowTenDay.map((r, l) => {
+                          return (
+                            <th
+                              key={l}
+                              colSpan="3"
+                              style={{
+                                fontSize: "15px",
+                              }}
+                            >
+                              {r[[i18n.language]]}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                      <tr>
+                        {tableRowTenDay.map((r, l) => {
+                          return (
+                            <>
+                              <th
+                                key={l}
+                                colSpan="1"
+                                style={{
+                                  fontSize: "15px",
+                                }}
+                              >
+                                1
+                              </th>
+                              <th
+                                key={l}
+                                colSpan="1"
+                                style={{
+                                  fontSize: "15px",
+                                }}
+                              >
+                                2
+                              </th>
+                              <th
+                                key={l}
+                                colSpan="1"
+                                style={{
+                                  fontSize: "15px",
+                                }}
+                              >
+                                3
+                              </th>
+                            </>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {electricalEnergyTenDayDataByStationId.data?.map(
+                        (item, index) => {
+                          return (
+                            <tr className="tr0" key={index}>
+                              <td
+                                style={{
+                                  fontSize: "15px",
+                                  textAlign: "center",
+                                }}
+                              >
+                                {index + 1}
+                              </td>
+                              <td>
+                                <div
+                                  style={{
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  <span
+                                    style={{
+                                      fontSize: "15px",
+                                    }}
+                                  >
+                                    {item.electricalEnergy?.name}
+                                  </span>
+                                </div>
+                              </td>
+                              {tableRowTenDay.map((d, w) => {
+                                const existedMonthValue =
+                                  item.electricalEnergyData?.find(
+                                    (a) => a.month == d.month
+                                  );
+
+                                if (existedMonthValue) {
+                                  let result = [];
+                                  for (let s of d.tenDayNumbers) {
+                                    const find =
+                                      existedMonthValue.dataMonth.find(
+                                        (m) => m.tenDayNumber == s
+                                      );
+                                    result.push(find == undefined ? "-" : find);
+                                  }
+                                  return result.map((t, k) => {
+                                    return (
+                                      <td
+                                        key={k}
+                                        style={{
+                                          fontSize: "15px",
+                                          textAlign: "center",
+                                        }}
+                                      >
+                                        {t != "-"
+                                          ? Number(
+                                              t[
+                                                selectValueElectricalEnergyForSearch
+                                              ]
+                                            ).toFixed(1)
+                                          : t}
+                                      </td>
+                                    );
+                                  });
+                                } else {
+                                  return d.tenDayNumbers.map((s, p) => {
+                                    return (
+                                      <td
+                                        key={p}
+                                        style={{
+                                          fontSize: "15px",
+                                          textAlign: "center",
+                                        }}
+                                      >
+                                        -
+                                      </td>
+                                    );
+                                  });
+                                }
+                              })}
+                            </tr>
+                          );
+                        }
+                      )}
+                    </tbody>
+                  </table>
+
+                  <Pagination
+                    style={{ marginTop: "10px" }}
+                    align="center"
+                    defaultCurrent={pageDataForElectricalEnergy.page}
+                    total={findTotalPagesForElectricalEnergy().totalPages}
+                    onChange={(page, size) =>
+                      setPageDataForElectricalEnergy({
+                        page: page,
+                        perPage: size,
+                      })
+                    }
+                  />
                 </>
               ) : reportTableHeading.index == 5 ? (
                 //! MONTHLY REPORT ELECTRICAL ENERGY
                 <>
                   <table
-                  border="1"
-                  cellPadding="0"
-                  cellSpacing="0"
-                  style={{ maxWidth: "1000px", width: "100%", margin: "auto" }}
-                >
-                  <thead>
-                    <tr>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        T/R
-                      </th>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        Stansiya nomi
-                      </th>
-                      <th
-                        colSpan="24"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        {daylyDate.year()}
-                      </th>
-                    </tr>
-                    <tr>
-                      {tableRowTenDay.map((r, l) => {
-                        return (
-                          <th
-                            key={l}
-                            style={{
-                              fontSize: "15px",
-                            }}
-                          >
-                            {r[i18n.language]}
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {electricalEnergyMonthlyDataByStationId.data?.map(
-                      (item, index) => {
-                        return (
-                          <tr className="tr0" key={index}>
-                            <td
+                    border="1"
+                    cellPadding="0"
+                    cellSpacing="0"
+                    style={{
+                      maxWidth: "1000px",
+                      width: "100%",
+                      margin: "auto",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          T/R
+                        </th>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          Stansiya nomi
+                        </th>
+                        <th
+                          colSpan="24"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          {daylyDate.year()}
+                        </th>
+                      </tr>
+                      <tr>
+                        {tableRowTenDay.map((r, l) => {
+                          return (
+                            <th
+                              key={l}
                               style={{
                                 fontSize: "15px",
-                                textAlign: "center",
                               }}
                             >
-                              {index + 1}
-                            </td>
-                            <td>
-                              <div
+                              {r[i18n.language]}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {electricalEnergyMonthlyDataByStationId.data?.map(
+                        (item, index) => {
+                          return (
+                            <tr className="tr0" key={index}>
+                              <td
                                 style={{
+                                  fontSize: "15px",
                                   textAlign: "center",
                                 }}
                               >
-                                <span
+                                {index + 1}
+                              </td>
+                              <td>
+                                <div
                                   style={{
-                                    fontSize: "15px",
+                                    textAlign: "center",
                                   }}
                                 >
-                                  {item.electricalEnergy.name}
-                                </span>
-                              </div>
-                            </td>
-                            {tableRowTenDay.map((d, w) => {
-                              const existedValue =
-                                item.electricalEnergyData.find(
-                                  (a) => a.month == w + 1
-                                );
-                              if (existedValue) {
-                                return (
-                                  <td
-                                    key={w}
+                                  <span
                                     style={{
                                       fontSize: "15px",
-                                      textAlign: "center",
                                     }}
                                   >
-                                    {Number(
-                                      existedValue[
-                                        selectValueElectricalEnergyForSearch
-                                      ]
-                                    ).toFixed(1)}
-                                  </td>
-                                );
-                              } else {
-                                return (
-                                  <td
-                                    key={w}
-                                    style={{
-                                      fontSize: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    -
-                                  </td>
-                                );
-                              }
-                            })}
-                          </tr>
-                        );
-                      }
-                    )}
-                  </tbody>
-                </table>
+                                    {item.electricalEnergy.name}
+                                  </span>
+                                </div>
+                              </td>
+                              {tableRowTenDay.map((d, w) => {
+                                const existedValue =
+                                  item.electricalEnergyData.find(
+                                    (a) => a.month == w + 1
+                                  );
+                                if (existedValue) {
+                                  return (
+                                    <td
+                                      key={w}
+                                      style={{
+                                        fontSize: "15px",
+                                        textAlign: "center",
+                                      }}
+                                    >
+                                      {Number(
+                                        existedValue[
+                                          selectValueElectricalEnergyForSearch
+                                        ]
+                                      ).toFixed(1)}
+                                    </td>
+                                  );
+                                } else {
+                                  return (
+                                    <td
+                                      key={w}
+                                      style={{
+                                        fontSize: "15px",
+                                        textAlign: "center",
+                                      }}
+                                    >
+                                      -
+                                    </td>
+                                  );
+                                }
+                              })}
+                            </tr>
+                          );
+                        }
+                      )}
+                    </tbody>
+                  </table>
 
-                <Pagination style={{marginTop: "10px"}} align="center" defaultCurrent={pageDataForElectricalEnergy.page} total={findTotalPagesForElectricalEnergy().totalPages} onChange={(page, size) => setPageDataForElectricalEnergy({page: page, perPage: size})}/>
+                  <Pagination
+                    style={{ marginTop: "10px" }}
+                    align="center"
+                    defaultCurrent={pageDataForElectricalEnergy.page}
+                    total={findTotalPagesForElectricalEnergy().totalPages}
+                    onChange={(page, size) =>
+                      setPageDataForElectricalEnergy({
+                        page: page,
+                        perPage: size,
+                      })
+                    }
+                  />
                 </>
               ) : reportTableHeading.index == 6 ? (
                 //! CHOSEN DATE REPORT ELECTRICAL ENERGY
                 <>
                   <table
-                  border="1"
-                  cellPadding="0"
-                  cellSpacing="0"
-                  style={{ maxWidth: "1000px", width: "100%", margin: "auto" }}
-                >
-                  <thead>
-                    <tr>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        T/R
-                      </th>
-                      <th
-                        rowSpan="2"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        Stansiya nomi
-                      </th>
-                      <th
-                        colSpan="24"
-                        style={{
-                          fontSize: "15px",
-                        }}
-                      >
-                        {dateForChosenDate}
-                      </th>
-                    </tr>
-                    <tr>
-                      {valueTodayTable.map((r, l) => {
-                        return (
-                          <th
-                            key={l}
-                            style={{
-                              fontSize: "15px",
-                            }}
-                          >
-                            {r}
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {electricalEnergyChosenDateDataByStationId.data?.map(
-                      (item, index) => {
-                        return (
-                          <tr className="tr0" key={index}>
-                            <td
+                    border="1"
+                    cellPadding="0"
+                    cellSpacing="0"
+                    style={{
+                      maxWidth: "1000px",
+                      width: "100%",
+                      margin: "auto",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          T/R
+                        </th>
+                        <th
+                          rowSpan="2"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          Stansiya nomi
+                        </th>
+                        <th
+                          colSpan="24"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          {dateForChosenDate}
+                        </th>
+                      </tr>
+                      <tr>
+                        {valueTodayTable.map((r, l) => {
+                          return (
+                            <th
+                              key={l}
                               style={{
                                 fontSize: "15px",
-                                textAlign: "center",
                               }}
                             >
-                              {index + 1}
-                            </td>
-                            <td>
-                              <div
+                              {r}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {electricalEnergyChosenDateDataByStationId.data?.map(
+                        (item, index) => {
+                          return (
+                            <tr className="tr0" key={index}>
+                              <td
                                 style={{
+                                  fontSize: "15px",
                                   textAlign: "center",
                                 }}
                               >
-                                <span
+                                {index + 1}
+                              </td>
+                              <td>
+                                <div
                                   style={{
-                                    fontSize: "15px",
+                                    textAlign: "center",
                                   }}
                                 >
-                                  {item.electricalEnergy.name}
-                                </span>
-                              </div>
-                            </td>
-                            {valueTodayTable.map((d, w) => {
-                              const existedValue =
-                                item.electricalEnergyData?.find(
-                                  (a) => a.date.split(" ")[1].split(":")[0] == d
-                                );
-
-                              if (existedValue) {
-                                return (
-                                  <td
-                                    key={w}
+                                  <span
                                     style={{
                                       fontSize: "15px",
-                                      textAlign: "center",
                                     }}
                                   >
-                                    {Number(
-                                      existedValue[
-                                        selectValueElectricalEnergyForSearch
-                                      ]
-                                    )}
-                                  </td>
-                                );
-                              } else {
-                                return (
-                                  <td
-                                    key={w}
-                                    style={{
-                                      fontSize: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    -
-                                  </td>
-                                );
-                              }
-                            })}
-                          </tr>
-                        );
-                      }
-                    )}
-                  </tbody>
-                </table>
+                                    {item.electricalEnergy.name}
+                                  </span>
+                                </div>
+                              </td>
+                              {valueTodayTable.map((d, w) => {
+                                const existedValue =
+                                  item.electricalEnergyData?.find(
+                                    (a) =>
+                                      a.date.split(" ")[1].split(":")[0] == d
+                                  );
 
-                <Pagination style={{marginTop: "10px"}} align="center" defaultCurrent={pageDataForElectricalEnergy.page} total={findTotalPagesForElectricalEnergy().totalPages} onChange={(page, size) => setPageDataForElectricalEnergy({page: page, perPage: size})}/>
+                                if (existedValue) {
+                                  return (
+                                    <td
+                                      key={w}
+                                      style={{
+                                        fontSize: "15px",
+                                        textAlign: "center",
+                                      }}
+                                    >
+                                      {Number(
+                                        existedValue[
+                                          selectValueElectricalEnergyForSearch
+                                        ]
+                                      )}
+                                    </td>
+                                  );
+                                } else {
+                                  return (
+                                    <td
+                                      key={w}
+                                      style={{
+                                        fontSize: "15px",
+                                        textAlign: "center",
+                                      }}
+                                    >
+                                      -
+                                    </td>
+                                  );
+                                }
+                              })}
+                            </tr>
+                          );
+                        }
+                      )}
+                    </tbody>
+                  </table>
+
+                  <Pagination
+                    style={{ marginTop: "10px" }}
+                    align="center"
+                    defaultCurrent={pageDataForElectricalEnergy.page}
+                    total={findTotalPagesForElectricalEnergy().totalPages}
+                    onChange={(page, size) =>
+                      setPageDataForElectricalEnergy({
+                        page: page,
+                        perPage: size,
+                      })
+                    }
+                  />
                 </>
               ) : (
                 ""
