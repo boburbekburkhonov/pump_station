@@ -4,6 +4,7 @@ const initialState = {
   allStations: [],
   stationAllDataByStationId: [],
   pumpDataByStationId: [],
+  electrEnergyDataByStationId: [],
   todayDataByStationId: [],
   yesterdayDataByStationId: [],
   dailyDataByStationId: [],
@@ -151,9 +152,19 @@ const dashboardReducer = (state = initialState, action) => {
     case REPORTS_TYPES.GET_ELECTRICAL_ENERGY_TODAY_DATA_BY_STATION_ID:
       return {
         ...state,
+        electrEnergyDataByStationId: action.payload,
+      };
+    case REPORTS_TYPES.GET_ALL_ELECTRICAL_ENERGY_TODAY_DATA_BY_STATION_ID:
+      return {
+        ...state,
         electricalEnergyTodayDataByStationId: action.payload,
       };
     case REPORTS_TYPES.GET_ELECTRICAL_ENERGY_YESTERDAY_DATA_BY_STATION_ID:
+      return {
+        ...state,
+        electrEnergyDataByStationId: action.payload,
+      };
+    case REPORTS_TYPES.GET_ALL_ELECTRICAL_ENERGY_YESTERDAY_DATA_BY_STATION_ID:
       return {
         ...state,
         electricalEnergyYesterdayDataByStationId: action.payload,
@@ -161,9 +172,19 @@ const dashboardReducer = (state = initialState, action) => {
     case REPORTS_TYPES.GET_ELECTRICAL_ENERGY_DAILY_DATA_BY_STATION_ID:
       return {
         ...state,
+        electrEnergyDataByStationId: action.payload,
+      };
+    case REPORTS_TYPES.GET_ALL_ELECTRICAL_ENERGY_DAILY_DATA_BY_STATION_ID:
+      return {
+        ...state,
         electricalEnergyDailyDataByStationId: action.payload,
       };
     case REPORTS_TYPES.GET_ELECTRICAL_ENERGY_WEEKLY_DATA_BY_STATION_ID:
+      return {
+        ...state,
+        electrEnergyDataByStationId: action.payload,
+      };
+    case REPORTS_TYPES.GET_ALL_ELECTRICAL_ENERGY_WEEKLY_DATA_BY_STATION_ID:
       return {
         ...state,
         electricalEnergyWeeklyDataByStationId: action.payload,
@@ -171,9 +192,19 @@ const dashboardReducer = (state = initialState, action) => {
     case REPORTS_TYPES.GET_ELECTRICAL_ENERGY_TEN_DAY_DATA_BY_STATION_ID:
       return {
         ...state,
+        electrEnergyDataByStationId: action.payload,
+      };
+    case REPORTS_TYPES.GET_ALL_ELECTRICAL_ENERGY_TEN_DAY_DATA_BY_STATION_ID:
+      return {
+        ...state,
         electricalEnergyTenDayDataByStationId: action.payload,
       };
     case REPORTS_TYPES.GET_ELECTRICAL_ENERGY_MONTHLY_DATA_BY_STATION_ID:
+      return {
+        ...state,
+        electrEnergyDataByStationId: action.payload,
+      };
+    case REPORTS_TYPES.GET_ALL_ELECTRICAL_ENERGY_MONTHLY_DATA_BY_STATION_ID:
       return {
         ...state,
         electricalEnergyMonthlyDataByStationId: action.payload,
@@ -181,7 +212,17 @@ const dashboardReducer = (state = initialState, action) => {
     case REPORTS_TYPES.GET_ELECTRICAL_ENERGY_CHOSEN_DATE_DATA_BY_STATION_ID:
       return {
         ...state,
+        electrEnergyDataByStationId: action.payload,
+      };
+    case REPORTS_TYPES.GET_ALL_ELECTRICAL_ENERGY_CHOSEN_DATE_DATA_BY_STATION_ID:
+      return {
+        ...state,
         electricalEnergyChosenDateDataByStationId: action.payload,
+      };
+    case REPORTS_TYPES.GET_ELECTRICAL_ENERGY_DATE_RANGE_DATA_BY_STATION_ID:
+      return {
+        ...state,
+        electrEnergyDataByStationId: action.payload,
       };
     default:
       return state;
