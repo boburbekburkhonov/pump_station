@@ -307,21 +307,29 @@ export const getPumpTodayDataByStationId =
           name: e.aggregate.name,
           aggregateData: e.aggregateData,
           lineChartData: {
-            date: e.aggregateData?.map((item) => item.date.split(" ")[1]),
+            date: e.aggregateData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.date.split(" ")[1]),
             lineData: [
               {
                 name: aggregateDataType[lang].name1,
-                data: e.aggregateData?.map((item) => item.flow),
+                data: e.aggregateData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.flow),
                 unit: "m³/s",
               },
               {
                 name: aggregateDataType[lang].name2,
-                data: e.aggregateData?.map((item) => item.velocity),
+                data: e.aggregateData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.velocity),
                 unit: "m/s",
               },
               {
                 name: aggregateDataType[lang].name3,
-                data: e.aggregateData?.map((item) => item.volume),
+                data: e.aggregateData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.volume),
                 unit: "m³",
               },
             ],
@@ -391,58 +399,80 @@ export const getElectricalEnergyTodayDataByStationId =
           name: e.electricalEnergy.name,
           electricalEnergyData: e.electricalEnergyData,
           lineChartData: {
-            date: e.electricalEnergyData?.map((item) => item.date.split(" ")[1]),
+            date: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.date.split(" ")[1]),
             lineData: [
               {
                 name: electryDataType[lang].energyActive,
-                data: e.electricalEnergyData?.map((item) => item.energyActive),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.energyActive),
                 unit: unitTranslations[lang].kwHour,
               },
               {
                 name: electryDataType[lang].energyReactive,
-                data: e.electricalEnergyData?.map((item) => item.energyReactive),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.energyReactive),
                 unit: unitTranslations[lang].kwHour,
               },
               {
                 name: electryDataType[lang].powerActive,
-                data: e.electricalEnergyData?.map((item) => item.powerActive),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.powerActive),
                 unit: "Kw",
               },
               {
                 name: electryDataType[lang].powerReactive,
-                data: e.electricalEnergyData?.map((item) => item.powerReactive),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.powerReactive),
                 unit: "Kw",
               },
 
               {
                 name: electryDataType[lang].current1,
-                data: e.electricalEnergyData?.map((item) => item.current1),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.current1),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].current2,
-                data: e.electricalEnergyData?.map((item) => item.current2),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.current2),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].current3,
-                data: e.electricalEnergyData?.map((item) => item.current3),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.current3),
                 unit: "A",
               },
 
               {
                 name: electryDataType[lang].voltage1,
-                data: e.electricalEnergyData?.map((item) => item.voltage1),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.voltage1),
                 unit: "V",
               },
               {
                 name: electryDataType[lang].voltage2,
-                data: e.electricalEnergyData?.map((item) => item.voltage2),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.voltage2),
                 unit: "V",
               },
               {
                 name: electryDataType[lang].voltage3,
-                data: e.electricalEnergyData?.map((item) => item.voltage3),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.voltage3),
                 unit: "V",
               },
             ],
@@ -567,21 +597,29 @@ export const getPumpYesterdayDataByStationId =
           name: e.aggregate.name,
           aggregateData: e.aggregateData,
           lineChartData: {
-            date: e.aggregateData?.map((item) => item.date.split(" ")[1]),
+            date: e.aggregateData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.date.split(" ")[1]),
             lineData: [
               {
                 name: aggregateDataType[lang].name1,
-                data: e.aggregateData?.map((item) => item.flow),
+                data: e.aggregateData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.flow),
                 unit: "m³/s",
               },
               {
                 name: aggregateDataType[lang].name2,
-                data: e.aggregateData?.map((item) => item.velocity),
+                data: e.aggregateData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.velocity),
                 unit: "m/s",
               },
               {
                 name: aggregateDataType[lang].name3,
-                data: e.aggregateData?.map((item) => item.volume),
+                data: e.aggregateData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.volume),
                 unit: "m³",
               },
             ],
@@ -651,58 +689,80 @@ export const getElectricalEnergyYesterdayDataByStationId =
           name: e.electricalEnergy.name,
           electricalEnergyData: e.electricalEnergyData,
           lineChartData: {
-            date: e.electricalEnergyData?.map((item) => item.date.split(" ")[1]),
+            date: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.date.split(" ")[1]),
             lineData: [
               {
                 name: electryDataType[lang].energyActive,
-                data: e.electricalEnergyData?.map((item) => item.energyActive),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.energyActive),
                 unit: unitTranslations[lang].kwHour,
               },
               {
                 name: electryDataType[lang].energyReactive,
-                data: e.electricalEnergyData?.map((item) => item.energyReactive),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.energyReactive),
                 unit: unitTranslations[lang].kwHour,
               },
               {
                 name: electryDataType[lang].powerActive,
-                data: e.electricalEnergyData?.map((item) => item.powerActive),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.powerActive),
                 unit: "Kw",
               },
               {
                 name: electryDataType[lang].powerReactive,
-                data: e.electricalEnergyData?.map((item) => item.powerReactive),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.powerReactive),
                 unit: "Kw",
               },
 
               {
                 name: electryDataType[lang].current1,
-                data: e.electricalEnergyData?.map((item) => item.current1),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.current1),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].current2,
-                data: e.electricalEnergyData?.map((item) => item.current2),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.current2),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].current3,
-                data: e.electricalEnergyData?.map((item) => item.current3),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.current3),
                 unit: "A",
               },
 
               {
                 name: electryDataType[lang].voltage1,
-                data: e.electricalEnergyData?.map((item) => item.voltage1),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.voltage1),
                 unit: "V",
               },
               {
                 name: electryDataType[lang].voltage2,
-                data: e.electricalEnergyData?.map((item) => item.voltage2),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.voltage2),
                 unit: "V",
               },
               {
                 name: electryDataType[lang].voltage3,
-                data: e.electricalEnergyData?.map((item) => item.voltage3),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.voltage3),
                 unit: "V",
               },
             ],
@@ -817,25 +877,33 @@ export const getPumpDailyDataByStationId =
           name: e.aggregate.name,
           aggregateData: e.aggregateData,
           lineChartData: {
-            date: e.aggregateData?.map((item) => item.date.split("T")[0]),
+            date: e.aggregateData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.date.split("T")[0]),
             lineData: [
               {
                 name: aggregateDataType[lang].name1,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) =>
                   Number(item.flow.toFixed(2))
                 ),
                 unit: "m³/s",
               },
               {
                 name: aggregateDataType[lang].name2,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) =>
                   Number(item.velocity.toFixed(2))
                 ),
                 unit: "m/s",
               },
               {
                 name: aggregateDataType[lang].name3,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) =>
                   Number(item.volume.toFixed(2))
                 ),
                 unit: "m³",
@@ -907,57 +975,79 @@ export const getElectricalEnergyDailyDataByStationId =
           name: e.electricalEnergy.name,
           electricalEnergyData: e.electricalEnergyData,
           lineChartData: {
-            date: e.electricalEnergyData?.map((item) => item.date.split(" ")[1]),
+            date: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.date.split("T")[0]),
             lineData: [
               {
                 name: electryDataType[lang].energyActive,
-                data: e.electricalEnergyData?.map((item) => item.energyActive),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.energyActive),
                 unit: unitTranslations[lang].kwHour,
               },
               {
                 name: electryDataType[lang].energyReactive,
-                data: e.electricalEnergyData?.map((item) => item.energyReactive),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => item.energyReactive),
                 unit: unitTranslations[lang].kwHour,
               },
               {
                 name: electryDataType[lang].powerActive,
-                data: e.electricalEnergyData?.map((item) => Number(item.powerActive.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => Number(item.powerActive.toFixed(2)) ),
                 unit: "Kw",
               },
               {
                 name: electryDataType[lang].powerReactive,
-                data: e.electricalEnergyData?.map((item) => Number(item.powerReactive.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => Number(item.powerReactive.toFixed(2)) ),
                 unit: "Kw",
               },
 
               {
                 name: electryDataType[lang].current1,
-                data: e.electricalEnergyData?.map((item) => Number(item.current1.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => Number(item.current1.toFixed(2)) ),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].current2,
-                data: e.electricalEnergyData?.map((item) => Number(item.current2.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => Number(item.current2.toFixed(2)) ),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].current3,
-                data: e.electricalEnergyData?.map((item) => Number(item.current3.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => Number(item.current3.toFixed(2)) ),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].voltage1,
-                data: e.electricalEnergyData?.map((item) => Number(item.voltage1.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => Number(item.voltage1.toFixed(2)) ),
                 unit: "V",
               },
               {
                 name: electryDataType[lang].voltage2,
-                data: e.electricalEnergyData?.map((item) => Number(item.voltage2.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => Number(item.voltage2.toFixed(2)) ),
                 unit: "V",
               },
               {
                 name: electryDataType[lang].voltage3,
-                data: e.electricalEnergyData?.map((item) => Number(item.voltage3.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) => Number(item.voltage3.toFixed(2)) ),
                 unit: "V",
               },
             ],
@@ -1082,25 +1172,33 @@ export const getPumpWeeklyDataByStationId =
           name: e.aggregate.name,
           aggregateData: e.aggregateData,
           lineChartData: {
-            date: e.aggregateData?.map((item) => `${months[lang][item.month - 1]} ${item.week} ${months[lang][12]}`),
+            date: e.aggregateData.slice().sort(
+              (a, b) => new Date(a.week) - new Date(b.week)
+            )?.map((item) => `${months[lang][item.month - 1]} ${item.week} ${months[lang][12]}`),
             lineData: [
               {
                 name: aggregateDataType[lang].name1,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+              (a, b) => new Date(a.week) - new Date(b.week)
+            )?.map((item) =>
                   Number(item.flow.toFixed(2))
                 ),
                 unit: "m³/s",
               },
               {
                 name: aggregateDataType[lang].name2,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+              (a, b) => new Date(a.week) - new Date(b.week)
+            )?.map((item) =>
                   Number(item.velocity.toFixed(2))
                 ),
                 unit: "m/s",
               },
               {
                 name: aggregateDataType[lang].name3,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+                  (a, b) => new Date(a.week) - new Date(b.week)
+                )?.map((item) =>
                   Number(item.volume.toFixed(2))
                 ),
                 unit: "m³",
@@ -1172,57 +1270,79 @@ export const getElectricalEnergyWeeklyDataByStationId =
           name: e.electricalEnergy.name,
           electricalEnergyData: e.electricalEnergyData,
           lineChartData: {
-            date: e.electricalEnergyData?.map((item) => `${months[lang][item.month - 1]} ${item.week} ${months[lang][12]}`),
+            date: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.week) - new Date(b.week)
+            )?.map((item) => `${months[lang][item.month - 1]} ${item.week} ${months[lang][12]}`),
             lineData: [
               {
                 name: electryDataType[lang].energyActive,
-                data: e.electricalEnergyData?.map((item) => item.energyActive),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.week) - new Date(b.week)
+            )?.map((item) => item.energyActive),
                 unit: unitTranslations[lang].kwHour,
               },
               {
                 name: electryDataType[lang].energyReactive,
-                data: e.electricalEnergyData?.map((item) => item.energyReactive),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.week) - new Date(b.week)
+            )?.map((item) => item.energyReactive),
                 unit: unitTranslations[lang].kwHour,
               },
               {
                 name: electryDataType[lang].powerActive,
-                data: e.electricalEnergyData?.map((item) => Number(item.powerActive.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.week) - new Date(b.week)
+            )?.map((item) => Number(item.powerActive.toFixed(2)) ),
                 unit: "Kw",
               },
               {
                 name: electryDataType[lang].powerReactive,
-                data: e.electricalEnergyData?.map((item) => Number(item.powerReactive.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.week) - new Date(b.week)
+            )?.map((item) => Number(item.powerReactive.toFixed(2)) ),
                 unit: "Kw",
               },
 
               {
                 name: electryDataType[lang].current1,
-                data: e.electricalEnergyData?.map((item) => Number(item.current1.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.week) - new Date(b.week)
+            )?.map((item) => Number(item.current1.toFixed(2)) ),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].current2,
-                data: e.electricalEnergyData?.map((item) => Number(item.current2.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.week) - new Date(b.week)
+            )?.map((item) => Number(item.current2.toFixed(2)) ),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].current3,
-                data: e.electricalEnergyData?.map((item) => Number(item.current3.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.week) - new Date(b.week)
+            )?.map((item) => Number(item.current3.toFixed(2)) ),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].voltage1,
-                data: e.electricalEnergyData?.map((item) => Number(item.voltage1.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.week) - new Date(b.week)
+            )?.map((item) => Number(item.voltage1.toFixed(2)) ),
                 unit: "V",
               },
               {
                 name: electryDataType[lang].voltage2,
-                data: e.electricalEnergyData?.map((item) => Number(item.voltage2.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.week) - new Date(b.week)
+            )?.map((item) => Number(item.voltage2.toFixed(2)) ),
                 unit: "V",
               },
               {
                 name: electryDataType[lang].voltage3,
-                data: e.electricalEnergyData?.map((item) => Number(item.voltage3.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.week) - new Date(b.week)
+            )?.map((item) => Number(item.voltage3.toFixed(2)) ),
                 unit: "V",
               },
             ],
@@ -1360,27 +1480,35 @@ export const getPumpTenDayDataByStationId =
           name: e.name,
           aggregateData: e.aggregateData,
           lineChartData: {
-            date: e.aggregateData?.map((item) => `${months[lang][item.month - 1]} ${
+            date: e.aggregateData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => `${months[lang][item.month - 1]} ${
               daysValues[lang][item.tenDayNumber - 1]
             }`),
             lineData: [
               {
                 name: aggregateDataType[lang].name1,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+                  (a, b) => new Date(a.month) - new Date(b.month)
+                )?.map((item) =>
                   Number(item.flow.toFixed(2))
                 ),
                 unit: "m³/s",
               },
               {
                 name: aggregateDataType[lang].name2,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) =>
                   Number(item.velocity.toFixed(2))
                 ),
                 unit: "m/s",
               },
               {
                 name: aggregateDataType[lang].name3,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) =>
                   Number(item.volume.toFixed(2))
                 ),
                 unit: "m³",
@@ -1462,59 +1590,81 @@ export const getElectricalEnergyTenDayDataByStationId =
           name: e.name,
           electricalEnergyData: e.electricalEnergyData,
           lineChartData: {
-            date: e.electricalEnergyData?.map((item) => `${months[lang][item.month - 1]} ${
+            date: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => `${months[lang][item.month - 1]} ${
               daysValues[lang][item.tenDayNumber - 1]
             }`),
             lineData: [
               {
                 name: electryDataType[lang].energyActive,
-                data: e.electricalEnergyData?.map((item) => item.energyActive),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => item.energyActive),
                 unit: unitTranslations[lang].kwHour,
               },
               {
                 name: electryDataType[lang].energyReactive,
-                data: e.electricalEnergyData?.map((item) => item.energyReactive),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => item.energyReactive),
                 unit: unitTranslations[lang].kwHour,
               },
               {
                 name: electryDataType[lang].powerActive,
-                data: e.electricalEnergyData?.map((item) => Number(item.powerActive.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => Number(item.powerActive.toFixed(2)) ),
                 unit: "Kw",
               },
               {
                 name: electryDataType[lang].powerReactive,
-                data: e.electricalEnergyData?.map((item) => Number(item.powerReactive.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => Number(item.powerReactive.toFixed(2)) ),
                 unit: "Kw",
               },
 
               {
                 name: electryDataType[lang].current1,
-                data: e.electricalEnergyData?.map((item) => Number(item.current1.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => Number(item.current1.toFixed(2)) ),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].current2,
-                data: e.electricalEnergyData?.map((item) => Number(item.current2.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => Number(item.current2.toFixed(2)) ),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].current3,
-                data: e.electricalEnergyData?.map((item) => Number(item.current3.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => Number(item.current3.toFixed(2)) ),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].voltage1,
-                data: e.electricalEnergyData?.map((item) => Number(item.voltage1.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => Number(item.voltage1.toFixed(2)) ),
                 unit: "V",
               },
               {
                 name: electryDataType[lang].voltage2,
-                data: e.electricalEnergyData?.map((item) => Number(item.voltage2.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => Number(item.voltage2.toFixed(2)) ),
                 unit: "V",
               },
               {
                 name: electryDataType[lang].voltage3,
-                data: e.electricalEnergyData?.map((item) => Number(item.voltage3.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => Number(item.voltage3.toFixed(2)) ),
                 unit: "V",
               },
             ],
@@ -1639,25 +1789,33 @@ export const getPumpMonthlyDataByStationId =
           name: e.aggregate.name,
           aggregateData: e.aggregateData,
           lineChartData: {
-            date: e.aggregateData?.map((item) => `${months[lang][item.month - 1]}`),
+            date: e.aggregateData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => `${months[lang][item.month - 1]}`),
             lineData: [
               {
                 name: aggregateDataType[lang].name1,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) =>
                   Number(item.flow.toFixed(2))
                 ),
                 unit: "m³/s",
               },
               {
                 name: aggregateDataType[lang].name2,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) =>
                   Number(item.velocity.toFixed(2))
                 ),
                 unit: "m/s",
               },
               {
                 name: aggregateDataType[lang].name3,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+                  (a, b) => new Date(a.month) - new Date(b.month)
+                )?.map((item) =>
                   Number(item.volume.toFixed(2))
                 ),
                 unit: "m³",
@@ -1729,57 +1887,79 @@ export const getElectricalEnergyMonthlyDataByStationId =
           name: e.electricalEnergy.name,
           electricalEnergyData: e.electricalEnergyData,
           lineChartData: {
-            date: e.electricalEnergyData?.map((item) => `${months[lang][item.month - 1]}`),
+            date: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => `${months[lang][item.month - 1]}`),
             lineData: [
               {
                 name: electryDataType[lang].energyActive,
-                data: e.electricalEnergyData?.map((item) => item.energyActive),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => item.energyActive),
                 unit: unitTranslations[lang].kwHour,
               },
               {
                 name: electryDataType[lang].energyReactive,
-                data: e.electricalEnergyData?.map((item) => item.energyReactive),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => item.energyReactive),
                 unit: unitTranslations[lang].kwHour,
               },
               {
                 name: electryDataType[lang].powerActive,
-                data: e.electricalEnergyData?.map((item) => Number(item.powerActive.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => Number(item.powerActive.toFixed(2)) ),
                 unit: "Kw",
               },
               {
                 name: electryDataType[lang].powerReactive,
-                data: e.electricalEnergyData?.map((item) => Number(item.powerReactive.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => Number(item.powerReactive.toFixed(2)) ),
                 unit: "Kw",
               },
 
               {
                 name: electryDataType[lang].current1,
-                data: e.electricalEnergyData?.map((item) => Number(item.current1.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => Number(item.current1.toFixed(2)) ),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].current2,
-                data: e.electricalEnergyData?.map((item) => Number(item.current2.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => Number(item.current2.toFixed(2)) ),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].current3,
-                data: e.electricalEnergyData?.map((item) => Number(item.current3.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => Number(item.current3.toFixed(2)) ),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].voltage1,
-                data: e.electricalEnergyData?.map((item) => Number(item.voltage1.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => Number(item.voltage1.toFixed(2)) ),
                 unit: "V",
               },
               {
                 name: electryDataType[lang].voltage2,
-                data: e.electricalEnergyData?.map((item) => Number(item.voltage2.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => Number(item.voltage2.toFixed(2)) ),
                 unit: "V",
               },
               {
                 name: electryDataType[lang].voltage3,
-                data: e.electricalEnergyData?.map((item) => Number(item.voltage3.toFixed(2)) ),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.month) - new Date(b.month)
+            )?.map((item) => Number(item.voltage3.toFixed(2)) ),
                 unit: "V",
               },
             ],
@@ -1905,25 +2085,33 @@ export const getPumpChosenDateDataByStationId =
           name: e.aggregate.name,
           aggregateData: e.aggregateData,
           lineChartData: {
-            date: e.aggregateData?.map((item) => item.date),
+            date: e.aggregateData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.date),
             lineData: [
               {
                 name: aggregateDataType[lang].name1,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) =>
                   Number(item.flow.toFixed(2))
                 ),
                 unit: "m³/s",
               },
               {
                 name: aggregateDataType[lang].name2,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) =>
                   Number(item.velocity.toFixed(2))
                 ),
                 unit: "m/s",
               },
               {
                 name: aggregateDataType[lang].name3,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) =>
                   Number(item.volume.toFixed(2))
                 ),
                 unit: "m³",
@@ -1977,7 +2165,7 @@ export const getElectricalEnergyChosenDateDataByStationId =
       });
 
       const res = await getDataApi(
-        `electrical-energy-all-data/findDataByStationIdAndDateRange?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&date=${date}`,
+        `electrical-energy-all-data/findDataByStationIdAndDate?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&date=${date}`,
         token
       );
       const data = res.data.data.data;
@@ -1995,58 +2183,80 @@ export const getElectricalEnergyChosenDateDataByStationId =
           name: e.electricalEnergy.name,
           electricalEnergyData: e.electricalEnergyData,
           lineChartData: {
-            date: e.electricalEnergyData?.map((item) => item.date),
+            date: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.date),
             lineData: [
               {
                 name: electryDataType[lang].energyActive,
-                data: e.electricalEnergyData?.map((item) => item.energyActive),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.energyActive),
                 unit: unitTranslations[lang].kwHour,
               },
               {
                 name: electryDataType[lang].energyReactive,
-                data: e.electricalEnergyData?.map((item) => item.energyReactive),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.energyReactive),
                 unit: unitTranslations[lang].kwHour,
               },
               {
                 name: electryDataType[lang].powerActive,
-                data: e.electricalEnergyData?.map((item) => item.powerActive),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.powerActive),
                 unit: "Kw",
               },
               {
                 name: electryDataType[lang].powerReactive,
-                data: e.electricalEnergyData?.map((item) => item.powerReactive),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.powerReactive),
                 unit: "Kw",
               },
 
               {
                 name: electryDataType[lang].current1,
-                data: e.electricalEnergyData?.map((item) => item.current1),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.current1),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].current2,
-                data: e.electricalEnergyData?.map((item) => item.current2),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.current2),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].current3,
-                data: e.electricalEnergyData?.map((item) => item.current3),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.current3),
                 unit: "A",
               },
 
               {
                 name: electryDataType[lang].voltage1,
-                data: e.electricalEnergyData?.map((item) => item.voltage1),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.voltage1),
                 unit: "V",
               },
               {
                 name: electryDataType[lang].voltage2,
-                data: e.electricalEnergyData?.map((item) => item.voltage2),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.voltage2),
                 unit: "V",
               },
               {
                 name: electryDataType[lang].voltage3,
-                data: e.electricalEnergyData?.map((item) => item.voltage3),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.voltage3),
                 unit: "V",
               },
             ],
@@ -2171,25 +2381,33 @@ export const getPumpDateRangeDataByStationId =
           name: e.aggregate.name,
           aggregateData: e.aggregateData,
           lineChartData: {
-            date: e.aggregateData?.map((item) => item.date),
+            date: e.aggregateData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.date),
             lineData: [
               {
                 name: aggregateDataType[lang].name1,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) =>
                   Number(item.flow.toFixed(2))
                 ),
                 unit: "m³/s",
               },
               {
                 name: aggregateDataType[lang].name2,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) =>
                   Number(item.velocity.toFixed(2))
                 ),
                 unit: "m/s",
               },
               {
                 name: aggregateDataType[lang].name3,
-                data: e.aggregateData?.map((item) =>
+                data: e.aggregateData.slice().sort(
+                  (a, b) => new Date(a.date) - new Date(b.date)
+                )?.map((item) =>
                   Number(item.volume.toFixed(2))
                 ),
                 unit: "m³",
@@ -2248,9 +2466,6 @@ export const getPumpDateRangeDataByStationId =
       );
       const data = res.data.data.data;
 
-      console.log(data);
-
-
       data.forEach((electr) => {
         electr.electricalEnergyData.sort(
           (a, b) => new Date(b.date) - new Date(a.date)
@@ -2264,58 +2479,80 @@ export const getPumpDateRangeDataByStationId =
           name: e.electricalEnergy.name,
           electricalEnergyData: e.electricalEnergyData,
           lineChartData: {
-            date: e.electricalEnergyData?.map((item) => item.date),
+            date: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.date),
             lineData: [
               {
                 name: electryDataType[lang].energyActive,
-                data: e.electricalEnergyData?.map((item) => item.energyActive),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.energyActive),
                 unit: unitTranslations[lang].kwHour,
               },
               {
                 name: electryDataType[lang].energyReactive,
-                data: e.electricalEnergyData?.map((item) => item.energyReactive),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.energyReactive),
                 unit: unitTranslations[lang].kwHour,
               },
               {
                 name: electryDataType[lang].powerActive,
-                data: e.electricalEnergyData?.map((item) => item.powerActive),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.powerActive),
                 unit: "Kw",
               },
               {
                 name: electryDataType[lang].powerReactive,
-                data: e.electricalEnergyData?.map((item) => item.powerReactive),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.powerReactive),
                 unit: "Kw",
               },
 
               {
                 name: electryDataType[lang].current1,
-                data: e.electricalEnergyData?.map((item) => item.current1),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.current1),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].current2,
-                data: e.electricalEnergyData?.map((item) => item.current2),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.current2),
                 unit: "A",
               },
               {
                 name: electryDataType[lang].current3,
-                data: e.electricalEnergyData?.map((item) => item.current3),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.current3),
                 unit: "A",
               },
 
               {
                 name: electryDataType[lang].voltage1,
-                data: e.electricalEnergyData?.map((item) => item.voltage1),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.voltage1),
                 unit: "V",
               },
               {
                 name: electryDataType[lang].voltage2,
-                data: e.electricalEnergyData?.map((item) => item.voltage2),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.voltage2),
                 unit: "V",
               },
               {
                 name: electryDataType[lang].voltage3,
-                data: e.electricalEnergyData?.map((item) => item.voltage3),
+                data: e.electricalEnergyData.slice().sort(
+              (a, b) => new Date(a.date) - new Date(b.date)
+            )?.map((item) => item.voltage3),
                 unit: "V",
               },
             ],

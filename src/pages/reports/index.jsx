@@ -1719,7 +1719,6 @@ function Reports() {
       return item.date;
     }
   };
-  console.log(electrEnergyDataByStationId);
 
   return (
     <section className="reports">
