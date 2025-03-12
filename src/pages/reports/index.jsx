@@ -226,7 +226,7 @@ function Reports() {
     (e) => {
       e.preventDefault();
       const lang = i18n.language;
-      const selectedStationForSort = allStations[selectDataTypeForStation]?.id;
+      const selectedStationForSort = allStations[selectDataTypeForStation - 1]?.id;
       setReportTableHeading({
         title: t("dataPagesInformation.selectButtonNames", {
           returnObjects: true,
@@ -234,15 +234,15 @@ function Reports() {
         index: selectDataType,
       });
       const aggregateIdForLineChart =
-        allStations[selectDataTypeForStation]?.aggregate[0]?.id;
+        allStations[selectDataTypeForStation - 1]?.aggregate[0]?.id;
       const electricalEnergyIdForLineChart =
-        allStations[selectDataTypeForStation]?.electricalEnergy[0]?.id;
+        allStations[selectDataTypeForStation - 1]?.electricalEnergy[0]?.id;
       setSelectValueDataForLineChart(0);
       setSelectValueElectricalEnergyDataForLineChart(0);
       setPageData({ page: 1, perPage: 10 });
       setPageDataForElectricalEnergy({ page: 1, perPage: 10 });
       setStationNameTotalInformation(
-        allStations[selectDataTypeForStation]?.name
+        allStations[selectDataTypeForStation - 1]?.name
       );
       switch (selectDataType) {
         case 0:
@@ -1030,10 +1030,12 @@ function Reports() {
   };
 
   const isEmptyData = () => {
-    if(pumpDataByStationId.length == 0 || !pumpDataByStationId?.length){
-      return true
+    if(reportTableHeading.index != undefined){
+      if(pumpDataByStationId.length == 0 || !pumpDataByStationId?.length){
+        return true
+      }
     }else {
-      return false
+      return true
     }
     // if (reportTableHeading.index == 0) {
     //   if (
