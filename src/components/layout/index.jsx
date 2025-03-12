@@ -65,7 +65,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
   );
   const [collapsed, setCollapsed] = useState(false);
   const [visible, setVisible] = useState(false);
-
+  const [selectedKey, setSelectedKey] = useState("home");
   const fetchAllData = useCallback(() => {
     const lang = i18n.language;
 
@@ -82,7 +82,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
 
   const menuItems = [
     {
-      key: "/",
+      key: "home",
       icon: (
         <PieChartOutlined
           className='menu-icon'
@@ -96,7 +96,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       ),
     },
     {
-      key: "/maps",
+      key: "maps",
       icon: (
         <AimOutlined
           className='menu-icon'
@@ -120,7 +120,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       label: <p className='link_new_text_style'>{t("layoutData.navLink3")}</p>,
       children: [
         {
-          key: "/data",
+          key: "data",
           label: (
             <Link className='layout_links' to='/data'>
               {t("layoutData.navLink8")}
@@ -128,7 +128,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
           ),
         },
         {
-          key: "/electrical/data",
+          key: "electrical/data",
           label: (
             <Link className='layout_links' to='/electrical/data'>
               {t("layoutData.navLink7")}
@@ -138,7 +138,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       ],
     },
     {
-      key: "/reports",
+      key: "reports",
       icon: (
         <SnippetsOutlined
           className='menu-icon'
@@ -152,7 +152,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       ),
     },
     {
-      key: "/notification",
+      key: "notification",
       icon: (
         <BellOutlined
           className='menu-icon'
@@ -166,7 +166,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       ),
     },
     {
-      key: "/stations",
+      key: "stations",
       icon: (
         <DesktopOutlined
           className='menu-icon'
@@ -190,7 +190,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       label: <p className='link_new_text_style'>{t("layoutData.navLink5")}</p>,
       children: [
         {
-          key: "/users",
+          key: "users",
           label: (
             <Link className='layout_links' to='/users'>
               {t("layoutData.navLink5")}
@@ -198,7 +198,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
           ),
         },
         {
-          key: "/user/join",
+          key: "user/join",
           label: (
             <Link className='layout_links' to='/user/join'>
               {t("layoutData.navLink12")}
@@ -206,7 +206,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
           ),
         },
         {
-          key: "/roles",
+          key: "roles",
           label: (
             <Link className='layout_links' to='/roles'>
               {t("layoutData.navLink13")}
@@ -226,7 +226,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       label: <p className='link_new_text_style'>{t("layoutData.navLink16")}</p>,
       children: [
         {
-          key: "/regions",
+          key: "regions",
           label: (
             <Link className='layout_links' to='/regions'>
               {t("layoutData.navLink9")}
@@ -234,7 +234,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
           ),
         },
         {
-          key: "/districts",
+          key: "districts",
           label: (
             <Link className='layout_links' to='/districts'>
               {t("layoutData.navLink10")}
@@ -242,7 +242,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
           ),
         },
         {
-          key: "/organizations",
+          key: "organizations",
           label: (
             <Link className='layout_links' to='/organizations'>
               {t("layoutData.navLink11")}
@@ -264,7 +264,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
 
   const menuItemsUsers = [
     {
-      key: "/",
+      key: "home",
       icon: (
         <PieChartOutlined
           className='menu-icon'
@@ -278,7 +278,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       ),
     },
     {
-      key: "/maps",
+      key: "maps",
       icon: (
         <AimOutlined
           className='menu-icon'
@@ -302,7 +302,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       label: <p className='link_new_text_style'>{t("layoutData.navLink3")}</p>,
       children: [
         {
-          key: "/all/data",
+          key: "all/data",
           label: (
             <Link className='layout_links' to='/all/data'>
               {t("layoutData.navLink17")}
@@ -310,7 +310,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
           ),
         },
         {
-          key: "/data",
+          key: "data",
           label: (
             <Link className='layout_links' to='/data'>
               {t("layoutData.navLink8")}
@@ -318,7 +318,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
           ),
         },
         {
-          key: "/electrical/data",
+          key: "electrical/data",
           label: (
             <Link className='layout_links' to='/electrical/data'>
               {t("layoutData.navLink7")}
@@ -328,7 +328,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       ],
     },
     {
-      key: "/reports",
+      key: "reports",
       icon: (
         <SnippetsOutlined
           className='menu-icon'
@@ -342,7 +342,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       ),
     },
     {
-      key: "/notification",
+      key: "notification",
       icon: (
         <BellOutlined
           className='menu-icon'
@@ -356,7 +356,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       ),
     },
     {
-      key: "/stations",
+      key: "stations",
       icon: (
         <DesktopOutlined
           className='menu-icon'
@@ -470,7 +470,8 @@ const LayoutComponent = memo(({ childrenComponent }) => {
               paddingBottom: "60px",
             }}
             mode='inline'
-            defaultSelectedKeys={[location.pathname]}
+            selectedKeys={[selectedKey]}
+            onClick={(e) => setSelectedKey(e.key)}
             items={
               isAuthenticated === "674877fbf0a8ec5c59065cb6"
                 ? menuItems
@@ -511,7 +512,9 @@ const LayoutComponent = memo(({ childrenComponent }) => {
             <div className='header_controller_component'>
               <div>
                 <Avatar
-                  onClick={() => navigate("/settings")}
+                  onClick={() => {
+                    setSelectedKey('settings')
+                    navigate("/settings")}}
                   shape='square'
                   style={{
                     marginBottom: "8px",

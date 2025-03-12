@@ -1030,6 +1030,11 @@ function Reports() {
   };
 
   const isEmptyData = () => {
+    if(pumpDataByStationId.length == 0 || !pumpDataByStationId?.length){
+      return true
+    }else {
+      return false
+    }
     // if (reportTableHeading.index == 0) {
     //   if (
     //     todayDataByStationId.totalPages == 0 ||
@@ -1082,7 +1087,7 @@ function Reports() {
     // } else {
     //   return true;
     // }
-    return false;
+    // return false;
   };
 
   const isEmptyDataElectricalEnergy = () => {
@@ -1759,14 +1764,20 @@ function Reports() {
                 }}
                 value={selectDataTypeForStation}
                 className="reports_sort_select"
-                options={allStations.map((item, index) => ({
-                  value: index,
-                  label: item.name,
-                }))}
+                options={[
+                  { value: 0, label: t("layoutData.chooseStation"), disabled: true }, // Qo'shimcha option
+                  ...allStations.map((item, index) => ({
+                    value: index + 1,
+                    label: item.name,
+                  })),
+                ]}
                 onChange={(key, option) => setSelectDataTypeForStation(key)}
               />
-
-              <Select
+              {
+                selectDataTypeForStation != 0
+                ?
+                <>
+                  <Select
                 key={"selects_names"}
                 size="large"
                 style={{
@@ -1847,6 +1858,10 @@ function Reports() {
               >
                 Qidirish
               </button>
+                </>
+              :
+              ''
+              }
             </form>
           </div>
         </div>
