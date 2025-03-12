@@ -7,6 +7,7 @@ export const DASHBOARD_DATAS = {
   GET_USER_INFORMATION_BY_ID: "GET_USER_INFORMATION_BY_ID",
   UPDATED_USER_INFORMATION_BY_ID: "UPDATE_USER_INFORMATION_BY_ID",
   GET_COUNT_STATIONS_STATISTICS: "GET_COUNT_STATIONS_STATISTICS",
+  GET_COUNT_STATIONS_STATISTICS_FOR_ORGANIZATION: "GET_COUNT_STATIONS_STATISTICS_FOR_ORGANIZATION",
   GET_STATISTIC_DATA_LOADING: "GET_STATISTIC_DATA_LOADING",
   GET_COUNT_STATIONS_STATISTICS_FOR_ADMIN:
     "GET_COUNT_STATIONS_STATISTICS_FOR_ADMIN",
@@ -74,6 +75,58 @@ export const getStatisticsDashboard =
       dispatch({
         type: DASHBOARD_DATAS.GET_COUNT_STATIONS_STATISTICS,
         payload: newData,
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: DASHBOARD_DATAS.GET_STATISTIC_DATA_LOADING,
+        payload: false,
+      });
+    }
+  };
+
+  export const getStatisticsDashboardForOrganization =
+  (regionId, lang, token) => async (dispatch) => {
+    try {
+      dispatch({
+        type: DASHBOARD_DATAS.GET_STATISTIC_DATA_LOADING,
+        payload: true,
+      });
+
+      const res = await getDataApi(
+        `dashboard/findStationCountGroup?lang=${lang}&regionId=${regionId}`,
+        token
+      );
+
+      const data = res.data.data
+
+      const newData = [
+        data.totalStations,
+        data.totalActiveStations,
+        data.totalInactiveStations,
+      ];
+
+      dispatch({
+        type: DASHBOARD_DATAS.GET_COUNT_STATIONS_STATISTICS_FOR_ORGANIZATION,
+        payload: {
+          newData: newData,
+          districts: res.data.data.data
+        },
       });
     } catch (err) {
       if (!err.response) {

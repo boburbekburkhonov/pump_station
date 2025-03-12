@@ -6,6 +6,7 @@ import { Routes, Route } from "react-router-dom";
 const pages = {
   Home: lazy(() => import("./dashboard/home")),
   UserDashboard: lazy(() => import("./dashboardUser")),
+  OrganizationDashboard: lazy(() => import("./dashboardOrganization")),
   Stations: lazy(() => import("./stations")),
   StationsWithUser: lazy(() => import("./stationsWithUser")),
   StationsInformations: lazy(() => import("./stationsInfo")),
@@ -31,13 +32,22 @@ const pages = {
 
 const isAdmin = () =>
   localStorage.getItem("roles") === "674877fbf0a8ec5c59065cb6";
+const checkRole = () => {
+  if(localStorage.getItem("roles") === "674877fbf0a8ec5c59065cb6"){
+    return 'root'
+  } else if (localStorage.getItem("roles") === "675689ce75ed8fc6ed490821"){
+    return 'district'
+  } else if (localStorage.getItem("roles") === "678a3a7a271c9b956e44441b"){
+    return 'organization'
+  }
+}
 
 function Root() {
   return (
     <Routes>
       <Route
         path="/"
-        element={isAdmin() ? <pages.Home /> : <pages.UserDashboard />}
+        element={checkRole() == 'root' ? <pages.Home /> : checkRole() == 'district' ? <pages.UserDashboard /> : checkRole() == 'organization' ? <pages.OrganizationDashboard /> : ''}
       />
       <Route
         path="/stations"

@@ -5,6 +5,7 @@ import { DASHBOARD_DATAS } from "../actions/dashboard";
 const initialState = {
   userInformationById: [],
   statisticData: [],
+  statisticDataForOrganization: [],
   statisticDataForAdmin: [],
   stationsId: [],
   loadingStatistic: true,
@@ -26,6 +27,11 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         statisticData: action.payload,
+      };
+    case DASHBOARD_DATAS.GET_COUNT_STATIONS_STATISTICS_FOR_ORGANIZATION:
+      return {
+        ...state,
+        statisticDataForOrganization: action.payload,
       };
     case DASHBOARD_DATAS.GET_STATISTIC_DATA_LOADING:
       return {
