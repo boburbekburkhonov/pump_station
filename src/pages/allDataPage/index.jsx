@@ -51,6 +51,30 @@ function AllDatapPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [oneStationLastData, setOneStationLastData] = useState();
 
+
+  const fetchAllData = useCallback(() => {
+    const lang = i18n.language;
+
+    dispatch(findInMapsLastData(lang, token, current, pageSize));
+  }, [dispatch, token, i18n.language, current, pageSize, count]);
+
+  useEffect(() => {
+    fetchAllData();
+
+    const handleLanguageChange = () => fetchAllData();
+    i18n.on("languageChanged", handleLanguageChange);
+
+    return () => {
+      i18n.off("languageChanged", handleLanguageChange);
+    };
+  }, [fetchAllData, current, pageSize, i18n]);
+
+  useEffect(() => {
+    if (stationsId) {
+      localStorage.setItem("localStationsId", JSON.stringify([...stationsId]));
+    }
+  }, [stationsId]);
+
   // Sahifadagi maksimal card sonini hisoblash
   const calculatePageSize = () => {
     const screenHeight = window.innerHeight;
@@ -62,6 +86,7 @@ function AllDatapPage() {
     const newPageSize = estimatedRows * estimatedColumns;
 
     setPageSize(newPageSize > 0 ? newPageSize : 1);
+    setCount(count + 1)
   };
 
   // Ekran o'lchamiga qarab Col span o'zgaradi
@@ -85,30 +110,7 @@ function AllDatapPage() {
       window.removeEventListener("resize", calculatePageSize);
       window.removeEventListener("resize", updateColSpan);
     };
-  }, []);
-
-  const fetchAllData = useCallback(() => {
-    const lang = i18n.language;
-
-    dispatch(findInMapsLastData(lang, token, current, pageSize));
-  }, [dispatch, token, i18n.language, current, pageSize, count]);
-
-  useEffect(() => {
-    fetchAllData();
-
-    const handleLanguageChange = () => fetchAllData();
-    i18n.on("languageChanged", handleLanguageChange);
-
-    return () => {
-      i18n.off("languageChanged", handleLanguageChange);
-    };
-  }, [fetchAllData, i18n]);
-
-  useEffect(() => {
-    if (stationsId) {
-      localStorage.setItem("localStationsId", JSON.stringify([...stationsId]));
-    }
-  }, [stationsId]);
+  }, [current, pageSize]);
 
   const handleChangeSelectStationData = (id) => {
     const userId = Cookies.get("userId");
@@ -728,8 +730,12 @@ function AllDatapPage() {
         }}
         className="all_stations_data_stations_info"
       >
-        <div >
-          <Row className="all_stations_data_main_section" gutter={[16, 16]} justify="start">
+        <div>
+          <Row
+            className="all_stations_data_main_section"
+            gutter={[16, 16]}
+            justify="start"
+          >
             {stationsMap?.data?.map((item, index) => {
               const allAgrigateData = item.aggregate?.reduce(
                 (acc, itemAg) => {
@@ -769,7 +775,7 @@ function AllDatapPage() {
                   key={index}
                   span={colSpan}
                   style={{
-                    maxWidth: "360px",
+                    maxWidth: "370px",
                   }}
                 >
                   <Card
