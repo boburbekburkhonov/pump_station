@@ -4,7 +4,7 @@ import React, { useEffect, useCallback, useState, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import { Button, Card, Modal, Pagination } from "antd";
+import { Button, Card, Col, Modal, Pagination, Row } from "antd";
 import moreInfo from "../../assets/info.png";
 
 import {
@@ -44,20 +44,54 @@ function AllDatapPage() {
   const { stationsMap, stationsLoading, stationsId } = useSelector(
     (state) => state.stations
   );
-  const [pageData, setPageData] = useState({
-    page: 1,
-    perPage: 10,
-  });
+  const [current, setCurrent] = useState(1);
+  const [pageSize, setPageSize] = useState(6);
+  const [colSpan, setColSpan] = useState(8);
   const [count, setCount] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
   const [oneStationLastData, setOneStationLastData] = useState();
 
+  // Sahifadagi maksimal card sonini hisoblash
+  const calculatePageSize = () => {
+    const screenHeight = window.innerHeight;
+    const navbarHeight = 160; // Navbar + pagination balandligi
+    const availableHeight = screenHeight - navbarHeight;
+
+    const estimatedRows = Math.floor(availableHeight / 300); // Har qator taxminan 200px
+    const estimatedColumns = Math.floor(window.innerWidth / 290); // Har card 300px kenglikka ega deb hisoblaymiz
+    const newPageSize = estimatedRows * estimatedColumns;
+
+    setPageSize(newPageSize > 0 ? newPageSize : 1);
+  };
+
+  // Ekran o'lchamiga qarab Col span o'zgaradi
+  const updateColSpan = () => {
+    const screenWidth = window.innerWidth;
+    if (screenWidth < 576) {
+      setColSpan(24); // 1 ustun
+    } else if (screenWidth < 992) {
+      setColSpan(12); // 2 ustun
+    } else {
+      setColSpan(8); // 3 ustun
+    }
+  };
+
+  useEffect(() => {
+    calculatePageSize();
+    updateColSpan();
+    window.addEventListener("resize", calculatePageSize);
+    window.addEventListener("resize", updateColSpan);
+    return () => {
+      window.removeEventListener("resize", calculatePageSize);
+      window.removeEventListener("resize", updateColSpan);
+    };
+  }, []);
+
   const fetchAllData = useCallback(() => {
     const lang = i18n.language;
-    const { page, perPage } = pageData;
 
-    dispatch(findInMapsLastData(lang, token, page, perPage));
-  }, [dispatch, token, i18n.language, pageData, count]);
+    dispatch(findInMapsLastData(lang, token, current, pageSize));
+  }, [dispatch, token, i18n.language, current, pageSize, count]);
 
   useEffect(() => {
     fetchAllData();
@@ -102,7 +136,7 @@ function AllDatapPage() {
       )
     );
 
-    setCount(count + 1)
+    setCount(count + 1);
   };
 
   const handlePaginationChange = (page, size) => {
@@ -110,10 +144,8 @@ function AllDatapPage() {
 
     dispatch(findInMapsLastData(lang, token, page, size));
 
-    setPageData({
-      page: page,
-      perPage: size,
-    });
+    setCurrent(page);
+    setPageSize(size);
   };
 
   const handleOpenModal = (id) => {
@@ -696,191 +728,200 @@ function AllDatapPage() {
         }}
         className="all_stations_data_stations_info"
       >
-        <div className="all_stations_data_main_section">
-          {stationsMap?.data?.map((item, index) => {
-            const allAgrigateData = item.aggregate?.reduce(
-              (acc, itemAg) => {
-                const totalsVolume = itemAg?.pumpLastData?.totalsVolume;
-                const velocity = itemAg?.pumpLastData?.velocity;
+        <div >
+          <Row className="all_stations_data_main_section" gutter={[16, 16]} justify="start">
+            {stationsMap?.data?.map((item, index) => {
+              const allAgrigateData = item.aggregate?.reduce(
+                (acc, itemAg) => {
+                  const totalsVolume = itemAg?.pumpLastData?.totalsVolume;
+                  const velocity = itemAg?.pumpLastData?.velocity;
 
-                return {
-                  totalsVolume:
-                    acc.totalsVolume +
-                    (totalsVolume ? +totalsVolume : 0) /
-                      item?.aggregate?.length,
-                  velocity:
-                    acc.velocity +
-                    (velocity ? +velocity : 0) / item?.aggregate?.length,
-                };
-              },
-              { totalsVolume: 0, velocity: 0 }
-            ) || { totalsVolume: 0, velocity: 0 };
+                  return {
+                    totalsVolume:
+                      acc.totalsVolume +
+                      (totalsVolume ? +totalsVolume : 0) /
+                        item?.aggregate?.length,
+                    velocity:
+                      acc.velocity +
+                      (velocity ? +velocity : 0) / item?.aggregate?.length,
+                  };
+                },
+                { totalsVolume: 0, velocity: 0 }
+              ) || { totalsVolume: 0, velocity: 0 };
 
-            const allElectrData = item.electricalEnergyLastData?.reduce(
-              (acc, itemAg) => {
-                const energyActiveTotal =
-                  itemAg?.electricalEnergyLastData?.energyActiveTotal;
+              const allElectrData = item.electricalEnergyLastData?.reduce(
+                (acc, itemAg) => {
+                  const energyActiveTotal =
+                    itemAg?.electricalEnergyLastData?.energyActiveTotal;
 
-                return {
-                  energyActiveTotal:
-                    acc.energyActiveTotal +
-                    (energyActiveTotal ? +energyActiveTotal : 0) /
-                      item?.electricalEnergyLastData?.length,
-                };
-              },
-              { energyActiveTotal: 0 }
-            ) || { energyActiveTotal: 0 };
+                  return {
+                    energyActiveTotal:
+                      acc.energyActiveTotal +
+                      (energyActiveTotal ? +energyActiveTotal : 0) /
+                        item?.electricalEnergyLastData?.length,
+                  };
+                },
+                { energyActiveTotal: 0 }
+              ) || { energyActiveTotal: 0 };
 
-            return (
-              <Card
-                key={index}
-                type="inner"
-                className="all_stations_data_paga_card_element"
-                style={{
-                  background: colors.blurBgColor2,
-                  maxWidth: "360px",
-                }}
-              >
-                <div
-                  className="all_stations_data_page_card_header"
+              return (
+                <Col
+                  key={index}
+                  span={colSpan}
                   style={{
-                    borderBottom: `3px solid ${
-                      item.status ? "#40C057" : "red"
-                    }`,
+                    maxWidth: "360px",
                   }}
                 >
-                  <img
+                  <Card
+                    key={index}
+                    type="inner"
+                    className="all_stations_data_paga_card_element"
                     style={{
-                      filter: theme === "light" ? "invert(0)" : "invert(1)",
-                    }}
-                    className="save_action_data"
-                    src={
-                      item.selectionDashboard
-                        ? CheckBookmark
-                        : UnCheckBookmark
-                    }
-                    alt="Images"
-                    onClick={() => handleChangeSelectStationData(item?.id)}
-                  />
-
-                  <h1 className="m-0">{item.name}</h1>
-                  <img
-                    className="more_info__action_data"
-                    src={moreInfo}
-                    alt="moreInfo"
-                    width={25}
-                    height={25}
-                    onClick={() => {
-                      findOneStationById(item.id);
-                      setModalOpen(true);
-                    }}
-                  />
-                </div>
-
-                <div className="all_stations_data_page_aggrigate_container">
-                  <div
-                    className="all_stations_data_page_aggrigate_card_item"
-                    style={{
-                      backgroundColor: colors.backgroundColor,
+                      background: colors.blurBgColor2,
                     }}
                   >
-                    <div className="all_stations_data_page_aggrigate_item">
-                      <div className="all_stations_data_item">
-                        <div className="normal_flex_card">
-                          <AreaChartOutlined
-                            style={{
-                              color: colors.textColor,
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
-                          <h4>
-                            {t(
-                              "dataPagesInformation.allStationsAggrigatetotalsVolume"
-                            )}
-                            :{" "}
-                          </h4>
+                    <div
+                      className="all_stations_data_page_card_header"
+                      style={{
+                        borderBottom: `3px solid ${
+                          item.status ? "#40C057" : "red"
+                        }`,
+                      }}
+                    >
+                      <img
+                        style={{
+                          filter: theme === "light" ? "invert(0)" : "invert(1)",
+                        }}
+                        className="save_action_data"
+                        src={
+                          item.selectionDashboard
+                            ? CheckBookmark
+                            : UnCheckBookmark
+                        }
+                        alt="Images"
+                        onClick={() => handleChangeSelectStationData(item?.id)}
+                      />
+
+                      <h1 className="m-0">{item.name}</h1>
+                      <img
+                        className="more_info__action_data"
+                        src={moreInfo}
+                        alt="moreInfo"
+                        width={25}
+                        height={25}
+                        onClick={() => {
+                          findOneStationById(item.id);
+                          setModalOpen(true);
+                        }}
+                      />
+                    </div>
+
+                    <div className="all_stations_data_page_aggrigate_container">
+                      <div
+                        className="all_stations_data_page_aggrigate_card_item"
+                        style={{
+                          backgroundColor: colors.backgroundColor,
+                        }}
+                      >
+                        <div className="all_stations_data_page_aggrigate_item">
+                          <div className="all_stations_data_item">
+                            <div className="normal_flex_card">
+                              <AreaChartOutlined
+                                style={{
+                                  color: colors.textColor,
+                                }}
+                                className="dashboard_last_data_icons"
+                              />
+                              <h4>
+                                {t(
+                                  "dataPagesInformation.allStationsAggrigatetotalsVolume"
+                                )}
+                                :{" "}
+                              </h4>
+                            </div>
+                            <h4 className="all_stations_data_item_import_data">
+                              {allAgrigateData.totalsVolume?.toFixed(2)} m³
+                            </h4>
+                          </div>
+
+                          <div className="all_stations_data_item">
+                            <div className="normal_flex_card">
+                              <ExperimentOutlined
+                                style={{
+                                  color: colors.textColor,
+                                }}
+                                className="dashboard_last_data_icons"
+                              />
+                              <h4>
+                                {t(
+                                  "dataPagesInformation.allStationsAggrigatetotalsFlow"
+                                )}
+                                :{" "}
+                              </h4>
+                            </div>
+                            <h4 className="all_stations_data_item_import_data">
+                              {allAgrigateData.velocity?.toFixed(2)}{" "}
+                              {t(
+                                "dashboardPageData.lastStationsData.aggrigateSpeedConst"
+                              )}
+                            </h4>
+                          </div>
                         </div>
-                        <h4 className="all_stations_data_item_import_data">
-                          {allAgrigateData.totalsVolume?.toFixed(2)} m³
-                        </h4>
                       </div>
 
-                      <div className="all_stations_data_item">
-                        <div className="normal_flex_card">
-                          <ExperimentOutlined
-                            style={{
-                              color: colors.textColor,
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
-                          <h4>
-                            {t(
-                              "dataPagesInformation.allStationsAggrigatetotalsFlow"
-                            )}
-                            :{" "}
-                          </h4>
+                      <div
+                        className="all_stations_data_page_aggrigate_card_item"
+                        style={{
+                          backgroundColor: colors.backgroundColor,
+                        }}
+                      >
+                        <div className="all_stations_data_page_aggrigate_item">
+                          <div className="all_stations_data_item">
+                            <div className="normal_flex_card">
+                              <NodeIndexOutlined
+                                style={{
+                                  color: colors.textColor,
+                                }}
+                                className="dashboard_last_data_icons"
+                              />
+                              <h4>
+                                {t(
+                                  "dataPagesInformation.allStationsElektrActiveEnergy"
+                                )}
+                                :{" "}
+                              </h4>
+                            </div>
+                            <h4 className="all_stations_data_item_import_data">
+                              {allElectrData.energyActiveTotal} kw
+                            </h4>
+                          </div>
                         </div>
-                        <h4 className="all_stations_data_item_import_data">
-                          {allAgrigateData.velocity?.toFixed(2)}{" "}
-                          {t(
-                            "dashboardPageData.lastStationsData.aggrigateSpeedConst"
-                          )}
-                        </h4>
                       </div>
                     </div>
-                  </div>
 
-                  <div
-                    className="all_stations_data_page_aggrigate_card_item"
-                    style={{
-                      backgroundColor: colors.backgroundColor,
-                    }}
-                  >
-                    <div className="all_stations_data_page_aggrigate_item">
-                      <div className="all_stations_data_item">
-                        <div className="normal_flex_card">
-                          <NodeIndexOutlined
-                            style={{
-                              color: colors.textColor,
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
-                          <h4>
-                            {t(
-                              "dataPagesInformation.allStationsElektrActiveEnergy"
-                            )}
-                            :{" "}
-                          </h4>
-                        </div>
-                        <h4 className="all_stations_data_item_import_data">
-                          {allElectrData.energyActiveTotal} kw
-                        </h4>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <Button
-                  type="primary"
-                  onClick={() => handleOpenModal(item.id)}
-                  style={{
-                    marginTop: 10,
-                    width: "100%",
-                  }}
-                >
-                  {t("stationsPageData.table14Data")}
-                </Button>
-              </Card>
-            );
-          })}
+                    <Button
+                      type="primary"
+                      onClick={() => handleOpenModal(item.id)}
+                      style={{
+                        marginTop: 10,
+                        width: "100%",
+                      }}
+                    >
+                      {t("stationsPageData.table14Data")}
+                    </Button>
+                  </Card>
+                </Col>
+              );
+            })}
+          </Row>
         </div>
 
         <Pagination
           className="data_pagination_info"
-          current={pageData.page}
+          current={current}
           onChange={handlePaginationChange}
           total={stationsMap?.totalDocuments}
-          pageSize={pageData.perPage}
+          pageSize={pageSize}
           align="end"
         />
       </div>
