@@ -441,6 +441,7 @@
     },
     "dateSelectDay": "Дата",
     "dateSelectYear": "Год",
+    "total": "Общий",
     "active_indicator": "Активный",
     "not_active_indicator": "Неактивный",
     "allStationsDataHead": "Окончательные совокупные данные и данные счетчиков электроэнергии по всем станциям",

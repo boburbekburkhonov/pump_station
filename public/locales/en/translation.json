@@ -441,6 +441,7 @@
     },
     "dateSelectDay": "Date",
     "dateSelectYear": "Year",
+    "total": "Total",
     "active_indicator": "Active",
     "not_active_indicator": "Inactive",
     "allStationsDataHead": "Last aggregate and electricity meter data for all stations",

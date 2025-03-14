@@ -441,6 +441,7 @@
     },
     "dateSelectDay": "Sanadagi",
     "dateSelectYear": "Yildagi",
+    "total": "Jami",
     "active_indicator": "Faol",
     "not_active_indicator": "Faolmas",
     "allStationsDataHead": "Barcha stansiyalarning so'ngi agrigat va elektr hisoblagich ma'lumotlari",
