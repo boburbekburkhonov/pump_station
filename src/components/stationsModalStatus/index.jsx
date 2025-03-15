@@ -9,9 +9,14 @@ import { EyeFilled } from "@ant-design/icons";
 import { getAllStationsData } from "../../redux/actions/stationsActions";
 
 import TableComponent from "../../components/tableComponent";
-import '../../pages/data/index.css'
+import "../../pages/data/index.css";
 
-function ViewStationModal({ status, isOpenStationModal, closeModal }) {
+function ViewStationModal({
+  status,
+  districtId,
+  isOpenStationModal,
+  closeModal,
+}) {
   const [dataSource, setDataSource] = useState([]);
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -36,6 +41,7 @@ function ViewStationModal({ status, isOpenStationModal, closeModal }) {
       regionId: "",
       organizationId: "",
       status: status,
+      districtId: districtId ? districtId : "",
     };
 
     dispatch(getAllStationsData(stationParams, token));
@@ -122,9 +128,8 @@ function ViewStationModal({ status, isOpenStationModal, closeModal }) {
         align: "center",
         render: (_, key) => (
           <span
-            className={
-              key.status ? "active_indicator" : "not_active_indicator"
-            }>
+            className={key.status ? "active_indicator" : "not_active_indicator"}
+          >
             {key.status
               ? t("dataPagesInformation.active_indicator")
               : t("dataPagesInformation.not_active_indicator")}
@@ -139,7 +144,7 @@ function ViewStationModal({ status, isOpenStationModal, closeModal }) {
         align: "center",
         render: (_, key) => (
           <Button
-            type='primary'
+            type="primary"
             icon={<EyeFilled />}
             onClick={() => navigate(`/stations/${key.key}`)}
             style={{ boxShadow: "none" }}
@@ -153,7 +158,7 @@ function ViewStationModal({ status, isOpenStationModal, closeModal }) {
 
   return (
     <Modal
-      key='stations_by_status_modal'
+      key="stations_by_status_modal"
       title={t("stationsPageData.cancelButtonModal")}
       open={isOpenStationModal}
       centered
@@ -163,12 +168,14 @@ function ViewStationModal({ status, isOpenStationModal, closeModal }) {
       style={{
         color: colors.textColor,
       }}
-      className='stations_status_more_modal'>
+      className="stations_status_more_modal"
+    >
       <div
         style={{
           background: colors.layoutBackground,
         }}
-        className='stations_status_body_container'>
+        className="stations_status_body_container"
+      >
         {loading ? (
           <Card
             style={{

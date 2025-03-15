@@ -68,28 +68,6 @@ import ViewMoreStationModal from "../../components/viewMoreStationModal";
 const STATISTIC_CARDS_CHUNK = 3;
 const STATISTIC_CARDS_CHUNK_NEXT = 7;
 
-const StatisticCard = ({
-  icon,
-  status,
-  countValue,
-  cardStyle,
-  onChangeModalData,
-}) => (
-  <Card
-    bordered={false}
-    style={cardStyle}
-    type="inner"
-    onClick={onChangeModalData}
-    className="dashbord_card_element"
-  >
-    {icon}
-    <div>
-      <p>{status}</p>
-      <h3>{countValue}</h3>
-    </div>
-  </Card>
-);
-
 const ViewMoreLastData = memo(
   ({ openModalData, closeModal, colors, data, t }) => {
     return (
@@ -728,12 +706,38 @@ function OrganizationDashboard() {
     useState(true);
   const [isOpenModalStation, setIsOpenModalStation] = useState(false);
   const [isStationsStatus, setIsStationsStatus] = useState("");
+  const [isDistrictId, setIsDistrictId] = useState("");
   const [isOpenMoreViewData, setIsOpenMoreViewData] = useState(false);
   const [getSelectStationDate, setGetSelectStationData] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
 
   const regionId = Cookies.get("regionId");
   const token = localStorage.getItem("access_token");
+
+  const StatisticCard = ({
+    icon,
+    status,
+    countValue,
+    cardStyle,
+    onChangeModalData,
+  }) => (
+    <Card
+      bordered={false}
+      style={cardStyle}
+      type="inner"
+      onClick={() => {
+        setIsDistrictId("");
+        onChangeModalData();
+      }}
+      className="dashbord_card_element"
+    >
+      {icon}
+      <div>
+        <p>{status}</p>
+        <h3>{countValue}</h3>
+      </div>
+    </Card>
+  );
 
   const fetchAllData = useCallback(async () => {
     const lang = i18n.language;
@@ -938,59 +942,78 @@ function OrganizationDashboard() {
         <h2>Jami tuman stansiyalari</h2>
 
         <div className="dashboard_wrapper_districts_items">
-        {statisticDataForOrganization.districts?.map((e, i) => {
-          return (
-            <div className="dashboard_wrapper_districts_list_card" key={i}>
-              <h3>
-                <EnvironmentOutlined style={{ fontSize: "22px" }} />
-                <span>Tuman:</span>
-                <span>{e.name}</span>
-              </h3>
+          {statisticDataForOrganization.districts?.map((e, i) => {
+            return (
               <div
-                className="dashboard_wrapper_districts_list_info"
-                style={{ cursor: "pointer" }}
+                className="dashboard_wrapper_districts_list_card"
+                key={i}
+                onClick={() => setIsDistrictId(e.id)}
               >
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <AppstoreOutlined
-                    style={{ fontSize: "24px", color: "rgb(64, 95, 242)" }}
-                  />
-                  <span style={{ marginLeft: "8px", color: "rgb(49, 57, 77)" }}>
-                    {t("dataPagesInformation.total")}:
+                <h3>
+                  <EnvironmentOutlined style={{ fontSize: "22px" }} />
+                  <span>Tuman:</span>
+                  <span>{e.name}</span>
+                </h3>
+                <div
+                  className="dashboard_wrapper_districts_list_info"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleOpenStatusStations(0)}
+                >
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <AppstoreOutlined
+                      style={{ fontSize: "24px", color: "rgb(64, 95, 242)" }}
+                    />
+                    <span
+                      style={{ marginLeft: "8px", color: "rgb(49, 57, 77)" }}
+                    >
+                      {t("dataPagesInformation.total")}:
+                    </span>
+                  </div>
+                  <span style={{ color: "rgb(49, 57, 77)" }}>
+                    {e.countStations}
                   </span>
                 </div>
-                <span style={{ color: "rgb(49, 57, 77)" }}>{e.countStations}</span>
-              </div>
-              <div
-                className="dashboard_wrapper_districts_list_info"
-                style={{ cursor: "pointer" }}
-              >
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <CheckCircleOutlined
-                    style={{ fontSize: "24px", color: "rgb(40, 167, 69)" }}
-                  />
-                  <span style={{ marginLeft: "8px", color: "rgb(49, 57, 77)" }}>
-                    {t("dataPagesInformation.active_indicator")}:
+                <div
+                  className="dashboard_wrapper_districts_list_info"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleOpenStatusStations(1)}
+                >
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <CheckCircleOutlined
+                      style={{ fontSize: "24px", color: "rgb(40, 167, 69)" }}
+                    />
+                    <span
+                      style={{ marginLeft: "8px", color: "rgb(49, 57, 77)" }}
+                    >
+                      {t("dataPagesInformation.active_indicator")}:
+                    </span>
+                  </div>
+                  <span style={{ color: "rgb(49, 57, 77)" }}>
+                    {e.countActiveStations}
                   </span>
                 </div>
-                <span style={{ color: "rgb(49, 57, 77)" }}>{e.countActiveStations}</span>
-              </div>
-              <div
-                className="dashboard_wrapper_districts_list_info"
-                style={{ cursor: "pointer" }}
-              >
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <ExclamationCircleOutlined
-                    style={{ fontSize: "24px", color: "rgb(220, 53, 69)" }}
-                  />
-                  <span style={{ marginLeft: "8px", color: "rgb(49, 57, 77)" }}>
-                    {t("dataPagesInformation.not_active_indicator")}:
+                <div
+                  className="dashboard_wrapper_districts_list_info"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleOpenStatusStations(2)}
+                >
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <ExclamationCircleOutlined
+                      style={{ fontSize: "24px", color: "rgb(220, 53, 69)" }}
+                    />
+                    <span
+                      style={{ marginLeft: "8px", color: "rgb(49, 57, 77)" }}
+                    >
+                      {t("dataPagesInformation.not_active_indicator")}:
+                    </span>
+                  </div>
+                  <span style={{ color: "rgb(49, 57, 77)" }}>
+                    {e.countInactiveStations}
                   </span>
                 </div>
-                <span style={{ color: "rgb(49, 57, 77)" }}>{e.countInactiveStations}</span>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
         </div>
       </div>
 
@@ -1254,6 +1277,7 @@ function OrganizationDashboard() {
       {isOpenModalStation && (
         <ViewStationModal
           status={isStationsStatus}
+          districtId={isDistrictId}
           isOpenStationModal={isOpenModalStation}
           closeModal={() => setIsOpenModalStation(false)}
         />

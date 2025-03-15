@@ -7,6 +7,7 @@ export const STATIONS_TYPES = {
   UPDATE_STATIONS: "UPDATE_STATIONS",
   DELETE_STATIONS: "DELETE_STATIONS",
   FIND_ALL_STATIONS: "FIND_ALL_STATIONS",
+  FIND_ALL_STATIONS_BY_DISTRICT_ID: "FIND_ALL_STATIONS_BY_DISTRICT_ID",
   FIND_BY_ID_STATIONS: "FIND_BY_ID_STATIONS",
   FIND_LAST_DATA_AND_STATIONS: "FIND_LAST_DATA_AND_STATIONS",
   FIND_MAPS_LAST_DATA: "FIND_MAPS_LAST_DATA",
@@ -23,7 +24,7 @@ export const getAllStationsData = (data, token) => async (dispatch) => {
     });
 
     const res = await getDataApi(
-      `stations/findAll?lang=${data.lang}&page=${data.page}&perPage=${data.perPage}&search=${data.search}&regionId=${data.regionId}&organizationId=${data.organizationId}&status=${data.status}`,
+      `stations/findAll?lang=${data.lang}&page=${data.page}&perPage=${data.perPage}&search=${data.search}&regionId=${data.regionId}&districtId=${data.districtId}&organizationId=${data.organizationId}&status=${data.status}`,
       token
     );
 
@@ -38,6 +39,56 @@ export const getAllStationsData = (data, token) => async (dispatch) => {
         success: res.data.message,
       },
     });
+  } catch (err) {
+    if (!err.response) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: "Network Error",
+        },
+      });
+    } else {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: err.response.data.message || err.response.statusText,
+        },
+      });
+    }
+  } finally {
+    dispatch({
+      type: GLOBALTYPES.LOADING,
+      payload: false,
+    });
+  }
+};
+
+export const getAllStationsDataByDistrictId = (data, token) => async (dispatch) => {
+  try {
+    dispatch({
+      type: GLOBALTYPES.LOADING,
+      payload: true,
+    });
+
+    const res = await getDataApi(
+      `stations/findAll?lang=${data.lang}&regionId=${data.regionId}&districtId=${data.districtId}&status=${data.status}`,
+      token
+    );
+
+    console.log(res.data.data);
+
+
+    // dispatch({
+    //   type: STATIONS_TYPES.FIND_ALL_STATIONS_BY_DISTRICT_ID,
+    //   payload: res.data.data,
+    // });
+
+    // dispatch({
+    //   type: GLOBALTYPES.ALERT,
+    //   payload: {
+    //     success: res.data.message,
+    //   },
+    // });
   } catch (err) {
     if (!err.response) {
       dispatch({
