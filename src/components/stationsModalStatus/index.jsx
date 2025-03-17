@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Modal, Card } from "antd";
 import { EyeFilled } from "@ant-design/icons";
 
-import { getAllStationsData } from "../../redux/actions/stationsActions";
+import { getAllStationsData, getAllStationsDataByDistrictId } from "../../redux/actions/stationsActions";
 
 import TableComponent from "../../components/tableComponent";
 import "../../pages/data/index.css";
@@ -44,7 +44,7 @@ function ViewStationModal({
       districtId: districtId ? districtId : "",
     };
 
-    dispatch(getAllStationsData(stationParams, token));
+    dispatch(getAllStationsDataByDistrictId(stationParams, token));
   }, [dispatch, token, currentPage, pageSize, i18n.language, status]);
 
   useEffect(() => {
@@ -85,7 +85,7 @@ function ViewStationModal({
       status: status,
     };
 
-    dispatch(getAllStationsData(paginationParams, token));
+    dispatch(getAllStationsDataByDistrictId(paginationParams, token));
     setPageSize(size);
     setCurrentPage(page);
   };

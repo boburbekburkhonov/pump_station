@@ -17,6 +17,11 @@ const stationsReducer = (state = initialState, action) => {
                 ...state,
                 stationsData: action.payload
             };
+        case STATIONS_TYPES.FIND_ALL_STATIONS_BY_DISTRICT_ID:
+            return {
+                ...state,
+                stationsData: action.payload
+            };
         case STATIONS_TYPES.FIND_BY_ID_STATIONS:
             return {
                 ...state,

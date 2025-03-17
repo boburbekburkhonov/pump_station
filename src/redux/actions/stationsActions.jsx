@@ -24,7 +24,7 @@ export const getAllStationsData = (data, token) => async (dispatch) => {
     });
 
     const res = await getDataApi(
-      `stations/findAll?lang=${data.lang}&page=${data.page}&perPage=${data.perPage}&search=${data.search}&regionId=${data.regionId}&districtId=${data.districtId}&organizationId=${data.organizationId}&status=${data.status}`,
+      `stations/findAll?lang=${data.lang}&page=${data.page}&perPage=${data.perPage}&search=${data.search}&regionId=${data.regionId}&organizationId=${data.organizationId}&status=${data.status}`,
       token
     );
 
@@ -71,24 +71,21 @@ export const getAllStationsDataByDistrictId = (data, token) => async (dispatch) 
     });
 
     const res = await getDataApi(
-      `stations/findAll?lang=${data.lang}&regionId=${data.regionId}&districtId=${data.districtId}&status=${data.status}`,
+      `stations/findAll?lang=${data.lang}&page=${data.page}&perPage=${data.perPage}&search=${data.search}&regionId=${data.regionId}&districtId=${data.districtId}&organizationId=${data.organizationId}&status=${data.status}`,
       token
     );
 
-    console.log(res.data.data);
+    dispatch({
+      type: STATIONS_TYPES.FIND_ALL_STATIONS_BY_DISTRICT_ID,
+      payload: res.data.data,
+    });
 
-
-    // dispatch({
-    //   type: STATIONS_TYPES.FIND_ALL_STATIONS_BY_DISTRICT_ID,
-    //   payload: res.data.data,
-    // });
-
-    // dispatch({
-    //   type: GLOBALTYPES.ALERT,
-    //   payload: {
-    //     success: res.data.message,
-    //   },
-    // });
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: {
+        success: res.data.message,
+      },
+    });
   } catch (err) {
     if (!err.response) {
       dispatch({
