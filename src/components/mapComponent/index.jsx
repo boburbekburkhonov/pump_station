@@ -56,7 +56,7 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
       {/* Polygon */}
       {polygonCoords.length > 0 && (
         <>
-          <Polygon
+          {/* <Polygon
             paths={polygonCoords}
             options={{
               strokeColor: colors.buttonColor,
@@ -65,7 +65,7 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
               fillColor: colors.buttonColor,
               fillOpacity: 0.1,
             }}
-          />
+          /> */}
 
           {/* Markers */}
           {stationData.data?.map((station, index) => (

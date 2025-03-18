@@ -58,6 +58,8 @@ const LayoutComponent = memo(({ childrenComponent }) => {
   const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem("roles");
   const isToken = localStorage.getItem("access_token");
+  const nameUser = localStorage.getItem("name");
+  const nameRole = localStorage.getItem("roleName");
 
   const { colors, theme } = useSelector((state) => state.theme);
   const { countNotif, unseenNotif } = useSelector(
@@ -85,12 +87,12 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       key: "home",
       icon: (
         <PieChartOutlined
-          className='menu-icon'
+          className="menu-icon"
           style={{ fontSize: "16px", fontWeight: "500" }}
         />
       ),
       label: (
-        <Link className='layout_links' to='/'>
+        <Link className="layout_links" to="/">
           {t("layoutData.navLink1")}
         </Link>
       ),
@@ -99,12 +101,12 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       key: "maps",
       icon: (
         <AimOutlined
-          className='menu-icon'
+          className="menu-icon"
           style={{ fontSize: "16px", fontWeight: "500" }}
         />
       ),
       label: (
-        <Link className='layout_links' to='/maps'>
+        <Link className="layout_links" to="/maps">
           {t("layoutData.navLink2")}
         </Link>
       ),
@@ -113,16 +115,16 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       key: "data_page",
       icon: (
         <DatabaseOutlined
-          className='menu-icon'
+          className="menu-icon"
           style={{ fontSize: "16px", fontWeight: "500" }}
         />
       ),
-      label: <p className='link_new_text_style'>{t("layoutData.navLink3")}</p>,
+      label: <p className="link_new_text_style">{t("layoutData.navLink3")}</p>,
       children: [
         {
           key: "data",
           label: (
-            <Link className='layout_links' to='/data'>
+            <Link className="layout_links" to="/data">
               {t("layoutData.navLink8")}
             </Link>
           ),
@@ -130,7 +132,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
         {
           key: "electrical/data",
           label: (
-            <Link className='layout_links' to='/electrical/data'>
+            <Link className="layout_links" to="/electrical/data">
               {t("layoutData.navLink7")}
             </Link>
           ),
@@ -141,12 +143,12 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       key: "reports",
       icon: (
         <SnippetsOutlined
-          className='menu-icon'
+          className="menu-icon"
           style={{ fontSize: "16px", fontWeight: "500" }}
         />
       ),
       label: (
-        <Link className='layout_links' to='/reports'>
+        <Link className="layout_links" to="/reports">
           {t("layoutData.navLink14")}
         </Link>
       ),
@@ -155,12 +157,12 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       key: "notification",
       icon: (
         <BellOutlined
-          className='menu-icon'
+          className="menu-icon"
           style={{ fontSize: "16px", fontWeight: "500" }}
         />
       ),
       label: (
-        <Link className='layout_links' to='/notification'>
+        <Link className="layout_links" to="/notification">
           {t("layoutData.navLink15")}
         </Link>
       ),
@@ -169,12 +171,12 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       key: "stations",
       icon: (
         <DesktopOutlined
-          className='menu-icon'
+          className="menu-icon"
           style={{ fontSize: "16px", fontWeight: "500" }}
         />
       ),
       label: (
-        <Link className='layout_links' to='/stations'>
+        <Link className="layout_links" to="/stations">
           {t("layoutData.navLink4")}
         </Link>
       ),
@@ -183,16 +185,16 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       key: "users_page",
       icon: (
         <UserSwitchOutlined
-          className='menu-icon'
+          className="menu-icon"
           style={{ fontSize: "16px", fontWeight: "500" }}
         />
       ),
-      label: <p className='link_new_text_style'>{t("layoutData.navLink5")}</p>,
+      label: <p className="link_new_text_style">{t("layoutData.navLink5")}</p>,
       children: [
         {
           key: "users",
           label: (
-            <Link className='layout_links' to='/users'>
+            <Link className="layout_links" to="/users">
               {t("layoutData.navLink5")}
             </Link>
           ),
@@ -200,7 +202,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
         {
           key: "user/join",
           label: (
-            <Link className='layout_links' to='/user/join'>
+            <Link className="layout_links" to="/user/join">
               {t("layoutData.navLink12")}
             </Link>
           ),
@@ -208,7 +210,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
         {
           key: "roles",
           label: (
-            <Link className='layout_links' to='/roles'>
+            <Link className="layout_links" to="/roles">
               {t("layoutData.navLink13")}
             </Link>
           ),
@@ -219,16 +221,16 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       key: "add_news_data",
       icon: (
         <AppstoreAddOutlined
-          className='menu-icon'
+          className="menu-icon"
           style={{ fontSize: "16px", fontWeight: "500" }}
         />
       ),
-      label: <p className='link_new_text_style'>{t("layoutData.navLink16")}</p>,
+      label: <p className="link_new_text_style">{t("layoutData.navLink16")}</p>,
       children: [
         {
           key: "regions",
           label: (
-            <Link className='layout_links' to='/regions'>
+            <Link className="layout_links" to="/regions">
               {t("layoutData.navLink9")}
             </Link>
           ),
@@ -236,7 +238,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
         {
           key: "districts",
           label: (
-            <Link className='layout_links' to='/districts'>
+            <Link className="layout_links" to="/districts">
               {t("layoutData.navLink10")}
             </Link>
           ),
@@ -244,7 +246,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
         {
           key: "organizations",
           label: (
-            <Link className='layout_links' to='/organizations'>
+            <Link className="layout_links" to="/organizations">
               {t("layoutData.navLink11")}
             </Link>
           ),
@@ -267,12 +269,12 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       key: "home",
       icon: (
         <PieChartOutlined
-          className='menu-icon'
+          className="menu-icon"
           style={{ fontSize: "16px", fontWeight: "500" }}
         />
       ),
       label: (
-        <Link className='layout_links' to='/'>
+        <Link className="layout_links" to="/">
           {t("layoutData.navLink1")}
         </Link>
       ),
@@ -281,12 +283,12 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       key: "maps",
       icon: (
         <AimOutlined
-          className='menu-icon'
+          className="menu-icon"
           style={{ fontSize: "16px", fontWeight: "500" }}
         />
       ),
       label: (
-        <Link className='layout_links' to='/maps'>
+        <Link className="layout_links" to="/maps">
           {t("layoutData.navLink2")}
         </Link>
       ),
@@ -295,16 +297,16 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       key: "data_page",
       icon: (
         <DatabaseOutlined
-          className='menu-icon'
+          className="menu-icon"
           style={{ fontSize: "16px", fontWeight: "500" }}
         />
       ),
-      label: <p className='link_new_text_style'>{t("layoutData.navLink3")}</p>,
+      label: <p className="link_new_text_style">{t("layoutData.navLink3")}</p>,
       children: [
         {
           key: "all/data",
           label: (
-            <Link className='layout_links' to='/all/data'>
+            <Link className="layout_links" to="/all/data">
               {t("layoutData.navLink17")}
             </Link>
           ),
@@ -312,7 +314,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
         {
           key: "data",
           label: (
-            <Link className='layout_links' to='/data'>
+            <Link className="layout_links" to="/data">
               {t("layoutData.navLink8")}
             </Link>
           ),
@@ -320,7 +322,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
         {
           key: "electrical/data",
           label: (
-            <Link className='layout_links' to='/electrical/data'>
+            <Link className="layout_links" to="/electrical/data">
               {t("layoutData.navLink7")}
             </Link>
           ),
@@ -331,12 +333,12 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       key: "reports",
       icon: (
         <SnippetsOutlined
-          className='menu-icon'
+          className="menu-icon"
           style={{ fontSize: "16px", fontWeight: "500" }}
         />
       ),
       label: (
-        <Link className='layout_links' to='/reports'>
+        <Link className="layout_links" to="/reports">
           {t("layoutData.navLink14")}
         </Link>
       ),
@@ -345,12 +347,12 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       key: "notification",
       icon: (
         <BellOutlined
-          className='menu-icon'
+          className="menu-icon"
           style={{ fontSize: "16px", fontWeight: "500" }}
         />
       ),
       label: (
-        <Link className='layout_links' to='/notification'>
+        <Link className="layout_links" to="/notification">
           {t("layoutData.navLink15")}
         </Link>
       ),
@@ -359,12 +361,12 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       key: "stations",
       icon: (
         <DesktopOutlined
-          className='menu-icon'
+          className="menu-icon"
           style={{ fontSize: "16px", fontWeight: "500" }}
         />
       ),
       label: (
-        <Link className='layout_links' to='/stations'>
+        <Link className="layout_links" to="/stations">
           {t("layoutData.navLink4")}
         </Link>
       ),
@@ -390,7 +392,8 @@ const LayoutComponent = memo(({ childrenComponent }) => {
     <div
       style={{
         textAlign: "center",
-      }}>
+      }}
+    >
       <FolderOpenOutlined
         style={{
           fontSize: 20,
@@ -438,11 +441,13 @@ const LayoutComponent = memo(({ childrenComponent }) => {
           defaultShadow: "none",
           primaryShadow: "none",
         },
-      }}>
+      }}
+    >
       <Layout
         style={{
           background: colors.background,
-        }}>
+        }}
+      >
         <Sider
           style={{
             background: colors.layoutBackground,
@@ -452,15 +457,30 @@ const LayoutComponent = memo(({ childrenComponent }) => {
           trigger={null}
           collapsible
           collapsed={collapsed}
-          className='custom-sider'>
-          <div className='layout_logo_box' style={{
-            background: colors.background
-          }}>
-            <img src={theme === "light" ? Logo : Logo2} alt='logo' className="logo_image_styles" />
+          className="custom-sider"
+        >
+          <div
+            className="layout_logo_box"
+            style={{
+              background: colors.background,
+            }}
+          >
+            <img
+              src={theme === "light" ? Logo : Logo2}
+              alt="logo"
+              className="logo_image_styles"
+            />
 
-            {!collapsed && <h1 className='logo_name' style={{
-              color: colors.logoColor
-            }} >Smart Pump Station</h1>}
+            {!collapsed && (
+              <h1
+                className="logo_name"
+                style={{
+                  color: colors.logoColor,
+                }}
+              >
+                Smart Pump Station
+              </h1>
+            )}
           </div>
 
           <Menu
@@ -469,7 +489,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
               overflowY: "scroll",
               paddingBottom: "60px",
             }}
-            mode='inline'
+            mode="inline"
             selectedKeys={[selectedKey]}
             onClick={(e) => setSelectedKey(e.key)}
             items={
@@ -483,7 +503,8 @@ const LayoutComponent = memo(({ childrenComponent }) => {
         <Layout
           style={{
             background: colors.background,
-          }}>
+          }}
+        >
           <Header
             style={{
               padding: "0 0.75rem 0 0",
@@ -491,47 +512,87 @@ const LayoutComponent = memo(({ childrenComponent }) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-            }}>
-            <Button
-              type='text'
-              icon={
-                collapsed ? (
-                  <MenuUnfoldOutlined style={{ color: colors.text }} />
-                ) : (
-                  <MenuFoldOutlined style={{ color: colors.text }} />
-                )
-              }
-              onClick={() => setCollapsed(!collapsed)}
+            }}
+          >
+            <div
               style={{
-                fontSize: "16px",
-                width: 64,
-                height: 64,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
               }}
-            />
+            >
+              <Button
+                type="text"
+                icon={
+                  collapsed ? (
+                    <MenuUnfoldOutlined style={{ color: colors.text }} />
+                  ) : (
+                    <MenuFoldOutlined style={{ color: colors.text }} />
+                  )
+                }
+                onClick={() => setCollapsed(!collapsed)}
+                style={{
+                  fontSize: "16px",
+                  width: 64,
+                  height: 64,
+                }}
+              />
 
-            <div className='header_controller_component'>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginLeft: '5px'
+                }}
+              >
+                <p
+                  style={{
+                    margin: "0",
+                    fontWeight: "500",
+                    color: colors.text
+                  }}
+                >
+                  <span>
+                  {t("loginData.user")}:
+                  </span>
+                  {" "}
+                  {nameUser}
+                  {/* <span style={{
+                    textTransform: 'lowercase'
+                  }}>
+                  {" "}
+                  {nameRole}
+                  </span> */}
+                </p>
+              </div>
+            </div>
+
+            <div className="header_controller_component">
               <div>
                 <Avatar
                   onClick={() => {
-                    setSelectedKey('settings')
-                    navigate("/settings")}}
-                  shape='square'
+                    setSelectedKey("settings");
+                    navigate("/settings");
+                  }}
+                  shape="square"
                   style={{
                     marginBottom: "8px",
                     background: colors.buttonColor,
                     cursor: "pointer",
                   }}
-                  size='default'
+                  size="default"
                   icon={<UserOutlined />}
                 />
               </div>
 
-              <div className='header_badge_container'>
+              <div className="header_badge_container">
                 <Badge
                   onClick={showDrawer}
                   count={countNotif}
-                  overflowCount={10}>
-                  <Button type='primary' icon={<BellFilled />} />
+                  overflowCount={10}
+                >
+                  <Button type="primary" icon={<BellFilled />} />
                 </Badge>
               </div>
             </div>
@@ -544,7 +605,8 @@ const LayoutComponent = memo(({ childrenComponent }) => {
               height: "90vh",
               overflowY: "auto",
               paddingBottom: "30px",
-            }}>
+            }}
+          >
             {childrenComponent}
           </Content>
         </Layout>
@@ -552,10 +614,11 @@ const LayoutComponent = memo(({ childrenComponent }) => {
 
       <Drawer
         title={t("layoutData.navLink15")}
-        placement='right'
+        placement="right"
         closable={true}
         onClose={closeDrawer}
-        open={visible}>
+        open={visible}
+      >
         {countNotif === 0 ? (
           <Empty description={false} />
         ) : (
@@ -565,11 +628,12 @@ const LayoutComponent = memo(({ childrenComponent }) => {
               <List.Item
                 actions={[
                   <Button
-                    type='text'
+                    type="text"
                     onClick={() => handleDismiss(index)}
                     icon={<DeleteFilled />}
                   />,
-                ]}>
+                ]}
+              >
                 {item}
               </List.Item>
             )}

@@ -8,6 +8,7 @@
     "phoneDetectMessage": "Please enter a phone number",
     "rememberMessage": "Remember me",
     "loginButton": "Login",
+    "user": "User",
     "userPlaceholder": "Username",
     "passPlaceholder": "Password",
     "phonePlaceholder": "Phone number",

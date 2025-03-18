@@ -370,6 +370,7 @@ export const findMyLocationsPolygon = (lang, id, token) => async (dispatch) => {
       `districts/getById?lang=${lang}&id=${id}`,
       token
     );
+    console.log(res.data.data);
 
     dispatch({
       type: STATIONS_TYPES.FIND_MY_LOCATIONS_POLYGONE,

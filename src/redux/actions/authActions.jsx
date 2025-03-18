@@ -18,10 +18,13 @@ export const signInAction = (data, lang) => async (dispatch) => {
       username: data.username,
       password: data.password,
     });
+    console.log(res.data.data.user.name);
 
     localStorage.setItem("roles", res.data.data.user.role.id);
     localStorage.setItem("access_token", res.data.data.accessToken);
     localStorage.setItem("refresh_token", res.data.data.refreshToken);
+    localStorage.setItem("name", res.data.data.user.name);
+    localStorage.setItem("roleName", res.data.data.user.role.name);
     Cookies.set("regionId", res.data.data.user.regionId, {
       expires: 1,
       path: "/",
