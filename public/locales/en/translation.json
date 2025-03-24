@@ -68,6 +68,8 @@
     "stationsInputName": "Station name",
     "stationsInputRegion": "Select region",
     "stationsInputDestrict": "Select district",
+    "allDistricts": "All districts",
+    "headingLastDataByDistrictId": "latest aggregate and electricity meter data from district stations",
     "stationsInputOrganizations": "Select organization",
     "stationsInputEnergy": "Enter energy code",
     "stationsCheckboxEnergy": "Electricity",
