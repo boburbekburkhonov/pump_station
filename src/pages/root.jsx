@@ -13,7 +13,9 @@ const pages = {
   MapsPage: lazy(() => import("./maps")),
   ProfilePage: lazy(() => import("./profilePage")),
   DataPage: lazy(() => import("./data")),
+  DataPageOrganization: lazy(() => import("./dataOrganization")),
   ElectrPage: lazy(() => import("./electrydata")),
+  ElectrPageOrganization: lazy(() => import("./electrydataOrganization")),
   Users: lazy(() => import("./users")),
   RolePage: lazy(() => import("./role")),
   Reports: lazy(() => import("./reports")),
@@ -28,27 +30,37 @@ const pages = {
   AllDataPage: lazy(() => import("./allDataPage")),
   AllDataPageOrganization: lazy(() => import("./allDataPageOrganization")),
   MoreAllDataPage: lazy(() => import("./aggregateAndElectricalMoreDataPage")),
-  Settings: lazy(() => import("./settingsPage"))
+  Settings: lazy(() => import("./settingsPage")),
 };
 
 const isAdmin = () =>
   localStorage.getItem("roles") === "674877fbf0a8ec5c59065cb6";
 const checkRole = () => {
-  if(localStorage.getItem("roles") === "674877fbf0a8ec5c59065cb6"){
-    return 'root'
-  } else if (localStorage.getItem("roles") === "675689ce75ed8fc6ed490821"){
-    return 'district'
-  } else if (localStorage.getItem("roles") === "678a3a7a271c9b956e44441b"){
-    return 'organization'
+  if (localStorage.getItem("roles") === "674877fbf0a8ec5c59065cb6") {
+    return "root";
+  } else if (localStorage.getItem("roles") === "675689ce75ed8fc6ed490821") {
+    return "district";
+  } else if (localStorage.getItem("roles") === "678a3a7a271c9b956e44441b") {
+    return "organization";
   }
-}
+};
 
 function Root() {
   return (
     <Routes>
       <Route
         path="/"
-        element={checkRole() == 'root' ? <pages.Home /> : checkRole() == 'district' ? <pages.UserDashboard /> : checkRole() == 'organization' ? <pages.OrganizationDashboard /> : ''}
+        element={
+          checkRole() == "root" ? (
+            <pages.Home />
+          ) : checkRole() == "district" ? (
+            <pages.UserDashboard />
+          ) : checkRole() == "organization" ? (
+            <pages.OrganizationDashboard />
+          ) : (
+            ""
+          )
+        }
       />
       <Route
         path="/stations"
@@ -58,12 +70,48 @@ function Root() {
       <Route path="/stations/:id" element={<pages.StationsInformations />} />
       <Route path="/maps" element={<pages.MapsPage />} />
       <Route path="/profile" element={<pages.ProfilePage />} />
-      <Route path="/data" element={<pages.DataPage />} />
-      <Route path="/electrical/data" element={<pages.ElectrPage />} />
+      <Route
+        path="/data"
+        element={
+          checkRole() == "root" ? (
+            <pages.DataPage />
+          ) : checkRole() == "district" ? (
+            <pages.DataPage />
+          ) : checkRole() == "organization" ? (
+            <pages.DataPageOrganization />
+          ) : (
+            ""
+          )
+        }
+      />
+      <Route
+        path="/electrical/data"
+        element={
+          checkRole() == "root" ? (
+            <pages.ElectrPage />
+          ) : checkRole() == "district" ? (
+            <pages.ElectrPage />
+          ) : checkRole() == "organization" ? (
+            <pages.ElectrPageOrganization />
+          ) : (
+            ""
+          )
+        }
+      />
       <Route path="/reports" element={<pages.Reports />} />
       <Route
         path="/all/data"
-        element={checkRole() == 'root' ? <pages.AllDataPage /> : checkRole() == 'district' ? <pages.AllDataPage /> : checkRole() == 'organization' ? <pages.AllDataPageOrganization /> : ''}
+        element={
+          checkRole() == "root" ? (
+            <pages.AllDataPage />
+          ) : checkRole() == "district" ? (
+            <pages.AllDataPage />
+          ) : checkRole() == "organization" ? (
+            <pages.AllDataPageOrganization />
+          ) : (
+            ""
+          )
+        }
       />
       <Route path="/agrigate/infos/:id" element={<pages.AggrigateMoreData />} />
       <Route path="/all/data/infos/:id" element={<pages.MoreAllDataPage />} />
@@ -71,10 +119,7 @@ function Root() {
         path="/electrical/infos/:id"
         element={<pages.ElectricalMoreData />}
       />
-      <Route
-        path="/settings/*"
-        element={<pages.Settings />}
-      />
+      <Route path="/settings/*" element={<pages.Settings />} />
 
       {isAdmin() && (
         <>

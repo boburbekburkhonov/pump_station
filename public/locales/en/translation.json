@@ -70,6 +70,8 @@
     "stationsInputDestrict": "Select district",
     "allDistricts": "All districts",
     "headingLastDataByDistrictId": "latest aggregate and electricity meter data from district stations",
+    "headingLastAggregateDataByDistrictId": "Latest data of all station aggregates",
+    "headingLastAggregateDataByOneDistrictId": "Latest aggregate data from district stations",
     "stationsInputOrganizations": "Select organization",
     "stationsInputEnergy": "Enter energy code",
     "stationsCheckboxEnergy": "Electricity",

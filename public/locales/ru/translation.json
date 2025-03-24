@@ -70,6 +70,8 @@
     "stationsInputDestrict": "Выбрать район",
     "allDistricts": "Все районы",
     "headingLastDataByDistrictId": "последние сводные данные и данные счетчиков электроэнергии с районных станций",
+    "headingLastAggregateDataByDistrictId": "Последние данные всех агрегатов станции",
+    "headingLastAggregateDataByOneDistrictId": "последние обобщенные данные с районных станций",
     "stationsInputOrganizations": "Выберите организацию",
     "stationsInputEnergy": "Энергетический код",
     "stationsCheckboxEnergy": "Электричество",
