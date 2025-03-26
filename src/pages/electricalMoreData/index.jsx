@@ -415,6 +415,20 @@ const ElectricalMoreData = () => {
 
   return (
     <section className="more_info_sections">
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <h2 style={{ color: "#405FF2" }}>
+          {t("dashboardPageData.lastStationsData.electryName")}:
+        </h2>
+        <h2 style={{ color: "#405FF2", marginLeft: "10px" }}>
+          {foundElectryById.name}
+        </h2>
+      </div>
+
       <Anchor
         className="anchor-items-container"
         direction="horizontal"
@@ -479,7 +493,6 @@ const ElectricalMoreData = () => {
           isType={isActiveGraphic}
           theme={theme}
           lineChartData={electryLineChartData}
-          electryName={{ code: "electr", name: foundElectryById.name }}
         />
       )}
 
@@ -504,9 +517,9 @@ const ElectricalMoreData = () => {
           isType={isActiveGraphic}
           theme={theme}
           lineChartData={electryLineChartData}
-          electryName={{ code: "electr", name: foundElectryById.name }}
         />
       )}
+
       {activeSection === "section3" && !isPending && (
         <ThirdSections
           columns={columnsUser}
@@ -542,9 +555,9 @@ const ElectricalMoreData = () => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
-          electryName={{ code: "electr", name: foundElectryById.name }}
         />
       )}
+
       {activeSection === "section4" && !isPending && (
         <FourThSections
           columns={columnsUser}
@@ -579,9 +592,9 @@ const ElectricalMoreData = () => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
-          electryName={{ code: "electr", name: foundElectryById.name }}
         />
       )}
+
       {activeSection === "section5" && !isPending && (
         <FiveThSections
           columns={columnsUser}
@@ -619,9 +632,9 @@ const ElectricalMoreData = () => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
-          electryName={{ code: "electr", name: foundElectryById.name }}
         />
       )}
+
       {activeSection === "section6" && !isPending && (
         <SixThSections
           columns={columnsUser}
@@ -657,9 +670,9 @@ const ElectricalMoreData = () => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
-          electryName={{ code: "electr", name: foundElectryById.name }}
         />
       )}
+
       {activeSection === "section7" && !isPending && (
         <SevenThSections
           columns={columnsUser}
@@ -685,9 +698,9 @@ const ElectricalMoreData = () => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
-          electryName={{ code: "electr", name: foundElectryById.name }}
         />
       )}
+
       {activeSection === "section8" && !isPending && (
         <EightThSections
           columns={columnsUser}
@@ -713,7 +726,6 @@ const ElectricalMoreData = () => {
           onChange={onChangeDateRange}
           dateFormat={dateFormat}
           valueInput={dateRange}
-          electryName={{ code: "electr", name: foundElectryById.name }}
         />
       )}
     </section>

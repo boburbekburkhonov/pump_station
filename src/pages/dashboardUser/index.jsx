@@ -730,6 +730,7 @@ function UserDashboard() {
   const [selectedColor, setSelectedColor] = useState("");
   const [oneStationLastData, setOneStationLastData] = useState();
   const [modalOpen, setModalOpen] = useState(false);
+  const [activePieButton, setActivePieButton] = useState(0);
 
   const regionId = Cookies.get("regionId");
   const token = localStorage.getItem("access_token");
@@ -1730,43 +1731,53 @@ function UserDashboard() {
               </h1>
 
               <div className="filter_select_box">
-                <Select
-                  size="large"
-                  value={selectButtonData}
-                  className="select_input_stations"
-                  options={t("dashboardPageData.filterCardData", {
+              {t("dashboardPageData.filterCardData", {
                     returnObjects: true,
-                  }).map((item, index) => ({
-                    value: index,
-                    label: item.title,
-                  }))}
-                  onChange={(key, option) => handleChangeStatistics(key)}
-                />
+                  }).map((item,index) => {
+                    return <Button
+                    key={index}
+                    type={activePieButton == index ? "primary" : "default"}
+                    size="large"
+                    onClick={() => {
+                      setActivePieButton(index)
+                      handleChangeStatistics(index)}}
+                  >
+                    {item.title}
+                  </Button>
+                  })}
               </div>
             </div>
 
             <div className="dashboard_pie_chart_container">
               <div className="dashboard_pie_chart_card">
-                {secondPieData && (
+                {firstPieData && (
                   <PieChart
                     theme={colors}
-                    data={secondPieData}
-                    centerText={`${totalData?.totalEnergyActiveToday || 0}\n${t(
-                      "dashboardPageData.lastStationsData.energyValueView"
-                    )}`}
-                    title={t("dashboardPageData.statisticsTitle2")}
+                    data={firstPieData}
+                    centerText={`${
+                      totalData?.totalVolumeToday != 0
+                        ? Number(totalData?.totalVolumeToday).toFixed(2)
+                        : totalData?.totalVolumeToday || 0
+                    }\nm³`}
+                    title={t("dashboardPageData.statisticsTitle1")}
                     handleonIsOpenStationModal={handleViewMoreStationData}
                   />
                 )}
               </div>
 
               <div className="dashboard_pie_chart_card">
-                {firstPieData && (
+                {secondPieData && (
                   <PieChart
                     theme={colors}
-                    data={firstPieData}
-                    centerText={`${totalData?.totalVolumeToday || 0}\nm³`}
-                    title={t("dashboardPageData.statisticsTitle1")}
+                    data={secondPieData}
+                    centerText={`${
+                      totalData?.totalEnergyActiveToday != 0
+                        ? Number(totalData?.totalEnergyActiveToday).toFixed(2)
+                        : totalData?.totalEnergyActiveToday || 0
+                    }\n${t(
+                      "dashboardPageData.lastStationsData.energyValueView"
+                    )}`}
+                    title={t("dashboardPageData.statisticsTitle2")}
                     handleonIsOpenStationModal={handleViewMoreStationData}
                   />
                 )}

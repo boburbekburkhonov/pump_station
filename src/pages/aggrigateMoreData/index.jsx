@@ -328,6 +328,20 @@ const AggrigateMoreData = memo(() => {
         minHeight: "90vh",
       }}
     >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <h2 style={{ color: "#405FF2" }}>
+          {t("dashboardPageData.lastStationsData.agrigateName")}:
+        </h2>
+        <h2 style={{ color: "#405FF2", marginLeft: "10px" }}>
+          {foundAggregateById.name}
+        </h2>
+      </div>
+
       <Anchor
         className="anchor-items-container"
         direction="horizontal"
@@ -395,7 +409,6 @@ const AggrigateMoreData = memo(() => {
           isType={isActiveGraphic}
           theme={theme}
           lineChartData={pumpLineChartData}
-          electryName={{code: 'aggregate', name: foundAggregateById.name}}
         />
       )}
 
@@ -423,9 +436,9 @@ const AggrigateMoreData = memo(() => {
           isType={isActiveGraphic}
           theme={theme}
           lineChartData={pumpLineChartData}
-          electryName={{code: 'aggregate', name: foundAggregateById.name}}
         />
       )}
+
       {activeSection === "section3" && !isPending && (
         <ThirdSections
           columns={columnsUser}
@@ -454,9 +467,9 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
-          electryName={{code: 'aggregate', name: foundAggregateById.name}}
         />
       )}
+
       {activeSection === "section4" && !isPending && (
         <FourThSections
           columns={columnsUser}
@@ -485,9 +498,9 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
-          electryName={{code: 'aggregate', name: foundAggregateById.name}}
         />
       )}
+
       {activeSection === "section5" && !isPending && (
         <FiveThSections
           columns={columnsUser}
@@ -518,9 +531,9 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
-          electryName={{code: 'aggregate', name: foundAggregateById.name}}
         />
       )}
+
       {activeSection === "section6" && !isPending && (
         <SixThSections
           columns={columnsUser}
@@ -549,9 +562,9 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
-          electryName={{code: 'aggregate', name: foundAggregateById.name}}
         />
       )}
+
       {activeSection === "section7" && !isPending && (
         <SevenThSections
           columns={columnsUser}
@@ -580,9 +593,9 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
-          electryName={{code: 'aggregate', name: foundAggregateById.name}}
         />
       )}
+
       {activeSection === "section8" && !isPending && (
         <EightThSections
           columns={columnsUser}
@@ -611,7 +624,6 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeDateRange}
           dateFormat={dateFormat}
           valueInput={dateRange}
-          electryName={{code: 'aggregate', name: foundAggregateById.name}}
         />
       )}
     </section>

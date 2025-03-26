@@ -51,7 +51,6 @@ function AllDatapPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [oneStationLastData, setOneStationLastData] = useState();
 
-
   const fetchAllData = useCallback(() => {
     const lang = i18n.language;
 
@@ -86,7 +85,7 @@ function AllDatapPage() {
     const newPageSize = estimatedRows * estimatedColumns;
 
     setPageSize(newPageSize > 0 ? newPageSize : 1);
-    setCount(count + 1)
+    setCount(count + 1);
   };
 
   // Ekran o'lchamiga qarab Col span o'zgaradi
@@ -442,278 +441,285 @@ function AllDatapPage() {
               </div>
             </div>
 
-            <div className="modal_wrapper_of_electr_energy">
-              <h2>
-                {t(
-                  "dashboardPageData.lastStationsData.headingElectrEnergyModal"
-                )}
-              </h2>
+            {oneStationLastData.haveElectricalEnergy ? (
+              <div className="modal_wrapper_of_electr_energy">
+                <h2>
+                  {t(
+                    "dashboardPageData.lastStationsData.headingElectrEnergyModal"
+                  )}
+                </h2>
 
-              <div
-                className="modal_wrapper_of_body_electy_energy"
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  gap: "15px",
-                  padding: "15px",
-                }}
-              >
-                {oneStationLastData?.electricalEnergyLastData.map((e, i) => {
-                  return (
-                    <div className="modal_aggregate_wrapper" key={i}>
-                      <div
-                        className="modal_aggregate_wrapper_item modal_aggregate_wrapper_item_name"
-                        style={{
-                          borderBottom: `3px solid ${statusOfAggregateAndElectrEnergy(
-                            {
-                              workingStatus: e.workingStatus,
-                              defectionStatus: e.defectionStatus,
-                            }
-                          )}`,
-                        }}
-                      >
-                        <h2 className="modal_aggregate_wrapper_item_name_heading">
-                          {t("dashboardPageData.lastStationsData.electryName")}:
-                        </h2>
-
-                        <p className="modal_aggregate_wrapper_item_name_desc">
-                          {e?.name}
-                        </p>
-                      </div>
-
-                      <div className="modal_aggregate_wrapper_item">
-                        <div className="modal_aggregate_wrapper_item_left_wrapper">
-                          <DashboardOutlined
-                            style={{
-                              color: "#000000",
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
-
-                          <h2 className="modal_aggregate_wrapper_item_heading">
+                <div
+                  className="modal_wrapper_of_body_electy_energy"
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: "15px",
+                    padding: "15px",
+                  }}
+                >
+                  {oneStationLastData?.electricalEnergyLastData.map((e, i) => {
+                    return (
+                      <div className="modal_aggregate_wrapper" key={i}>
+                        <div
+                          className="modal_aggregate_wrapper_item modal_aggregate_wrapper_item_name"
+                          style={{
+                            borderBottom: `3px solid ${statusOfAggregateAndElectrEnergy(
+                              {
+                                workingStatus: e.workingStatus,
+                                defectionStatus: e.defectionStatus,
+                              }
+                            )}`,
+                          }}
+                        >
+                          <h2 className="modal_aggregate_wrapper_item_name_heading">
                             {t(
-                              "dashboardPageData.lastStationsData.energyActive"
+                              "dashboardPageData.lastStationsData.electryName"
                             )}
                             :
                           </h2>
+
+                          <p className="modal_aggregate_wrapper_item_name_desc">
+                            {e?.name}
+                          </p>
                         </div>
 
-                        <p className="modal_aggregate_wrapper_item_desc">
-                          {e.electricalEnergyLastData?.energyActive}{" "}
-                          {t(
-                            "dashboardPageData.lastStationsData.energyValueView"
-                          )}
-                        </p>
-                      </div>
+                        <div className="modal_aggregate_wrapper_item">
+                          <div className="modal_aggregate_wrapper_item_left_wrapper">
+                            <DashboardOutlined
+                              style={{
+                                color: "#000000",
+                              }}
+                              className="dashboard_last_data_icons"
+                            />
 
-                      <div className="modal_aggregate_wrapper_item">
-                        <div className="modal_aggregate_wrapper_item_left_wrapper">
-                          <DashboardOutlined
-                            style={{
-                              color: "#000000",
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
+                            <h2 className="modal_aggregate_wrapper_item_heading">
+                              {t(
+                                "dashboardPageData.lastStationsData.energyActive"
+                              )}
+                              :
+                            </h2>
+                          </div>
 
-                          <h2 className="modal_aggregate_wrapper_item_heading">
+                          <p className="modal_aggregate_wrapper_item_desc">
+                            {e.electricalEnergyLastData?.energyActive}{" "}
                             {t(
-                              "dashboardPageData.lastStationsData.energyReactive"
+                              "dashboardPageData.lastStationsData.energyValueView"
                             )}
-                            :
-                          </h2>
+                          </p>
                         </div>
 
-                        <p className="modal_aggregate_wrapper_item_desc">
-                          {e.electricalEnergyLastData?.energyReactive}{" "}
-                          {t(
-                            "dashboardPageData.lastStationsData.energyValueView"
-                          )}
-                        </p>
-                      </div>
+                        <div className="modal_aggregate_wrapper_item">
+                          <div className="modal_aggregate_wrapper_item_left_wrapper">
+                            <DashboardOutlined
+                              style={{
+                                color: "#000000",
+                              }}
+                              className="dashboard_last_data_icons"
+                            />
 
-                      <div className="modal_aggregate_wrapper_item">
-                        <div className="modal_aggregate_wrapper_item_left_wrapper">
-                          <PoweroffOutlined
-                            style={{
-                              color: "#000000",
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
+                            <h2 className="modal_aggregate_wrapper_item_heading">
+                              {t(
+                                "dashboardPageData.lastStationsData.energyReactive"
+                              )}
+                              :
+                            </h2>
+                          </div>
 
-                          <h2 className="modal_aggregate_wrapper_item_heading">
+                          <p className="modal_aggregate_wrapper_item_desc">
+                            {e.electricalEnergyLastData?.energyReactive}{" "}
                             {t(
-                              "dashboardPageData.lastStationsData.powerActive"
+                              "dashboardPageData.lastStationsData.energyValueView"
                             )}
-                            :
-                          </h2>
+                          </p>
                         </div>
 
-                        <p className="modal_aggregate_wrapper_item_desc">
-                          {e.electricalEnergyLastData?.powerActive} kw
-                        </p>
-                      </div>
+                        <div className="modal_aggregate_wrapper_item">
+                          <div className="modal_aggregate_wrapper_item_left_wrapper">
+                            <PoweroffOutlined
+                              style={{
+                                color: "#000000",
+                              }}
+                              className="dashboard_last_data_icons"
+                            />
 
-                      <div className="modal_aggregate_wrapper_item">
-                        <div className="modal_aggregate_wrapper_item_left_wrapper">
-                          <ThunderboltOutlined
-                            style={{
-                              color: "#000000",
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
+                            <h2 className="modal_aggregate_wrapper_item_heading">
+                              {t(
+                                "dashboardPageData.lastStationsData.powerActive"
+                              )}
+                              :
+                            </h2>
+                          </div>
 
-                          <h2 className="modal_aggregate_wrapper_item_heading">
-                            {t(
-                              "dashboardPageData.lastStationsData.electryVoltage1"
-                            )}
-                            : :
-                          </h2>
+                          <p className="modal_aggregate_wrapper_item_desc">
+                            {e.electricalEnergyLastData?.powerActive} kw
+                          </p>
                         </div>
 
-                        <p className="modal_aggregate_wrapper_item_desc">
-                          {e.electricalEnergyLastData?.voltage1} V
-                        </p>
-                      </div>
+                        <div className="modal_aggregate_wrapper_item">
+                          <div className="modal_aggregate_wrapper_item_left_wrapper">
+                            <ThunderboltOutlined
+                              style={{
+                                color: "#000000",
+                              }}
+                              className="dashboard_last_data_icons"
+                            />
 
-                      <div className="modal_aggregate_wrapper_item">
-                        <div className="modal_aggregate_wrapper_item_left_wrapper">
-                          <BulbOutlined
-                            style={{
-                              color: "#000000",
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
+                            <h2 className="modal_aggregate_wrapper_item_heading">
+                              {t(
+                                "dashboardPageData.lastStationsData.electryVoltage1"
+                              )}
+                              : :
+                            </h2>
+                          </div>
 
-                          <h2 className="modal_aggregate_wrapper_item_heading">
-                            {t(
-                              "dashboardPageData.lastStationsData.electryCurrent1"
-                            )}
-                            : :
-                          </h2>
+                          <p className="modal_aggregate_wrapper_item_desc">
+                            {e.electricalEnergyLastData?.voltage1} V
+                          </p>
                         </div>
 
-                        <p className="modal_aggregate_wrapper_item_desc">
-                          {e.electricalEnergyLastData?.current1} A
-                        </p>
-                      </div>
+                        <div className="modal_aggregate_wrapper_item">
+                          <div className="modal_aggregate_wrapper_item_left_wrapper">
+                            <BulbOutlined
+                              style={{
+                                color: "#000000",
+                              }}
+                              className="dashboard_last_data_icons"
+                            />
 
-                      <div className="modal_aggregate_wrapper_item">
-                        <div className="modal_aggregate_wrapper_item_left_wrapper">
-                          <ThunderboltOutlined
-                            style={{
-                              color: "#000000",
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
+                            <h2 className="modal_aggregate_wrapper_item_heading">
+                              {t(
+                                "dashboardPageData.lastStationsData.electryCurrent1"
+                              )}
+                              : :
+                            </h2>
+                          </div>
 
-                          <h2 className="modal_aggregate_wrapper_item_heading">
-                            {t(
-                              "dashboardPageData.lastStationsData.electryVoltage2"
-                            )}
-                            : :
-                          </h2>
+                          <p className="modal_aggregate_wrapper_item_desc">
+                            {e.electricalEnergyLastData?.current1} A
+                          </p>
                         </div>
 
-                        <p className="modal_aggregate_wrapper_item_desc">
-                          {e.electricalEnergyLastData?.voltage2} V
-                        </p>
-                      </div>
+                        <div className="modal_aggregate_wrapper_item">
+                          <div className="modal_aggregate_wrapper_item_left_wrapper">
+                            <ThunderboltOutlined
+                              style={{
+                                color: "#000000",
+                              }}
+                              className="dashboard_last_data_icons"
+                            />
 
-                      <div className="modal_aggregate_wrapper_item">
-                        <div className="modal_aggregate_wrapper_item_left_wrapper">
-                          <BulbOutlined
-                            style={{
-                              color: "#000000",
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
+                            <h2 className="modal_aggregate_wrapper_item_heading">
+                              {t(
+                                "dashboardPageData.lastStationsData.electryVoltage2"
+                              )}
+                              : :
+                            </h2>
+                          </div>
 
-                          <h2 className="modal_aggregate_wrapper_item_heading">
-                            {t(
-                              "dashboardPageData.lastStationsData.electryCurrent2"
-                            )}
-                            : :
-                          </h2>
+                          <p className="modal_aggregate_wrapper_item_desc">
+                            {e.electricalEnergyLastData?.voltage2} V
+                          </p>
                         </div>
 
-                        <p className="modal_aggregate_wrapper_item_desc">
-                          {e.electricalEnergyLastData?.current2} A
-                        </p>
-                      </div>
+                        <div className="modal_aggregate_wrapper_item">
+                          <div className="modal_aggregate_wrapper_item_left_wrapper">
+                            <BulbOutlined
+                              style={{
+                                color: "#000000",
+                              }}
+                              className="dashboard_last_data_icons"
+                            />
 
-                      <div className="modal_aggregate_wrapper_item">
-                        <div className="modal_aggregate_wrapper_item_left_wrapper">
-                          <ThunderboltOutlined
-                            style={{
-                              color: "#000000",
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
+                            <h2 className="modal_aggregate_wrapper_item_heading">
+                              {t(
+                                "dashboardPageData.lastStationsData.electryCurrent2"
+                              )}
+                              : :
+                            </h2>
+                          </div>
 
-                          <h2 className="modal_aggregate_wrapper_item_heading">
-                            {t(
-                              "dashboardPageData.lastStationsData.electryVoltage3"
-                            )}
-                            : :
-                          </h2>
+                          <p className="modal_aggregate_wrapper_item_desc">
+                            {e.electricalEnergyLastData?.current2} A
+                          </p>
                         </div>
 
-                        <p className="modal_aggregate_wrapper_item_desc">
-                          {e.electricalEnergyLastData?.voltage3} V
-                        </p>
-                      </div>
+                        <div className="modal_aggregate_wrapper_item">
+                          <div className="modal_aggregate_wrapper_item_left_wrapper">
+                            <ThunderboltOutlined
+                              style={{
+                                color: "#000000",
+                              }}
+                              className="dashboard_last_data_icons"
+                            />
 
-                      <div className="modal_aggregate_wrapper_item">
-                        <div className="modal_aggregate_wrapper_item_left_wrapper">
-                          <BulbOutlined
-                            style={{
-                              color: "#000000",
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
+                            <h2 className="modal_aggregate_wrapper_item_heading">
+                              {t(
+                                "dashboardPageData.lastStationsData.electryVoltage3"
+                              )}
+                              : :
+                            </h2>
+                          </div>
 
-                          <h2 className="modal_aggregate_wrapper_item_heading">
-                            {t(
-                              "dashboardPageData.lastStationsData.electryCurrent3"
-                            )}
-                            : :
-                          </h2>
+                          <p className="modal_aggregate_wrapper_item_desc">
+                            {e.electricalEnergyLastData?.voltage3} V
+                          </p>
                         </div>
 
-                        <p className="modal_aggregate_wrapper_item_desc">
-                          {e.electricalEnergyLastData?.current3} A
-                        </p>
-                      </div>
+                        <div className="modal_aggregate_wrapper_item">
+                          <div className="modal_aggregate_wrapper_item_left_wrapper">
+                            <BulbOutlined
+                              style={{
+                                color: "#000000",
+                              }}
+                              className="dashboard_last_data_icons"
+                            />
 
-                      <div className="modal_aggregate_wrapper_item">
-                        <div className="modal_aggregate_wrapper_item_left_wrapper">
-                          <ClockCircleOutlined
-                            style={{
-                              color: "#000000",
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
+                            <h2 className="modal_aggregate_wrapper_item_heading">
+                              {t(
+                                "dashboardPageData.lastStationsData.electryCurrent3"
+                              )}
+                              : :
+                            </h2>
+                          </div>
 
-                          <h2 className="modal_aggregate_wrapper_item_heading">
-                            {t(
-                              "dashboardPageData.lastStationsData.aggrigateTime"
-                            )}
-                            :
-                          </h2>
+                          <p className="modal_aggregate_wrapper_item_desc">
+                            {e.electricalEnergyLastData?.current3} A
+                          </p>
                         </div>
 
-                        <p className="modal_aggregate_wrapper_item_desc">
-                          {fixDate(e.electricalEnergyLastData?.date)}
-                        </p>
+                        <div className="modal_aggregate_wrapper_item">
+                          <div className="modal_aggregate_wrapper_item_left_wrapper">
+                            <ClockCircleOutlined
+                              style={{
+                                color: "#000000",
+                              }}
+                              className="dashboard_last_data_icons"
+                            />
+
+                            <h2 className="modal_aggregate_wrapper_item_heading">
+                              {t(
+                                "dashboardPageData.lastStationsData.aggrigateTime"
+                              )}
+                              :
+                            </h2>
+                          </div>
+
+                          <p className="modal_aggregate_wrapper_item_desc">
+                            {fixDate(e.electricalEnergyLastData?.date)}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            ) : (
+              ""
+            )}
           </>
         )}
       </Modal>

@@ -281,6 +281,19 @@ function AgrigateAndElectricalMoreData() {
       }}
       className="more_info_sections"
     >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <h2 style={{ color: "#405FF2" }}>
+          {t("stationsPageData.stationsInputName")}:
+        </h2>
+        <h2 style={{ color: "#405FF2", marginLeft: "10px" }}>
+          {foundStationById.name}
+        </h2>
+      </div>
       <Anchor
         className="anchor-items-container"
         direction="horizontal"
@@ -339,7 +352,6 @@ function AgrigateAndElectricalMoreData() {
           handlePaginationChange={handlePaginationChange}
           page={pageData.page}
           perPage={pageData.perPage}
-          electryName={{ code: "all", name: foundStationById.name }}
         />
       )}
 
@@ -356,7 +368,6 @@ function AgrigateAndElectricalMoreData() {
           totalColumns={columnsName}
           handlePaginationChange={handlePaginationChange}
           totalDataSource={totalValueData}
-          electryName={{ code: "all", name: foundStationById.name }}
         />
       )}
 
@@ -376,7 +387,6 @@ function AgrigateAndElectricalMoreData() {
           dateFormat={dateFormat}
           valueInput={daylyDate}
           handlePaginationChange={handlePaginationChange}
-          electryName={{ code: "all", name: foundStationById.name }}
         />
       )}
 
@@ -396,7 +406,6 @@ function AgrigateAndElectricalMoreData() {
           dateFormat={dateFormat}
           valueInput={daylyDate}
           handlePaginationChange={handlePaginationChange}
-          electryName={{ code: "all", name: foundStationById.name }}
         />
       )}
 
@@ -416,7 +425,6 @@ function AgrigateAndElectricalMoreData() {
           dateFormat={dateFormat}
           valueInput={daylyDate}
           handlePaginationChange={handlePaginationChange}
-          electryName={{ code: "all", name: foundStationById.name }}
         />
       )}
 
@@ -436,7 +444,6 @@ function AgrigateAndElectricalMoreData() {
           dateFormat={dateFormat}
           valueInput={daylyDate}
           handlePaginationChange={handlePaginationChange}
-          electryName={{ code: "all", name: foundStationById.name }}
         />
       )}
 
@@ -456,7 +463,6 @@ function AgrigateAndElectricalMoreData() {
           dateFormat={dateFormat}
           valueInput={daylyDate}
           handlePaginationChange={handlePaginationChange}
-          electryName={{ code: "all", name: foundStationById.name }}
         />
       )}
 
@@ -476,7 +482,6 @@ function AgrigateAndElectricalMoreData() {
           valueInput={dateRange}
           onChange={onChangeDateRange}
           handlePaginationChange={handlePaginationChange}
-          electryName={{ code: "all", name: foundStationById.name }}
         />
       )}
     </section>

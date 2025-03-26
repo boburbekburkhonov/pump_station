@@ -66,13 +66,17 @@ const PieChart = ({
 }) => {
   const chartRef = useRef(null);
 
-  const memoizedData = useMemo(() => data.map((item) => ({ ...item })), [data]);
+  const memoizedData = useMemo(() => data.map((item) => ({
+    name: item.name,
+    y: item.y > 0 ? item.y : 0.0001,
+    unit: item.unit,
+  })), [data]);
 
   useEffect(() => {
     if (chartRef.current?.chart) {
       const chart = chartRef.current.chart;
 
-      chart.series[0].setData(data, true, { duration: 1500 });
+      chart.series[0].setData(memoizedData, true, { duration: 1500 });
 
       if (centerText) {
         if (chart.centerTextElement) {
@@ -104,13 +108,14 @@ const PieChart = ({
       type: "pie",
       backgroundColor: theme.backgroundColor,
       width: 700,
-      weight: 550
+      weight: 550,
     },
     tooltip: {
       headerFormat: "",
-      pointFormat:
-        '<span style="color:{point.color}">\u25cf</span> ' +
-        `{point.name}: <b>{point.y} {point.unit}</b>`,
+      pointFormatter: function () {
+        return `<span style="color:${this.color}">\u25cf</span> ` +
+          `<b>${this.name}</b>: <b>${this.y === 0.0001 ? "0" : Number(this.y).toFixed(2)} ${this.unit}</b>`;
+      },
     },
     title: {
       text: title,
@@ -130,7 +135,12 @@ const PieChart = ({
           enabled: true,
           distance: 20,
           color: theme.text,
-          format: `<b>{point.name}</b><br>{point.y} {point.unit}`,
+          formatter: function () {
+            return `<b>${this.point.name}</b><br>${this.y == 0.0001 ? '0' : Number(this.y).toFixed(2)} ${
+              this.point.unit
+            }`;
+          },
+          showInLegend: true,
         },
         point: {
           events: {
@@ -138,6 +148,7 @@ const PieChart = ({
               const clickedColor = this.color;
 
               const newData = data.map((item) => ({ ...item }));
+
               const clickedPoint = newData.find(
                 (item) => item.name === this.name
               );
