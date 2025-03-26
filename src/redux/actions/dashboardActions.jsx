@@ -2,6 +2,7 @@
 
 import { GLOBALTYPES } from "./globalTypes";
 import { getDataApi } from "../../utils";
+import axios from "axios";
 
 export const DASHBOARD_ACTIONS_TYPES = {
   FIND_PUMP_LAST_DATA_BY_STATIONS_ID: "FIND_PUMP_LAST_DATA_BY_STATIONS_ID",
@@ -438,15 +439,49 @@ export const getTodayDataByStationId =
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
-        payload: resTotalData.data.data.slice().sort(
-            (a, b) => new Date(b.date) - new Date(a.date)
-          )
+        payload: resTotalData.data.data
+          .slice()
+          .sort((a, b) => new Date(b.date) - new Date(a.date)),
       });
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
         payload: dataByDate,
       });
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.statusText ||
+        "Network Error";
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: errorMessage },
+      });
+    } finally {
+      dispatch({ type: GLOBALTYPES.LOADING, payload: false });
+    }
+  };
+
+export const exportExcelTodayDataByStationId =
+  (stationId, token, lang, stationName, typeSave) => async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/stations/downloadTodayDataAllByStationId?lang=${lang}&stationId=${stationId}`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${stationName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
     } catch (err) {
       const errorMessage =
         err.response?.data?.message ||
@@ -554,15 +589,49 @@ export const getYesterdayStationIdData =
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
-        payload: resTotalData.data.data.slice().sort(
-          (a, b) => new Date(b.date) - new Date(a.date)
-        ),
+        payload: resTotalData.data.data
+          .slice()
+          .sort((a, b) => new Date(b.date) - new Date(a.date)),
       });
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
         payload: dataByDate,
       });
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.statusText ||
+        "Network Error";
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: errorMessage },
+      });
+    } finally {
+      dispatch({ type: GLOBALTYPES.LOADING, payload: false });
+    }
+  };
+
+export const exportExcelYesterdayDataByStationId =
+  (stationId, token, lang, stationName, typeSave) => async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/stations/downloadYesterdayDataAllByStationId?lang=${lang}&stationId=${stationId}`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${stationName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
     } catch (err) {
       const errorMessage =
         err.response?.data?.message ||
@@ -678,15 +747,50 @@ export const getDailyStationsIdData =
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
-        payload: resTotalData.data.data.slice().sort(
-          (a, b) => new Date(b.date) - new Date(a.date)
-        )
+        payload: resTotalData.data.data
+          .slice()
+          .sort((a, b) => new Date(b.date) - new Date(a.date)),
       });
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
         payload: dataByDate,
       });
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.statusText ||
+        "Network Error";
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: errorMessage },
+      });
+    } finally {
+      dispatch({ type: GLOBALTYPES.LOADING, payload: false });
+    }
+  };
+
+export const exportExcelDailyDataByStationId =
+  (stationId, token, lang, stationName, month, year, typeSave) =>
+  async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/stations/downloadDailyDataAllByStationId?stationId=${stationId}&lang=${lang}&month=${month}&year=${year}`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${stationName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
     } catch (err) {
       const errorMessage =
         err.response?.data?.message ||
@@ -742,10 +846,14 @@ export const getWeeklyStationsIdData =
       const resultTotalData = [];
       const resultTotalDataForLineCHart = [];
 
-     const sortTotalData = resTotalData.data.data.slice().sort((a, b) => b.week - a.week);
-     const sortTotalDataForLineChart = resTotalData.data.data.slice().sort((a, b) => a.week - b.week);
+      const sortTotalData = resTotalData.data.data
+        .slice()
+        .sort((a, b) => b.week - a.week);
+      const sortTotalDataForLineChart = resTotalData.data.data
+        .slice()
+        .sort((a, b) => a.week - b.week);
 
-     sortTotalData.forEach((e) => {
+      sortTotalData.forEach((e) => {
         resultTotalData.push({
           date: `${months[lang][e.month - 1]} ${e.week} ${months[lang][12]}`,
           volume: e.volume,
@@ -812,6 +920,41 @@ export const getWeeklyStationsIdData =
         type: GLOBALTYPES.LOADING,
         payload: false,
       });
+    }
+  };
+
+export const exportExcelWeeklyDataByStationId =
+  (stationId, token, lang, stationName, month, year, typeSave) =>
+  async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/stations/downloadWeeklyDataAllByStationId?stationId=${stationId}&lang=${lang}&month=${month}&year=${year}`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${stationName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.statusText ||
+        "Network Error";
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: errorMessage },
+      });
+    } finally {
+      dispatch({ type: GLOBALTYPES.LOADING, payload: false });
     }
   };
 
@@ -856,8 +999,12 @@ export const getTenDayStationsIdData =
       const resultTotalData = [];
       const resultTotalDataForLineCHart = [];
 
-      const sortTotalData = resTotalData.data.data.slice().sort((a, b) => b.month - a.month);
-      const sortTotalDataForLineChart = resTotalData.data.data.slice().sort((a, b) => a.month - b.month);
+      const sortTotalData = resTotalData.data.data
+        .slice()
+        .sort((a, b) => b.month - a.month);
+      const sortTotalDataForLineChart = resTotalData.data.data
+        .slice()
+        .sort((a, b) => a.month - b.month);
 
       sortTotalData.forEach((e) => {
         resultTotalData.push({
@@ -930,6 +1077,40 @@ export const getTenDayStationsIdData =
         type: GLOBALTYPES.LOADING,
         payload: false,
       });
+    }
+  };
+
+export const exportExcelTenDayDataByStationId =
+  (stationId, token, lang, stationName, year, typeSave) => async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/stations/downloadTenDayDataAllByStationId?stationId=${stationId}&lang=${lang}&year=${year}`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${stationName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.statusText ||
+        "Network Error";
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: errorMessage },
+      });
+    } finally {
+      dispatch({ type: GLOBALTYPES.LOADING, payload: false });
     }
   };
 
@@ -974,8 +1155,12 @@ export const getMonthlyStationsIdData =
       const resultTotalData = [];
       const resultTotalDataForLineCHart = [];
 
-      const sortTotalData = resTotalData.data.data.slice().sort((a, b) => b.month - a.month);
-      const sortTotalDataForLineChart = resTotalData.data.data.slice().sort((a, b) => a.month - b.month);
+      const sortTotalData = resTotalData.data.data
+        .slice()
+        .sort((a, b) => b.month - a.month);
+      const sortTotalDataForLineChart = resTotalData.data.data
+        .slice()
+        .sort((a, b) => a.month - b.month);
 
       sortTotalData.forEach((e) => {
         resultTotalData.push({
@@ -1049,6 +1234,147 @@ export const getMonthlyStationsIdData =
     }
   };
 
+export const exportExcelMonthlyDataByStationId =
+  (stationId, token, lang, stationName, year, typeSave) => async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/stations/downloadMonthlyDataAllByStationId?stationId=${stationId}&lang=${lang}&year=${year}`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${stationName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.statusText ||
+        "Network Error";
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: errorMessage },
+      });
+    } finally {
+      dispatch({ type: GLOBALTYPES.LOADING, payload: false });
+    }
+  };
+
+// * Yearly Data With Stations Id
+
+export const getYearlyStationsIdData =
+  (stationId, token, lang) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const resTotalData = await getDataApi(
+        `stations/findYearlyDataAllByStationId?lang=${lang}&stationId=${stationId}`,
+        token
+      );
+
+      const sortTotalData = resTotalData.data.data
+        .slice()
+        .sort((a, b) => b.month - a.month);
+      const sortTotalDataForLineChart = resTotalData.data.data
+        .slice()
+        .sort((a, b) => a.month - b.month);
+
+      const lineChartData = {
+        date: sortTotalDataForLineChart?.map((item) => item.year),
+        lineData: [
+          {
+            name: allDataType[lang].name1,
+            data: sortTotalDataForLineChart?.map((item) => item.volume),
+            unit: "m³",
+          },
+          {
+            name: allDataType[lang].name2,
+            data: sortTotalDataForLineChart?.map((item) => item.energyActive),
+            unit: unitTranslations[lang].kwHour,
+          },
+        ],
+      };
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_ALL_DATA,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_BY_STATIONID_AGGRIGATE_ELECTRICAL,
+        payload: sortTotalData,
+      });
+    } catch (err) {
+      console.log(err);
+
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+export const exportExcelYearlyDataByStationId =
+  (stationId, token, lang, stationName, typeSave) => async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/stations/downloadYearlyDataAllByStationId?stationId=${stationId}&lang=${lang}`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${stationName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.statusText ||
+        "Network Error";
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: errorMessage },
+      });
+    } finally {
+      dispatch({ type: GLOBALTYPES.LOADING, payload: false });
+    }
+  };
+
 // * Select Data With Stations Id
 export const getSelectStationsIdData =
   (stationId, token, lang, page, perPage, date) => async (dispatch) => {
@@ -1062,66 +1388,67 @@ export const getSelectStationsIdData =
         `stations/findDateDataAllByStationId?lang=${lang}&stationId=${stationId}&date=${date}`,
         token
       );
+      console.log(`stations/findDateDataAllByStationId?lang=${lang}&stationId=${stationId}&date=${date}`);
 
-      const resAggregateData = await getDataApi(
-        `pump-all-data/findDataByStationIdDate?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&date=${date}`,
-        token
-      );
+      // const resAggregateData = await getDataApi(
+      //   `pump-all-data/findDataByStationIdDate?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&date=${date}`,
+      //   token
+      // );
 
-      const resElecrtEnergyData = await getDataApi(
-        `electrical-energy-all-data/findDataByStationIdAndDate?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&date=${date}`,
-        token
-      );
+      // const resElecrtEnergyData = await getDataApi(
+      //   `electrical-energy-all-data/findDataByStationIdAndDate?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&date=${date}`,
+      //   token
+      // );
 
-      const dataSource = [];
-      const expandedData = [];
+      // const dataSource = [];
+      // const expandedData = [];
 
-      resAggregateData.data.data.data.forEach((aggregate) => {
-        aggregate.aggregateData.sort(
-          (a, b) => new Date(b.date) - new Date(a.date)
-        );
-      });
+      // resAggregateData.data.data.data.forEach((aggregate) => {
+      //   aggregate.aggregateData.sort(
+      //     (a, b) => new Date(b.date) - new Date(a.date)
+      //   );
+      // });
 
-      resElecrtEnergyData.data.data.data.forEach((elecrt) => {
-        elecrt.electricalEnergyData.sort(
-          (a, b) => new Date(b.date) - new Date(a.date)
-        );
-      });
+      // resElecrtEnergyData.data.data.data.forEach((elecrt) => {
+      //   elecrt.electricalEnergyData.sort(
+      //     (a, b) => new Date(b.date) - new Date(a.date)
+      //   );
+      // });
 
-      resAggregateData.data.data.data.forEach((e) => {
-        dataSource.push({
-          name: e.aggregate.name,
-          key: e.aggregate.id,
-          dataType: "aggregate",
-        });
+      // resAggregateData.data.data.data.forEach((e) => {
+      //   dataSource.push({
+      //     name: e.aggregate.name,
+      //     key: e.aggregate.id,
+      //     dataType: "aggregate",
+      //   });
 
-        expandedData.push({
-          key: e.aggregate.id,
-          values: e.aggregateData,
-        });
-      });
+      //   expandedData.push({
+      //     key: e.aggregate.id,
+      //     values: e.aggregateData,
+      //   });
+      // });
 
-      resElecrtEnergyData.data.data.data.forEach((e) => {
-        dataSource.push({
-          name: e.electricalEnergy.name,
-          key: e.electricalEnergy.id,
-          dataType: "electricalEnergy",
-        });
+      // resElecrtEnergyData.data.data.data.forEach((e) => {
+      //   dataSource.push({
+      //     name: e.electricalEnergy.name,
+      //     key: e.electricalEnergy.id,
+      //     dataType: "electricalEnergy",
+      //   });
 
-        expandedData.push({
-          key: e.electricalEnergy.id,
-          values: e.electricalEnergyData,
-        });
-      });
+      //   expandedData.push({
+      //     key: e.electricalEnergy.id,
+      //     values: e.electricalEnergyData,
+      //   });
+      // });
 
-      const dataByDate = {
-        dataSource: dataSource,
-        expandData: expandedData,
-      };
+      // const dataByDate = {
+      //   dataSource: dataSource,
+      //   expandData: expandedData,
+      // };
 
-      const sortTotalData = resTotalData.data.data.slice().sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-      );
+      const sortTotalData = resTotalData.data.data
+        .slice()
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
 
       const lineChartData = {
         date: resTotalData.data.data?.map((item) => item.date),
@@ -1149,10 +1476,10 @@ export const getSelectStationsIdData =
         payload: sortTotalData,
       });
 
-      dispatch({
-        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
-        payload: dataByDate,
-      });
+      // dispatch({
+      //   type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_STATION_ID,
+      //   payload: dataByDate,
+      // });
     } catch (err) {
       if (!err.response) {
         dispatch({
@@ -1174,6 +1501,40 @@ export const getSelectStationsIdData =
         type: GLOBALTYPES.LOADING,
         payload: false,
       });
+    }
+  };
+
+  export const exportExcelSelectStationsDataByStationId =
+  (stationId, token, lang, stationName, date, typeSave) => async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/stations/downloadDateDataAllByStationId?stationId=${stationId}&lang=${lang}&date=2025-03-25`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${stationName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.statusText ||
+        "Network Error";
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: errorMessage },
+      });
+    } finally {
+      dispatch({ type: GLOBALTYPES.LOADING, payload: false });
     }
   };
 
@@ -1205,19 +1566,19 @@ export const getDataRangeStationsIdData =
       const dataSource = [];
       const expandedData = [];
 
-      resAggregateData.data.data.data.forEach((aggregate) => {
-        aggregate.aggregateData.sort(
+      resAggregateData.data.data.data?.forEach((aggregate) => {
+        aggregate.aggregateData?.sort(
           (a, b) => new Date(b.date) - new Date(a.date)
         );
       });
 
-      resElecrtEnergyData.data.data.data.forEach((elecrt) => {
-        elecrt.electricalEnergyData.sort(
+      resElecrtEnergyData.data.data.data?.forEach((elecrt) => {
+        elecrt.electricalEnergyData?.sort(
           (a, b) => new Date(b.date) - new Date(a.date)
         );
       });
 
-      resAggregateData.data.data.data.forEach((e) => {
+      resAggregateData.data.data.data?.forEach((e) => {
         dataSource.push({
           name: e.aggregate.name,
           key: e.aggregate.id,
@@ -1230,7 +1591,7 @@ export const getDataRangeStationsIdData =
         });
       });
 
-      resElecrtEnergyData.data.data.data.forEach((e) => {
+      resElecrtEnergyData.data.data.data?.forEach((e) => {
         dataSource.push({
           name: e.electricalEnergy.name,
           key: e.electricalEnergy.id,
@@ -1248,9 +1609,9 @@ export const getDataRangeStationsIdData =
         expandData: expandedData,
       };
 
-      const sortTotalData = resTotalData.data.data.slice().sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-      );
+      const sortTotalData = resTotalData.data.data
+        .slice()
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
 
       const lineChartData = {
         date: resTotalData.data.data?.map((item) => item.date),
@@ -1305,6 +1666,40 @@ export const getDataRangeStationsIdData =
         type: GLOBALTYPES.LOADING,
         payload: false,
       });
+    }
+  };
+
+  export const exportExcelDataRangeDataByStationId =
+  (stationId, token, lang, stationName, startDate, endDate, typeSave) => async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/stations/downloadDateRangeDataAllByStationId?stationId=${stationId}&lang=${lang}&startDate=2025-03-25&endDate=2025-03-25`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${stationName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.statusText ||
+        "Network Error";
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: errorMessage },
+      });
+    } finally {
+      dispatch({ type: GLOBALTYPES.LOADING, payload: false });
     }
   };
 
@@ -1982,13 +2377,15 @@ export const getTenDayAggregateIDData =
       );
 
       const lineChartData = {
-        date: formattedData.slice()
-        .sort((a, b) => a.month - b.month)?.map(
-          (item) =>
-            `${months[lang][item.month - 1]} ${
-              daysValues[lang][item.tenDayNumber - 1]
-            }`
-        ),
+        date: formattedData
+          .slice()
+          .sort((a, b) => a.month - b.month)
+          ?.map(
+            (item) =>
+              `${months[lang][item.month - 1]} ${
+                daysValues[lang][item.tenDayNumber - 1]
+              }`
+          ),
         lineData: [
           {
             name: aggregateDataType[lang].name1,
@@ -2072,83 +2469,96 @@ export const findTenDayDataElectricityId =
       );
 
       const lineChartData = {
-        date: formattedData.slice().sort((a, b) => a.month - b.month)?.map(
-          (item) =>
-            `${months[lang][item.month - 1]} ${
-              daysValues[lang][item.tenDayNumber - 1]
-            }`
-        ),
+        date: formattedData
+          .slice()
+          .sort((a, b) => a.month - b.month)
+          ?.map(
+            (item) =>
+              `${months[lang][item.month - 1]} ${
+                daysValues[lang][item.tenDayNumber - 1]
+              }`
+          ),
         lineData: [
           {
             name: electryDataType[lang].energyActive,
-            data: formattedData.slice().sort((a, b) => a.month - b.month)?.map((item) =>
-              Number(item.energyActive.toFixed(2))
-            ),
+            data: formattedData
+              .slice()
+              .sort((a, b) => a.month - b.month)
+              ?.map((item) => Number(item.energyActive.toFixed(2))),
             unit: unitTranslations[lang].kwHour,
           },
           {
             name: electryDataType[lang].energyReactive,
-            data: formattedData.slice().sort((a, b) => a.month - b.month)?.map((item) =>
-              Number(item.energyReactive.toFixed(2))
-            ),
+            data: formattedData
+              .slice()
+              .sort((a, b) => a.month - b.month)
+              ?.map((item) => Number(item.energyReactive.toFixed(2))),
             unit: unitTranslations[lang].kwHour,
           },
           {
             name: electryDataType[lang].powerActive,
-            data: formattedData.slice().sort((a, b) => a.month - b.month)?.map((item) =>
-              Number(item.powerActive.toFixed(2))
-            ),
+            data: formattedData
+              .slice()
+              .sort((a, b) => a.month - b.month)
+              ?.map((item) => Number(item.powerActive.toFixed(2))),
             unit: "Kw",
           },
           {
             name: electryDataType[lang].powerReactive,
-            data: formattedData.slice().sort((a, b) => a.month - b.month)?.map((item) =>
-              Number(item.powerReactive.toFixed(2))
-            ),
+            data: formattedData
+              .slice()
+              .sort((a, b) => a.month - b.month)
+              ?.map((item) => Number(item.powerReactive.toFixed(2))),
             unit: "Kw",
           },
 
           {
             name: electryDataType[lang].current1,
-            data: formattedData.slice().sort((a, b) => a.month - b.month)?.map((item) =>
-              Number(item.current1.toFixed(2))
-            ),
+            data: formattedData
+              .slice()
+              .sort((a, b) => a.month - b.month)
+              ?.map((item) => Number(item.current1.toFixed(2))),
             unit: "A",
           },
           {
             name: electryDataType[lang].current2,
-            data: formattedData.slice().sort((a, b) => a.month - b.month)?.map((item) =>
-              Number(item.current2.toFixed(2))
-            ),
+            data: formattedData
+              .slice()
+              .sort((a, b) => a.month - b.month)
+              ?.map((item) => Number(item.current2.toFixed(2))),
             unit: "A",
           },
           {
             name: electryDataType[lang].current3,
-            data: formattedData.slice().sort((a, b) => a.month - b.month)?.map((item) =>
-              Number(item.current3.toFixed(2))
-            ),
+            data: formattedData
+              .slice()
+              .sort((a, b) => a.month - b.month)
+              ?.map((item) => Number(item.current3.toFixed(2))),
             unit: "A",
           },
 
           {
             name: electryDataType[lang].voltage1,
-            data: formattedData.slice().sort((a, b) => a.month - b.month)?.map((item) =>
-              Number(item.voltage1.toFixed(2))
-            ),
+            data: formattedData
+              .slice()
+              .sort((a, b) => a.month - b.month)
+              ?.map((item) => Number(item.voltage1.toFixed(2))),
             unit: "V",
           },
           {
             name: electryDataType[lang].voltage2,
-            data: formattedData.slice().sort((a, b) => a.month - b.month)?.map((item) =>
-              Number(item.voltage2.toFixed(2))
-            ),
+            data: formattedData
+              .slice()
+              .sort((a, b) => a.month - b.month)
+              ?.map((item) => Number(item.voltage2.toFixed(2))),
             unit: "V",
           },
           {
             name: electryDataType[lang].voltage3,
-            data: formattedData.slice().sort((a, b) => a.month - b.month)?.map((item) =>
-              Number(item.voltage3.toFixed(2))
-            ),
+            data: formattedData
+              .slice()
+              .sort((a, b) => a.month - b.month)
+              ?.map((item) => Number(item.voltage3.toFixed(2))),
             unit: "V",
           },
         ],
@@ -2208,40 +2618,48 @@ export const getMonthlyAggregateIDData =
         nextPages: data.nextPages,
         totalDocuments: data.totalDocuments,
         totalPages: data.totalPages,
-        data: data?.data.slice()
-        .sort((a, b) => new Date(b.month) - new Date(a.month))?.map((item) => {
-          return {
-            id: item.id,
-            velocity: item.velocity,
-            flow: item.flow,
-            volume: item.volume,
-            date: `${item.year}- ${months[lang][item.month - 1]}`,
-          };
-        }),
+        data: data?.data
+          .slice()
+          .sort((a, b) => new Date(b.month) - new Date(a.month))
+          ?.map((item) => {
+            return {
+              id: item.id,
+              velocity: item.velocity,
+              flow: item.flow,
+              volume: item.volume,
+              date: `${item.year}- ${months[lang][item.month - 1]}`,
+            };
+          }),
       };
 
       const lineChartData = {
-        date: res.data.data.data.slice()
-        .sort((a, b) => new Date(a.month) - new Date(b.month))?.map(
-          (item) => `${item.year}- ${months[lang][item.month - 1]}`
-        ),
+        date: res.data.data.data
+          .slice()
+          .sort((a, b) => new Date(a.month) - new Date(b.month))
+          ?.map((item) => `${item.year}- ${months[lang][item.month - 1]}`),
         lineData: [
           {
             name: aggregateDataType[lang].name1,
-            data: res.data.data.data.slice()
-            .sort((a, b) => new Date(a.month) - new Date(b.month))?.map((item) => Number(item.flow.toFixed(2))),
+            data: res.data.data.data
+              .slice()
+              .sort((a, b) => new Date(a.month) - new Date(b.month))
+              ?.map((item) => Number(item.flow.toFixed(2))),
             unit: "m³/s",
           },
           {
             name: aggregateDataType[lang].name2,
-            data: res.data.data.data.slice()
-            .sort((a, b) => new Date(a.month) - new Date(b.month))?.map((item) => Number(item.velocity.toFixed(2))),
+            data: res.data.data.data
+              .slice()
+              .sort((a, b) => new Date(a.month) - new Date(b.month))
+              ?.map((item) => Number(item.velocity.toFixed(2))),
             unit: "m/s",
           },
           {
             name: aggregateDataType[lang].name3,
-            data: res.data.data.data.slice()
-            .sort((a, b) => new Date(a.month) - new Date(b.month))?.map((item) => Number(item.volume.toFixed(2))),
+            data: res.data.data.data
+              .slice()
+              .sort((a, b) => new Date(a.month) - new Date(b.month))
+              ?.map((item) => Number(item.volume.toFixed(2))),
             unit: "m³",
           },
         ],
@@ -2410,8 +2828,9 @@ export const getSelectDateAggregateIDData =
         token
       );
 
-      const data = res.data.data.data.slice()
-      .sort((a, b) => new Date(a.date) - new Date(b.date));;
+      const data = res.data.data.data
+        .slice()
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
 
       const lineChartData = {
         date: data?.map((item) => item.date.split(" ")[1]),
@@ -2603,26 +3022,26 @@ export const getDailyAggregateIDData =
         lineData: [
           {
             name: aggregateDataType[lang].name1,
-            data: res.data.data.data.slice()
-            .sort((a, b) => new Date(a.date) - new Date(b.date))?.map((item) =>
-              Number(item.flow.toFixed(2))
-            ),
+            data: res.data.data.data
+              .slice()
+              .sort((a, b) => new Date(a.date) - new Date(b.date))
+              ?.map((item) => Number(item.flow.toFixed(2))),
             unit: "m³/s",
           },
           {
             name: aggregateDataType[lang].name2,
-            data: res.data.data.data.slice()
-            .sort((a, b) => new Date(a.date) - new Date(b.date))?.map((item) =>
-              Number(item.velocity.toFixed(2))
-            ),
+            data: res.data.data.data
+              .slice()
+              .sort((a, b) => new Date(a.date) - new Date(b.date))
+              ?.map((item) => Number(item.velocity.toFixed(2))),
             unit: "m/s",
           },
           {
             name: aggregateDataType[lang].name3,
-            data: res.data.data.data.slice()
-            .sort((a, b) => new Date(a.date) - new Date(b.date))?.map((item) =>
-              Number(item.volume.toFixed(2))
-            ),
+            data: res.data.data.data
+              .slice()
+              .sort((a, b) => new Date(a.date) - new Date(b.date))
+              ?.map((item) => Number(item.volume.toFixed(2))),
             unit: "m³",
           },
         ],
@@ -2785,8 +3204,9 @@ export const getRangeAggregateIDData =
         token
       );
 
-      const data = res.data.data.data.slice()
-      .sort((a, b) => new Date(a.date) - new Date(b.date));
+      const data = res.data.data.data
+        .slice()
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
 
       const lineChartData = {
         date: data?.map((item) => item.date.split(" ")[0]),

@@ -31,6 +31,7 @@ import {
   getSelectStationsIdData,
   getDataRangeStationsIdData,
   findStationById,
+  getYearlyStationsIdData,
 } from "../../redux/actions/dashboardActions";
 import Loading from "../../components/loading";
 
@@ -47,6 +48,7 @@ import {
   SixThSections,
   SevenThSections,
   EightThSections,
+  NineThSections,
 } from "../../components/aggrigateAndElectircalAnchorItem";
 
 dayjs.extend(customParseFormat);
@@ -169,6 +171,15 @@ function AgrigateAndElectricalMoreData() {
           break;
         case "section7":
           dispatch(
+            getYearlyStationsIdData(
+              id,
+              token,
+              lang,
+            )
+          );
+          break;
+        case "section8":
+          dispatch(
             getSelectStationsIdData(
               id,
               token,
@@ -179,7 +190,7 @@ function AgrigateAndElectricalMoreData() {
             )
           );
           break;
-        case "section8":
+        case "section9":
           dispatch(
             getDataRangeStationsIdData(
               id,
@@ -246,6 +257,31 @@ function AgrigateAndElectricalMoreData() {
         title: t("dataPagesInformation.dataTableInformation.dataDate"),
         dataIndex: "date",
         key: "date",
+        align: "center",
+        width: 250,
+      },
+      {
+        title: t("dataPagesInformation.dataTableInformation.totalEnergy"),
+        dataIndex: "energyActive",
+        key: "energyActive",
+        align: "center",
+      },
+      {
+        title: t("dataPagesInformation.dataTableInformation.totalValume"),
+        dataIndex: "volume",
+        key: "volume",
+        align: "center",
+      },
+    ],
+    [t]
+  );
+
+  const columnsNameYear = useMemo(
+    () => [
+      {
+        title: t("dataPagesInformation.dataTableInformation.dataDate"),
+        dataIndex: "year",
+        key: "year",
         align: "center",
         width: 250,
       },
@@ -352,6 +388,8 @@ function AgrigateAndElectricalMoreData() {
           handlePaginationChange={handlePaginationChange}
           page={pageData.page}
           perPage={pageData.perPage}
+          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name}}
+          dispatch={dispatch}
         />
       )}
 
@@ -368,6 +406,10 @@ function AgrigateAndElectricalMoreData() {
           totalColumns={columnsName}
           handlePaginationChange={handlePaginationChange}
           totalDataSource={totalValueData}
+          page={pageData.page}
+          perPage={pageData.perPage}
+          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name}}
+          dispatch={dispatch}
         />
       )}
 
@@ -387,6 +429,10 @@ function AgrigateAndElectricalMoreData() {
           dateFormat={dateFormat}
           valueInput={daylyDate}
           handlePaginationChange={handlePaginationChange}
+          page={pageData.page}
+          perPage={pageData.perPage}
+          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name, month: String(daylyDate.month() + 1).padStart(2, "0"), year: daylyDate.year()}}
+          dispatch={dispatch}
         />
       )}
 
@@ -406,6 +452,10 @@ function AgrigateAndElectricalMoreData() {
           dateFormat={dateFormat}
           valueInput={daylyDate}
           handlePaginationChange={handlePaginationChange}
+          page={pageData.page}
+          perPage={pageData.perPage}
+          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name, month: String(daylyDate.month() + 1).padStart(2, "0"), year: daylyDate.year()}}
+          dispatch={dispatch}
         />
       )}
 
@@ -425,6 +475,10 @@ function AgrigateAndElectricalMoreData() {
           dateFormat={dateFormat}
           valueInput={daylyDate}
           handlePaginationChange={handlePaginationChange}
+          page={pageData.page}
+          perPage={pageData.perPage}
+          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name, year: daylyDate.year()}}
+          dispatch={dispatch}
         />
       )}
 
@@ -444,6 +498,10 @@ function AgrigateAndElectricalMoreData() {
           dateFormat={dateFormat}
           valueInput={daylyDate}
           handlePaginationChange={handlePaginationChange}
+          page={pageData.page}
+          perPage={pageData.perPage}
+          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name, year: daylyDate.year()}}
+          dispatch={dispatch}
         />
       )}
 
@@ -457,12 +515,16 @@ function AgrigateAndElectricalMoreData() {
           theme={theme}
           lineChartData={lineStationId}
           isActiveTable={isActiveTable}
-          totalColumns={columnsName}
+          totalColumns={columnsNameYear}
           totalDataSource={totalValueData}
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
           handlePaginationChange={handlePaginationChange}
+          page={pageData.page}
+          perPage={pageData.perPage}
+          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name}}
+          dispatch={dispatch}
         />
       )}
 
@@ -478,10 +540,37 @@ function AgrigateAndElectricalMoreData() {
           isActiveTable={isActiveTable}
           totalColumns={columnsName}
           totalDataSource={totalValueData}
+          onChange={onChangeMonthYear}
+          dateFormat={dateFormat}
+          valueInput={daylyDate}
+          handlePaginationChange={handlePaginationChange}
+          page={pageData.page}
+          perPage={pageData.perPage}
+          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name, date: daylyDate.format("YYYY-MM-DD")}}
+          dispatch={dispatch}
+        />
+      )}
+
+      {activeSection === "section9" && !isPending && (
+        <NineThSections
+          expandDataSource={pumpDataWithStationId?.expandData}
+          dataSource={pumpDataWithStationId?.dataSource}
+          colors={colors}
+          t={t}
+          changeDataViewType={changeDataViewType}
+          theme={theme}
+          lineChartData={lineStationId}
+          isActiveTable={isActiveTable}
+          totalColumns={columnsName}
+          totalDataSource={totalValueData}
           dateFormat={dateFormat}
           valueInput={dateRange}
           onChange={onChangeDateRange}
           handlePaginationChange={handlePaginationChange}
+          page={pageData.page}
+          perPage={pageData.perPage}
+          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name, startDate: dateRange[0].format("YYYY-MM-DD"), endDate: dateRange[1].format("YYYY-MM-DD")}}
+          dispatch={dispatch}
         />
       )}
     </section>

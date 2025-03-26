@@ -397,6 +397,7 @@
       { "title": "Haftalik ma'lumotlar" },
       { "title": "10 kunlik ma'lumotlar" },
       { "title": "Oylik ma'lumotlar" },
+      { "title": "Yillik ma'lumotlar" },
       { "title": "Tanlangan sana" },
       { "title": "Tanlangan sana oralig'i" }
     ],
@@ -407,6 +408,7 @@
       { "title": "Haftalik umumiy ma'lumotlar" },
       { "title": "10 kunlik umumiy ma'lumotlar" },
       { "title": "oylik umumiy ma'lumotlar" },
+      { "title": "yillik umumiy ma'lumotlar" },
       { "title": "Belgilangan sanadagi umumiy ma'lumotlari" },
       { "title": "Tanlangan sana oralig'idagi umumiy ma'lumotlar" }
     ],

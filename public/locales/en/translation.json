@@ -395,6 +395,7 @@
       { "title": "Weekly Data" },
       { "title": "10-Day Data" },
       { "title": "Monthly Data" },
+      { "title": "Annual data" },
       { "title": "Selected Date" },
       { "title": "Selected Date Range" }
     ],
@@ -405,6 +406,7 @@
       { "title": "Weekly general data" },
       { "title": "10-day general data" },
       { "title": "Monthly general data" },
+      { "title": "annual general information" },
       { "title": "General data by date" },
       { "title": "General data for the selected range" }
     ],

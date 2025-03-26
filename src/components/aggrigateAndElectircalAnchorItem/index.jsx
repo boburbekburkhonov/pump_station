@@ -7,8 +7,134 @@ import TableComponent from "../tableComponent";
 import SolarEmploymentChart from "../googleNewPieChart";
 import TableAggrigateAndElectryData from "../aggrigateAndElectricalTable";
 import { useTranslation } from "react-i18next";
+import {
+  exportExcelDailyDataByStationId,
+  exportExcelDataRangeDataByStationId,
+  exportExcelMonthlyDataByStationId,
+  exportExcelSelectStationsDataByStationId,
+  exportExcelTenDayDataByStationId,
+  exportExcelTodayDataByStationId,
+  exportExcelWeeklyDataByStationId,
+  exportExcelYearlyDataByStationId,
+  exportExcelYesterdayDataByStationId,
+} from "../../redux/actions/dashboardActions";
+import { useDispatch } from "react-redux";
 
 const { RangePicker } = DatePicker;
+
+const downloadDataByExcelFile = (selectedData, info, dispatch, typeSave) => {
+  switch (selectedData) {
+    case "today":
+      dispatch(
+        exportExcelTodayDataByStationId(
+          info.stationId,
+          info.token,
+          info.lang,
+          info.stationName,
+          typeSave
+        )
+      );
+      break;
+    case "yesterday":
+      dispatch(
+        exportExcelYesterdayDataByStationId(
+          info.stationId,
+          info.token,
+          info.lang,
+          info.stationName,
+          typeSave
+        )
+      );
+      break;
+    case "daily":
+      dispatch(
+        exportExcelDailyDataByStationId(
+          info.stationId,
+          info.token,
+          info.lang,
+          info.stationName,
+          info.month,
+          info.year,
+          typeSave
+        )
+      );
+    case "weekly":
+      dispatch(
+        exportExcelWeeklyDataByStationId(
+          info.stationId,
+          info.token,
+          info.lang,
+          info.stationName,
+          info.month,
+          info.year,
+          typeSave
+        )
+      );
+      break;
+    case "tenDay":
+      dispatch(
+        exportExcelTenDayDataByStationId(
+          info.stationId,
+          info.token,
+          info.lang,
+          info.stationName,
+          info.year,
+          typeSave
+        )
+      );
+      break;
+    case "monthly":
+      dispatch(
+        exportExcelMonthlyDataByStationId(
+          info.stationId,
+          info.token,
+          info.lang,
+          info.stationName,
+          info.year,
+          typeSave
+        )
+      );
+      break;
+    case "yearly":
+      dispatch(
+        exportExcelYearlyDataByStationId(
+          info.stationId,
+          info.token,
+          info.lang,
+          info.stationName,
+          typeSave
+        )
+      );
+      break;
+    case "selectedDate":
+      dispatch(
+        exportExcelSelectStationsDataByStationId(
+          info.stationId,
+          info.token,
+          info.lang,
+          info.stationName,
+          info.date,
+          typeSave
+        )
+      );
+      break;
+    case "dataRange":
+      dispatch(
+        exportExcelDataRangeDataByStationId(
+          info.stationId,
+          info.token,
+          info.lang,
+          info.stationName,
+          info.startDate,
+          info.endDate,
+          typeSave
+        )
+      );
+      break;
+    default:
+      break;
+  }
+};
 
 const FirstSections = memo(
   ({
@@ -24,6 +150,8 @@ const FirstSections = memo(
     handlePaginationChange,
     page,
     perPage,
+    excelData,
+    dispatch,
   }) => (
     <div
       style={{
@@ -58,12 +186,12 @@ const FirstSections = memo(
             {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
-          <Button
+          {/* <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("full_data")}
           >
             {t("dataPagesInformation.dataTypeButton2")}
-          </Button>
+          </Button> */}
 
           <Button
             type={isActiveTable === "graphic" ? "primary" : "default"}
@@ -71,8 +199,22 @@ const FirstSections = memo(
           >
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
+
           <span>
-            <img alt="download_excel" src={Excel} />
+            <img
+              alt="download_excel"
+              src={Excel}
+              onClick={() => {
+                downloadDataByExcelFile(
+                  "today",
+                  excelData,
+                  dispatch,
+                  t("dataPagesInformation.selectAllDataButtonNames", {
+                    returnObjects: true,
+                  })[0].title
+                );
+              }}
+            />
           </span>
         </div>
       </div>
@@ -95,14 +237,14 @@ const FirstSections = memo(
           handlePaginationChange={handlePaginationChange}
         />
       )}
-
+      {/*
       {isActiveTable === "full_data" && (
         <TableAggrigateAndElectryData
           expandDataSource={expandDataSource}
           t={t}
           dataSource={dataSource}
         />
-      )}
+      )} */}
     </div>
   )
 );
@@ -121,6 +263,8 @@ const SecondSections = memo(
     handlePaginationChange,
     page,
     perPage,
+    excelData,
+    dispatch,
   }) => (
     <div
       style={{
@@ -128,7 +272,10 @@ const SecondSections = memo(
       }}
       className="pump_selected_data_with_today"
     >
-      <div className="header_more_aggregate_data" style={{ marginBottom: "15px" }}>
+      <div
+        className="header_more_aggregate_data"
+        style={{ marginBottom: "15px" }}
+      >
         <h1 className="head_title_data" style={{ margin: "0" }}>
           {
             t(
@@ -152,12 +299,12 @@ const SecondSections = memo(
             {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
-          <Button
+          {/* <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("full_data")}
           >
             {t("dataPagesInformation.dataTypeButton2")}
-          </Button>
+          </Button> */}
 
           <Button
             type={isActiveTable === "graphic" ? "primary" : "default"}
@@ -166,7 +313,20 @@ const SecondSections = memo(
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
-            <img alt="download_excel" src={Excel} />
+            <img
+              alt="download_excel"
+              src={Excel}
+              onClick={() => {
+                downloadDataByExcelFile(
+                  "yesterday",
+                  excelData,
+                  dispatch,
+                  t("dataPagesInformation.selectAllDataButtonNames", {
+                    returnObjects: true,
+                  })[1].title
+                );
+              }}
+            />
           </span>
         </div>
       </div>
@@ -190,13 +350,13 @@ const SecondSections = memo(
         />
       )}
 
-      {isActiveTable === "full_data" && (
+      {/* {isActiveTable === "full_data" && (
         <TableAggrigateAndElectryData
           expandDataSource={expandDataSource}
           t={t}
           dataSource={dataSource}
         />
-      )}
+      )} */}
     </div>
   )
 );
@@ -287,6 +447,8 @@ const ThirdSections = memo(
     onChange,
     dateFormat,
     valueInput,
+    excelData,
+    dispatch,
   }) => (
     <div
       style={{
@@ -294,7 +456,10 @@ const ThirdSections = memo(
       }}
       className="pump_selected_data_with_today"
     >
-      <div className="header_more_aggregate_data" style={{ marginBottom: "15px" }}>
+      <div
+        className="header_more_aggregate_data"
+        style={{ marginBottom: "15px" }}
+      >
         <h1 className="head_title_data" style={{ margin: "0" }}>
           {
             t(
@@ -328,12 +493,12 @@ const ThirdSections = memo(
             {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
-          <Button
+          {/* <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("full_data")}
           >
             {t("dataPagesInformation.dataTypeButton2")}
-          </Button>
+          </Button> */}
 
           <Button
             type={isActiveTable === "graphic" ? "primary" : "default"}
@@ -342,7 +507,20 @@ const ThirdSections = memo(
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
-            <img alt="download_excel" src={Excel} />
+            <img
+              alt="download_excel"
+              src={Excel}
+              onClick={() => {
+                downloadDataByExcelFile(
+                  "daily",
+                  excelData,
+                  dispatch,
+                  t("dataPagesInformation.selectAllDataButtonNames", {
+                    returnObjects: true,
+                  })[2].title
+                );
+              }}
+            />
           </span>
         </div>
       </div>
@@ -366,13 +544,13 @@ const ThirdSections = memo(
         />
       )}
 
-      {isActiveTable === "full_data" && (
+      {/* {isActiveTable === "full_data" && (
         <TableAggrigateAndElectryData
           expandDataSource={expandDataSource}
           t={t}
           dataSource={dataSource}
         />
-      )}
+      )} */}
     </div>
   )
 );
@@ -394,6 +572,8 @@ const FourThSections = memo(
     onChange,
     dateFormat,
     valueInput,
+    excelData,
+    dispatch,
   }) => (
     <div
       style={{
@@ -401,7 +581,10 @@ const FourThSections = memo(
       }}
       className="pump_selected_data_with_today"
     >
-      <div className="header_more_aggregate_data" style={{ marginBottom: "15px" }}>
+      <div
+        className="header_more_aggregate_data"
+        style={{ marginBottom: "15px" }}
+      >
         <h1 className="head_title_data" style={{ margin: "0" }}>
           {
             t(
@@ -436,12 +619,12 @@ const FourThSections = memo(
             {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
-          <Button
+          {/* <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("full_data")}
           >
             {t("dataPagesInformation.dataTypeButton2")}
-          </Button>
+          </Button> */}
 
           <Button
             type={isActiveTable === "graphic" ? "primary" : "default"}
@@ -450,7 +633,20 @@ const FourThSections = memo(
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
-            <img alt="download_excel" src={Excel} />
+            <img
+              alt="download_excel"
+              src={Excel}
+              onClick={() => {
+                downloadDataByExcelFile(
+                  "weekly",
+                  excelData,
+                  dispatch,
+                  t("dataPagesInformation.selectAllDataButtonNames", {
+                    returnObjects: true,
+                  })[3].title
+                );
+              }}
+            />
           </span>
         </div>
       </div>
@@ -474,13 +670,13 @@ const FourThSections = memo(
         />
       )}
 
-      {isActiveTable === "full_data" && (
+      {/* {isActiveTable === "full_data" && (
         <TableAggrigateAndElectryData
           expandDataSource={expandDataSource}
           t={t}
           dataSource={dataSource}
         />
-      )}
+      )} */}
     </div>
   )
 );
@@ -501,6 +697,8 @@ const FiveThSections = memo(
     perPage,
     onChange,
     valueInput,
+    excelData,
+    dispatch,
   }) => (
     <div
       style={{
@@ -508,7 +706,10 @@ const FiveThSections = memo(
       }}
       className="pump_selected_data_with_today"
     >
-      <div className="header_more_aggregate_data" style={{ marginBottom: "15px" }}>
+      <div
+        className="header_more_aggregate_data"
+        style={{ marginBottom: "15px" }}
+      >
         <h1 className="head_title_data" style={{ margin: "0" }}>
           {valueInput.format("YYYY")}
           {"\t"}-{"\t"}
@@ -544,12 +745,12 @@ const FiveThSections = memo(
             {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
-          <Button
+          {/* <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("full_data")}
           >
             {t("dataPagesInformation.dataTypeButton2")}
-          </Button>
+          </Button> */}
 
           <Button
             type={isActiveTable === "graphic" ? "primary" : "default"}
@@ -558,7 +759,20 @@ const FiveThSections = memo(
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
-            <img alt="download_excel" src={Excel} />
+            <img
+              alt="download_excel"
+              src={Excel}
+              onClick={() => {
+                downloadDataByExcelFile(
+                  "tenDay",
+                  excelData,
+                  dispatch,
+                  t("dataPagesInformation.selectAllDataButtonNames", {
+                    returnObjects: true,
+                  })[4].title
+                );
+              }}
+            />
           </span>
         </div>
       </div>
@@ -582,13 +796,13 @@ const FiveThSections = memo(
         />
       )}
 
-      {isActiveTable === "full_data" && (
+      {/* {isActiveTable === "full_data" && (
         <TableAggrigateAndElectryData
           expandDataSource={expandDataSource}
           t={t}
           dataSource={dataSource}
         />
-      )}
+      )} */}
     </div>
   )
 );
@@ -609,6 +823,8 @@ const SixThSections = memo(
     perPage,
     onChange,
     valueInput,
+    excelData,
+    dispatch,
   }) => (
     <div
       style={{
@@ -616,7 +832,10 @@ const SixThSections = memo(
       }}
       className="pump_selected_data_with_today"
     >
-      <div className="header_more_aggregate_data" style={{ marginBottom: "15px" }}>
+      <div
+        className="header_more_aggregate_data"
+        style={{ marginBottom: "15px" }}
+      >
         <h1 className="head_title_data" style={{ margin: "0" }}>
           {valueInput.format("YYYY")}
           {"\t"}-{"\t"}
@@ -652,12 +871,12 @@ const SixThSections = memo(
             {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
-          <Button
+          {/* <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("full_data")}
           >
             {t("dataPagesInformation.dataTypeButton2")}
-          </Button>
+          </Button> */}
 
           <Button
             type={isActiveTable === "graphic" ? "primary" : "default"}
@@ -666,7 +885,20 @@ const SixThSections = memo(
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
-            <img alt="download_excel" src={Excel} />
+            <img
+              alt="download_excel"
+              src={Excel}
+              onClick={() => {
+                downloadDataByExcelFile(
+                  "monthly",
+                  excelData,
+                  dispatch,
+                  t("dataPagesInformation.selectAllDataButtonNames", {
+                    returnObjects: true,
+                  })[5].title
+                );
+              }}
+            />
           </span>
         </div>
       </div>
@@ -690,13 +922,13 @@ const SixThSections = memo(
         />
       )}
 
-      {isActiveTable === "full_data" && (
+      {/* {isActiveTable === "full_data" && (
         <TableAggrigateAndElectryData
           expandDataSource={expandDataSource}
           t={t}
           dataSource={dataSource}
         />
-      )}
+      )} */}
     </div>
   )
 );
@@ -717,6 +949,8 @@ const SevenThSections = memo(
     perPage,
     onChange,
     valueInput,
+    excelData,
+    dispatch,
   }) => (
     <div
       style={{
@@ -724,8 +958,15 @@ const SevenThSections = memo(
       }}
       className="pump_selected_data_with_today"
     >
-      <div className="header_more_aggregate_data" style={{ marginBottom: "15px" }}>
+      <div
+        className="header_more_aggregate_data"
+        style={{ marginBottom: "15px" }}
+      >
         <h1 className="head_title_data" style={{ margin: "0" }}>
+          {valueInput.format("YYYY")}
+          {"\t"}-{"\t"}
+          {t("dataPagesInformation.dateSelectYear")}
+          {"\t"}
           {
             t(
               isActiveTable === "all_data"
@@ -737,6 +978,120 @@ const SevenThSections = memo(
                 returnObjects: true,
               }
             )[6].title
+          }
+        </h1>
+
+        <div className="header_more_aggregate_data">
+          <Button
+            type={isActiveTable === "all_data" ? "primary" : "default"}
+            onClick={() => changeDataViewType("all_data")}
+          >
+            {t("dataPagesInformation.dataTypeButton1")}
+          </Button>
+
+          {/* <Button
+            type={isActiveTable === "full_data" ? "primary" : "default"}
+            onClick={() => changeDataViewType("full_data")}
+          >
+            {t("dataPagesInformation.dataTypeButton2")}
+          </Button> */}
+
+          <Button
+            type={isActiveTable === "graphic" ? "primary" : "default"}
+            onClick={() => changeDataViewType("graphic")}
+          >
+            {t("dataPagesInformation.buttonDataType2")}
+          </Button>
+          <span>
+            <img
+              alt="download_excel"
+              src={Excel}
+              onClick={() => {
+                downloadDataByExcelFile(
+                  "yearly",
+                  excelData,
+                  dispatch,
+                  t("dataPagesInformation.selectAllDataButtonNames", {
+                    returnObjects: true,
+                  })[6].title
+                );
+              }}
+            />
+          </span>
+        </div>
+      </div>
+
+      {isActiveTable === "graphic" && lineChartData && (
+        <SolarEmploymentChart
+          data={lineChartData}
+          theme={colors}
+          lineStatus={true}
+        />
+      )}
+
+      {isActiveTable === "all_data" && (
+        <TableComponent
+          columns={totalColumns}
+          dataSource={totalDataSource}
+          currentPage={page}
+          pageSize={perPage}
+          totalPage={totalDataSource?.length || 0}
+          handlePaginationChange={handlePaginationChange}
+        />
+      )}
+
+      {/* {isActiveTable === "full_data" && (
+        <TableAggrigateAndElectryData
+          expandDataSource={expandDataSource}
+          t={t}
+          dataSource={dataSource}
+        />
+      )} */}
+    </div>
+  )
+);
+
+const EightThSections = memo(
+  ({
+    dataSource,
+    expandDataSource,
+    colors,
+    t,
+    changeDataViewType,
+    lineChartData,
+    isActiveTable,
+    totalColumns,
+    totalDataSource,
+    handlePaginationChange,
+    page,
+    perPage,
+    onChange,
+    valueInput,
+    excelData,
+    dispatch,
+  }) => (
+    <div
+      style={{
+        background: colors.layoutBackground,
+      }}
+      className="pump_selected_data_with_today"
+    >
+      <div
+        className="header_more_aggregate_data"
+        style={{ marginBottom: "15px" }}
+      >
+        <h1 className="head_title_data" style={{ margin: "0" }}>
+          {
+            t(
+              isActiveTable === "all_data"
+                ? "dataPagesInformation.selectAllDataButtonNames"
+                : isActiveTable === "full_data"
+                ? "dataPagesInformation.selectMoreDataButtonNames"
+                : "dataPagesInformation.selectGraphicDataButtonNames",
+              {
+                returnObjects: true,
+              }
+            )[7].title
           }
           {"\t"}({"\t"}
           {fixDateHeadingForDateRange(valueInput.format("YYYY-MM-DD"))}
@@ -758,12 +1113,12 @@ const SevenThSections = memo(
             {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
-          <Button
+          {/* <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("full_data")}
           >
             {t("dataPagesInformation.dataTypeButton2")}
-          </Button>
+          </Button> */}
 
           <Button
             type={isActiveTable === "graphic" ? "primary" : "default"}
@@ -772,7 +1127,20 @@ const SevenThSections = memo(
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
-            <img alt="download_excel" src={Excel} />
+            <img
+              alt="download_excel"
+              src={Excel}
+              onClick={() => {
+                downloadDataByExcelFile(
+                  "selectedDate",
+                  excelData,
+                  dispatch,
+                  t("dataPagesInformation.selectAllDataButtonNames", {
+                    returnObjects: true,
+                  })[7].title
+                );
+              }}
+            />
           </span>
         </div>
       </div>
@@ -796,18 +1164,18 @@ const SevenThSections = memo(
         />
       )}
 
-      {isActiveTable === "full_data" && (
+      {/* {isActiveTable === "full_data" && (
         <TableAggrigateAndElectryData
           expandDataSource={expandDataSource}
           t={t}
           dataSource={dataSource}
         />
-      )}
+      )} */}
     </div>
   )
 );
 
-const EightThSections = memo(
+const NineThSections = memo(
   ({
     dataSource,
     expandDataSource,
@@ -824,6 +1192,8 @@ const EightThSections = memo(
     valueInput,
     onChange,
     dateFormat,
+    excelData,
+    dispatch,
   }) => (
     <div
       style={{
@@ -831,7 +1201,10 @@ const EightThSections = memo(
       }}
       className="pump_selected_data_with_today"
     >
-      <div className="header_more_aggregate_data" style={{ marginBottom: "15px" }}>
+      <div
+        className="header_more_aggregate_data"
+        style={{ marginBottom: "15px" }}
+      >
         <h1 className="head_title_data" style={{ margin: "0" }}>
           {
             t(
@@ -843,7 +1216,7 @@ const EightThSections = memo(
               {
                 returnObjects: true,
               }
-            )[7].title
+            )[8].title
           }
         </h1>
 
@@ -862,12 +1235,12 @@ const EightThSections = memo(
             {t("dataPagesInformation.dataTypeButton1")}
           </Button>
 
-          <Button
+          {/* <Button
             type={isActiveTable === "full_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("full_data")}
           >
             {t("dataPagesInformation.dataTypeButton2")}
-          </Button>
+          </Button> */}
 
           <Button
             type={isActiveTable === "graphic" ? "primary" : "default"}
@@ -876,7 +1249,20 @@ const EightThSections = memo(
             {t("dataPagesInformation.buttonDataType2")}
           </Button>
           <span>
-            <img alt="download_excel" src={Excel} />
+            <img
+              alt="download_excel"
+              src={Excel}
+              onClick={() => {
+                downloadDataByExcelFile(
+                  "dataRange",
+                  excelData,
+                  dispatch,
+                  t("dataPagesInformation.selectAllDataButtonNames", {
+                    returnObjects: true,
+                  })[8].title
+                );
+              }}
+            />
           </span>
         </div>
       </div>
@@ -900,13 +1286,13 @@ const EightThSections = memo(
         />
       )}
 
-      {isActiveTable === "full_data" && (
+      {/* {isActiveTable === "full_data" && (
         <TableAggrigateAndElectryData
           expandDataSource={expandDataSource}
           t={t}
           dataSource={dataSource}
         />
-      )}
+      )} */}
     </div>
   )
 );
@@ -920,4 +1306,5 @@ export {
   SixThSections,
   SevenThSections,
   EightThSections,
+  NineThSections,
 };
