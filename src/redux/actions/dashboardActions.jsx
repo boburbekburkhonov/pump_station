@@ -787,7 +787,7 @@ export const exportExcelDailyDataByStationId =
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${stationName} ${String(typeSave).toLowerCase()}.xlsx`;
+      a.download = `${stationName} ${String(typeSave)}.xlsx`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -940,7 +940,7 @@ export const exportExcelWeeklyDataByStationId =
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${stationName} ${String(typeSave).toLowerCase()}.xlsx`;
+      a.download = `${stationName} ${String(typeSave)}.xlsx`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -1507,7 +1507,7 @@ export const getSelectStationsIdData =
   (stationId, token, lang, stationName, date, typeSave) => async (dispatch) => {
     try {
       const response = await axios.get(
-        `https://api.ns.sss.uz/api/v1/stations/downloadDateDataAllByStationId?stationId=${stationId}&lang=${lang}&date=2025-03-25`,
+        `https://api.ns.sss.uz/api/v1/stations/downloadDateDataAllByStationId?stationId=${stationId}&lang=${lang}&date=${date}`,
         {
           responseType: "blob", // Muvofiq formatda olish uchun
           headers: {
@@ -1672,7 +1672,7 @@ export const getDataRangeStationsIdData =
   (stationId, token, lang, stationName, startDate, endDate, typeSave) => async (dispatch) => {
     try {
       const response = await axios.get(
-        `https://api.ns.sss.uz/api/v1/stations/downloadDateRangeDataAllByStationId?stationId=${stationId}&lang=${lang}&startDate=2025-03-25&endDate=2025-03-25`,
+        `https://api.ns.sss.uz/api/v1/stations/downloadDateRangeDataAllByStationId?stationId=${stationId}&lang=${lang}&startDate=${startDate}&endDate=${endDate}`,
         {
           responseType: "blob", // Muvofiq formatda olish uchun
           headers: {
@@ -3489,7 +3489,7 @@ export const getDailyAggregateIDData =
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${aggregateName} ${String(typeSave).toLowerCase()}.xlsx`;
+      a.download = `${aggregateName} ${String(typeSave)}.xlsx`;
       document.body.appendChild(a);
       a.click();
       a.remove();

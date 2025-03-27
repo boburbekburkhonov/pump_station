@@ -515,9 +515,17 @@ const ThirdSections = memo(
                   "daily",
                   excelData,
                   dispatch,
-                  t("dataPagesInformation.selectAllDataButtonNames", {
-                    returnObjects: true,
-                  })[2].title
+                  `${Number(valueInput.format("YYYY-MM").split("-")[0])} ${
+                    months[excelData.lang][12]
+                  } ${
+                    months[excelData.lang][
+                      Number(valueInput.format("YYYY-MM").split("-")[1]) - 1
+                    ]
+                  } ${
+                    t("dataPagesInformation.selectAllDataButtonNames", {
+                      returnObjects: true,
+                    })[2].title
+                  }`
                 );
               }}
             />
@@ -641,9 +649,17 @@ const FourThSections = memo(
                   "weekly",
                   excelData,
                   dispatch,
-                  t("dataPagesInformation.selectAllDataButtonNames", {
-                    returnObjects: true,
-                  })[3].title
+                  `${Number(valueInput.format("YYYY-MM").split("-")[0])} ${
+                    months[excelData.lang][12]
+                  } ${
+                    months[excelData.lang][
+                      Number(valueInput.format("YYYY-MM").split("-")[1]) - 1
+                    ]
+                  } ${
+                    t("dataPagesInformation.selectAllDataButtonNames", {
+                      returnObjects: true,
+                    })[3].title
+                  }`
                 );
               }}
             />
@@ -767,9 +783,13 @@ const FiveThSections = memo(
                   "tenDay",
                   excelData,
                   dispatch,
-                  t("dataPagesInformation.selectAllDataButtonNames", {
-                    returnObjects: true,
-                  })[4].title
+                  `${valueInput.format("YYYY")} ${t(
+                    "dataPagesInformation.dateSelectYear"
+                  )} ${
+                    t("dataPagesInformation.selectAllDataButtonNames", {
+                      returnObjects: true,
+                    })[4].title
+                  }`
                 );
               }}
             />
@@ -893,9 +913,13 @@ const SixThSections = memo(
                   "monthly",
                   excelData,
                   dispatch,
-                  t("dataPagesInformation.selectAllDataButtonNames", {
-                    returnObjects: true,
-                  })[5].title
+                  `${valueInput.format("YYYY")} ${t(
+                    "dataPagesInformation.dateSelectYear"
+                  )} ${
+                    t("dataPagesInformation.selectAllDataButtonNames", {
+                      returnObjects: true,
+                    })[5].title
+                  }`
                 );
               }}
             />
@@ -1011,9 +1035,13 @@ const SevenThSections = memo(
                   "yearly",
                   excelData,
                   dispatch,
-                  t("dataPagesInformation.selectAllDataButtonNames", {
-                    returnObjects: true,
-                  })[6].title
+                  `${valueInput.format("YYYY")} ${t(
+                    "dataPagesInformation.dateSelectYear"
+                  )} ${
+                    t("dataPagesInformation.selectAllDataButtonNames", {
+                      returnObjects: true,
+                    })[6].title
+                  }`
                 );
               }}
             />
@@ -1135,9 +1163,22 @@ const EightThSections = memo(
                   "selectedDate",
                   excelData,
                   dispatch,
-                  t("dataPagesInformation.selectAllDataButtonNames", {
+                  `${Number(valueInput.format("YYYY-MM-DD").split("-")[0])} ${
+                    months[excelData.lang][12]
+                  } ${Number(valueInput.format("YYYY-MM-DD").split("-")[2])} ${
+                    months[excelData.lang][
+                      Number(valueInput.format("YYYY-MM-DD").split("-")[1]) - 1
+                    ]
+                  } ${t("dataPagesInformation.selectAllDataButtonNames", {
                     returnObjects: true,
-                  })[7].title
+                  })[7]
+                    .title.split(" ")
+                    .slice(
+                      1,
+                      t("dataPagesInformation.selectAllDataButtonNames", {
+                        returnObjects: true,
+                      })[7].title.split(" ").length
+                    ).join(' ')}`
                 );
               }}
             />
@@ -1227,7 +1268,8 @@ const NineThSections = memo(
             value={valueInput}
             defaultValue={valueInput}
           />
-
+        {console.log(valueInput[0].format("YYYY-MM-DD"))}
+        {console.log(valueInput[1].format("YYYY-MM-DD"))}
           <Button
             type={isActiveTable === "all_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("all_data")}
@@ -1257,9 +1299,11 @@ const NineThSections = memo(
                   "dataRange",
                   excelData,
                   dispatch,
-                  t("dataPagesInformation.selectAllDataButtonNames", {
+                  `${valueInput[0].format("YYYY-MM-DD")} ${valueInput[1].format("YYYY-MM-DD")} ${t("dataPagesInformation.selectAllDataButtonNames", {
                     returnObjects: true,
-                  })[8].title
+                  })[8].title.split(' ').slice(2, t("dataPagesInformation.selectAllDataButtonNames", {
+                    returnObjects: true,
+                  })[8].title.split(' ').length).join(' ')}`
                 );
               }}
             />
