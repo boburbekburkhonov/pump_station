@@ -24,6 +24,7 @@ import {
   getSelectDateAggregateIDData,
   getRangeAggregateIDData,
   findAggregateById,
+  getYearlyAggregateIDData,
 } from "../../redux/actions/dashboardActions";
 import Loading from "../../components/loading";
 import "../dashboard/index.css";
@@ -44,6 +45,7 @@ import localeData from "dayjs/plugin/localeData";
 import weekday from "dayjs/plugin/weekday";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import weekYear from "dayjs/plugin/weekYear";
+import { NineThSections } from "../../components/aggregateOrElectricalAnchorItem";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(advancedFormat);
@@ -114,7 +116,9 @@ const AggrigateMoreData = memo(() => {
 
   const { loading } = useSelector((state) => state.alert);
   const { colors, theme } = useSelector((state) => state.theme);
-  const { pumpIdData, pumpLineChartData, foundAggregateById } = useSelector((state) => state.pumps);
+  const { pumpIdData, pumpLineChartData, foundAggregateById } = useSelector(
+    (state) => state.pumps
+  );
 
   const [pageData, setPageData] = useState({
     page: 1,
@@ -201,6 +205,17 @@ const AggrigateMoreData = memo(() => {
           break;
         case "section7":
           dispatch(
+            getYearlyAggregateIDData(
+              id,
+              token,
+              lang,
+              pageData.page,
+              pageData.perPage
+            )
+          );
+          break;
+        case "section8":
+          dispatch(
             getSelectDateAggregateIDData(
               id,
               token,
@@ -211,7 +226,7 @@ const AggrigateMoreData = memo(() => {
             )
           );
           break;
-        case "section8":
+        case "section9":
           dispatch(
             getRangeAggregateIDData(
               id,
@@ -251,8 +266,8 @@ const AggrigateMoreData = memo(() => {
   }, [changeDataTime, i18n]);
 
   useEffect(() => {
-    dispatch(findAggregateById(params.id, token, lang))
-  }, [])
+    dispatch(findAggregateById(params.id, token, lang));
+  }, []);
 
   const columnsUser = useMemo(
     () => [
@@ -409,6 +424,13 @@ const AggrigateMoreData = memo(() => {
           isType={isActiveGraphic}
           theme={theme}
           lineChartData={pumpLineChartData}
+          excelData={{
+            lang: lang,
+            token: token,
+            aggregateId: params.id,
+            aggregateName: foundAggregateById.name,
+          }}
+          dispatch={dispatch}
         />
       )}
 
@@ -436,6 +458,13 @@ const AggrigateMoreData = memo(() => {
           isType={isActiveGraphic}
           theme={theme}
           lineChartData={pumpLineChartData}
+          excelData={{
+            lang: lang,
+            token: token,
+            aggregateId: params.id,
+            aggregateName: foundAggregateById.name,
+          }}
+          dispatch={dispatch}
         />
       )}
 
@@ -443,8 +472,8 @@ const AggrigateMoreData = memo(() => {
         <ThirdSections
           columns={columnsUser}
           dataSource={
-            Array.isArray(pumpIdData)
-              ? pumpIdData.map((item, index) => ({
+            Array.isArray(pumpIdData.data)
+              ? pumpIdData.data.map((item, index) => ({
                   ...item,
                   key: item.id || `temp-key3-${index}`,
                   date: item.date?.split("T")[0] || item.date,
@@ -467,6 +496,15 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          excelData={{
+            lang: lang,
+            token: token,
+            aggregateId: params.id,
+            aggregateName: foundAggregateById.name,
+            month: daylyDate.month(),
+            year: daylyDate.year(),
+          }}
+          dispatch={dispatch}
         />
       )}
 
@@ -498,6 +536,15 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          excelData={{
+            lang: lang,
+            token: token,
+            aggregateId: params.id,
+            aggregateName: foundAggregateById.name,
+            month: daylyDate.month(),
+            year: daylyDate.year(),
+          }}
+          dispatch={dispatch}
         />
       )}
 
@@ -531,6 +578,14 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          excelData={{
+            lang: lang,
+            token: token,
+            aggregateId: params.id,
+            aggregateName: foundAggregateById.name,
+            year: daylyDate.year(),
+          }}
+          dispatch={dispatch}
         />
       )}
 
@@ -562,11 +617,56 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          excelData={{
+            lang: lang,
+            token: token,
+            aggregateId: params.id,
+            aggregateName: foundAggregateById.name,
+            year: daylyDate.year(),
+          }}
+          dispatch={dispatch}
         />
       )}
 
       {activeSection === "section7" && !isPending && (
         <SevenThSections
+          columns={columnsUser}
+          dataSource={
+            Array.isArray(pumpIdData)
+              ? pumpIdData?.map((item, index) => ({
+                  ...item,
+                  key: item.id || `temp-key7-${index}`,
+                  date: item.year,
+                  volume: item.volume,
+                  velocity: item.velocity,
+                  flow: item.flow,
+                }))
+              : []
+          }
+          currentPage={pageData.page}
+          pageSize={pageData.perPage}
+          totalPage={pumpIdData?.length}
+          handlePaginationChange={handlePaginationChange}
+          colors={colors}
+          t={t}
+          changeDataViewType={changeDataViewType}
+          isType={isActiveGraphic}
+          theme={theme}
+          lineChartData={pumpLineChartData}
+          dateFormat={dateFormat}
+          valueInput={daylyDate}
+          excelData={{
+            lang: lang,
+            token: token,
+            aggregateId: params.id,
+            aggregateName: foundAggregateById.name,
+          }}
+          dispatch={dispatch}
+        />
+      )}
+
+      {activeSection === "section8" && !isPending && (
+        <EightThSections
           columns={columnsUser}
           dataSource={
             Array.isArray(pumpIdData?.data)
@@ -593,11 +693,19 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeMonthYear}
           dateFormat={dateFormat}
           valueInput={daylyDate}
+          excelData={{
+            lang: lang,
+            token: token,
+            aggregateId: params.id,
+            aggregateName: foundAggregateById.name,
+            date: daylyDate.format("YYYY-MM-DD")
+          }}
+          dispatch={dispatch}
         />
       )}
 
-      {activeSection === "section8" && !isPending && (
-        <EightThSections
+      {activeSection === "section9" && !isPending && (
+        <NineThSections
           columns={columnsUser}
           dataSource={
             Array.isArray(pumpIdData?.data)
@@ -624,6 +732,16 @@ const AggrigateMoreData = memo(() => {
           onChange={onChangeDateRange}
           dateFormat={dateFormat}
           valueInput={dateRange}
+          excelData={{
+            lang: lang,
+            token: token,
+            aggregateId: params.id,
+            aggregateName: foundAggregateById.name,
+            date: daylyDate.format("YYYY-MM-DD"),
+            startDate: dateRange[0].format("YYYY-MM-DD"),
+            endDate: dateRange[1].format("YYYY-MM-DD")
+          }}
+          dispatch={dispatch}
         />
       )}
     </section>

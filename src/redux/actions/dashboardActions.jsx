@@ -1388,7 +1388,6 @@ export const getSelectStationsIdData =
         `stations/findDateDataAllByStationId?lang=${lang}&stationId=${stationId}&date=${date}`,
         token
       );
-      console.log(`stations/findDateDataAllByStationId?lang=${lang}&stationId=${stationId}&date=${date}`);
 
       // const resAggregateData = await getDataApi(
       //   `pump-all-data/findDataByStationIdDate?lang=${lang}&stationId=${stationId}&page=${page}&perPage=${perPage}&date=${date}`,
@@ -1858,6 +1857,50 @@ export const getTodayAggregateIDData =
     }
   };
 
+  export const exportExcelTodayAggregateIDData =
+  (aggregateId, token, lang, aggregateName, typeSave) => async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/pump-today-data/download/findDataByAggregateId?aggregateId=${aggregateId}&lang=${lang}`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${aggregateName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
 export const findTodayDataElectricityId =
   (electricalId, token, lang, page, perPage) => async (dispatch) => {
     try {
@@ -2014,6 +2057,50 @@ export const getYesterdayAggregateIDData =
         type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
         payload: res.data.data,
       });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+  export const exportExcelYesterdayAggregateIDData =
+  (aggregateId, token, lang, aggregateName, typeSave) => async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/pump-yesterday-data/download/findDataByAggregateId?aggregateId=${aggregateId}&lang=${lang}`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${aggregateName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
     } catch (err) {
       if (!err.response) {
         dispatch({
@@ -2233,6 +2320,52 @@ export const getWeeklyAggregateIDData =
     }
   };
 
+  export const exportExcelWeeklyAggregateIDData =
+  (aggregateId, token, lang, aggregateName, typeSave, month, year) => async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/pump-weekly-data/download/findDataByAggregateIdAndYearMonthNumber?aggregateId=${aggregateId}&lang=${lang}&month=${
+          month + 1
+        }&year=${year}`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${aggregateName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
 export const findWeeklyDataElectricityId =
   (electricalId, token, lang, page, perPage, month, year) =>
   async (dispatch) => {
@@ -2423,6 +2556,50 @@ export const getTenDayAggregateIDData =
         type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
         payload: formattedData.slice().sort((a, b) => b.month - a.month),
       });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+  export const exportExcelTenDayAggregateIDData =
+  (aggregateId, token, lang, aggregateName, typeSave, year) => async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/pump-ten-day-data/download/findDataByAggregateIdAndYearNumber?aggregateId=${aggregateId}&lang=${lang}&year=${year}`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${aggregateName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
     } catch (err) {
       if (!err.response) {
         dispatch({
@@ -2698,6 +2875,50 @@ export const getMonthlyAggregateIDData =
     }
   };
 
+  export const exportExcelMonthlyAggregateIDData =
+  (aggregateId, token, lang, aggregateName, typeSave, year) => async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/pump-monthly-data/download/findDataByAggregateIdAndYearNumber?aggregateId=${aggregateId}&lang=${lang}&year=${year}`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${aggregateName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
 export const findMonthlyDataElectricityId =
   (electricalId, token, lang, page, perPage, year) => async (dispatch) => {
     try {
@@ -2814,6 +3035,132 @@ export const findMonthlyDataElectricityId =
     }
   };
 
+  // * Yearly data
+export const getYearlyAggregateIDData =
+(aggregateId, token, lang, page, perPage, year) => async (dispatch) => {
+  try {
+    dispatch({
+      type: GLOBALTYPES.LOADING,
+      payload: true,
+    });
+
+    const res = await getDataApi(
+      `pump-monthly-data/findYearlyDataByAggregateId?lang=${lang}&aggregateId=${aggregateId}`,
+      token
+    );
+
+    const data = res.data.data;
+
+    const lineChartData = {
+      date: res.data.data
+        .slice()
+        .sort((a, b) => new Date(a.year) - new Date(b.year))
+        ?.map((item) => item.year),
+      lineData: [
+        {
+          name: aggregateDataType[lang].name1,
+          data: res.data.data
+            .slice()
+            .sort((a, b) => new Date(a.year) - new Date(b.year))
+            ?.map((item) => Number(item.flow.toFixed(2))),
+          unit: "m³/s",
+        },
+        {
+          name: aggregateDataType[lang].name2,
+          data: res.data.data
+            .slice()
+            .sort((a, b) => new Date(a.year) - new Date(b.year))
+            ?.map((item) => Number(item.velocity.toFixed(2))),
+          unit: "m/s",
+        },
+        {
+          name: aggregateDataType[lang].name3,
+          data: res.data.data
+            .slice()
+            .sort((a, b) => new Date(a.year) - new Date(b.year))
+            ?.map((item) => Number(item.volume.toFixed(2))),
+          unit: "m³",
+        },
+      ],
+    };
+
+    dispatch({
+      type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_AGGREGATE_ID,
+      payload: lineChartData,
+    });
+
+    dispatch({
+      type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
+      payload: data,
+    });
+  } catch (err) {
+    if (!err.response) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: "Network Error",
+        },
+      });
+    } else {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: err.response.data.message || err.response.statusText,
+        },
+      });
+    }
+  } finally {
+    dispatch({
+      type: GLOBALTYPES.LOADING,
+      payload: false,
+    });
+  }
+};
+
+export const exportExcelYearlyAggregateIDData =
+(aggregateId, token, lang, aggregateName, typeSave) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `https://api.ns.sss.uz/api/v1/pump-monthly-data/download/findYearlyDataByStationId?aggregateId=${aggregateId}&lang=${lang}`,
+      {
+        responseType: "blob", // Muvofiq formatda olish uchun
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${aggregateName} ${String(typeSave).toLowerCase()}.xlsx`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  } catch (err) {
+    if (!err.response) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: "Network Error",
+        },
+      });
+    } else {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: err.response.data.message || err.response.statusText,
+        },
+      });
+    }
+  } finally {
+    dispatch({
+      type: GLOBALTYPES.LOADING,
+      payload: false,
+    });
+  }
+};
+
 // * Done
 export const getSelectDateAggregateIDData =
   (aggregateId, token, lang, page, perPage, date) => async (dispatch) => {
@@ -2862,6 +3209,50 @@ export const getSelectDateAggregateIDData =
         type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
         payload: res.data.data,
       });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+  export const exportExcelSelectDateAggregateIDData =
+  (aggregateId, token, lang, aggregateName, typeSave, date) => async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/pump-all-data/download/findDataByAggregateIdDate?aggregateId=${aggregateId}&lang=${lang}&date=${date}`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${aggregateName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
     } catch (err) {
       if (!err.response) {
         dispatch({
@@ -3054,8 +3445,54 @@ export const getDailyAggregateIDData =
 
       dispatch({
         type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
-        payload: res.data.data.data,
+        payload: res.data.data,
       });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+  export const exportExcelDailyAggregateIDData =
+  (aggregateId, token, lang, aggregateName, typeSave, month, year) => async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/pump-daily-data/download/findDataByAggregateId?aggregateId=${aggregateId}&lang=${lang}&month=${
+          month + 1
+        }&year=${year}`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${aggregateName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
     } catch (err) {
       if (!err.response) {
         dispatch({
@@ -3238,6 +3675,50 @@ export const getRangeAggregateIDData =
         type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
         payload: res.data.data,
       });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+  export const exportExcelRangeAggregateIDData =
+  (aggregateId, token, lang, aggregateName, typeSave, startDate, endDate) => async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/pump-all-data/download/findDataByAggregateIdAndDateRange?aggregateId=${aggregateId}&lang=${lang}&startDate=${startDate}&endDate=${endDate}`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${aggregateName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
     } catch (err) {
       if (!err.response) {
         dispatch({

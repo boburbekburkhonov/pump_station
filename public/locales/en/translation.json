@@ -417,6 +417,7 @@
       { "title": "Weekly detailed data" },
       { "title": "10-day detailed data" },
       { "title": "Monthly detailed data" },
+      { "title": "annual general information" },
       { "title": "Detailed data by date" },
       { "title": "Detailed data for the selected range" }
     ],
