@@ -4,7 +4,7 @@ import React, { useEffect, useCallback, useState, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import { Button, Card, Col, Modal, Pagination, Row, Select } from "antd";
+import { Button, Card, Col, Input, Modal, Pagination, Row, Select } from "antd";
 import moreInfo from "../../assets/info.png";
 
 import {
@@ -20,6 +20,7 @@ import {
   PoweroffOutlined,
   BulbOutlined,
   ThunderboltOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 
 import "./index.css";
@@ -56,6 +57,8 @@ function AllDatapPage() {
   const [oneStationLastData, setOneStationLastData] = useState();
   const [selectDistrictId, setSelectDistrictId] = useState(0);
   const regionId = Cookies.get("regionId");
+  const [searchText, setSearchText] = useState("");
+  const [status, setStatus] = useState("");
 
   const fetchAllData = useCallback(() => {
     const lang = i18n.language;
@@ -67,16 +70,20 @@ function AllDatapPage() {
         token,
         current,
         pageSize,
-        districtId == undefined ? "" : districtId
+        districtId == undefined ? "" : districtId,
+        undefined,
+        status
       )
     );
     dispatch(findLastStationsData(lang, token));
     dispatch(getByRegionIdData(lang, token, regionId));
-  }, [dispatch, token, i18n.language, current, pageSize, count]);
+  }, [dispatch, token, i18n.language, current, pageSize, count, status]);
 
   const getAllStationsDataByDistrictId = (key) => {
     const lang = i18n.language;
     const districtId = districtByRegionId[key - 1]?.id;
+    setSearchText("");
+    setStatus("");
 
     dispatch(
       findInMapsLastDataByDistrictId(
@@ -84,7 +91,9 @@ function AllDatapPage() {
         token,
         current,
         pageSize,
-        districtId == undefined ? "" : districtId
+        districtId == undefined ? "" : districtId,
+        undefined,
+        status
       )
     );
   };
@@ -235,6 +244,27 @@ function AllDatapPage() {
     } else {
       return "#E0C040";
     }
+  };
+
+  const handleInput = (event) => {
+    setSearchText(event.target.value);
+  };
+
+  const handleSearchLastData = () => {
+    const lang = i18n.language;
+    const districtId = districtByRegionId[selectDistrictId - 1]?.id;
+
+    dispatch(
+      findInMapsLastDataByDistrictId(
+        lang,
+        token,
+        undefined,
+        undefined,
+        districtId == undefined ? "" : districtId,
+        searchText,
+        status
+      )
+    );
   };
 
   if (stationsLoading || loading)
@@ -762,7 +792,10 @@ function AllDatapPage() {
         <h1>{t("stationsPageData.stationsInputDestrict")}</h1>
       </div>
 
-      <div className="reports_sort_select_wrapper" style={{marginBottom: '5px'}}>
+      <div
+        className="reports_sort_select_wrapper"
+        style={{ marginBottom: "5px" }}
+      >
         <Select
           key={"selects_name"}
           size="large"
@@ -797,6 +830,110 @@ function AllDatapPage() {
         }}
         className="all_stations_data_stations_info"
       >
+        <h2>Stansiya qidirish</h2>
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginTop: "5px",
+            marginBottom: "15px",
+          }}
+        >
+          <form
+            style={{
+              maxWidth: "480px",
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              paddingTop: "10px",
+            }}
+            onSubmit={handleSearchLastData}
+          >
+            <Input
+              addonBefore={<SearchOutlined />}
+              placeholder="Qidirish..."
+              value={searchText}
+              onChange={handleInput}
+            />
+
+            <Button
+              style={{ marginLeft: "10px" }}
+              type="primary"
+              onClick={() => handleSearchLastData()}
+            >
+              Qidirish
+            </Button>
+          </form>
+
+          <div className="filters_wrapper_btn">
+            <Button
+              style={{
+                marginLeft: "10px",
+                background: status == "" ? "#405FF2" : "#F4F8FF",
+                color: status == "" ? "#fff" : "#000",
+                border: status == "" ? "none" : "2px solid #000",
+              }}
+              type="primary"
+              onClick={() => {
+                setCurrent(1);
+                setPageSize(6);
+                setStatus("");
+              }}
+            >
+              <i className="fas fa-list icon"></i>{" "}
+              {
+                t("dashboardPageData.cardData", {
+                  returnObjects: true,
+                })[0]?.status
+              }
+            </Button>
+            <Button
+              style={{
+                marginLeft: "10px",
+                background: status == "true" ? "#28a745" : "#F4F8FF",
+                color: status == "true" ? "#fff" : "#000",
+                border: status == "true" ? "none" : "2px solid #000",
+              }}
+              type="primary"
+              onClick={() => {
+                setCurrent(1);
+                setPageSize(6);
+                setStatus("true");
+              }}
+            >
+              <i className="fas fa-check-circle icon"></i>{" "}
+              {
+                t("dashboardPageData.cardData", {
+                  returnObjects: true,
+                })[1]?.status
+              }
+            </Button>
+            <Button
+              style={{
+                marginLeft: "10px",
+                background: status == "false" ? "#dc3545" : "#F4F8FF",
+                color: status == "false" ? "#fff" : "#000",
+                border: status == "false" ? "none" : "2px solid #000",
+              }}
+              type="primary"
+              onClick={() => {
+                setCurrent(1);
+                setPageSize(6);
+                setStatus("false");
+              }}
+            >
+              <i className="fas fa-times-circle icon"></i>{" "}
+              {
+                t("dashboardPageData.cardData", {
+                  returnObjects: true,
+                })[2]?.status
+              }
+            </Button>
+          </div>
+        </div>
+
         <h2
           style={{
             margin: "10px 0",
@@ -804,18 +941,27 @@ function AllDatapPage() {
         >
           {districtByRegionId[selectDistrictId - 1] == undefined
             ? t("dataPagesInformation.allStationsDataHead")
-            : `${
-              districtByRegionId[selectDistrictId - 1]?.name.split(" ").slice(0, districtByRegionId[selectDistrictId - 1]?.name.split(" ").length - 1).join(' ')
-              } ${t("stationsPageData.headingLastDataByDistrictId")}`}
+            : `${districtByRegionId[selectDistrictId - 1]?.name
+                .split(" ")
+                .slice(
+                  0,
+                  districtByRegionId[selectDistrictId - 1]?.name.split(" ")
+                    .length - 1
+                )
+                .join(" ")} ${t(
+                "stationsPageData.headingLastDataByDistrictId"
+              )}`}
         </h2>
 
         {stationsMapByDistrictId.data?.length == 0 ? (
-          <div style={{
-            height: '50vh',
-            display:'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}>
+          <div
+            style={{
+              height: "50vh",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <EmptyCard />
           </div>
         ) : (
