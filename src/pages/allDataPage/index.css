@@ -197,3 +197,8 @@ p {
 .data_pagination_info {
   margin-top: auto;
 }
+
+.filters_wrapper_btn button:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
