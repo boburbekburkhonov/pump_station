@@ -202,6 +202,7 @@ const FirstSections = memo(
 
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
@@ -314,6 +315,7 @@ const SecondSections = memo(
           </Button>
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
@@ -508,6 +510,7 @@ const ThirdSections = memo(
           </Button>
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
@@ -642,6 +645,7 @@ const FourThSections = memo(
           </Button>
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
@@ -776,6 +780,7 @@ const FiveThSections = memo(
           </Button>
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
@@ -906,6 +911,7 @@ const SixThSections = memo(
           </Button>
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
@@ -1028,6 +1034,7 @@ const SevenThSections = memo(
           </Button>
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
@@ -1156,6 +1163,7 @@ const EightThSections = memo(
           </Button>
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
@@ -1178,7 +1186,8 @@ const EightThSections = memo(
                       t("dataPagesInformation.selectAllDataButtonNames", {
                         returnObjects: true,
                       })[7].title.split(" ").length
-                    ).join(' ')}`
+                    )
+                    .join(" ")}`
                 );
               }}
             />
@@ -1268,8 +1277,6 @@ const NineThSections = memo(
             value={valueInput}
             defaultValue={valueInput}
           />
-        {console.log(valueInput[0].format("YYYY-MM-DD"))}
-        {console.log(valueInput[1].format("YYYY-MM-DD"))}
           <Button
             type={isActiveTable === "all_data" ? "primary" : "default"}
             onClick={() => changeDataViewType("all_data")}
@@ -1292,6 +1299,7 @@ const NineThSections = memo(
           </Button>
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
@@ -1299,11 +1307,19 @@ const NineThSections = memo(
                   "dataRange",
                   excelData,
                   dispatch,
-                  `${valueInput[0].format("YYYY-MM-DD")} ${valueInput[1].format("YYYY-MM-DD")} ${t("dataPagesInformation.selectAllDataButtonNames", {
+                  `${valueInput[0].format("YYYY-MM-DD")} ${valueInput[1].format(
+                    "YYYY-MM-DD"
+                  )} ${t("dataPagesInformation.selectAllDataButtonNames", {
                     returnObjects: true,
-                  })[8].title.split(' ').slice(2, t("dataPagesInformation.selectAllDataButtonNames", {
-                    returnObjects: true,
-                  })[8].title.split(' ').length).join(' ')}`
+                  })[8]
+                    .title.split(" ")
+                    .slice(
+                      2,
+                      t("dataPagesInformation.selectAllDataButtonNames", {
+                        returnObjects: true,
+                      })[8].title.split(" ").length
+                    )
+                    .join(" ")}`
                 );
               }}
             />

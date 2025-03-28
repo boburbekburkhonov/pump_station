@@ -760,13 +760,14 @@ function AllDatapPage() {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            marginTop: '5px',
+            marginTop: "5px",
             marginBottom: "15px",
           }}
         >
           <form
             style={{
-              maxWidth: "400px",
+              maxWidth: "480px",
+              width: "100%",
               display: "flex",
               alignItems: "center",
               paddingTop: "10px",
@@ -793,9 +794,9 @@ function AllDatapPage() {
             <Button
               style={{
                 marginLeft: "10px",
-                background: status != "" ? "#405FF2" : "#F4F8FF",
-                color: status != "" ? "#fff" : "#000",
-                border: status != "" ? "none" : "2px solid #000",
+                background: status == "" ? "#405FF2" : "#F4F8FF",
+                color: status == "" ? "#fff" : "#000",
+                border: status == "" ? "none" : "2px solid #000",
               }}
               type="primary"
               onClick={() => {
@@ -814,9 +815,9 @@ function AllDatapPage() {
             <Button
               style={{
                 marginLeft: "10px",
-                background: status != "true" ? "#28a745" : "#F4F8FF",
-                color: status != "true" ? "#fff" : "#000",
-                border: status != "true" ? "none" : "2px solid #000",
+                background: status == "true" ? "#28a745" : "#F4F8FF",
+                color: status == "true" ? "#fff" : "#000",
+                border: status == "true" ? "none" : "2px solid #000",
               }}
               type="primary"
               onClick={() => {
@@ -835,9 +836,9 @@ function AllDatapPage() {
             <Button
               style={{
                 marginLeft: "10px",
-                background: status != "false" ? "#dc3545" : "#F4F8FF",
-                color: status != "false" ? "#fff" : "#000",
-                border: status != "false" ? "none" : "2px solid #000",
+                background: status == "false" ? "#dc3545" : "#F4F8FF",
+                color: status == "false" ? "#fff" : "#000",
+                border: status == "false" ? "none" : "2px solid #000",
               }}
               type="primary"
               onClick={() => {

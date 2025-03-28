@@ -4,7 +4,7 @@ import React, { useEffect, useCallback, useState, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import { Button, Card, Col, Modal, Pagination, Row } from "antd";
+import { Button, Card, Col, Input, Modal, Pagination, Row } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ThunderboltOutlined,
@@ -13,6 +13,7 @@ import {
   DashboardOutlined,
   NodeIndexOutlined,
   ClockCircleOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import "./index.css";
 import "../maps/index.css";
@@ -45,14 +46,18 @@ function ElectrPage() {
   const [count, setCount] = useState(1);
   const [oneStationLastData, setOneStationLastData] = useState();
   const [modalOpen, setModalOpen] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [status, setStatus] = useState("");
   const navigate = useNavigate();
 
   const fetchAllData = useCallback(() => {
     const lang = i18n.language;
 
-    dispatch(findInMapsLastData(lang, token, current, pageSize));
+    dispatch(
+      findInMapsLastData(lang, token, current, pageSize, undefined, status)
+    );
     dispatch(findLastStationsData(lang, token));
-  }, [dispatch, token, i18n.language, current, pageSize, count]);
+  }, [dispatch, token, i18n.language, current, pageSize, count, status]);
 
   useEffect(() => {
     fetchAllData();
@@ -186,6 +191,18 @@ function ElectrPage() {
     } else {
       return "#E0C040";
     }
+  };
+
+  const handleInput = (event) => {
+    setSearchText(event.target.value);
+  };
+
+  const handleSearchLastData = () => {
+    const lang = i18n.language;
+
+    dispatch(
+      findInMapsLastData(lang, token, undefined, undefined, searchText, status)
+    );
   };
 
   if (stationsLoading || loading)
@@ -551,169 +568,292 @@ function ElectrPage() {
         }}
         className="data_page_main_stations_info_container"
       >
-        <div className="data_page_main_stations_info">
-          <Row
-            className="all_stations_data_main_section"
-            gutter={[16, 16]}
-            justify="start"
+        <h2>Stansiya qidirish</h2>
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginTop: "5px",
+            marginBottom: "15px",
+          }}
+        >
+          <form
+            style={{
+              maxWidth: "480px",
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              paddingTop: "10px",
+            }}
+            onSubmit={handleSearchLastData}
           >
-            {stationsMap?.data?.map((item, index) => {
-              const allElectrData = item.electricalEnergyLastData?.reduce(
-                (acc, itemAg) => {
-                  const energyActiveTotal =
-                    itemAg?.electricalEnergyLastData?.energyActiveTotal;
+            <Input
+              addonBefore={<SearchOutlined />}
+              placeholder="Qidirish..."
+              value={searchText}
+              onChange={handleInput}
+            />
 
-                  const energyReactiveTotal =
-                    itemAg?.electricalEnergyLastData?.energyReactiveTotal;
+            <Button
+              style={{ marginLeft: "10px" }}
+              type="primary"
+              onClick={() => handleSearchLastData()}
+            >
+              Qidirish
+            </Button>
+          </form>
 
-                  return {
-                    energyActiveTotal:
-                      acc.energyActiveTotal +
-                      (energyActiveTotal ? +energyActiveTotal : 0) /
-                        item?.electricalEnergyLastData?.length,
-                    energyReactiveTotal:
-                      acc.energyReactiveTotal +
-                      (energyReactiveTotal ? +energyReactiveTotal : 0) /
-                        item?.electricalEnergyLastData?.length,
-                  };
-                },
-                { energyActiveTotal: 0, energyReactiveTotal: 0 }
-              ) || { energyActiveTotal: 0, energyReactiveTotal: 0 };
-
-              return (
-                <Col
-                  key={index}
-                  span={colSpan}
-                  style={{
-                    maxWidth: "370px",
-                  }}
-                >
-                  <Card
-                    key={index}
-                    type="inner"
-                    className="data_paga_card_element"
-                    style={{
-                      background: colors.blurBgColor2,
-                      maxWidth: "360px",
-                    }}
-                  >
-                    <div
-                      className="data_page_card_header"
-                      style={{
-                        borderBottom: `3px solid ${
-                          item.status ? "#40C057" : "red"
-                        }`,
-                      }}
-                    >
-                      <img
-                        style={{
-                          filter: theme === "light" ? "invert(0)" : "invert(1)",
-                        }}
-                        className="save_action_data"
-                        src={
-                          item.selectionDashboard
-                            ? CheckBookmark
-                            : UnCheckBookmark
-                        }
-                        alt="Images"
-                        onClick={() => handleChangeSelectStationData(item?.id)}
-                      />
-
-                      <h1>{item.name}</h1>
-
-                      <img
-                        className="more_info__action_data"
-                        src={moreInfo}
-                        alt="moreInfo"
-                        width={25}
-                        height={25}
-                        onClick={() => {
-                          findOneStationById(item.id);
-                          setModalOpen(true);
-                        }}
-                      />
-                    </div>
-
-                    <div
-                      className="data_page_aggrigate_container"
-                      style={{
-                        cursor: "pointer",
-                      }}
-                      onClick={() => {
-                        findOneStationById(item.id);
-                        setModalOpen(true);
-                      }}
-                    >
-                      <div
-                        className="all_stations_data_page_aggrigate_card_item"
-                        style={{
-                          backgroundColor: colors.backgroundColor,
-                        }}
-                      >
-                        <div className="all_stations_data_page_aggrigate_item">
-                          <div
-                            className="all_stations_data_item"
-                            style={{ marginTop: "10px" }}
-                          >
-                            <div className="normal_flex_card">
-                              <NodeIndexOutlined
-                                style={{
-                                  color: colors.textColor,
-                                }}
-                                className="dashboard_last_data_icons"
-                              />
-                              <h4>
-                                {t(
-                                  "dataPagesInformation.allStationsElektrActiveEnergy"
-                                )}
-                                :{" "}
-                              </h4>
-                            </div>
-                            <h4 className="all_stations_data_item_import_data">
-                              {allElectrData.energyActiveTotal} kw
-                            </h4>
-                          </div>
-
-                          <div
-                            className="all_stations_data_item"
-                            style={{ marginTop: "12px" }}
-                          >
-                            <div className="normal_flex_card">
-                              <BulbOutlined
-                                style={{
-                                  color: colors.textColor,
-                                }}
-                                className="dashboard_last_data_icons"
-                              />
-                              <h4>
-                                {t(
-                                  "dataPagesInformation.allStationsElektrReactiveEnergy"
-                                )}
-                                :{" "}
-                              </h4>
-                            </div>
-                            <h4 className="all_stations_data_item_import_data">
-                              {allElectrData.energyReactiveTotal} kw
-                            </h4>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
-                </Col>
-              );
-            })}
-          </Row>
+          <div className="filters_wrapper_btn">
+            <Button
+              style={{
+                marginLeft: "10px",
+                background: status == "" ? "#405FF2" : "#F4F8FF",
+                color: status == "" ? "#fff" : "#000",
+                border: status == "" ? "none" : "2px solid #000",
+              }}
+              type="primary"
+              onClick={() => {
+                setCurrent(1);
+                setPageSize(6);
+                setStatus("");
+              }}
+            >
+              <i className="fas fa-list icon"></i>{" "}
+              {
+                t("dashboardPageData.cardData", {
+                  returnObjects: true,
+                })[0]?.status
+              }
+            </Button>
+            <Button
+              style={{
+                marginLeft: "10px",
+                background: status == "true" ? "#28a745" : "#F4F8FF",
+                color: status == "true" ? "#fff" : "#000",
+                border: status == "true" ? "none" : "2px solid #000",
+              }}
+              type="primary"
+              onClick={() => {
+                setCurrent(1);
+                setPageSize(6);
+                setStatus("true");
+              }}
+            >
+              <i className="fas fa-check-circle icon"></i>{" "}
+              {
+                t("dashboardPageData.cardData", {
+                  returnObjects: true,
+                })[1]?.status
+              }
+            </Button>
+            <Button
+              style={{
+                marginLeft: "10px",
+                background: status == "false" ? "#dc3545" : "#F4F8FF",
+                color: status == "false" ? "#fff" : "#000",
+                border: status == "false" ? "none" : "2px solid #000",
+              }}
+              type="primary"
+              onClick={() => {
+                setCurrent(1);
+                setPageSize(6);
+                setStatus("false");
+              }}
+            >
+              <i className="fas fa-times-circle icon"></i>{" "}
+              {
+                t("dashboardPageData.cardData", {
+                  returnObjects: true,
+                })[2]?.status
+              }
+            </Button>
+          </div>
         </div>
 
-        <Pagination
-          className="data_pagination_info"
-          current={current}
-          onChange={handlePaginationChange}
-          total={stationsMap?.totalDocuments}
-          pageSize={pageSize}
-          align="end"
-        />
+        <div>
+          {stationsMap?.data?.length == 0 ? (
+            <div
+              style={{
+                height: "70vh",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <EmptyCard />
+            </div>
+          ) : (
+            <>
+              <Row
+                className="all_stations_data_main_section"
+                gutter={[16, 16]}
+                justify="start"
+              >
+                {stationsMap?.data?.map((item, index) => {
+                  const allElectrData = item.electricalEnergyLastData?.reduce(
+                    (acc, itemAg) => {
+                      const energyActiveTotal =
+                        itemAg?.electricalEnergyLastData?.energyActiveTotal;
+
+                      const energyReactiveTotal =
+                        itemAg?.electricalEnergyLastData?.energyReactiveTotal;
+
+                      return {
+                        energyActiveTotal:
+                          acc.energyActiveTotal +
+                          (energyActiveTotal ? +energyActiveTotal : 0) /
+                            item?.electricalEnergyLastData?.length,
+                        energyReactiveTotal:
+                          acc.energyReactiveTotal +
+                          (energyReactiveTotal ? +energyReactiveTotal : 0) /
+                            item?.electricalEnergyLastData?.length,
+                      };
+                    },
+                    { energyActiveTotal: 0, energyReactiveTotal: 0 }
+                  ) || { energyActiveTotal: 0, energyReactiveTotal: 0 };
+
+                  return (
+                    <Col
+                      key={index}
+                      span={colSpan}
+                      style={{
+                        maxWidth: "370px",
+                      }}
+                    >
+                      <Card
+                        key={index}
+                        type="inner"
+                        className="data_paga_card_element"
+                        style={{
+                          background: colors.blurBgColor2,
+                          maxWidth: "360px",
+                        }}
+                      >
+                        <div
+                          className="data_page_card_header"
+                          style={{
+                            borderBottom: `3px solid ${
+                              item.status ? "#40C057" : "red"
+                            }`,
+                          }}
+                        >
+                          <img
+                            style={{
+                              filter:
+                                theme === "light" ? "invert(0)" : "invert(1)",
+                            }}
+                            className="save_action_data"
+                            src={
+                              item.selectionDashboard
+                                ? CheckBookmark
+                                : UnCheckBookmark
+                            }
+                            alt="Images"
+                            onClick={() =>
+                              handleChangeSelectStationData(item?.id)
+                            }
+                          />
+
+                          <h1>{item.name}</h1>
+
+                          <img
+                            className="more_info__action_data"
+                            src={moreInfo}
+                            alt="moreInfo"
+                            width={25}
+                            height={25}
+                            onClick={() => {
+                              findOneStationById(item.id);
+                              setModalOpen(true);
+                            }}
+                          />
+                        </div>
+
+                        <div
+                          className="data_page_aggrigate_container"
+                          style={{
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            findOneStationById(item.id);
+                            setModalOpen(true);
+                          }}
+                        >
+                          <div
+                            className="all_stations_data_page_aggrigate_card_item"
+                            style={{
+                              backgroundColor: colors.backgroundColor,
+                            }}
+                          >
+                            <div className="all_stations_data_page_aggrigate_item">
+                              <div
+                                className="all_stations_data_item"
+                                style={{ marginTop: "10px" }}
+                              >
+                                <div className="normal_flex_card">
+                                  <NodeIndexOutlined
+                                    style={{
+                                      color: colors.textColor,
+                                    }}
+                                    className="dashboard_last_data_icons"
+                                  />
+                                  <h4>
+                                    {t(
+                                      "dataPagesInformation.allStationsElektrActiveEnergy"
+                                    )}
+                                    :{" "}
+                                  </h4>
+                                </div>
+                                <h4 className="all_stations_data_item_import_data">
+                                  {allElectrData.energyActiveTotal} kw
+                                </h4>
+                              </div>
+
+                              <div
+                                className="all_stations_data_item"
+                                style={{ marginTop: "12px" }}
+                              >
+                                <div className="normal_flex_card">
+                                  <BulbOutlined
+                                    style={{
+                                      color: colors.textColor,
+                                    }}
+                                    className="dashboard_last_data_icons"
+                                  />
+                                  <h4>
+                                    {t(
+                                      "dataPagesInformation.allStationsElektrReactiveEnergy"
+                                    )}
+                                    :{" "}
+                                  </h4>
+                                </div>
+                                <h4 className="all_stations_data_item_import_data">
+                                  {allElectrData.energyReactiveTotal} kw
+                                </h4>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    </Col>
+                  );
+                })}
+              </Row>
+
+              <Pagination
+                className="data_pagination_info"
+                current={current}
+                onChange={handlePaginationChange}
+                total={stationsMap?.totalDocuments}
+                pageSize={pageSize}
+                align="end"
+              />
+            </>
+          )}
+        </div>
       </div>
     </section>
   );

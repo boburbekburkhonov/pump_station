@@ -248,6 +248,7 @@ const FirstSections = memo(
           </Button>
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
@@ -333,6 +334,7 @@ const SecondSections = memo(
           </Button>
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
@@ -429,6 +431,7 @@ const ThirdSections = memo(
           </Button>
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
@@ -534,6 +537,7 @@ const FourThSections = memo(
           </Button>
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
@@ -641,6 +645,7 @@ const FiveThSections = memo(
           </Button>
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
@@ -745,6 +750,7 @@ const SixThSections = memo(
           </Button>
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
@@ -841,6 +847,7 @@ const SevenThSections = memo(
           </Button>
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
@@ -941,6 +948,7 @@ const EightThSections = memo(
           </Button>
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
@@ -1050,6 +1058,7 @@ const NineThSections = memo(
           </Button>
           <span>
             <img
+              style={{ cursor: "pointer" }}
               alt="download_excel"
               src={Excel}
               onClick={() => {
