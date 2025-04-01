@@ -200,9 +200,18 @@ function ElectrPage() {
   const handleSearchLastData = () => {
     const lang = i18n.language;
 
-    dispatch(
-      findInMapsLastData(lang, token, undefined, undefined, searchText, status)
-    );
+    if (searchText.length != 0) {
+      dispatch(
+        findInMapsLastData(
+          lang,
+          token,
+          undefined,
+          undefined,
+          searchText,
+          status
+        )
+      );
+    }
   };
 
   if (stationsLoading || loading)
@@ -618,6 +627,7 @@ function ElectrPage() {
                 setCurrent(1);
                 setPageSize(6);
                 setStatus("");
+                setSearchText("");
               }}
             >
               <i className="fas fa-list icon"></i>{" "}
@@ -639,6 +649,7 @@ function ElectrPage() {
                 setCurrent(1);
                 setPageSize(6);
                 setStatus("true");
+                setSearchText("");
               }}
             >
               <i className="fas fa-check-circle icon"></i>{" "}
@@ -660,6 +671,7 @@ function ElectrPage() {
                 setCurrent(1);
                 setPageSize(6);
                 setStatus("false");
+                setSearchText("");
               }}
             >
               <i className="fas fa-times-circle icon"></i>{" "}

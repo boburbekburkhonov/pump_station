@@ -206,9 +206,18 @@ function DataPage() {
   const handleSearchLastData = () => {
     const lang = i18n.language;
 
-    dispatch(
-      findInMapsLastData(lang, token, undefined, undefined, searchText, status)
-    );
+    if (searchText.length != 0) {
+      dispatch(
+        findInMapsLastData(
+          lang,
+          token,
+          undefined,
+          undefined,
+          searchText,
+          status
+        )
+      );
+    }
   };
 
   if (stationsLoading || loading)
@@ -490,7 +499,7 @@ function DataPage() {
           <form
             style={{
               maxWidth: "480px",
-              width: '100%',
+              width: "100%",
               display: "flex",
               alignItems: "center",
               paddingTop: "10px",
@@ -526,6 +535,7 @@ function DataPage() {
                 setCurrent(1);
                 setPageSize(6);
                 setStatus("");
+                setSearchText("");
               }}
             >
               <i className="fas fa-list icon"></i>{" "}
@@ -547,6 +557,7 @@ function DataPage() {
                 setCurrent(1);
                 setPageSize(6);
                 setStatus("true");
+                setSearchText("");
               }}
             >
               <i className="fas fa-check-circle icon"></i>{" "}
@@ -568,6 +579,7 @@ function DataPage() {
                 setCurrent(1);
                 setPageSize(6);
                 setStatus("false");
+                setSearchText("");
               }}
             >
               <i className="fas fa-times-circle icon"></i>{" "}
@@ -580,7 +592,7 @@ function DataPage() {
           </div>
         </div>
 
-        <div >
+        <div>
           {stationsMap?.data?.length == 0 ? (
             <div
               style={{

@@ -248,17 +248,19 @@ function ElectrPage() {
     const lang = i18n.language;
     const districtId = districtByRegionId[selectDistrictId - 1]?.id;
 
-    dispatch(
-      findInMapsLastDataByDistrictId(
-        lang,
-        token,
-        undefined,
-        undefined,
-        districtId == undefined ? "" : districtId,
-        searchText,
-        status
-      )
-    );
+    if (searchText.length != 0) {
+      dispatch(
+        findInMapsLastDataByDistrictId(
+          lang,
+          token,
+          undefined,
+          undefined,
+          districtId == undefined ? "" : districtId,
+          searchText,
+          status
+        )
+      );
+    }
   };
 
   if (stationsLoading || loading)
@@ -702,6 +704,7 @@ function ElectrPage() {
                 setCurrent(1);
                 setPageSize(6);
                 setStatus("");
+                setSearchText('')
               }}
             >
               <i className="fas fa-list icon"></i>{" "}
@@ -723,6 +726,7 @@ function ElectrPage() {
                 setCurrent(1);
                 setPageSize(6);
                 setStatus("true");
+                setSearchText('')
               }}
             >
               <i className="fas fa-check-circle icon"></i>{" "}
@@ -744,6 +748,7 @@ function ElectrPage() {
                 setCurrent(1);
                 setPageSize(6);
                 setStatus("false");
+                setSearchText('')
               }}
             >
               <i className="fas fa-times-circle icon"></i>{" "}
@@ -892,7 +897,7 @@ function ElectrPage() {
                           >
                             <div className="all_stations_data_page_aggrigate_item">
                               <div
-                                className="all_stations_data_item"
+                                className="data_item"
                                 style={{ marginTop: "10px" }}
                               >
                                 <div className="normal_flex_card">
@@ -915,7 +920,7 @@ function ElectrPage() {
                               </div>
 
                               <div
-                                className="all_stations_data_item"
+                                className="data_item"
                                 style={{ marginTop: "12px" }}
                               >
                                 <div className="normal_flex_card">

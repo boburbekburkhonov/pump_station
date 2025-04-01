@@ -254,17 +254,19 @@ function AllDatapPage() {
     const lang = i18n.language;
     const districtId = districtByRegionId[selectDistrictId - 1]?.id;
 
-    dispatch(
-      findInMapsLastDataByDistrictId(
-        lang,
-        token,
-        undefined,
-        undefined,
-        districtId == undefined ? "" : districtId,
-        searchText,
-        status
-      )
-    );
+    if (searchText.length != 0) {
+      dispatch(
+        findInMapsLastDataByDistrictId(
+          lang,
+          token,
+          undefined,
+          undefined,
+          districtId == undefined ? "" : districtId,
+          searchText,
+          status
+        )
+      );
+    }
   };
 
   if (stationsLoading || loading)
@@ -880,6 +882,7 @@ function AllDatapPage() {
                 setCurrent(1);
                 setPageSize(6);
                 setStatus("");
+                setSearchText('')
               }}
             >
               <i className="fas fa-list icon"></i>{" "}
@@ -901,6 +904,7 @@ function AllDatapPage() {
                 setCurrent(1);
                 setPageSize(6);
                 setStatus("true");
+                setSearchText('')
               }}
             >
               <i className="fas fa-check-circle icon"></i>{" "}
@@ -922,6 +926,7 @@ function AllDatapPage() {
                 setCurrent(1);
                 setPageSize(6);
                 setStatus("false");
+                setSearchText('')
               }}
             >
               <i className="fas fa-times-circle icon"></i>{" "}
