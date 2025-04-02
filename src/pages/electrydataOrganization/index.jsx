@@ -274,8 +274,11 @@ function ElectrPage() {
     const findHaveElectricity = item.data?.find(
       (e) => e.haveElectricalEnergy == true
     );
+    const findHaveElectricityNewOffice = item.data?.find(
+      (e) => e.id == '6753eb683094896172bbb39c'
+    );
 
-    if (findHaveElectricity == undefined) {
+    if (findHaveElectricity == undefined || findHaveElectricityNewOffice) {
       return 1;
     } else {
       return item.totalDocuments;

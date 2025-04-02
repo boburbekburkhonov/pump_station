@@ -1802,7 +1802,7 @@ function UserDashboard() {
                             </h4>
                           </div>
                           <h4 className="all_stations_data_item_import_data">
-                            {allElectrData.energyActiveTotal} kw
+                            {allElectrData.energyActiveTotal} {String(t("dashboardPageData.lastStationsData.energyValueView")).toLowerCase()}
                           </h4>
                         </div>
                       </div>

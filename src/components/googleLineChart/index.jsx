@@ -1,8 +1,11 @@
 import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import { useTranslation } from "react-i18next";
 
-const StatisticsLineChart = ({data}) => {
+const StatisticsLineChart = ({ data }) => {
+  const { i18n, t } = useTranslation();
+
   const options = {
     chart: {
       type: "column",
@@ -40,12 +43,14 @@ const StatisticsLineChart = ({data}) => {
     },
     series: [
       {
-        name: "Suv hajmi (m³)",
+        name: `${t("dashboardPageData.buttonAggregate")} (m³)`,
         data: data.volume,
         color: "#4169E1",
       },
       {
-        name: "Sariflangan energiya (kWh)",
+        name: `${t("dataPagesInformation.allStationsElektrActiveEnergy")} ${t(
+          "dashboardPageData.lastStationsData.energyValueView"
+        )}`,
         data: data.energyActive,
         color: "#32CD32",
       },
