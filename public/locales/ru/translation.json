@@ -322,7 +322,7 @@
     "tooltipName": "Объем воды",
     "tooltipName2": "Заряженная мощность",
     "statisticsTitle1": "Статистика объёма воды станций",
-    "statisticsTitle2": "Статистика потребления электроэнергии станциями",
+    "statisticsTitle2": "Статистика номинальной энергии станций",
     "emptyData": "Информация недоступна",
     "filterTitle2": [
       {
@@ -341,6 +341,7 @@
         "title": "Это годовые данные"
       }
     ],
+    "lineChartDataHeading": "Всего по округам",
     "lastStationsData": {
       "locations": "Viloyat",
       "locations2": "Tashkilot",
@@ -455,7 +456,7 @@
     "allStationsDataHead": "Окончательные совокупные данные и данные счетчиков электроэнергии по всем станциям",
     "allStationsAggrigatetotalsVolume": "Объем прошедшей воды",
     "allStationsAggrigatetotalsFlow": "Средний расход",
-    "allStationsElektrActiveEnergy": "Активное потребление энергии",
+    "allStationsElektrActiveEnergy": "Энергия потраченная",
     "allStationsElektrReactiveEnergy": "Номинальная реактивная энергия",
     "allStationsDataModalCancelButton": "Возвращаться",
     "allStationsDataModalOkButton": "Понятно",

@@ -139,20 +139,20 @@ const LayoutComponent = memo(({ childrenComponent }) => {
         },
       ],
     },
-    {
-      key: "reports",
-      icon: (
-        <SnippetsOutlined
-          className="menu-icon"
-          style={{ fontSize: "16px", fontWeight: "500" }}
-        />
-      ),
-      label: (
-        <Link className="layout_links" to="/reports">
-          {t("layoutData.navLink14")}
-        </Link>
-      ),
-    },
+    // {
+    //   key: "reports",
+    //   icon: (
+    //     <SnippetsOutlined
+    //       className="menu-icon"
+    //       style={{ fontSize: "16px", fontWeight: "500" }}
+    //     />
+    //   ),
+    //   label: (
+    //     <Link className="layout_links" to="/reports">
+    //       {t("layoutData.navLink14")}
+    //     </Link>
+    //   ),
+    // },
     {
       key: "notification",
       icon: (
@@ -329,20 +329,20 @@ const LayoutComponent = memo(({ childrenComponent }) => {
         },
       ],
     },
-    {
-      key: "reports",
-      icon: (
-        <SnippetsOutlined
-          className="menu-icon"
-          style={{ fontSize: "16px", fontWeight: "500" }}
-        />
-      ),
-      label: (
-        <Link className="layout_links" to="/reports">
-          {t("layoutData.navLink14")}
-        </Link>
-      ),
-    },
+    // {
+    //   key: "reports",
+    //   icon: (
+    //     <SnippetsOutlined
+    //       className="menu-icon"
+    //       style={{ fontSize: "16px", fontWeight: "500" }}
+    //     />
+    //   ),
+    //   label: (
+    //     <Link className="layout_links" to="/reports">
+    //       {t("layoutData.navLink14")}
+    //     </Link>
+    //   ),
+    // },
     {
       key: "notification",
       icon: (

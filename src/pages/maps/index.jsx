@@ -194,131 +194,149 @@ function MapsPage() {
                 </p>
               </div>
 
-              <div className="modal_aggregate_wrapper_item">
-                <div className="modal_aggregate_wrapper_item_left_wrapper">
-                  <AreaChartOutlined className="dashboard_last_data_icons" />
-
-                  <h2
-                    className="modal_aggregate_wrapper_item_heading"
-                    style={{ color: colors.text }}
-                  >
-                    {t("dashboardPageData.lastStationsData.agrigateVolume")}:
-                  </h2>
-                </div>
-
-                <p
-                  className="modal_aggregate_wrapper_item_desc"
-                  style={{ color: colors.text }}
+              {e.pumpLastData == undefined ? (
+                <h3
+                  style={{
+                    fontWeight: 400,
+                    marginTop: '25px',
+                    textAlign: 'center'
+                  }}
                 >
-                  {e.pumpLastData?.volume} m³
-                </p>
-              </div>
+                  {t("dashboardPageData.emptyData")}...
+                </h3>
+              ) : (
+                <>
+                  <div className="modal_aggregate_wrapper_item">
+                    <div className="modal_aggregate_wrapper_item_left_wrapper">
+                      <AreaChartOutlined className="dashboard_last_data_icons" />
 
-              <div className="modal_aggregate_wrapper_item">
-                <div className="modal_aggregate_wrapper_item_left_wrapper">
-                  <LineChartOutlined className="dashboard_last_data_icons" />
+                      <h2
+                        className="modal_aggregate_wrapper_item_heading"
+                        style={{ color: colors.text }}
+                      >
+                        {t("dashboardPageData.lastStationsData.agrigateVolume")}
+                        :
+                      </h2>
+                    </div>
 
-                  <h2
-                    className="modal_aggregate_wrapper_item_heading"
-                    style={{ color: colors.text }}
-                  >
-                    {t("dashboardPageData.lastStationsData.agrigateVelocity")}:
-                  </h2>
-                </div>
+                    <p
+                      className="modal_aggregate_wrapper_item_desc"
+                      style={{ color: colors.text }}
+                    >
+                      {e.pumpLastData?.volume} m³
+                    </p>
+                  </div>
 
-                <p
-                  className="modal_aggregate_wrapper_item_desc"
-                  style={{ color: colors.text }}
-                >
-                  {e.pumpLastData?.velocity} m/s
-                </p>
-              </div>
+                  <div className="modal_aggregate_wrapper_item">
+                    <div className="modal_aggregate_wrapper_item_left_wrapper">
+                      <LineChartOutlined className="dashboard_last_data_icons" />
 
-              <div className="modal_aggregate_wrapper_item">
-                <div className="modal_aggregate_wrapper_item_left_wrapper">
-                  <ExperimentOutlined className="dashboard_last_data_icons" />
+                      <h2
+                        className="modal_aggregate_wrapper_item_heading"
+                        style={{ color: colors.text }}
+                      >
+                        {t(
+                          "dashboardPageData.lastStationsData.agrigateVelocity"
+                        )}
+                        :
+                      </h2>
+                    </div>
 
-                  <h2
-                    className="modal_aggregate_wrapper_item_heading"
-                    style={{ color: colors.text }}
-                  >
-                    {t("dashboardPageData.lastStationsData.agrigateSpeed")}:
-                  </h2>
-                </div>
+                    <p
+                      className="modal_aggregate_wrapper_item_desc"
+                      style={{ color: colors.text }}
+                    >
+                      {e.pumpLastData?.velocity} m/s
+                    </p>
+                  </div>
 
-                <p
-                  className="modal_aggregate_wrapper_item_desc"
-                  style={{ color: colors.text }}
-                >
-                  {e.pumpLastData?.flow} m³/s
-                </p>
-              </div>
+                  <div className="modal_aggregate_wrapper_item">
+                    <div className="modal_aggregate_wrapper_item_left_wrapper">
+                      <ExperimentOutlined className="dashboard_last_data_icons" />
 
-              <div className="modal_aggregate_wrapper_item">
-                <div className="modal_aggregate_wrapper_item_left_wrapper">
-                  <BgColorsOutlined className="dashboard_last_data_icons" />
+                      <h2
+                        className="modal_aggregate_wrapper_item_heading"
+                        style={{ color: colors.text }}
+                      >
+                        {t("dashboardPageData.lastStationsData.agrigateSpeed")}:
+                      </h2>
+                    </div>
 
-                  <h2
-                    className="modal_aggregate_wrapper_item_heading"
-                    style={{ color: colors.text }}
-                  >
-                    {t(
-                      "dashboardPageData.lastStationsData.agrigateDailyVolume"
-                    )}
-                    :
-                  </h2>
-                </div>
+                    <p
+                      className="modal_aggregate_wrapper_item_desc"
+                      style={{ color: colors.text }}
+                    >
+                      {e.pumpLastData?.flow} m³/s
+                    </p>
+                  </div>
 
-                <p
-                  className="modal_aggregate_wrapper_item_desc"
-                  style={{ color: colors.text }}
-                >
-                  {e.pumpLastData?.todayTotalFlow} m³
-                </p>
-              </div>
+                  <div className="modal_aggregate_wrapper_item">
+                    <div className="modal_aggregate_wrapper_item_left_wrapper">
+                      <BgColorsOutlined className="dashboard_last_data_icons" />
 
-              <div className="modal_aggregate_wrapper_item">
-                <div className="modal_aggregate_wrapper_item_left_wrapper">
-                  <DotChartOutlined className="dashboard_last_data_icons" />
+                      <h2
+                        className="modal_aggregate_wrapper_item_heading"
+                        style={{ color: colors.text }}
+                      >
+                        {t(
+                          "dashboardPageData.lastStationsData.agrigateDailyVolume"
+                        )}
+                        :
+                      </h2>
+                    </div>
 
-                  <h2
-                    className="modal_aggregate_wrapper_item_heading"
-                    style={{ color: colors.text }}
-                  >
-                    {t(
-                      "dashboardPageData.lastStationsData.agrigateTotalsVolume"
-                    )}
-                    :
-                  </h2>
-                </div>
+                    <p
+                      className="modal_aggregate_wrapper_item_desc"
+                      style={{ color: colors.text }}
+                    >
+                      {e.pumpLastData?.todayTotalFlow} m³
+                    </p>
+                  </div>
 
-                <p
-                  className="modal_aggregate_wrapper_item_desc"
-                  style={{ color: colors.text }}
-                >
-                  {e.pumpLastData?.totalsVolume} m³
-                </p>
-              </div>
+                  <div className="modal_aggregate_wrapper_item">
+                    <div className="modal_aggregate_wrapper_item_left_wrapper">
+                      <DotChartOutlined className="dashboard_last_data_icons" />
 
-              <div className="modal_aggregate_wrapper_item">
-                <div className="modal_aggregate_wrapper_item_left_wrapper">
-                  <ClockCircleOutlined className="dashboard_last_data_icons" />
+                      <h2
+                        className="modal_aggregate_wrapper_item_heading"
+                        style={{ color: colors.text }}
+                      >
+                        {t(
+                          "dashboardPageData.lastStationsData.agrigateTotalsVolume"
+                        )}
+                        :
+                      </h2>
+                    </div>
 
-                  <h2
-                    className="modal_aggregate_wrapper_item_heading"
-                    style={{ color: colors.text }}
-                  >
-                    {t("dashboardPageData.lastStationsData.aggrigateTime")}:
-                  </h2>
-                </div>
+                    <p
+                      className="modal_aggregate_wrapper_item_desc"
+                      style={{ color: colors.text }}
+                    >
+                      {e.pumpLastData?.totalsVolume} m³
+                    </p>
+                  </div>
 
-                <p
-                  className="modal_aggregate_wrapper_item_desc"
-                  style={{ color: colors.text }}
-                >
-                  {fixDate(e.pumpLastData?.date)}
-                </p>
-              </div>
+                  <div className="modal_aggregate_wrapper_item">
+                    <div className="modal_aggregate_wrapper_item_left_wrapper">
+                      <ClockCircleOutlined className="dashboard_last_data_icons" />
+
+                      <h2
+                        className="modal_aggregate_wrapper_item_heading"
+                        style={{ color: colors.text }}
+                      >
+                        {t("dashboardPageData.lastStationsData.aggrigateTime")}:
+                      </h2>
+                    </div>
+
+                    <p
+                      className="modal_aggregate_wrapper_item_desc"
+                      style={{ color: colors.text }}
+                    >
+                      {fixDate(e.pumpLastData?.date)}
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
           ))}
         </div>

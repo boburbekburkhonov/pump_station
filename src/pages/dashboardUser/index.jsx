@@ -40,6 +40,7 @@ import {
 import {
   getAllStationsId,
   getStatisticsDashboard,
+  getVolumeAndEnergyDataByGroupStation,
 } from "../../redux/actions/dashboard";
 import "../dashboard/index.css";
 import { findLastStationsData } from "../../redux/actions/stationsActions";
@@ -64,6 +65,8 @@ import SolarEmploymentChart from "../../components/googleNewPieChart";
 import ViewStationModal from "../../components/stationsModalStatus/index";
 import ViewMoreStationModal from "../../components/viewMoreStationModal";
 import { useNavigate } from "react-router-dom";
+import StatisticsLineChart from "../../components/googleLineChart";
+import { isString } from "highcharts";
 
 const STATISTIC_CARDS_CHUNK = 3;
 const STATISTIC_CARDS_CHUNK_NEXT = 7;
@@ -700,9 +703,12 @@ function UserDashboard() {
   const dispatch = useDispatch();
   const { i18n, t } = useTranslation();
   const { colors, theme } = useSelector((state) => state.theme);
-  const { statisticData, stationsId, loadingStatistic } = useSelector(
-    (state) => state.dashboard
-  );
+  const {
+    statisticData,
+    stationsId,
+    loadingStatistic,
+    statisticDataForLineChart,
+  } = useSelector((state) => state.dashboard);
   const { totalData, loadingData, firstPieData, secondPieData } = useSelector(
     (state) => state.pie
   );
@@ -730,7 +736,9 @@ function UserDashboard() {
   const [selectedColor, setSelectedColor] = useState("");
   const [oneStationLastData, setOneStationLastData] = useState();
   const [modalOpen, setModalOpen] = useState(false);
+  const [activeSquareButton, setActiveSquareButton] = useState(0);
   const [activePieButton, setActivePieButton] = useState(0);
+  const [activeLineButton, setActiveLineButton] = useState(0);
 
   const regionId = Cookies.get("regionId");
   const token = localStorage.getItem("access_token");
@@ -746,6 +754,7 @@ function UserDashboard() {
           dispatch(findLastStationsData(lang, token)),
           dispatch(getAllStationsId(lang, token)),
           dispatch(findTodayStatisticData(lang, token)),
+          dispatch(getVolumeAndEnergyDataByGroupStation(lang, token, "today")),
         ]);
       });
     } catch (error) {
@@ -943,6 +952,117 @@ function UserDashboard() {
 
   const handleOpenModal = (id) => {
     navigate(`/all/data/infos/${id}`);
+  };
+
+  const handleVolumeAndEnergyDataByGroupStation = (key) => {
+    switch (key) {
+      case 0:
+        dispatch(
+          getVolumeAndEnergyDataByGroupStation(i18n.language, token, "today")
+        );
+        break;
+      case 1:
+        dispatch(
+          getVolumeAndEnergyDataByGroupStation(
+            i18n.language,
+            token,
+            "yesterday"
+          )
+        );
+        break;
+      case 2:
+        dispatch(
+          getVolumeAndEnergyDataByGroupStation(i18n.language, token, "week")
+        );
+        break;
+      case 3:
+        dispatch(
+          getVolumeAndEnergyDataByGroupStation(i18n.language, token, "month")
+        );
+        break;
+      case 4:
+        dispatch(
+          getVolumeAndEnergyDataByGroupStation(i18n.language, token, "year")
+        );
+        break;
+      default:
+        break;
+    }
+  };
+
+  const sortDataLineChart = (data) => {
+    const date = [];
+    const dataVolume = [];
+    const dataEnergyActive = [];
+    const months = {
+      uz: [
+        "Yanvar",
+        "Fevral",
+        "Mart",
+        "Aprel",
+        "May",
+        "Iyun",
+        "Iyul",
+        "Avgust",
+        "Sentabr",
+        "Oktabr",
+        "Noyabr",
+        "Dekabr",
+        "hafta",
+      ],
+      en: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+        "week",
+      ],
+      ru: [
+        "Январь",
+        "Февраль",
+        "Март",
+        "Апрель",
+        "Май",
+        "Июнь",
+        "Июль",
+        "Август",
+        "Сентябрь",
+        "Октябрь",
+        "Ноябрь",
+        "Декабрь",
+        "неделя",
+      ],
+    };
+
+    data.forEach((e) => {
+      if (activeSquareButton == 0) {
+        date.push(typeof e?.date != "number" ? e?.date?.split(" ")[1] : "");
+      } else if (activeSquareButton == 1) {
+        date.push(typeof e?.date != "number" ? e?.date?.split(" ")[1] : "");
+      } else if (activeSquareButton == 2) {
+        date.push(typeof e?.date != "number" ? e?.date?.split("T")[0] : "");
+      } else if (activeSquareButton == 3) {
+        date.push(typeof e?.date != "number" ? e?.date?.split("T")[0] : "");
+      } else if (activeSquareButton == 4) {
+        date.push(months[i18n.language][e.date - 1]);
+      }
+      dataVolume.push(e.volume);
+      dataEnergyActive.push(e.energyActive);
+    });
+
+    return {
+      date: date,
+      volume: dataVolume,
+      energyActive: dataEnergyActive,
+    };
   };
 
   return (
@@ -1600,7 +1720,7 @@ function UserDashboard() {
                     />
                     <h1
                       className="m-0"
-                      style={{ textAlign: "center", margin: "0" }}
+                      style={{ textAlign: "center", margin: "0", padding: '0' }}
                     >
                       {item.name}
                     </h1>
@@ -1721,6 +1841,68 @@ function UserDashboard() {
           />
         ) : (
           <>
+            <div
+              className="filter_container_dashboard"
+              style={{
+                marginBottom: "50px",
+              }}
+            >
+              <h1>
+                {t("dashboardPageData.lineChartDataHeading")}{" "}
+                {String(
+                  t("dashboardPageData.filterTitle2", { returnObjects: true })[
+                    activeSquareButton
+                  ]?.title
+                ).toLowerCase()}
+              </h1>
+
+              <div className="filter_select_box">
+                {t("dashboardPageData.filterCardData", {
+                  returnObjects: true,
+                }).map((item, index) => {
+                  return (
+                    <Button
+                      key={index}
+                      type={activeSquareButton == index ? "primary" : "default"}
+                      size="large"
+                      onClick={() => {
+                        handleVolumeAndEnergyDataByGroupStation(index);
+                        setActiveSquareButton(index);
+                      }}
+                    >
+                      {item.title}
+                    </Button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="">
+              <StatisticsLineChart
+                data={sortDataLineChart(statisticDataForLineChart)}
+              />
+            </div>
+          </>
+        )}
+      </div>
+
+      <div
+        className="dashboard_statistic_datas"
+        style={{
+          background: colors.layoutBackground,
+          marginTop: "20px",
+        }}
+      >
+        {loadingData || isPending ? (
+          <Card
+            style={{
+              width: "100%",
+              height: 700,
+            }}
+            loading={loadingData}
+          />
+        ) : (
+          <>
             <div className="filter_container_dashboard">
               <h1>
                 {
@@ -1731,20 +1913,23 @@ function UserDashboard() {
               </h1>
 
               <div className="filter_select_box">
-              {t("dashboardPageData.filterCardData", {
-                    returnObjects: true,
-                  }).map((item,index) => {
-                    return <Button
-                    key={index}
-                    type={activePieButton == index ? "primary" : "default"}
-                    size="large"
-                    onClick={() => {
-                      setActivePieButton(index)
-                      handleChangeStatistics(index)}}
-                  >
-                    {item.title}
-                  </Button>
-                  })}
+                {t("dashboardPageData.filterCardData", {
+                  returnObjects: true,
+                }).map((item, index) => {
+                  return (
+                    <Button
+                      key={index}
+                      type={activePieButton == index ? "primary" : "default"}
+                      size="large"
+                      onClick={() => {
+                        setActivePieButton(index);
+                        handleChangeStatistics(index);
+                      }}
+                    >
+                      {item.title}
+                    </Button>
+                  );
+                })}
               </div>
             </div>
 
@@ -1804,13 +1989,31 @@ function UserDashboard() {
         ) : (
           <>
             <div className="filter_container_dashboard">
-              <h1>
-                {
-                  t("dashboardPageData.filterTitle2", { returnObjects: true })[
-                    selectDataType
-                  ]?.title
-                }
-              </h1>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Select
+                  size="large"
+                  value={selectStationsId}
+                  className="select_input_stations"
+                  options={stationsId.map((item) => ({
+                    value: item.id,
+                    label: item.name,
+                  }))}
+                  onChange={(key, option) => setSelectStationsId(key)}
+                />
+
+                <h1 style={{ marginLeft: "15px" }}>
+                  {String(
+                    t("dashboardPageData.filterTitle2", {
+                      returnObjects: true,
+                    })[selectDataType]?.title
+                  ).toLowerCase()}
+                </h1>
+              </div>
 
               <div className="filter_select_box">
                 <Button
@@ -1829,29 +2032,33 @@ function UserDashboard() {
                   {t("dashboardPageData.buttonElectr")}
                 </Button>
 
-                <Select
-                  size="large"
-                  value={selectDataType}
-                  className="select_input_stations"
-                  options={t("dashboardPageData.filterCardData", {
-                    returnObjects: true,
-                  }).map((item, index) => ({
-                    value: index,
-                    label: item.title,
-                  }))}
-                  onChange={(key, option) => handleChangeLineStatistics(key)}
-                />
+                <div
+                  style={{
+                    width: "2.2px",
+                    height: "40px",
+                    background: "rgb(205 205 205)",
+                  }}
+                ></div>
 
-                <Select
-                  size="large"
-                  value={selectStationsId}
-                  className="select_input_stations"
-                  options={stationsId.map((item) => ({
-                    value: item.id,
-                    label: item.name,
-                  }))}
-                  onChange={(key, option) => setSelectStationsId(key)}
-                />
+                <div className="filter_select_box">
+                  {t("dashboardPageData.filterCardData", {
+                    returnObjects: true,
+                  }).map((item, index) => {
+                    return (
+                      <Button
+                        key={index}
+                        type={activeLineButton == index ? "primary" : "default"}
+                        size="large"
+                        onClick={() => {
+                          setActiveLineButton(index);
+                          handleChangeLineStatistics(index);
+                        }}
+                      >
+                        {item.title}
+                      </Button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 

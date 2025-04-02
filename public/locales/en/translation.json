@@ -322,7 +322,7 @@
     "tooltipName": "Water volume",
     "tooltipName2": "Rated power",
     "statisticsTitle1": "Water volume statistics of stations",
-    "statisticsTitle2": "Electricity consumption statistics of stations",
+    "statisticsTitle2": "Stations' rated energy statistics",
     "emptyData": "No information available.",
     "filterTitle2": [
       {
@@ -341,6 +341,7 @@
         "title": "This year data statistics"
       }
     ],
+    "lineChartDataHeading": "Total by district",
     "lastStationsData": {
       "locations": "Viloyat",
       "locations2": "Tashkilot",
@@ -455,7 +456,7 @@
     "allStationsDataHead": "Last aggregate and electricity meter data for all stations",
     "allStationsAggrigatetotalsVolume": "Volume of water flowed",
     "allStationsAggrigatetotalsFlow": "Average flow rate",
-    "allStationsElektrActiveEnergy": "Active energy consumed",
+    "allStationsElektrActiveEnergy": "Energy consumed",
     "allStationsElektrReactiveEnergy": "Rated reactive energy",
     "allStationsDataModalCancelButton": "Go back",
     "allStationsDataModalOkButton": "Understandable",

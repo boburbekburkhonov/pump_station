@@ -83,7 +83,7 @@ function ElectrPage() {
     const availableHeight = screenHeight - navbarHeight;
 
     const estimatedRows = Math.floor(availableHeight / 220); // Har qator taxminan 200px
-    const estimatedColumns = Math.floor(window.innerWidth / 290); // Har card 300px kenglikka ega deb hisoblaymiz
+    const estimatedColumns = Math.floor(window.innerWidth / 400); // Har card 300px kenglikka ega deb hisoblaymiz
     const newPageSize = estimatedRows * estimatedColumns;
 
     setPageSize(newPageSize > 0 ? newPageSize : 1);
@@ -220,6 +220,18 @@ function ElectrPage() {
         <Loading />
       </section>
     );
+
+  const sortPagination = (item) => {
+    const findHaveElectricity = item.data?.find(
+      (e) => e.haveElectricalEnergy == true
+    );
+
+    if (findHaveElectricity == undefined) {
+      return 1;
+    } else {
+      return item.totalDocuments;
+    }
+  };
 
   return (
     <section className="data_main_sections">
@@ -685,7 +697,8 @@ function ElectrPage() {
         </div>
 
         <div>
-          {stationsMap?.data?.length == 0 ? (
+          {stationsMap?.data?.length == 0 ||
+          sortPagination(stationsMap) == 1 ? (
             <div
               style={{
                 height: "70vh",
@@ -732,124 +745,128 @@ function ElectrPage() {
                       key={index}
                       span={colSpan}
                       style={{
-                        maxWidth: "370px",
+                        maxWidth: "450px",
+                        width: "100%",
                       }}
                     >
-                      <Card
-                        key={index}
-                        type="inner"
-                        className="data_paga_card_element"
-                        style={{
-                          background: colors.blurBgColor2,
-                          maxWidth: "360px",
-                        }}
-                      >
-                        <div
-                          className="data_page_card_header"
+                      {item.haveElectricalEnergy ? (
+                        <Card
+                          key={index}
+                          type="inner"
+                          className="data_paga_card_element"
                           style={{
-                            borderBottom: `3px solid ${
-                              item.status ? "#40C057" : "red"
-                            }`,
+                            background: colors.blurBgColor2,
                           }}
                         >
-                          <img
+                          <div
+                            className="data_page_card_header"
                             style={{
-                              filter:
-                                theme === "light" ? "invert(0)" : "invert(1)",
+                              borderBottom: `3px solid ${
+                                item.status ? "#40C057" : "red"
+                              }`,
                             }}
-                            className="save_action_data"
-                            src={
-                              item.selectionDashboard
-                                ? CheckBookmark
-                                : UnCheckBookmark
-                            }
-                            alt="Images"
-                            onClick={() =>
-                              handleChangeSelectStationData(item?.id)
-                            }
-                          />
+                          >
+                            <img
+                              style={{
+                                filter:
+                                  theme === "light" ? "invert(0)" : "invert(1)",
+                              }}
+                              className="save_action_data"
+                              src={
+                                item.selectionDashboard
+                                  ? CheckBookmark
+                                  : UnCheckBookmark
+                              }
+                              alt="Images"
+                              onClick={() =>
+                                handleChangeSelectStationData(item?.id)
+                              }
+                            />
 
-                          <h1>{item.name}</h1>
+                            <h1>{item.name}</h1>
 
-                          <img
-                            className="more_info__action_data"
-                            src={moreInfo}
-                            alt="moreInfo"
-                            width={25}
-                            height={25}
+                            <img
+                              className="more_info__action_data"
+                              src={moreInfo}
+                              alt="moreInfo"
+                              width={25}
+                              height={25}
+                              onClick={() => {
+                                findOneStationById(item.id);
+                                setModalOpen(true);
+                              }}
+                            />
+                          </div>
+
+                          <div
+                            className="data_page_aggrigate_container"
+                            style={{
+                              cursor: "pointer",
+                            }}
                             onClick={() => {
                               findOneStationById(item.id);
                               setModalOpen(true);
                             }}
-                          />
-                        </div>
-
-                        <div
-                          className="data_page_aggrigate_container"
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            findOneStationById(item.id);
-                            setModalOpen(true);
-                          }}
-                        >
-                          <div
-                            className="all_stations_data_page_aggrigate_card_item"
-                            style={{
-                              backgroundColor: colors.backgroundColor,
-                            }}
                           >
-                            <div className="all_stations_data_page_aggrigate_item">
-                              <div
-                                className="all_stations_data_item"
-                                style={{ marginTop: "10px" }}
-                              >
-                                <div className="normal_flex_card">
-                                  <NodeIndexOutlined
-                                    style={{
-                                      color: colors.textColor,
-                                    }}
-                                    className="dashboard_last_data_icons"
-                                  />
-                                  <h4>
-                                    {t(
-                                      "dataPagesInformation.allStationsElektrActiveEnergy"
-                                    )}
-                                    :{" "}
+                            <div
+                              className="all_stations_data_page_aggrigate_card_item"
+                              style={{
+                                backgroundColor: colors.backgroundColor,
+                              }}
+                            >
+                              <div className="all_stations_data_page_aggrigate_item">
+                                <div
+                                  className="all_stations_data_item"
+                                  style={{ marginTop: "10px" }}
+                                >
+                                  <div className="normal_flex_card">
+                                    <NodeIndexOutlined
+                                      style={{
+                                        color: colors.textColor,
+                                      }}
+                                      className="dashboard_last_data_icons"
+                                    />
+                                    <h4>
+                                      {t(
+                                        "dataPagesInformation.allStationsElektrActiveEnergy"
+                                      )}
+                                      :{" "}
+                                    </h4>
+                                  </div>
+                                  <h4 className="all_stations_data_item_import_data">
+                                    {allElectrData.energyActiveTotal} kw
                                   </h4>
                                 </div>
-                                <h4 className="all_stations_data_item_import_data">
-                                  {allElectrData.energyActiveTotal} kw
-                                </h4>
-                              </div>
 
-                              <div
-                                className="all_stations_data_item"
-                                style={{ marginTop: "12px" }}
-                              >
-                                <div className="normal_flex_card">
-                                  <BulbOutlined
-                                    style={{
-                                      color: colors.textColor,
-                                    }}
-                                    className="dashboard_last_data_icons"
-                                  />
-                                  <h4>
-                                    {t(
-                                      "dataPagesInformation.allStationsElektrReactiveEnergy"
-                                    )}
-                                    :{" "}
+                                <div
+                                  className="all_stations_data_item"
+                                  style={{ marginTop: "12px" }}
+                                >
+                                  <div className="normal_flex_card">
+                                    <BulbOutlined
+                                      style={{
+                                        color: colors.textColor,
+                                      }}
+                                      className="dashboard_last_data_icons"
+                                    />
+                                    <h4>
+                                      {t(
+                                        "dataPagesInformation.allStationsElektrReactiveEnergy"
+                                      )}
+                                      :{" "}
+                                    </h4>
+                                  </div>
+                                  <h4 className="all_stations_data_item_import_data">
+                                    {allElectrData.energyReactiveTotal} kw
                                   </h4>
                                 </div>
-                                <h4 className="all_stations_data_item_import_data">
-                                  {allElectrData.energyReactiveTotal} kw
-                                </h4>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </Card>
+                        </Card>
+                      ) : (
+                        ""
+                      )}
                     </Col>
                   );
                 })}
@@ -859,7 +876,7 @@ function ElectrPage() {
                 className="data_pagination_info"
                 current={current}
                 onChange={handlePaginationChange}
-                total={stationsMap?.totalDocuments}
+                total={sortPagination(stationsMap)}
                 pageSize={pageSize}
                 align="end"
               />

@@ -5,6 +5,7 @@ import { getDataApi } from "../../utils";
 
 export const DASHBOARD_DATAS = {
   GET_USER_INFORMATION_BY_ID: "GET_USER_INFORMATION_BY_ID",
+  GET_VOLUME_AND_ENERGY_DATA_BY_GROUPSTATION: "GET_VOLUME_AND_ENERGY_DATA_BY_GROUPSTATION",
   UPDATED_USER_INFORMATION_BY_ID: "UPDATE_USER_INFORMATION_BY_ID",
   GET_COUNT_STATIONS_STATISTICS: "GET_COUNT_STATIONS_STATISTICS",
   GET_COUNT_STATIONS_STATISTICS_FOR_ORGANIZATION: "GET_COUNT_STATIONS_STATISTICS_FOR_ORGANIZATION",
@@ -221,4 +222,36 @@ export const getAllStationsId = (lang, token) => async (dispatch) => {
       });
     }
   }
+};
+
+export const getVolumeAndEnergyDataByGroupStation =
+  (lang, token, dataType) => async (dispatch) => {
+    try {
+      const res = await getDataApi(
+        `dashboard/getVolumeAndEnergyDataByGroupStation?lang=${lang}&dataType=${dataType}`,
+        token
+      );
+      const data = res.data.data;
+
+      dispatch({
+        type: DASHBOARD_DATAS.GET_VOLUME_AND_ENERGY_DATA_BY_GROUPSTATION,
+        payload: data,
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    }
 };

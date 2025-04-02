@@ -88,8 +88,8 @@ function DataPage() {
     const navbarHeight = 160; // Navbar + pagination balandligi
     const availableHeight = screenHeight - navbarHeight;
 
-    const estimatedRows = Math.floor(availableHeight / 220); // Har qator taxminan 200px
-    const estimatedColumns = Math.floor(window.innerWidth / 290); // Har card 300px kenglikka ega deb hisoblaymiz
+    const estimatedRows = Math.floor(availableHeight / 150); // Har qator taxminan 200px
+    const estimatedColumns = Math.floor(window.innerWidth / 420); // Har card 300px kenglikka ega deb hisoblaymiz
     const newPageSize = estimatedRows * estimatedColumns;
 
     setPageSize(newPageSize > 0 ? newPageSize : 1);
@@ -296,7 +296,7 @@ function DataPage() {
                   display: "flex",
                   flexWrap: "wrap",
                   justifyContent: "space-between",
-                  alignItems: "center",
+                  // alignItems: "center",
                   gap: "15px",
                   padding: "15px",
                   cursor: "pointer",
@@ -334,137 +334,153 @@ function DataPage() {
                         </p>
                       </div>
 
-                      <div className="modal_electr_wrapper_item">
-                        <div className="modal_electr_wrapper_item_left_wrapper">
-                          <AreaChartOutlined
-                            style={{
-                              color: "#000000",
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
+                      {e.pumpLastData == undefined ? (
+                        <h3
+                          style={{
+                            fontWeight: 400,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            height: "90%",
+                          }}
+                        >
+                          {t("dashboardPageData.emptyData")}...
+                        </h3>
+                      ) : (
+                        <>
+                          <div className="modal_electr_wrapper_item">
+                            <div className="modal_electr_wrapper_item_left_wrapper">
+                              <AreaChartOutlined
+                                style={{
+                                  color: "#000000",
+                                }}
+                                className="dashboard_last_data_icons"
+                              />
 
-                          <h2 className="modal_electr_wrapper_item_heading">
-                            {t(
-                              "dashboardPageData.lastStationsData.agrigateVolume"
-                            )}
-                            :
-                          </h2>
-                        </div>
+                              <h2 className="modal_electr_wrapper_item_heading">
+                                {t(
+                                  "dashboardPageData.lastStationsData.agrigateVolume"
+                                )}
+                                :
+                              </h2>
+                            </div>
 
-                        <p className="modal_electr_wrapper_item_desc">
-                          {e.pumpLastData?.volume} m³
-                        </p>
-                      </div>
+                            <p className="modal_electr_wrapper_item_desc">
+                              {e.pumpLastData?.volume} m³
+                            </p>
+                          </div>
 
-                      <div className="modal_electr_wrapper_item">
-                        <div className="modal_electr_wrapper_item_left_wrapper">
-                          <LineChartOutlined
-                            style={{
-                              color: "#000000",
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
+                          <div className="modal_electr_wrapper_item">
+                            <div className="modal_electr_wrapper_item_left_wrapper">
+                              <LineChartOutlined
+                                style={{
+                                  color: "#000000",
+                                }}
+                                className="dashboard_last_data_icons"
+                              />
 
-                          <h2 className="modal_electr_wrapper_item_heading">
-                            {t(
-                              "dashboardPageData.lastStationsData.agrigateVelocity"
-                            )}
-                            :
-                          </h2>
-                        </div>
+                              <h2 className="modal_electr_wrapper_item_heading">
+                                {t(
+                                  "dashboardPageData.lastStationsData.agrigateVelocity"
+                                )}
+                                :
+                              </h2>
+                            </div>
 
-                        <p className="modal_electr_wrapper_item_desc">
-                          {e.pumpLastData?.velocity} m/s
-                        </p>
-                      </div>
+                            <p className="modal_electr_wrapper_item_desc">
+                              {e.pumpLastData?.velocity} m/s
+                            </p>
+                          </div>
 
-                      <div className="modal_electr_wrapper_item">
-                        <div className="modal_electr_wrapper_item_left_wrapper">
-                          <ExperimentOutlined
-                            style={{
-                              color: "#000000",
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
+                          <div className="modal_electr_wrapper_item">
+                            <div className="modal_electr_wrapper_item_left_wrapper">
+                              <ExperimentOutlined
+                                style={{
+                                  color: "#000000",
+                                }}
+                                className="dashboard_last_data_icons"
+                              />
 
-                          <h2 className="modal_electr_wrapper_item_heading">
-                            {t(
-                              "dashboardPageData.lastStationsData.agrigateSpeed"
-                            )}
-                            :
-                          </h2>
-                        </div>
+                              <h2 className="modal_electr_wrapper_item_heading">
+                                {t(
+                                  "dashboardPageData.lastStationsData.agrigateSpeed"
+                                )}
+                                :
+                              </h2>
+                            </div>
 
-                        <p className="modal_electr_wrapper_item_desc">
-                          {e.pumpLastData?.flow} m³/s
-                        </p>
-                      </div>
+                            <p className="modal_electr_wrapper_item_desc">
+                              {e.pumpLastData?.flow} m³/s
+                            </p>
+                          </div>
 
-                      <div className="modal_electr_wrapper_item">
-                        <div className="modal_electr_wrapper_item_left_wrapper">
-                          <BgColorsOutlined
-                            style={{
-                              color: "#000000",
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
+                          <div className="modal_electr_wrapper_item">
+                            <div className="modal_electr_wrapper_item_left_wrapper">
+                              <BgColorsOutlined
+                                style={{
+                                  color: "#000000",
+                                }}
+                                className="dashboard_last_data_icons"
+                              />
 
-                          <h2 className="modal_electr_wrapper_item_heading">
-                            {t(
-                              "dashboardPageData.lastStationsData.agrigateDailyVolume"
-                            )}
-                            :
-                          </h2>
-                        </div>
+                              <h2 className="modal_electr_wrapper_item_heading">
+                                {t(
+                                  "dashboardPageData.lastStationsData.agrigateDailyVolume"
+                                )}
+                                :
+                              </h2>
+                            </div>
 
-                        <p className="modal_electr_wrapper_item_desc">
-                          {e.pumpLastData?.todayTotalFlow} m³
-                        </p>
-                      </div>
+                            <p className="modal_electr_wrapper_item_desc">
+                              {e.pumpLastData?.todayTotalFlow} m³
+                            </p>
+                          </div>
 
-                      <div className="modal_electr_wrapper_item">
-                        <div className="modal_electr_wrapper_item_left_wrapper">
-                          <DotChartOutlined
-                            style={{
-                              color: "#000000",
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
+                          <div className="modal_electr_wrapper_item">
+                            <div className="modal_electr_wrapper_item_left_wrapper">
+                              <DotChartOutlined
+                                style={{
+                                  color: "#000000",
+                                }}
+                                className="dashboard_last_data_icons"
+                              />
 
-                          <h2 className="modal_electr_wrapper_item_heading">
-                            {t(
-                              "dashboardPageData.lastStationsData.agrigateTotalsVolume"
-                            )}
-                            :
-                          </h2>
-                        </div>
+                              <h2 className="modal_electr_wrapper_item_heading">
+                                {t(
+                                  "dashboardPageData.lastStationsData.agrigateTotalsVolume"
+                                )}
+                                :
+                              </h2>
+                            </div>
 
-                        <p className="modal_electr_wrapper_item_desc">
-                          {e.pumpLastData?.totalsVolume} m³
-                        </p>
-                      </div>
+                            <p className="modal_electr_wrapper_item_desc">
+                              {e.pumpLastData?.totalsVolume} m³
+                            </p>
+                          </div>
 
-                      <div className="modal_electr_wrapper_item">
-                        <div className="modal_electr_wrapper_item_left_wrapper">
-                          <ClockCircleOutlined
-                            style={{
-                              color: "#000000",
-                            }}
-                            className="dashboard_last_data_icons"
-                          />
+                          <div className="modal_electr_wrapper_item">
+                            <div className="modal_electr_wrapper_item_left_wrapper">
+                              <ClockCircleOutlined
+                                style={{
+                                  color: "#000000",
+                                }}
+                                className="dashboard_last_data_icons"
+                              />
 
-                          <h2 className="modal_electr_wrapper_item_heading">
-                            {t(
-                              "dashboardPageData.lastStationsData.aggrigateTime"
-                            )}
-                            :
-                          </h2>
-                        </div>
+                              <h2 className="modal_electr_wrapper_item_heading">
+                                {t(
+                                  "dashboardPageData.lastStationsData.aggrigateTime"
+                                )}
+                                :
+                              </h2>
+                            </div>
 
-                        <p className="modal_electr_wrapper_item_desc">
-                          {fixDate(e.pumpLastData?.date)}
-                        </p>
-                      </div>
+                            <p className="modal_electr_wrapper_item_desc">
+                              {fixDate(e.pumpLastData?.date)}
+                            </p>
+                          </div>
+                        </>
+                      )}
                     </div>
                   );
                 })}
@@ -636,7 +652,8 @@ function DataPage() {
                       key={index}
                       span={colSpan}
                       style={{
-                        maxWidth: "360px",
+                        maxWidth: "420px",
+                        width: '100%'
                       }}
                     >
                       <Card
@@ -645,7 +662,6 @@ function DataPage() {
                         className="data_paga_card_element"
                         style={{
                           background: colors.blurBgColor2,
-                          maxWidth: "360px",
                         }}
                       >
                         <div

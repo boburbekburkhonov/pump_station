@@ -324,7 +324,7 @@
     "tooltipName": "Suv hajmi",
     "tooltipName2": "Sariflangan quvat",
     "statisticsTitle1": "Stansiyalarning suv hajmi statistikasi",
-    "statisticsTitle2": "Stansiyalarning elektr sarfi statistikasi",
+    "statisticsTitle2": "Stansiyalarning sariflangan energiya statistikasi",
     "emptyData": "Ma'lumot mavjud emas",
     "filterTitle2": [
       {
@@ -343,6 +343,7 @@
         "title": "Yillik ma'lumotlar statistikasi"
       }
     ],
+    "lineChartDataHeading": "Tuman bo'yicha umumiy",
     "lastStationsData": {
       "locations": "Viloyat",
       "locations2": "Tashkilot",
@@ -457,7 +458,7 @@
     "allStationsDataHead": "Barcha stansiyalarning so'ngi agrigat va elektr hisoblagich ma'lumotlari",
     "allStationsAggrigatetotalsVolume": "Oqib o'tgan suv hajmi",
     "allStationsAggrigatetotalsFlow": "O'rtacha oqim tezligi",
-    "allStationsElektrActiveEnergy": "Sariflangan aktiv energiya",
+    "allStationsElektrActiveEnergy": "Sariflangan energiya",
     "allStationsElektrReactiveEnergy": "Sariflangan reaktiv energiya",
     "allStationsDataModalCancelButton": "Ortga qaytish",
     "allStationsDataModalOkButton": "Tushunarli",

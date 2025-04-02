@@ -12,7 +12,11 @@ import {
 import { useSelector } from "react-redux";
 import markerRed from "../../assets/location-red.png";
 import markerGreen from "../../assets/location-blue.png";
-import { AreaChartOutlined, ExperimentOutlined, NodeIndexOutlined } from "@ant-design/icons";
+import {
+  AreaChartOutlined,
+  ExperimentOutlined,
+  NodeIndexOutlined,
+} from "@ant-design/icons";
 
 const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
   const { colors } = useSelector((state) => state.theme);
@@ -72,7 +76,9 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
             <Marker
               icon={{
                 // url: station.status ? markerGreen : markerRed,
-                url: station.status ? "https://maps.google.com/mapfiles/ms/icons/green-dot.png" : "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+                url: station.status
+                  ? "https://maps.google.com/mapfiles/ms/icons/green-dot.png"
+                  : "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
                 // url: "https://maps.google.com/mapfiles/ms/icons/green-dot.png",
                 scaledSize: new window.google.maps.Size(45, 45),
               }}
@@ -131,7 +137,7 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
                     fontSize: "16px",
                     borderRadius: "0.25rem",
                     padding: "10px",
-                    marginTop: '10px'
+                    marginTop: "10px",
                   }}
                 >
                   <div
@@ -173,7 +179,7 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
                     fontSize: "16px",
                     borderRadius: "0.25rem",
                     padding: "10px",
-                    paddingBottom: '10px'
+                    paddingBottom: "10px",
                   }}
                 >
                   <div
@@ -229,17 +235,19 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
                       className="dashboard_last_data_icons"
                     />
                     <p style={{ margin: "0", marginLeft: "7px" }}>
-                      {t("dataPagesInformation.allStationsElektrActiveEnergy")}
-                      :
+                      {t("dataPagesInformation.allStationsElektrActiveEnergy")}:
                     </p>
                   </div>
 
                   <p style={{ margin: "0" }}>
                     {selectedMarker.electricalEnergyLastData?.reduce(
-                      (agg, curr) => agg + (curr?.electricalEnergyLastData?.energyActiveTotal || 0),
+                      (agg, curr) =>
+                        agg +
+                        (curr?.electricalEnergyLastData?.energyActiveTotal ||
+                          0),
                       0
                     )}{" "}
-                    kw
+                    {String(t("dashboardPageData.lastStationsData.energyValueView")).toLowerCase()}
                   </p>
                 </div>
 
