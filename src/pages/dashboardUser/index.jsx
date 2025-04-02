@@ -1652,6 +1652,7 @@ function UserDashboard() {
           ""
         )}
       </div>
+
       <div className="last_stations_data_container">
         <div className="last_stations_data_cards">
           {!stationsLoading &&
@@ -1720,7 +1721,7 @@ function UserDashboard() {
                     />
                     <h1
                       className="m-0"
-                      style={{ textAlign: "center", margin: "0", padding: '0' }}
+                      style={{ textAlign: "center", margin: "0", padding: "0" }}
                     >
                       {item.name}
                     </h1>
@@ -1802,7 +1803,12 @@ function UserDashboard() {
                             </h4>
                           </div>
                           <h4 className="all_stations_data_item_import_data">
-                            {allElectrData.energyActiveTotal} {String(t("dashboardPageData.lastStationsData.energyValueView")).toLowerCase()}
+                            {allElectrData.energyActiveTotal}{" "}
+                            {String(
+                              t(
+                                "dashboardPageData.lastStationsData.energyValueView"
+                              )
+                            ).toLowerCase()}
                           </h4>
                         </div>
                       </div>
@@ -1879,6 +1885,7 @@ function UserDashboard() {
 
             <div className="">
               <StatisticsLineChart
+                theme={colors}
                 data={sortDataLineChart(statisticDataForLineChart)}
               />
             </div>

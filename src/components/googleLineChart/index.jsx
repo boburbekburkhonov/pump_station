@@ -3,13 +3,13 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { useTranslation } from "react-i18next";
 
-const StatisticsLineChart = ({ data }) => {
+const StatisticsLineChart = ({ theme, data }) => {
   const { i18n, t } = useTranslation();
 
   const options = {
     chart: {
       type: "column",
-      backgroundColor: "#ffffff",
+      backgroundColor: theme.backgroundColor,
     },
     title: {
       text: "",
@@ -19,6 +19,9 @@ const StatisticsLineChart = ({ data }) => {
     xAxis: {
       categories: data.date,
       crosshair: true,
+      labels: {
+        style: { color: theme.text }, // X o'qi matn rangi
+      },
     },
     yAxis: {
       title: {
