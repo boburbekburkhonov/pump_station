@@ -25,7 +25,15 @@ export const getAllStationsData = (data, token) => async (dispatch) => {
     });
 
     const res = await getDataApi(
-      `stations/findAll?lang=${data.lang}&page=${data.page}&perPage=${data.perPage}&search=${data.search}&regionId=${data.regionId}&organizationId=${data.organizationId}&status=${data.status}`,
+      `stations/findAll?lang=${data.lang}&page=${
+        data.page == undefined ? "" : data.page
+      }&perPage=${data.perPage == undefined ? "" : data.perPage}&search=${
+        data.search == undefined ? "" : data.search
+      }&regionId=${
+        data.regionId == undefined ? "" : data.regionId
+      }&organizationId=${
+        data.organizationId == undefined ? "" : data.organizationId
+      }&status=${data.status == undefined ? "" : data.status}`,
       token
     );
 
@@ -330,9 +338,7 @@ export const findInMapsLastData =
       const res = await getDataApi(
         `stations/findAllLastData?lang=${lang}&page=${
           page == undefined ? "" : page
-        }&perPage=${
-          perPage == undefined ? "" : perPage
-        }&search=${
+        }&perPage=${perPage == undefined ? "" : perPage}&search=${
           search == undefined ? "" : search
         }&status=${status == undefined ? "" : status}`,
         token
@@ -367,7 +373,8 @@ export const findInMapsLastData =
   };
 
 export const findInMapsLastDataByDistrictId =
-  (lang, token, page, perPage, districtId, search, status) => async (dispatch) => {
+  (lang, token, page, perPage, districtId, search, status) =>
+  async (dispatch) => {
     try {
       dispatch({
         type: GLOBALTYPES.LOADING,

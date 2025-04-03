@@ -4,15 +4,16 @@ import React, { useCallback, useEffect, useState, useMemo, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { Button } from "antd";
-import { EyeFilled } from "@ant-design/icons";
+import { Button, Input } from "antd";
+import { EyeFilled, SearchOutlined } from "@ant-design/icons";
 
 import "../stations/index.css";
 import { getAllStationsData } from "../../redux/actions/stationsActions";
 import Loading from "../../components/loading";
 
 import TableComponent from "../../components/tableComponent";
-import '../data/index.css'
+import "../data/index.css";
+import EmptyCard from "../../components/emptyCard";
 
 const StationsWithUser = memo(() => {
   const [dataSource, setDataSource] = useState([]);
@@ -25,6 +26,8 @@ const StationsWithUser = memo(() => {
   const { loading } = useSelector((state) => state.alert);
   const { colors } = useSelector((state) => state.theme);
   const { stationsData } = useSelector((state) => state.stations);
+  const [status, setStatus] = useState("");
+  const [searchText, setSearchText] = useState("");
 
   const token = localStorage.getItem("access_token");
 
@@ -35,14 +38,14 @@ const StationsWithUser = memo(() => {
       lang,
       page: currentPage,
       perPage: pageSize,
-      search: "",
-      regionId: "",
-      organizationId: "",
-      status: "",
+      regionId: undefined,
+      organizationId: undefined,
+      search: undefined,
+      status: status,
     };
 
     dispatch(getAllStationsData(stationParams, token));
-  }, [dispatch, token, currentPage, pageSize, i18n.language]);
+  }, [dispatch, token, currentPage, pageSize, i18n.language, status]);
 
   useEffect(() => {
     fetchAllData();
@@ -76,10 +79,10 @@ const StationsWithUser = memo(() => {
       lang,
       page,
       perPage: size,
-      search: "",
-      regionId: "",
-      organizationId: "",
-      status: "",
+      search: undefined,
+      regionId: undefined,
+      organizationId: undefined,
+      status: status,
     };
 
     dispatch(getAllStationsData(paginationParams, token));
@@ -125,9 +128,8 @@ const StationsWithUser = memo(() => {
         align: "center",
         render: (_, key) => (
           <span
-            className={
-              key.status ? "active_indicator" : "not_active_indicator"
-            }>
+            className={key.status ? "active_indicator" : "not_active_indicator"}
+          >
             {key.status
               ? t("dataPagesInformation.active_indicator")
               : t("dataPagesInformation.not_active_indicator")}
@@ -142,7 +144,7 @@ const StationsWithUser = memo(() => {
         align: "center",
         render: (_, key) => (
           <Button
-            type='primary'
+            type="primary"
             icon={<EyeFilled />}
             onClick={() => navigate(`/stations/${key.key}`)}
             style={{ boxShadow: "none" }}
@@ -154,22 +156,156 @@ const StationsWithUser = memo(() => {
     [t, navigate, token]
   );
 
+  const handleInput = (event) => {
+    setSearchText(event.target.value);
+  };
+
+  const handleSearchLastData = () => {
+    const lang = i18n.language;
+
+    if (searchText.length != 0) {
+      const stationParams = {
+        lang,
+        page: undefined,
+        perPage: undefined,
+        search: searchText,
+        regionId: undefined,
+        organizationId: undefined,
+        status: status,
+      };
+      console.log(stationParams);
+
+      dispatch(getAllStationsData(stationParams, token));
+    }
+  };
+  console.log(dataSource);
+
   return (
-    <section className='stations_sections'>
+    <section className="stations_sections">
       {loading ? (
         <Loading />
       ) : (
         <>
-          {stationsData.data?.length > 0 && (
+          <div
+            style={{
+              background: colors.layoutBackground,
+              alignItems: "normal",
+              padding: "10px 20px",
+            }}
+            className="stations_body_container"
+          >
+            <div className="stations_header_title ">
+              <h1>{t("stationsPageData.stationsDataHeader")}</h1>
+            </div>
+
+            <h2 style={{ marginTop: "20px" }}>Stansiya qidirish</h2>
+
             <div
               style={{
-                background: colors.layoutBackground,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginTop: "5px",
+                marginBottom: "15px",
               }}
-              className='stations_body_container'>
-              <div className='stations_header_title '>
-                <h1>{t("stationsPageData.stationsDataHeader")}</h1>
-              </div>
+            >
+              <form
+                style={{
+                  maxWidth: "480px",
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  paddingTop: "10px",
+                }}
+                onSubmit={handleSearchLastData}
+              >
+                <Input
+                  addonBefore={<SearchOutlined />}
+                  placeholder="Qidirish..."
+                  value={searchText}
+                  onChange={handleInput}
+                />
 
+                <Button
+                  style={{ marginLeft: "10px" }}
+                  type="primary"
+                  onClick={() => handleSearchLastData()}
+                >
+                  Qidirish
+                </Button>
+              </form>
+
+              <div className="filters_wrapper_btn">
+                <Button
+                  style={{
+                    marginLeft: "10px",
+                    background: status == "" ? "#405FF2" : "#F4F8FF",
+                    color: status == "" ? "#fff" : "#000",
+                    border: status == "" ? "none" : "2px solid #000",
+                  }}
+                  type="primary"
+                  onClick={() => {
+                    setCurrentPage(1);
+                    setPageSize(10);
+                    setStatus("");
+                    setSearchText("");
+                  }}
+                >
+                  <i className="fas fa-list icon"></i>{" "}
+                  {
+                    t("dashboardPageData.cardData", {
+                      returnObjects: true,
+                    })[0]?.status
+                  }
+                </Button>
+                <Button
+                  style={{
+                    marginLeft: "10px",
+                    background: status == "true" ? "#28a745" : "#F4F8FF",
+                    color: status == "true" ? "#fff" : "#000",
+                    border: status == "true" ? "none" : "2px solid #000",
+                  }}
+                  type="primary"
+                  onClick={() => {
+                    setCurrentPage(1);
+                    setPageSize(10);
+                    setStatus("true");
+                    setSearchText("");
+                  }}
+                >
+                  <i className="fas fa-check-circle icon"></i>{" "}
+                  {
+                    t("dashboardPageData.cardData", {
+                      returnObjects: true,
+                    })[1]?.status
+                  }
+                </Button>
+                <Button
+                  style={{
+                    marginLeft: "10px",
+                    background: status == "false" ? "#dc3545" : "#F4F8FF",
+                    color: status == "false" ? "#fff" : "#000",
+                    border: status == "false" ? "none" : "2px solid #000",
+                  }}
+                  type="primary"
+                  onClick={() => {
+                    setCurrentPage(1);
+                    setPageSize(10);
+                    setStatus("false");
+                    setSearchText("");
+                  }}
+                >
+                  <i className="fas fa-times-circle icon"></i>{" "}
+                  {
+                    t("dashboardPageData.cardData", {
+                      returnObjects: true,
+                    })[2]?.status
+                  }
+                </Button>
+              </div>
+            </div>
+
+            {dataSource.length > 0 ? (
               <TableComponent
                 columns={columnsUser}
                 dataSource={dataSource}
@@ -178,8 +314,12 @@ const StationsWithUser = memo(() => {
                 totalPage={stationsData.totalDocuments}
                 handlePaginationChange={handlePaginationChange}
               />
-            </div>
-          )}
+            ) : (
+              <div style={{ height: "80vh" ,display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <EmptyCard />
+              </div>
+            )}
+          </div>
         </>
       )}
     </section>
