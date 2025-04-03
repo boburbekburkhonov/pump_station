@@ -4,7 +4,8 @@ import { NOTIFICATIONS_TYPES } from "../actions/notificationActions";
 
 const initialState = {
   countNotif: 0,
-  unseenNotif: []
+  unseenNotif: [],
+  allNotifications: []
 };
 
 const notificationReducer = (state = initialState, action) => {
@@ -19,6 +20,11 @@ const notificationReducer = (state = initialState, action) => {
       return {
         ...state,
         unseenNotif: action.payload,
+      };
+    case NOTIFICATIONS_TYPES.GET_ALL_NOTIFICATIONS_FOR_INFO:
+      return {
+        ...state,
+        allNotifications: action.payload,
       };
     default:
       return state;

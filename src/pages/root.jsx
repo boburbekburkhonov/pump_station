@@ -26,6 +26,7 @@ const pages = {
   AggrigateMoreData: lazy(() => import("./aggrigateMoreData")),
   ElectricalMoreData: lazy(() => import("./electricalMoreData")),
   Notifications: lazy(() => import("./notifications")),
+  NotificationsInfo: lazy(() => import("../components/notificationInformation")),
   NotFound: lazy(() => import("./notFound")),
   AllDataPage: lazy(() => import("./allDataPage")),
   AllDataPageOrganization: lazy(() => import("./allDataPageOrganization")),
@@ -67,6 +68,7 @@ function Root() {
         element={isAdmin() ? <pages.Stations /> : <pages.StationsWithUser />}
       />
       <Route path="/notification" element={<pages.Notifications />} />
+      <Route path="/notification/:id" element={<pages.NotificationsInfo />} />
       <Route path="/stations/:id" element={<pages.StationsInformations />} />
       <Route path="/maps" element={<pages.MapsPage />} />
       <Route path="/profile" element={<pages.ProfilePage />} />

@@ -1,0 +1,68 @@
+/* Card */
+.notification_information_card {
+  padding: 25px;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Icon */
+.notification_information_icon-box {
+  background: #e0f7fa;
+  padding: 15px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+/* Information */
+.notification_information_title {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.notification_information_title {
+  background: #f1f1f1;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.notification_information_message {
+  background: #f1f1f1;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.notification_information_time {
+  background: #f1f1f1;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.notification_information_ span {
+  font-weight: bold;
+  color: #333;
+}
+
+.notification_information_ {
+  font-weight: bold;
+  color: #0077b6;
+}
+
+.status-box {
+  background: #fff3cd;
+  padding: 12px 0;
+  border-radius: 8px;
+}
+
+.status {
+  font-weight: bold;
+}
+
+.warning {
+  color: #d9534f;
+}

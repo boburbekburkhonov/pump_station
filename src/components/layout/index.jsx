@@ -68,19 +68,19 @@ const LayoutComponent = memo(({ childrenComponent }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [visible, setVisible] = useState(false);
   const [selectedKey, setSelectedKey] = useState("home");
-  const fetchAllData = useCallback(() => {
-    const lang = i18n.language;
+  // const fetchAllData = useCallback(() => {
+  //   const lang = i18n.language;
 
-    dispatch(getNotificationCount(lang, isToken));
-    dispatch(getAllNotifications(lang, isToken));
-  }, [dispatch, isToken, i18n.language]);
+  //   dispatch(getNotificationCount(lang, isToken));
+  //   dispatch(getAllNotifications(lang, isToken));
+  // }, [dispatch, isToken, i18n.language]);
 
-  useEffect(() => {
-    fetchAllData();
-    i18n.on("languageChanged", fetchAllData);
+  // useEffect(() => {
+  //   fetchAllData();
+  //   i18n.on("languageChanged", fetchAllData);
 
-    return () => i18n.off("languageChanged", fetchAllData);
-  }, [fetchAllData, i18n]);
+  //   return () => i18n.off("languageChanged", fetchAllData);
+  // }, [fetchAllData, i18n]);
 
   const menuItems = [
     {
@@ -543,21 +543,17 @@ const LayoutComponent = memo(({ childrenComponent }) => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  marginLeft: '5px'
+                  marginLeft: "5px",
                 }}
               >
                 <p
                   style={{
                     margin: "0",
                     fontWeight: "500",
-                    color: colors.text
+                    color: colors.text,
                   }}
                 >
-                  <span>
-                  {t("loginData.user")}:
-                  </span>
-                  {" "}
-                  {nameUser}
+                  <span>{t("loginData.user")}:</span> {nameUser}
                   {/* <span style={{
                     textTransform: 'lowercase'
                   }}>
