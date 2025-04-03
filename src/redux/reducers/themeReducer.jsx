@@ -47,7 +47,8 @@ const themes = {
     statisticElement3: "#4072EE",
     blurBgColor: "rgba(64, 95, 242, 0.2)",
     blurBgColor2: "rgba(64, 95, 242, 0.1)",
-    logoColor: "#405FF2"
+    logoColor: "#405FF2",
+    backgroundColorNotificationInfo: '#FFF3CD'
   },
   dark: {
     background: "#37424e",
@@ -64,7 +65,8 @@ const themes = {
     boxShadow: "rgba(255, 255, 255, 0.2)",
     blurBgColor: "rgba(64, 95, 242, 0.2)",
     blurBgColor2: "rgba(64, 95, 255, 0.1)",
-    logoColor: "#fff"
+    logoColor: "#fff",
+    backgroundColorNotificationInfo: '#2e3540'
   },
 };
 

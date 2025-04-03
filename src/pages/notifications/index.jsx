@@ -60,10 +60,11 @@ function Notifications() {
 
     postDataApi(`notification/markAsUnseenAll?lang=${lang}`, {}, isToken).then(
       (data) => {
-        if(data.data.statusCode == 200){
-          setCount(count + 1)
+        if (data.data.statusCode == 200) {
+          setCount(count + 1);
         }
-      });
+      }
+    );
   };
 
   return (
@@ -87,9 +88,12 @@ function Notifications() {
               >
                 <h2>{t("layoutData.navLink15")}</h2>
 
-                <button className="mark-all-read" onClick={() => changeNotificationStatus()}>
-                  <i className="fas fa-check-circle"></i>Hammasini ko‘rib
-                  chiqdim
+                <button
+                  className="mark-all-read"
+                  onClick={() => changeNotificationStatus()}
+                >
+                  <i className="fas fa-check-circle"></i>
+                  {t("layoutData.navLink19")}
                 </button>
               </div>
 
@@ -122,6 +126,7 @@ function Notifications() {
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
+                        background: colors.layoutBackground,
                       }}
                     >
                       <p style={{ margin: "0", fontWeight: "bold" }}>
@@ -142,6 +147,7 @@ function Notifications() {
                             justifyContent: "space-between",
                             alignItems: "center",
                             cursor: "pointer",
+                            background: colors.layoutBackground,
                           }}
                           onClick={() => navigate(`/notification/${e.id}`)}
                         >

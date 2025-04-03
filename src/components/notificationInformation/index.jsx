@@ -9,6 +9,7 @@ import Loading from "../loading";
 
 const informationNotification = () => {
   const { i18n, t } = useTranslation();
+  const { colors } = useSelector((state) => state.theme);
   const lang = i18n.language;
   const { id } = useParams();
   const { allNotifications } = useSelector((state) => state.notifications);
@@ -21,9 +22,13 @@ const informationNotification = () => {
 
     setNotification(findNotification);
 
-    postDataApi(`notification/markAsSeen?lang=${lang}`, {
-      notificationId: id,
-    }, isToken).then((data) => data);
+    postDataApi(
+      `notification/markAsSeen?lang=${lang}`,
+      {
+        notificationId: id,
+      },
+      isToken
+    ).then((data) => data);
   }, [id, allNotifications]);
 
   const fixDate = (time) => {
@@ -83,8 +88,8 @@ const informationNotification = () => {
                   {t("settingNavbar.notification.item9")}
                 </h2>
 
-                <div className="status-box" style={{ marginBottom: "20px" }}>
-                  <p style={{ margin: "0", fontWeight: "bold" }}>
+                <div className="status-box" style={{ marginBottom: "20px", background: colors.backgroundColorNotificationInfo }}>
+                  <p style={{ margin: "0", fontWeight: "bold",}}>
                     Status:{" "}
                     <span className="status warning">
                       <span style={{ fontSize: "20px" }}>⚠️</span>
@@ -99,6 +104,7 @@ const informationNotification = () => {
                     marginBottom: "20px",
                     display: "flex",
                     alignItems: "center",
+                    background: colors.backgroundColorNotificationInfo
                   }}
                 >
                   Title:{" "}
@@ -118,6 +124,7 @@ const informationNotification = () => {
                     marginBottom: "20px",
                     display: "flex",
                     alignItems: "center",
+                    background: colors.backgroundColorNotificationInfo
                   }}
                 >
                   Message:{" "}
@@ -131,7 +138,7 @@ const informationNotification = () => {
                     {notification[0].message}
                   </p>
                 </h2>
-                <p className="notification_information_time">
+                <p className="notification_information_time" style={{background: colors.backgroundColorNotificationInfo}}>
                   📅 {fixDate(notification[0].date).date} | 🕒{" "}
                   {fixDate(notification[0].date).time}
                 </p>
