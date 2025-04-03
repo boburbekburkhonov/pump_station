@@ -12,6 +12,7 @@ import messageRead from "../../assets/email-read.png";
 import messageNotRead from "../../assets/email-not-read.png";
 import "./index.css";
 import Loading from "../../components/loading";
+import EmptyCard from "../../components/emptyCard";
 
 function Notifications() {
   const { colors, theme } = useSelector((state) => state.theme);
@@ -53,7 +54,10 @@ function Notifications() {
   };
 
   return (
-    <div>
+    <div style={{
+      background: colors.layoutBackground,
+      padding: '20px 20px'
+    }}>
       <section className="home-section">
         <div className="home-section-notification-wrapper">
           <div className="card-notification" style={{ width: "100%" }}>
@@ -72,7 +76,7 @@ function Notifications() {
                     alignItems: "center",
                   }}
                 >
-                  <Loading />
+                  <EmptyCard />
                 </div>
               ) : (
                 <>

@@ -4,7 +4,6 @@ import React, { memo, useState, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-
 import {
   Button,
   ConfigProvider,
@@ -46,10 +45,40 @@ import { logoutAction } from "../../redux/actions/authActions";
 import {
   deleteNotification,
   getAllNotifications,
+  getAllNotificationsForOneInfo,
   getNotificationCount,
 } from "../../redux/actions/notificationActions";
+import imageNotification from "../../assets/notification.svg";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import updateLocale from "dayjs/plugin/updateLocale";
+import "dayjs/locale/ru"; // Ruscha
+import "dayjs/locale/en"; // Inglizcha
+import "dayjs/locale/uz"; // O‘zbek (kirill)
 
 const { Header, Sider, Content } = Layout;
+
+dayjs.extend(relativeTime);
+dayjs.extend(updateLocale);
+
+// O‘zbek lotincha tarjima (qo‘lda)
+dayjs.updateLocale("uz", {
+  relativeTime: {
+    future: "%s dan keyin",
+    past: "%s oldin",
+    s: "bir necha soniya",
+    m: "bir daqiqa",
+    mm: "%d daqiqa",
+    h: "bir soat",
+    hh: "%d soat",
+    d: "bir kun",
+    dd: "%d kun",
+    M: "bir oy",
+    MM: "%d oy",
+    y: "bir yil",
+    yy: "%d yil",
+  },
+});
 
 const LayoutComponent = memo(({ childrenComponent }) => {
   const dispatch = useDispatch();
@@ -62,25 +91,25 @@ const LayoutComponent = memo(({ childrenComponent }) => {
   const nameRole = localStorage.getItem("roleName");
 
   const { colors, theme } = useSelector((state) => state.theme);
-  const { countNotif, unseenNotif } = useSelector(
+  const { countNotif, allNotifications } = useSelector(
     (state) => state.notifications
   );
   const [collapsed, setCollapsed] = useState(false);
   const [visible, setVisible] = useState(false);
   const [selectedKey, setSelectedKey] = useState("home");
-  // const fetchAllData = useCallback(() => {
-  //   const lang = i18n.language;
+  const fetchAllData = useCallback(() => {
+    const lang = i18n.language;
 
-  //   dispatch(getNotificationCount(lang, isToken));
-  //   dispatch(getAllNotifications(lang, isToken));
-  // }, [dispatch, isToken, i18n.language]);
+    dispatch(getNotificationCount(lang, isToken));
+    dispatch(getAllNotificationsForOneInfo(lang, isToken));
+  }, [dispatch, isToken, i18n.language]);
 
-  // useEffect(() => {
-  //   fetchAllData();
-  //   i18n.on("languageChanged", fetchAllData);
+  useEffect(() => {
+    fetchAllData();
+    i18n.on("languageChanged", fetchAllData);
 
-  //   return () => i18n.off("languageChanged", fetchAllData);
-  // }, [fetchAllData, i18n]);
+    return () => i18n.off("languageChanged", fetchAllData);
+  }, [fetchAllData, i18n]);
 
   const menuItems = [
     {
@@ -416,6 +445,11 @@ const LayoutComponent = memo(({ childrenComponent }) => {
     dispatch(deleteNotification(id, isToken));
   };
 
+  function timeAgo(dateString, lan) {
+    dayjs.locale(lan);
+    return dayjs(dateString).fromNow();
+  }
+
   return (
     <ConfigProvider
       renderEmpty={customizeRenderEmpty}
@@ -582,11 +616,11 @@ const LayoutComponent = memo(({ childrenComponent }) => {
                 />
               </div>
 
-              <div className="header_badge_container">
+              <div className="header_badge_container" style={{marginRight: '15px'}}>
                 <Badge
                   onClick={showDrawer}
                   count={countNotif}
-                  overflowCount={10}
+                  // overflowCount={10}
                 >
                   <Button type="primary" icon={<BellFilled />} />
                 </Badge>
@@ -616,24 +650,64 @@ const LayoutComponent = memo(({ childrenComponent }) => {
         open={visible}
       >
         {countNotif === 0 ? (
-          <Empty description={false} />
-        ) : (
-          <List
-            dataSource={unseenNotif}
-            renderItem={(item, index) => (
-              <List.Item
-                actions={[
-                  <Button
-                    type="text"
-                    onClick={() => handleDismiss(index)}
-                    icon={<DeleteFilled />}
-                  />,
-                ]}
-              >
-                {item}
-              </List.Item>
-            )}
+          <Empty
+            description={t("dashboardPageData.emptyData")}
+            style={{
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
           />
+        ) : (
+          <ul
+            className="notification-wrapper-is-read"
+            style={{
+              listStyleType: "none",
+              margin: "0",
+              padding: "0",
+              marginBottom: "20px",
+            }}
+          >
+            {allNotifications.data?.map((e, i) => {
+              return e.isSeen == false ? (
+                <li
+                  className="notification-wrapper-item "
+                  key={i}
+                  style={{ display: "flex", cursor: "pointer" }}
+                  onClick={() => {
+                    navigate(`/notification/${e.id}`);
+                    closeDrawer();
+                  }}
+                >
+                  <div style={{ display: "flex" }}>
+                    <img
+                      className="mt-2"
+                      style={{ marginTop: "10px" }}
+                      src={imageNotification}
+                      alt="messageRead"
+                      width={28}
+                      height={28}
+                    />
+                  </div>
+                  <div className="ms-4" style={{ marginLeft: "20px" }}>
+                    <p className="m-0" style={{ margin: "0" }}>
+                      {e.title}
+                    </p>
+                    <p
+                      className="notification-wrapper-item-time"
+                      style={{ margin: "0", marginTop: "8px" }}
+                    >
+                      {timeAgo(e?.createdAt, i18n.language)}
+                    </p>
+                  </div>
+                </li>
+              ) : (
+                ""
+              );
+            })}
+          </ul>
         )}
       </Drawer>
     </ConfigProvider>

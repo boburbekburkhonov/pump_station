@@ -160,3 +160,107 @@
 .ant-menu-title-content > p {
   margin: 0 !important;
 }
+
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+.notification-wrapper-is-read li {
+  border-bottom: 1px solid #e8eaf1;
+  padding: 10px 7px;
+  /* background: #FDFDFE; */
+  cursor: pointer;
+}
+
+.notification-wrapper-is-read li p {
+  font-size: 16px;
+}
+
+.notification-wrapper-is-read li:hover {
+  background: rgb(244, 242, 242);
+}
+.notification-wrapper-is-read li:active {
+  background: #E5E5E5;
+}
+
+.header_badge_notif_container:hover {
+  opacity: 0.7;
+}
+
+.header_badge_notif_container:active {
+  opacity: 0.3;
+}
+
+.notification.icon .notification-number {
+  font-family: "Poppins", serif;
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  z-index: 1;
+  background: rgb(204, 35, 17);
+  border: 3px solid #fff;
+  border-radius: 50%;
+  padding-top: 5px;
+  height: 22px;
+  width: 22px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 7px;
+  color: #fff;
+}
+
+.notification:hover {
+  opacity: 0.7;
+}
+
+.notification:active {
+  opacity: 0.4;
+}
+
+.animation_notifications {
+  -webkit-animation: bounce 1s infinite;
+}
+
+.header_profile_desc {
+  font-family: "Poppins", serif;
+  font-size: 17px;
+}
+
+@-webkit-keyframes bounce {
+  0%,
+  100%,
+  20%,
+  53%,
+  80% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    -webkit-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+  40%,
+  43% {
+    -webkit-transition-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transition-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    -webkit-transform: translate3d(0, -30px, 0);
+    -ms-transform: translate3d(0, -30px, 0);
+    transform: translate3d(0, -30px, 0);
+  }
+  70% {
+    -webkit-transition-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transition-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    -webkit-transform: translate3d(0, -15px, 0);
+    -ms-transform: translate3d(0, -15px, 0);
+    transform: translate3d(0, -15px, 0);
+  }
+  90% {
+    -webkit-transform: translate3d(0, -4px, 0);
+    -ms-transform: translate3d(0, -4px, 0);
+    transform: translate3d(0, -4px, 0);
+  }
+}
+
+.notification-wrapper-item-time {
+  font-size: 12px !important;
+  color: #606060;
+}
