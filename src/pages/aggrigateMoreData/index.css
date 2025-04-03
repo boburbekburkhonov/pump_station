@@ -33,6 +33,8 @@
   display: flex;
   gap: 5px;
   scroll-behavior: smooth;
+  scrollbar-width: thin; /* Firefox uchun */
+  scrollbar-color: #ccc transparent; /* Firefox uchun */
 }
 
 .header_more_aggregate_data {
@@ -47,4 +49,3 @@
   height: 55px;
   object-fit: contain;
 }
-

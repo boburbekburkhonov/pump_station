@@ -4,7 +4,17 @@ import React, { useEffect, useCallback, useState, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import { Button, Card, Col, Input, Modal, Pagination, Row, Select } from "antd";
+import {
+  Anchor,
+  Button,
+  Card,
+  Col,
+  Input,
+  Modal,
+  Pagination,
+  Row,
+  Select,
+} from "antd";
 import moreInfo from "../../assets/info.png";
 
 import {
@@ -22,9 +32,6 @@ import {
   ThunderboltOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-
-import "./index.css";
-import "../dashboard/index.css";
 import {
   createNewLastDataStation,
   findInMapsLastData,
@@ -37,6 +44,8 @@ import UnCheckBookmark from "../../assets/bookmarkCheck.svg";
 import { useNavigate } from "react-router-dom";
 import EmptyCard from "../../components/emptyCard";
 import { getByRegionIdData } from "../../redux/actions/districtActions";
+import "../dashboard/index.css";
+import "./index.css";
 
 function AllDatapPage() {
   const dispatch = useDispatch();
@@ -59,6 +68,7 @@ function AllDatapPage() {
   const regionId = Cookies.get("regionId");
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
+  const [activeSection, setActiveSection] = useState("0");
 
   const fetchAllData = useCallback(() => {
     const lang = i18n.language;
@@ -814,15 +824,10 @@ function AllDatapPage() {
         className="reports_sort_select_wrapper"
         style={{ marginBottom: "5px" }}
       >
-        <Select
-          key={"selects_name"}
-          size="large"
-          style={{
-            minWidth: 250,
-          }}
-          value={selectDistrictId}
-          className="reports_sort_select"
-          options={[
+        <Anchor
+          className="anchor-items-container"
+          direction="horizontal"
+          items={[
             {
               value: 0,
               label: t("stationsPageData.allDistricts"),
@@ -831,10 +836,43 @@ function AllDatapPage() {
               value: index + 1,
               label: item.name,
             })),
-          ]}
-          onChange={(key, option) => {
-            setSelectDistrictId(key);
-            getAllStationsDataByDistrictId(key);
+          ].map((item, index) => ({
+            key: `${index}`,
+            href: `#${index}`,
+            title: (
+              <p
+                style={{
+                  color:
+                    activeSection === `${index}`
+                      ? colors.textWhite
+                      : colors.text,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  border:
+                    activeSection === `${index}`
+                      ? "none"
+                      : `1px solid ${colors.buttonColor}`,
+                  background:
+                    activeSection === `${index}`
+                      ? colors.buttonColor
+                      : "transparent",
+                  paddingRight: 10,
+                  paddingLeft: 10,
+                  paddingTop: 5,
+                  paddingBottom: 5,
+                  borderRadius: 5,
+                }}
+              >
+                {item.label}
+              </p>
+            ),
+          }))}
+          onClick={(e, link) => {
+            e.preventDefault();
+            setActiveSection(link.href.replace("#", ""));
+            getAllStationsDataByDistrictId(Number(link.href.replace("#", "")));
+            setSelectDistrictId(Number(link.href.replace("#", "")));
             setCurrent(1);
           }}
         />
@@ -1032,8 +1070,8 @@ function AllDatapPage() {
                       key={index}
                       span={colSpan}
                       style={{
-                            maxWidth: "450px",
-                        width: '100%'
+                        maxWidth: "450px",
+                        width: "100%",
                       }}
                     >
                       <Card
@@ -1159,7 +1197,8 @@ function AllDatapPage() {
                                   </h4>
                                 </div>
                                 <h4 className="all_stations_data_item_import_data">
-                                  {allElectrData.energyActiveTotal} {String(
+                                  {allElectrData.energyActiveTotal}{" "}
+                                  {String(
                                     t(
                                       "dashboardPageData.lastStationsData.energyValueView"
                                     )

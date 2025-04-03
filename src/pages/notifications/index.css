@@ -1,6 +1,6 @@
 .notification-wrapper-item-first {
   border-top: 2px solid #e8eaf1;
-  background: #F1F5F8 !important;
+  background: #f1f5f8 !important;
 }
 
 .notification-wrapper li {
@@ -8,13 +8,43 @@
   border-left: 2px solid #e8eaf1;
   border-right: 2px solid #e8eaf1;
   padding: 14px !important;
-  background: #FDFDFE;
+  background: #fdfdfe;
   cursor: pointer;
 }
 
 .notification-wrapper li:hover {
-  background: #F2F2F2;
+  background: #f2f2f2;
 }
 .notification-wrapper li:active {
-  background: #E5E5E5;
+  background: #e5e5e5;
+}
+
+.mark-all-read {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  margin: 15px 0;
+  background: #405FF2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  transition: 0.3s;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.mark-all-read i {
+  margin-right: 10px;
+}
+
+.mark-all-read:hover {
+  background: linear-gradient(45deg, #0056b3, #004494);
+  transform: scale(1.05);
+}
+
+.mark-all-read:active {
+  transform: scale(0.98);
 }

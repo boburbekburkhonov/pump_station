@@ -13,6 +13,7 @@ import messageNotRead from "../../assets/email-not-read.png";
 import "./index.css";
 import Loading from "../../components/loading";
 import EmptyCard from "../../components/emptyCard";
+import { postDataApi } from "../../utils";
 
 function Notifications() {
   const { colors, theme } = useSelector((state) => state.theme);
@@ -24,6 +25,7 @@ function Notifications() {
     page: 1,
     perPage: 10,
   });
+  const [count, setCount] = useState(0);
   const { i18n, t } = useTranslation();
   const isToken = localStorage.getItem("access_token");
   const navigate = useNavigate();
@@ -36,7 +38,7 @@ function Notifications() {
     dispatch(
       getAllNotifications(lang, isToken, pageData.page, pageData.perPage)
     );
-  }, [pageData]);
+  }, [pageData, count]);
 
   const fixDate = (time) => {
     const fixedTime = new Date(time);
@@ -53,18 +55,43 @@ function Notifications() {
     return date;
   };
 
+  const changeNotificationStatus = () => {
+    const lang = i18n.language;
+
+    postDataApi(`notification/markAsUnseenAll?lang=${lang}`, {}, isToken).then(
+      (data) => {
+        if(data.data.statusCode == 200){
+          setCount(count + 1)
+        }
+      });
+  };
+
   return (
-    <div style={{
-      background: colors.layoutBackground,
-      padding: '20px 20px'
-    }}>
+    <div
+      style={{
+        background: colors.layoutBackground,
+        padding: "20px 20px",
+      }}
+    >
       <section className="home-section">
         <div className="home-section-notification-wrapper">
           <div className="card-notification" style={{ width: "100%" }}>
             <div className="card-body" style={{ padding: "0" }}>
-              <h2 style={{ marginBottom: "20px" }}>
-                {t("layoutData.navLink15")}
-              </h2>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "20px",
+                }}
+              >
+                <h2>{t("layoutData.navLink15")}</h2>
+
+                <button className="mark-all-read" onClick={() => changeNotificationStatus()}>
+                  <i className="fas fa-check-circle"></i>Hammasini ko‘rib
+                  chiqdim
+                </button>
+              </div>
 
               {unseenNotif.data?.length == 0 ||
               unseenNotif.data == undefined ? (

@@ -4,7 +4,17 @@ import React, { useEffect, useCallback, useState, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import { Button, Card, Col, Input, Modal, Pagination, Row, Select } from "antd";
+import {
+  Anchor,
+  Button,
+  Card,
+  Col,
+  Input,
+  Modal,
+  Pagination,
+  Row,
+  Select,
+} from "antd";
 import moreInfo from "../../assets/info.png";
 
 import {
@@ -64,6 +74,7 @@ function DataPage() {
   const regionId = Cookies.get("regionId");
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
+  const [activeSection, setActiveSection] = useState("0");
 
   const fetchAllData = useCallback(() => {
     const lang = i18n.language;
@@ -546,7 +557,7 @@ function DataPage() {
         className="reports_sort_select_wrapper"
         style={{ marginBottom: "10px" }}
       >
-        <Select
+        {/* <Select
           key={"selects_name"}
           size="large"
           style={{
@@ -567,6 +578,58 @@ function DataPage() {
           onChange={(key, option) => {
             setSelectDistrictId(key);
             getAllStationsDataByDistrictId(key);
+            setCurrent(1);
+          }}
+        /> */}
+        <Anchor
+          className="anchor-items-container"
+          direction="horizontal"
+          items={[
+            {
+              value: 0,
+              label: t("stationsPageData.allDistricts"),
+            }, // Qo'shimcha option
+            ...districtByRegionId.map((item, index) => ({
+              value: index + 1,
+              label: item.name,
+            })),
+          ].map((item, index) => ({
+            key: `${index}`,
+            href: `#${index}`,
+            title: (
+              <p
+                style={{
+                  color:
+                    activeSection === `${index}`
+                      ? colors.textWhite
+                      : colors.text,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  border:
+                    activeSection === `${index}`
+                      ? "none"
+                      : `1px solid ${colors.buttonColor}`,
+                  background:
+                    activeSection === `${index}`
+                      ? colors.buttonColor
+                      : "transparent",
+                  paddingRight: 10,
+                  paddingLeft: 10,
+                  paddingTop: 5,
+                  paddingBottom: 5,
+                  borderRadius: 5,
+                }}
+              >
+                {item.label}
+              </p>
+            ),
+          }))}
+          onClick={(e, link) => {
+            e.preventDefault();
+            setActiveSection(link.href.replace("#", ""));
+            getAllStationsDataByDistrictId(Number(link.href.replace("#", "")));
+            setSelectDistrictId(Number(link.href.replace("#", "")));
             setCurrent(1);
           }}
         />
@@ -747,7 +810,7 @@ function DataPage() {
                       span={colSpan}
                       style={{
                         maxWidth: "420px",
-                        width: '100%'
+                        width: "100%",
                       }}
                     >
                       <Card
