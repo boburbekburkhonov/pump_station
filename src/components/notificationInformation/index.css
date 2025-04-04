@@ -7,7 +7,6 @@
 
 /* Icon */
 .notification_information_icon-box {
-  background: #e0f7fa;
   padding: 15px;
   border-radius: 50%;
   display: inline-block;
@@ -20,7 +19,7 @@
 }
 
 .notification_information_title {
-  background: #f1f1f1;
+  /* background: #f1f1f1; */
   padding: 12px;
   border-radius: 8px;
   margin: 8px 0;
@@ -28,7 +27,7 @@
 }
 
 .notification_information_message {
-  background: #f1f1f1;
+  /* background: #f1f1f1; */
   padding: 12px;
   border-radius: 8px;
   margin: 8px 0;
@@ -36,7 +35,7 @@
 }
 
 .notification_information_time {
-  background: #f1f1f1;
+  /* background: #f1f1f1; */
   padding: 12px;
   border-radius: 8px;
   margin: 8px 0;

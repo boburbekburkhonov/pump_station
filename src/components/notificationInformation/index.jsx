@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { postDataApi } from "../../utils";
 import logo from "../../assets/output-onlinepngtools-removebg-preview.png";
+import logoDark from "../../assets/output-onlinepngtools__1_-removebg-preview.png";
 import "./index.css";
 import Loading from "../loading";
 
@@ -66,9 +67,14 @@ const informationNotification = () => {
         <>
           <div className="notification_information_container">
             <div className="notification_information_card">
-              <div className="notification_information_icon-box">
+              <div
+                className="notification_information_icon-box"
+                style={{
+                  background: theme == "light" ? "#e0f7fa" : "",
+                }}
+              >
                 <img
-                  src={logo}
+                  src={theme == "light" ? logo : logoDark}
                   alt="logo"
                   className="notification_information_icon"
                   width={222}
@@ -88,8 +94,14 @@ const informationNotification = () => {
                   {t("settingNavbar.notification.item9")}
                 </h2>
 
-                <div className="status-box" style={{ marginBottom: "20px", background: colors.backgroundColorNotificationInfo }}>
-                  <p style={{ margin: "0", fontWeight: "bold",}}>
+                <div
+                  className="status-box"
+                  style={{
+                    marginBottom: "20px",
+                    background: colors.backgroundColorNotificationInfo,
+                  }}
+                >
+                  <p style={{ margin: "0", fontWeight: "bold" }}>
                     Status:{" "}
                     <span className="status warning">
                       <span style={{ fontSize: "20px" }}>⚠️</span>
@@ -104,7 +116,7 @@ const informationNotification = () => {
                     marginBottom: "20px",
                     display: "flex",
                     alignItems: "center",
-                    background: colors.backgroundColorNotificationInfo
+                    background: colors.backgroundColorNotificationInfo,
                   }}
                 >
                   Title:{" "}
@@ -124,7 +136,7 @@ const informationNotification = () => {
                     marginBottom: "20px",
                     display: "flex",
                     alignItems: "center",
-                    background: colors.backgroundColorNotificationInfo
+                    background: colors.backgroundColorNotificationInfo,
                   }}
                 >
                   Message:{" "}
@@ -138,7 +150,10 @@ const informationNotification = () => {
                     {notification[0].message}
                   </p>
                 </h2>
-                <p className="notification_information_time" style={{background: colors.backgroundColorNotificationInfo}}>
+                <p
+                  className="notification_information_time"
+                  style={{ background: colors.backgroundColorNotificationInfo }}
+                >
                   📅 {fixDate(notification[0].date).date} | 🕒{" "}
                   {fixDate(notification[0].date).time}
                 </p>

@@ -684,7 +684,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
                   <div style={{ display: "flex" }}>
                     <img
                       className="mt-2"
-                      style={{ marginTop: "10px" }}
+                      style={{ marginTop: "10px", filter: theme === "dark" ? "invert(1) brightness(10)" : ""}}
                       src={imageNotification}
                       alt="messageRead"
                       width={28}
@@ -697,7 +697,7 @@ const LayoutComponent = memo(({ childrenComponent }) => {
                     </p>
                     <p
                       className="notification-wrapper-item-time"
-                      style={{ margin: "0", marginTop: "8px" }}
+                      style={{ margin: "0", marginTop: "8px", color: colors.text }}
                     >
                       {timeAgo(e?.createdAt, i18n.language)}
                     </p>

@@ -9,6 +9,7 @@ const initialState = {
   colors: {
     background: initialTheme === "light" ? "#F3F7FF" : "#37424e",
     layoutBackground: initialTheme === "light" ? "#FDFEFF" : "#2e3540",
+    backgroundColorNotificationInfo: initialTheme === "light" ? "#FFF3CD" : "#2e3540",
     text: initialTheme === "light" ? "#31394D" : "#FFFFFF",
     buttonText: initialTheme === "light" ? "#F3F7FF" : "#37424e",
     textWhite: "#fff",
