@@ -843,19 +843,38 @@ export const getWeeklyStationsIdData =
         lang
       );
 
+      const getMonthAndWeek = (week) => {
+        const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+        let daysPassed = (week - 1) * 7; // Hafta boshlangandan beri o'tgan kunlar
+        let monthIndex = 0;
+
+        while (daysPassed >= monthDays[monthIndex]) {
+          daysPassed -= monthDays[monthIndex];
+          monthIndex++;
+        }
+
+        const weekInMonth = Math.floor(daysPassed / 7) + 1; // Oy ichidagi hafta
+
+        return weekInMonth
+      };
+
       const resultTotalData = [];
       const resultTotalDataForLineCHart = [];
 
       const sortTotalData = resTotalData.data.data
         .slice()
         .sort((a, b) => b.week - a.week);
+
       const sortTotalDataForLineChart = resTotalData.data.data
         .slice()
         .sort((a, b) => a.week - b.week);
 
       sortTotalData.forEach((e) => {
         resultTotalData.push({
-          date: `${months[lang][e.month - 1]} ${e.week} ${months[lang][12]}`,
+          date: `${months[lang][e.month - 1]} ${getMonthAndWeek(e.week + 1)}-${
+            months[lang][12]
+          }`,
           volume: e.volume,
           energyActive: e.energyActive,
         });
@@ -1503,7 +1522,7 @@ export const getSelectStationsIdData =
     }
   };
 
-  export const exportExcelSelectStationsDataByStationId =
+export const exportExcelSelectStationsDataByStationId =
   (stationId, token, lang, stationName, date, typeSave) => async (dispatch) => {
     try {
       const response = await axios.get(
@@ -1668,8 +1687,9 @@ export const getDataRangeStationsIdData =
     }
   };
 
-  export const exportExcelDataRangeDataByStationId =
-  (stationId, token, lang, stationName, startDate, endDate, typeSave) => async (dispatch) => {
+export const exportExcelDataRangeDataByStationId =
+  (stationId, token, lang, stationName, startDate, endDate, typeSave) =>
+  async (dispatch) => {
     try {
       const response = await axios.get(
         `https://api.ns.sss.uz/api/v1/stations/downloadDateRangeDataAllByStationId?stationId=${stationId}&lang=${lang}&startDate=${startDate}&endDate=${endDate}`,
@@ -1857,7 +1877,7 @@ export const getTodayAggregateIDData =
     }
   };
 
-  export const exportExcelTodayAggregateIDData =
+export const exportExcelTodayAggregateIDData =
   (aggregateId, token, lang, aggregateName, typeSave) => async (dispatch) => {
     try {
       const response = await axios.get(
@@ -2081,7 +2101,7 @@ export const getYesterdayAggregateIDData =
     }
   };
 
-  export const exportExcelYesterdayAggregateIDData =
+export const exportExcelYesterdayAggregateIDData =
   (aggregateId, token, lang, aggregateName, typeSave) => async (dispatch) => {
     try {
       const response = await axios.get(
@@ -2320,8 +2340,9 @@ export const getWeeklyAggregateIDData =
     }
   };
 
-  export const exportExcelWeeklyAggregateIDData =
-  (aggregateId, token, lang, aggregateName, typeSave, month, year) => async (dispatch) => {
+export const exportExcelWeeklyAggregateIDData =
+  (aggregateId, token, lang, aggregateName, typeSave, month, year) =>
+  async (dispatch) => {
     try {
       const response = await axios.get(
         `https://api.ns.sss.uz/api/v1/pump-weekly-data/download/findDataByAggregateIdAndYearMonthNumber?aggregateId=${aggregateId}&lang=${lang}&month=${
@@ -2580,8 +2601,9 @@ export const getTenDayAggregateIDData =
     }
   };
 
-  export const exportExcelTenDayAggregateIDData =
-  (aggregateId, token, lang, aggregateName, typeSave, year) => async (dispatch) => {
+export const exportExcelTenDayAggregateIDData =
+  (aggregateId, token, lang, aggregateName, typeSave, year) =>
+  async (dispatch) => {
     try {
       const response = await axios.get(
         `https://api.ns.sss.uz/api/v1/pump-ten-day-data/download/findDataByAggregateIdAndYearNumber?aggregateId=${aggregateId}&lang=${lang}&year=${year}`,
@@ -2875,8 +2897,9 @@ export const getMonthlyAggregateIDData =
     }
   };
 
-  export const exportExcelMonthlyAggregateIDData =
-  (aggregateId, token, lang, aggregateName, typeSave, year) => async (dispatch) => {
+export const exportExcelMonthlyAggregateIDData =
+  (aggregateId, token, lang, aggregateName, typeSave, year) =>
+  async (dispatch) => {
     try {
       const response = await axios.get(
         `https://api.ns.sss.uz/api/v1/pump-monthly-data/download/findDataByAggregateIdAndYearNumber?aggregateId=${aggregateId}&lang=${lang}&year=${year}`,
@@ -3035,131 +3058,131 @@ export const findMonthlyDataElectricityId =
     }
   };
 
-  // * Yearly data
+// * Yearly data
 export const getYearlyAggregateIDData =
-(aggregateId, token, lang, page, perPage, year) => async (dispatch) => {
-  try {
-    dispatch({
-      type: GLOBALTYPES.LOADING,
-      payload: true,
-    });
-
-    const res = await getDataApi(
-      `pump-monthly-data/findYearlyDataByAggregateId?lang=${lang}&aggregateId=${aggregateId}`,
-      token
-    );
-
-    const data = res.data.data;
-
-    const lineChartData = {
-      date: res.data.data
-        .slice()
-        .sort((a, b) => new Date(a.year) - new Date(b.year))
-        ?.map((item) => item.year),
-      lineData: [
-        {
-          name: aggregateDataType[lang].name1,
-          data: res.data.data
-            .slice()
-            .sort((a, b) => new Date(a.year) - new Date(b.year))
-            ?.map((item) => Number(item.flow.toFixed(2))),
-          unit: "m³/s",
-        },
-        {
-          name: aggregateDataType[lang].name2,
-          data: res.data.data
-            .slice()
-            .sort((a, b) => new Date(a.year) - new Date(b.year))
-            ?.map((item) => Number(item.velocity.toFixed(2))),
-          unit: "m/s",
-        },
-        {
-          name: aggregateDataType[lang].name3,
-          data: res.data.data
-            .slice()
-            .sort((a, b) => new Date(a.year) - new Date(b.year))
-            ?.map((item) => Number(item.volume.toFixed(2))),
-          unit: "m³",
-        },
-      ],
-    };
-
-    dispatch({
-      type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_AGGREGATE_ID,
-      payload: lineChartData,
-    });
-
-    dispatch({
-      type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
-      payload: data,
-    });
-  } catch (err) {
-    if (!err.response) {
+  (aggregateId, token, lang, page, perPage, year) => async (dispatch) => {
+    try {
       dispatch({
-        type: GLOBALTYPES.ALERT,
-        payload: {
-          error: "Network Error",
-        },
+        type: GLOBALTYPES.LOADING,
+        payload: true,
       });
-    } else {
+
+      const res = await getDataApi(
+        `pump-monthly-data/findYearlyDataByAggregateId?lang=${lang}&aggregateId=${aggregateId}`,
+        token
+      );
+
+      const data = res.data.data;
+
+      const lineChartData = {
+        date: res.data.data
+          .slice()
+          .sort((a, b) => new Date(a.year) - new Date(b.year))
+          ?.map((item) => item.year),
+        lineData: [
+          {
+            name: aggregateDataType[lang].name1,
+            data: res.data.data
+              .slice()
+              .sort((a, b) => new Date(a.year) - new Date(b.year))
+              ?.map((item) => Number(item.flow.toFixed(2))),
+            unit: "m³/s",
+          },
+          {
+            name: aggregateDataType[lang].name2,
+            data: res.data.data
+              .slice()
+              .sort((a, b) => new Date(a.year) - new Date(b.year))
+              ?.map((item) => Number(item.velocity.toFixed(2))),
+            unit: "m/s",
+          },
+          {
+            name: aggregateDataType[lang].name3,
+            data: res.data.data
+              .slice()
+              .sort((a, b) => new Date(a.year) - new Date(b.year))
+              ?.map((item) => Number(item.volume.toFixed(2))),
+            unit: "m³",
+          },
+        ],
+      };
+
       dispatch({
-        type: GLOBALTYPES.ALERT,
-        payload: {
-          error: err.response.data.message || err.response.statusText,
-        },
+        type: DASHBOARD_ACTIONS_TYPES.LINE_CHART_DATA_WITH_AGGREGATE_ID,
+        payload: lineChartData,
+      });
+
+      dispatch({
+        type: DASHBOARD_ACTIONS_TYPES.FIND_DATA_BY_AGGREGATE_ID,
+        payload: data,
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
       });
     }
-  } finally {
-    dispatch({
-      type: GLOBALTYPES.LOADING,
-      payload: false,
-    });
-  }
-};
+  };
 
 export const exportExcelYearlyAggregateIDData =
-(aggregateId, token, lang, aggregateName, typeSave) => async (dispatch) => {
-  try {
-    const response = await axios.get(
-      `https://api.ns.sss.uz/api/v1/pump-monthly-data/download/findYearlyDataByStationId?aggregateId=${aggregateId}&lang=${lang}`,
-      {
-        responseType: "blob", // Muvofiq formatda olish uchun
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+  (aggregateId, token, lang, aggregateName, typeSave) => async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.ns.sss.uz/api/v1/pump-monthly-data/download/findYearlyDataByStationId?aggregateId=${aggregateId}&lang=${lang}`,
+        {
+          responseType: "blob", // Muvofiq formatda olish uchun
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${aggregateName} ${String(typeSave).toLowerCase()}.xlsx`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  } catch (err) {
-    if (!err.response) {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${aggregateName} ${String(typeSave).toLowerCase()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    } finally {
       dispatch({
-        type: GLOBALTYPES.ALERT,
-        payload: {
-          error: "Network Error",
-        },
-      });
-    } else {
-      dispatch({
-        type: GLOBALTYPES.ALERT,
-        payload: {
-          error: err.response.data.message || err.response.statusText,
-        },
+        type: GLOBALTYPES.LOADING,
+        payload: false,
       });
     }
-  } finally {
-    dispatch({
-      type: GLOBALTYPES.LOADING,
-      payload: false,
-    });
-  }
-};
+  };
 
 // * Done
 export const getSelectDateAggregateIDData =
@@ -3233,8 +3256,9 @@ export const getSelectDateAggregateIDData =
     }
   };
 
-  export const exportExcelSelectDateAggregateIDData =
-  (aggregateId, token, lang, aggregateName, typeSave, date) => async (dispatch) => {
+export const exportExcelSelectDateAggregateIDData =
+  (aggregateId, token, lang, aggregateName, typeSave, date) =>
+  async (dispatch) => {
     try {
       const response = await axios.get(
         `https://api.ns.sss.uz/api/v1/pump-all-data/download/findDataByAggregateIdDate?aggregateId=${aggregateId}&lang=${lang}&date=${date}`,
@@ -3471,8 +3495,9 @@ export const getDailyAggregateIDData =
     }
   };
 
-  export const exportExcelDailyAggregateIDData =
-  (aggregateId, token, lang, aggregateName, typeSave, month, year) => async (dispatch) => {
+export const exportExcelDailyAggregateIDData =
+  (aggregateId, token, lang, aggregateName, typeSave, month, year) =>
+  async (dispatch) => {
     try {
       const response = await axios.get(
         `https://api.ns.sss.uz/api/v1/pump-daily-data/download/findDataByAggregateId?aggregateId=${aggregateId}&lang=${lang}&month=${
@@ -3699,8 +3724,9 @@ export const getRangeAggregateIDData =
     }
   };
 
-  export const exportExcelRangeAggregateIDData =
-  (aggregateId, token, lang, aggregateName, typeSave, startDate, endDate) => async (dispatch) => {
+export const exportExcelRangeAggregateIDData =
+  (aggregateId, token, lang, aggregateName, typeSave, startDate, endDate) =>
+  async (dispatch) => {
     try {
       const response = await axios.get(
         `https://api.ns.sss.uz/api/v1/pump-all-data/download/findDataByAggregateIdAndDateRange?aggregateId=${aggregateId}&lang=${lang}&startDate=${startDate}&endDate=${endDate}`,

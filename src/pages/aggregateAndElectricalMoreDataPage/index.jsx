@@ -170,13 +170,7 @@ function AgrigateAndElectricalMoreData() {
           );
           break;
         case "section7":
-          dispatch(
-            getYearlyStationsIdData(
-              id,
-              token,
-              lang,
-            )
-          );
+          dispatch(getYearlyStationsIdData(id, token, lang));
           break;
         case "section8":
           dispatch(
@@ -388,7 +382,12 @@ function AgrigateAndElectricalMoreData() {
           handlePaginationChange={handlePaginationChange}
           page={pageData.page}
           perPage={pageData.perPage}
-          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name}}
+          excelData={{
+            lang: lang,
+            token: token,
+            stationId: params.id,
+            stationName: foundStationById.name,
+          }}
           dispatch={dispatch}
         />
       )}
@@ -408,7 +407,12 @@ function AgrigateAndElectricalMoreData() {
           totalDataSource={totalValueData}
           page={pageData.page}
           perPage={pageData.perPage}
-          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name}}
+          excelData={{
+            lang: lang,
+            token: token,
+            stationId: params.id,
+            stationName: foundStationById.name,
+          }}
           dispatch={dispatch}
         />
       )}
@@ -431,7 +435,14 @@ function AgrigateAndElectricalMoreData() {
           handlePaginationChange={handlePaginationChange}
           page={pageData.page}
           perPage={pageData.perPage}
-          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name, month: String(daylyDate.month() + 1).padStart(2, "0"), year: daylyDate.year()}}
+          excelData={{
+            lang: lang,
+            token: token,
+            stationId: params.id,
+            stationName: foundStationById.name,
+            month: String(daylyDate.month() + 1).padStart(2, "0"),
+            year: daylyDate.year(),
+          }}
           dispatch={dispatch}
         />
       )}
@@ -454,7 +465,14 @@ function AgrigateAndElectricalMoreData() {
           handlePaginationChange={handlePaginationChange}
           page={pageData.page}
           perPage={pageData.perPage}
-          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name, month: String(daylyDate.month() + 1).padStart(2, "0"), year: daylyDate.year()}}
+          excelData={{
+            lang: lang,
+            token: token,
+            stationId: params.id,
+            stationName: foundStationById.name,
+            month: String(daylyDate.month() + 1).padStart(2, "0"),
+            year: daylyDate.year(),
+          }}
           dispatch={dispatch}
         />
       )}
@@ -477,7 +495,13 @@ function AgrigateAndElectricalMoreData() {
           handlePaginationChange={handlePaginationChange}
           page={pageData.page}
           perPage={pageData.perPage}
-          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name, year: daylyDate.year()}}
+          excelData={{
+            lang: lang,
+            token: token,
+            stationId: params.id,
+            stationName: foundStationById.name,
+            year: daylyDate.year(),
+          }}
           dispatch={dispatch}
         />
       )}
@@ -500,7 +524,13 @@ function AgrigateAndElectricalMoreData() {
           handlePaginationChange={handlePaginationChange}
           page={pageData.page}
           perPage={pageData.perPage}
-          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name, year: daylyDate.year()}}
+          excelData={{
+            lang: lang,
+            token: token,
+            stationId: params.id,
+            stationName: foundStationById.name,
+            year: daylyDate.year(),
+          }}
           dispatch={dispatch}
         />
       )}
@@ -523,7 +553,12 @@ function AgrigateAndElectricalMoreData() {
           handlePaginationChange={handlePaginationChange}
           page={pageData.page}
           perPage={pageData.perPage}
-          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name}}
+          excelData={{
+            lang: lang,
+            token: token,
+            stationId: params.id,
+            stationName: foundStationById.name,
+          }}
           dispatch={dispatch}
         />
       )}
@@ -546,7 +581,13 @@ function AgrigateAndElectricalMoreData() {
           handlePaginationChange={handlePaginationChange}
           page={pageData.page}
           perPage={pageData.perPage}
-          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name, date: daylyDate.format("YYYY-MM-DD")}}
+          excelData={{
+            lang: lang,
+            token: token,
+            stationId: params.id,
+            stationName: foundStationById.name,
+            date: daylyDate.format("YYYY-MM-DD"),
+          }}
           dispatch={dispatch}
         />
       )}
@@ -569,7 +610,14 @@ function AgrigateAndElectricalMoreData() {
           handlePaginationChange={handlePaginationChange}
           page={pageData.page}
           perPage={pageData.perPage}
-          excelData={{lang: lang, token: token, stationId: params.id, stationName: foundStationById.name, startDate: dateRange[0].format("YYYY-MM-DD"), endDate: dateRange[1].format("YYYY-MM-DD")}}
+          excelData={{
+            lang: lang,
+            token: token,
+            stationId: params.id,
+            stationName: foundStationById.name,
+            startDate: dateRange[0].format("YYYY-MM-DD"),
+            endDate: dateRange[1].format("YYYY-MM-DD"),
+          }}
           dispatch={dispatch}
         />
       )}
