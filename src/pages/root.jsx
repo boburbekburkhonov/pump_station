@@ -8,6 +8,7 @@ const pages = {
   UserDashboard: lazy(() => import("./dashboardUser")),
   OrganizationDashboard: lazy(() => import("./dashboardOrganization")),
   Stations: lazy(() => import("./stations")),
+  StationsOrganization: lazy(() => import("./stationsOrganization")),
   StationsWithUser: lazy(() => import("./stationsWithUser")),
   StationsInformations: lazy(() => import("./stationsInfo")),
   MapsPage: lazy(() => import("./maps")),
@@ -26,7 +27,9 @@ const pages = {
   AggrigateMoreData: lazy(() => import("./aggrigateMoreData")),
   ElectricalMoreData: lazy(() => import("./electricalMoreData")),
   Notifications: lazy(() => import("./notifications")),
-  NotificationsInfo: lazy(() => import("../components/notificationInformation")),
+  NotificationsInfo: lazy(() =>
+    import("../components/notificationInformation")
+  ),
   NotFound: lazy(() => import("./notFound")),
   AllDataPage: lazy(() => import("./allDataPage")),
   AllDataPageOrganization: lazy(() => import("./allDataPageOrganization")),
@@ -63,10 +66,26 @@ function Root() {
           )
         }
       />
-      <Route
+      {/* <Route
         path="/stations"
         element={isAdmin() ? <pages.Stations /> : <pages.StationsWithUser />}
+      /> */}
+
+      <Route
+        path="/stations"
+        element={
+          checkRole() == "root" ? (
+            <pages.Stations />
+          ) : checkRole() == "district" ? (
+            <pages.StationsWithUser />
+          ) : checkRole() == "organization" ? (
+            <pages.StationsOrganization />
+          ) : (
+            ""
+          )
+        }
       />
+
       <Route path="/notification" element={<pages.Notifications />} />
       <Route path="/notification/:id" element={<pages.NotificationsInfo />} />
       <Route path="/stations/:id" element={<pages.StationsInformations />} />

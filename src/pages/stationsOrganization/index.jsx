@@ -4,22 +4,28 @@ import React, { useCallback, useEffect, useState, useMemo, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { Button, Input } from "antd";
+import { Anchor, Button, Input } from "antd";
 import { EyeFilled, SearchOutlined } from "@ant-design/icons";
 
 import "../stations/index.css";
-import { getAllStationsData } from "../../redux/actions/stationsActions";
+import {
+  findInMapsLastDataByDistrictId,
+  findLastStationsData,
+  getAllStationsData,
+} from "../../redux/actions/stationsActions";
 import Loading from "../../components/loading";
 
 import TableComponent from "../../components/tableComponent";
 import "../data/index.css";
 import EmptyCard from "../../components/emptyCard";
+import { getByRegionIdData } from "../../redux/actions/districtActions";
+import Cookies from "js-cookie";
 
-const StationsWithUser = memo(() => {
+const StationsWithOrganization = memo(() => {
   const [dataSource, setDataSource] = useState([]);
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const { districtByRegionId } = useSelector((state) => state.district);
   const { i18n, t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -28,21 +34,27 @@ const StationsWithUser = memo(() => {
   const { stationsData } = useSelector((state) => state.stations);
   const [status, setStatus] = useState("");
   const [searchText, setSearchText] = useState("");
-
+  const [activeSection, setActiveSection] = useState("0");
+  const [selectDistrictId, setSelectDistrictId] = useState(0);
   const token = localStorage.getItem("access_token");
+  const regionId = Cookies.get("regionId");
 
   const fetchAllData = useCallback(() => {
     const lang = i18n.language;
+    const districtId = districtByRegionId[selectDistrictId - 1]?.id;
 
     const stationParams = {
       lang,
       page: currentPage,
       perPage: pageSize,
       regionId: undefined,
+      districtId: districtId == undefined ? "" : districtId,
       organizationId: undefined,
       search: undefined,
       status: status,
     };
+
+    dispatch(getByRegionIdData(lang, token, regionId));
 
     dispatch(getAllStationsData(stationParams, token));
   }, [dispatch, token, currentPage, pageSize, i18n.language, status]);
@@ -74,6 +86,7 @@ const StationsWithUser = memo(() => {
 
   const handlePaginationChange = (page, size) => {
     const lang = i18n.language;
+    const districtId = districtByRegionId[selectDistrictId - 1]?.id;
 
     const paginationParams = {
       lang,
@@ -81,6 +94,7 @@ const StationsWithUser = memo(() => {
       perPage: size,
       search: undefined,
       regionId: undefined,
+      districtId: districtId == undefined ? "" : districtId,
       organizationId: undefined,
       status: status,
     };
@@ -162,6 +176,7 @@ const StationsWithUser = memo(() => {
 
   const handleSearchLastData = () => {
     const lang = i18n.language;
+    const districtId = districtByRegionId[selectDistrictId - 1]?.id;
 
     if (searchText.length != 0) {
       const stationParams = {
@@ -170,13 +185,33 @@ const StationsWithUser = memo(() => {
         perPage: undefined,
         search: searchText,
         regionId: undefined,
+        districtId: districtId == undefined ? "" : districtId,
         organizationId: undefined,
         status: status,
       };
-      console.log(stationParams);
 
       dispatch(getAllStationsData(stationParams, token));
     }
+  };
+
+  const getAllStationsByDistrictId = (key) => {
+    const lang = i18n.language;
+    const districtId = districtByRegionId[key - 1]?.id;
+    setSearchText("");
+    setStatus("");
+
+    const stationParams = {
+      lang,
+      page: currentPage,
+      perPage: pageSize,
+      regionId: undefined,
+      districtId: districtId == undefined ? "" : districtId,
+      organizationId: undefined,
+      search: undefined,
+      status: status,
+    };
+
+    dispatch(getAllStationsData(stationParams, token));
   };
 
   return (
@@ -193,8 +228,72 @@ const StationsWithUser = memo(() => {
             }}
             className="stations_body_container"
           >
-            <div className="stations_header_title ">
+            {/* <div className="stations_header_title ">
               <h1>{t("stationsPageData.stationsDataHeader")}</h1>
+            </div> */}
+
+            <div className="header_all_stations_data">
+              <h1>{t("stationsPageData.stationsInputDestrict")}</h1>
+            </div>
+
+            <div
+              className="reports_sort_select_wrapper"
+              style={{ marginBottom: "5px", marginTop: '10px' }}
+            >
+              <Anchor
+                className="anchor-items-container"
+                direction="horizontal"
+                items={[
+                  {
+                    value: 0,
+                    label: t("stationsPageData.allDistricts"),
+                  }, // Qo'shimcha option
+                  ...districtByRegionId.map((item, index) => ({
+                    value: index + 1,
+                    label: item.name,
+                  })),
+                ].map((item, index) => ({
+                  key: `${index}`,
+                  href: `#${index}`,
+                  title: (
+                    <p
+                      style={{
+                        color:
+                          activeSection === `${index}`
+                            ? colors.textWhite
+                            : colors.text,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        border:
+                          activeSection === `${index}`
+                            ? "none"
+                            : `1px solid ${colors.buttonColor}`,
+                        background:
+                          activeSection === `${index}`
+                            ? colors.buttonColor
+                            : "transparent",
+                        paddingRight: 10,
+                        paddingLeft: 10,
+                        paddingTop: 5,
+                        paddingBottom: 5,
+                        borderRadius: 5,
+                      }}
+                    >
+                      {item.label}
+                    </p>
+                  ),
+                }))}
+                onClick={(e, link) => {
+                  e.preventDefault();
+                  setActiveSection(link.href.replace("#", ""));
+                  getAllStationsByDistrictId(
+                    Number(link.href.replace("#", ""))
+                  );
+                  setSelectDistrictId(Number(link.href.replace("#", "")));
+                  setCurrentPage(1);
+                }}
+              />
             </div>
 
             <h2 style={{ marginTop: "20px" }}>Stansiya qidirish</h2>
@@ -314,7 +413,14 @@ const StationsWithUser = memo(() => {
                 handlePaginationChange={handlePaginationChange}
               />
             ) : (
-              <div style={{ height: "80vh" ,display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div
+                style={{
+                  height: "80vh",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <EmptyCard />
               </div>
             )}
@@ -325,4 +431,4 @@ const StationsWithUser = memo(() => {
   );
 });
 
-export default StationsWithUser;
+export default StationsWithOrganization;

@@ -16,7 +16,6 @@ import {
   Select,
 } from "antd";
 import moreInfo from "../../assets/info.png";
-
 import {
   NodeIndexOutlined,
   AreaChartOutlined,

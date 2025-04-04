@@ -31,6 +31,8 @@ export const getAllStationsData = (data, token) => async (dispatch) => {
         data.search == undefined ? "" : data.search
       }&regionId=${
         data.regionId == undefined ? "" : data.regionId
+      }&districtId=${
+        data.districtId == undefined ? "" : data.districtId
       }&organizationId=${
         data.organizationId == undefined ? "" : data.organizationId
       }&status=${data.status == undefined ? "" : data.status}`,
