@@ -843,7 +843,7 @@ export const getWeeklyStationsIdData =
         lang
       );
 
-      const getMonthAndWeek = (week) => {
+      const getWeek = (week) => {
         const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
         let daysPassed = (week - 1) * 7; // Hafta boshlangandan beri o'tgan kunlar
@@ -872,7 +872,7 @@ export const getWeeklyStationsIdData =
 
       sortTotalData.forEach((e) => {
         resultTotalData.push({
-          date: `${months[lang][e.month - 1]} ${getMonthAndWeek(e.week + 1)}-${
+          date: `${months[lang][e.month - 1]} ${getWeek(e.week + 1)}-${
             months[lang][12]
           }`,
           volume: e.volume,
