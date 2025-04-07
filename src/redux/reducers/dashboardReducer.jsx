@@ -8,6 +8,7 @@ const initialState = {
   statisticDataForOrganization: [],
   statisticDataForAdmin: [],
   statisticDataForLineChart: [],
+  volumeAndEnergyData: [],
   stationsId: [],
   loadingStatistic: true,
 };
@@ -33,6 +34,11 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         statisticDataForOrganization: action.payload,
+      };
+    case DASHBOARD_DATAS.GET_VOLUME_AND_ENERGY_DATA:
+      return {
+        ...state,
+        volumeAndEnergyData: action.payload,
       };
     case DASHBOARD_DATAS.GET_VOLUME_AND_ENERGY_DATA_BY_GROUPSTATION:
       return {

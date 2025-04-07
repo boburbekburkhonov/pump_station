@@ -5,10 +5,13 @@ import { getDataApi } from "../../utils";
 
 export const DASHBOARD_DATAS = {
   GET_USER_INFORMATION_BY_ID: "GET_USER_INFORMATION_BY_ID",
-  GET_VOLUME_AND_ENERGY_DATA_BY_GROUPSTATION: "GET_VOLUME_AND_ENERGY_DATA_BY_GROUPSTATION",
+  GET_VOLUME_AND_ENERGY_DATA: "GET_VOLUME_AND_ENERGY_DATA",
+  GET_VOLUME_AND_ENERGY_DATA_BY_GROUPSTATION:
+    "GET_VOLUME_AND_ENERGY_DATA_BY_GROUPSTATION",
   UPDATED_USER_INFORMATION_BY_ID: "UPDATE_USER_INFORMATION_BY_ID",
   GET_COUNT_STATIONS_STATISTICS: "GET_COUNT_STATIONS_STATISTICS",
-  GET_COUNT_STATIONS_STATISTICS_FOR_ORGANIZATION: "GET_COUNT_STATIONS_STATISTICS_FOR_ORGANIZATION",
+  GET_COUNT_STATIONS_STATISTICS_FOR_ORGANIZATION:
+    "GET_COUNT_STATIONS_STATISTICS_FOR_ORGANIZATION",
   GET_STATISTIC_DATA_LOADING: "GET_STATISTIC_DATA_LOADING",
   GET_COUNT_STATIONS_STATISTICS_FOR_ADMIN:
     "GET_COUNT_STATIONS_STATISTICS_FOR_ADMIN",
@@ -101,7 +104,7 @@ export const getStatisticsDashboard =
     }
   };
 
-  export const getStatisticsDashboardForOrganization =
+export const getStatisticsDashboardForOrganization =
   (regionId, lang, token) => async (dispatch) => {
     try {
       dispatch({
@@ -114,7 +117,7 @@ export const getStatisticsDashboard =
         token
       );
 
-      const data = res.data.data
+      const data = res.data.data;
 
       const newData = [
         data.totalStations,
@@ -126,7 +129,7 @@ export const getStatisticsDashboard =
         type: DASHBOARD_DATAS.GET_COUNT_STATIONS_STATISTICS_FOR_ORGANIZATION,
         payload: {
           newData: newData,
-          districts: res.data.data.data
+          districts: res.data.data.data,
         },
       });
     } catch (err) {
@@ -183,7 +186,7 @@ export const getStatisticsDashboardForAdmin =
         });
       }
     }
-};
+  };
 
 export const isUserUpdated = () => async (dispatch) => {
   dispatch({
@@ -254,4 +257,229 @@ export const getVolumeAndEnergyDataByGroupStation =
         });
       }
     }
-};
+  };
+
+export const getTodayVolumeAndEnergyData =
+  (lang, token) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const res = await getDataApi(
+        `dashboard/getVolumeAndEnergyDataToday?lang=${lang}`,
+        token
+      );
+      const data = res.data.data;
+
+      dispatch({
+        type: DASHBOARD_DATAS.GET_VOLUME_AND_ENERGY_DATA,
+        payload: {
+          volume: data.totalVolumeToday,
+          energyActive: data.totalEnergyActiveToday,
+        },
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    }finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+export const getYesterdayVolumeAndEnergyData =
+  (lang, token) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const res = await getDataApi(
+        `dashboard/getVolumeAndEnergyDataYesterday?lang=${lang}`,
+        token
+      );
+      const data = res.data.data;
+
+      dispatch({
+        type: DASHBOARD_DATAS.GET_VOLUME_AND_ENERGY_DATA,
+        payload: {
+          volume: data.totalVolumeYesterday,
+          energyActive: data.totalEnergyActiveYesterday,
+        },
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    }finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+export const getWeeklyVolumeAndEnergyData =
+  (lang, token) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const res = await getDataApi(
+        `dashboard/getVolumeAndEnergyDataThisWeek?lang=${lang}`,
+        token
+      );
+      const data = res.data.data;
+
+      dispatch({
+        type: DASHBOARD_DATAS.GET_VOLUME_AND_ENERGY_DATA,
+        payload: {
+          volume: data.totalVolumeThisWeek,
+          energyActive: data.totalEnergyActiveThisWeek,
+        },
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    }finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+export const getMonthlyVolumeAndEnergyData =
+  (lang, token) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const res = await getDataApi(
+        `dashboard/getVolumeAndEnergyDataThisMonth?lang=${lang}`,
+        token
+      );
+      const data = res.data.data;
+
+      dispatch({
+        type: DASHBOARD_DATAS.GET_VOLUME_AND_ENERGY_DATA,
+        payload: {
+          volume: data.totalVolumeThisMonth,
+          energyActive: data.totalEnergyActiveThisMonth,
+        },
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    }finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };
+
+export const getYearlyVolumeAndEnergyData =
+  (lang, token) => async (dispatch) => {
+    try {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: true,
+      });
+
+      const res = await getDataApi(
+        `dashboard/getVolumeAndEnergyDataThisYear?lang=${lang}`,
+        token
+      );
+      const data = res.data.data;
+
+      dispatch({
+        type: DASHBOARD_DATAS.GET_VOLUME_AND_ENERGY_DATA,
+        payload: {
+          volume: data.totalVolumeThisYear,
+          energyActive: data.totalEnergyActiveThisYear,
+        },
+      });
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.statusText,
+          },
+        });
+      }
+    }finally {
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: false,
+      });
+    }
+  };

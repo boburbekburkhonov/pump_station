@@ -43,9 +43,14 @@ import {
 
 import {
   getAllStationsId,
+  getMonthlyVolumeAndEnergyData,
   getStatisticsDashboard,
   getStatisticsDashboardForOrganization,
+  getTodayVolumeAndEnergyData,
   getVolumeAndEnergyDataByGroupStation,
+  getWeeklyVolumeAndEnergyData,
+  getYearlyVolumeAndEnergyData,
+  getYesterdayVolumeAndEnergyData,
 } from "../../redux/actions/dashboard";
 import "../dashboard/index.css";
 import { findLastStationsData } from "../../redux/actions/stationsActions";
@@ -71,6 +76,7 @@ import ViewStationModal from "../../components/stationsModalStatus/index";
 import ViewMoreStationModal from "../../components/viewMoreStationModal";
 import { useNavigate } from "react-router-dom";
 import StatisticsLineChart from "../../components/googleLineChart";
+import Loading from "../../components/loading";
 
 const STATISTIC_CARDS_CHUNK = 3;
 const STATISTIC_CARDS_CHUNK_NEXT = 7;
@@ -691,6 +697,7 @@ function OrganizationDashboard() {
     stationsId,
     loadingStatistic,
     statisticDataForLineChart,
+    volumeAndEnergyData,
   } = useSelector((state) => state.dashboard);
   const { totalData, loadingData, firstPieData, secondPieData } = useSelector(
     (state) => state.pie
@@ -698,7 +705,7 @@ function OrganizationDashboard() {
   const { totalLineData, loadingLineData, totalLineElectData } = useSelector(
     (state) => state.line
   );
-
+  const { loading } = useSelector((state) => state.alert);
   const { stationsLoading, stationsLastData } = useSelector(
     (state) => state.stations
   );
@@ -721,6 +728,8 @@ function OrganizationDashboard() {
   const [oneStationLastData, setOneStationLastData] = useState();
   const [modalOpen, setModalOpen] = useState(false);
   const [activeSquareButton, setActiveSquareButton] = useState(0);
+  const [activeVolemeAndEnergyButton, setActiveVolemeAndEnergyButton] =
+    useState(0);
 
   const regionId = Cookies.get("regionId");
   const token = localStorage.getItem("access_token");
@@ -761,6 +770,7 @@ function OrganizationDashboard() {
             getStatisticsDashboardForOrganization(regionId, lang, token)
           ),
           dispatch(findLastStationsData(lang, token)),
+          dispatch(getTodayVolumeAndEnergyData(lang, token)),
           dispatch(getVolumeAndEnergyDataByGroupStation(lang, token, "today")),
           // dispatch(getAllStationsId(lang, token)),
           // dispatch(findTodayStatisticData(lang, token)),
@@ -1073,6 +1083,28 @@ function OrganizationDashboard() {
       volume: dataVolume,
       energyActive: dataEnergyActive,
     };
+  };
+
+  const handleVolumeAndEnergyData = (key) => {
+    switch (key) {
+      case 0:
+        dispatch(getTodayVolumeAndEnergyData(i18n.language, token));
+        break;
+      case 1:
+        dispatch(getYesterdayVolumeAndEnergyData(i18n.language, token));
+        break;
+      case 2:
+        dispatch(getWeeklyVolumeAndEnergyData(i18n.language, token));
+        break;
+      case 3:
+        dispatch(getMonthlyVolumeAndEnergyData(i18n.language, token));
+        break;
+      case 4:
+        dispatch(getYearlyVolumeAndEnergyData(i18n.language, token));
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -1950,6 +1982,94 @@ function OrganizationDashboard() {
             </div>
           </>
         )}
+      </div>
+
+      <div
+        className="dashboard_statistic_datas"
+        style={{
+          background: colors.layoutBackground,
+        }}
+      >
+        <div
+          className="filter_container_dashboard"
+          style={{
+            marginBottom: "50px",
+          }}
+        >
+          <h1>
+            {/* {t("dashboardPageData.lineChartDataHeadingForOrg")}{" "}
+                {String(
+                  t("dashboardPageData.filterTitle2", { returnObjects: true })[
+                    activeSquareButton
+                  ]?.title
+                ).toLowerCase()} */}{" "}
+            2222
+          </h1>
+
+          <div className="filter_select_box">
+            {t("dashboardPageData.filterCardData", {
+              returnObjects: true,
+            }).map((item, index) => {
+              return (
+                <Button
+                  key={index}
+                  type={
+                    activeVolemeAndEnergyButton == index ? "primary" : "default"
+                  }
+                  size="large"
+                  onClick={() => {
+                    handleVolumeAndEnergyData(index);
+                    setActiveVolemeAndEnergyButton(index);
+                  }}
+                >
+                  {item.title}
+                </Button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className={loading ? 'volume-and-energy-spinner-wrapper' : ''}
+          style={{
+            paddingBottom:'20px'
+          }}
+        >
+          {loading ? (
+            <div className="s">
+              <div class="spinner"></div>
+            </div>
+          ) : (
+            <div className="stats-container-volume-energy">
+              <div className="stats-container-volume-energy-stat-item">
+                <div className="stats-container-volume-energy-icon-box stats-container-volume-energy-water">
+                  💧
+                </div>
+                <div className="stats-container-volume-energy-stat-content">
+                  <div className="stats-container-volume-energy-stat-label">
+                    {t("dashboardPageData.buttonAggregate")} (m³)
+                  </div>
+                  <div className="stats-container-volume-energy-stat-value">
+                    {Number(volumeAndEnergyData.volume).toFixed(2)}
+                  </div>
+                </div>
+              </div>
+              <div className="stats-container-volume-energy-stat-item">
+                <div className="stats-container-volume-energy-icon-box stats-container-volume-energy-energy">
+                  ⚡
+                </div>
+                <div className="stats-container-volume-energy-stat-content">
+                  <div className="stats-container-volume-energy-stat-label">
+                    {t("dataPagesInformation.allStationsElektrActiveEnergy")} (
+                    {t("dashboardPageData.lastStationsData.energyValueView")})
+                  </div>
+                  <div className="stats-container-volume-energy-stat-value">
+                    {Number(volumeAndEnergyData.energyActive).toFixed(2)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* <div
