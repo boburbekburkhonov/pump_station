@@ -882,7 +882,7 @@ export const getWeeklyStationsIdData =
 
       sortTotalDataForLineChart.forEach((e) => {
         resultTotalDataForLineCHart.push({
-          date: `${months[lang][e.month - 1]} ${e.week} ${months[lang][12]}`,
+          date: `${months[lang][e.month - 1]} ${getWeek(e.week + 1)}-${months[lang][12]}`,
           volume: e.volume,
           energyActive: e.energyActive,
         });
