@@ -45,6 +45,7 @@ import {
   getAllStationsId,
   getStatisticsDashboard,
   getStatisticsDashboardForOrganization,
+  getVolumeAndEnergyDataByGroupStation,
 } from "../../redux/actions/dashboard";
 import "../dashboard/index.css";
 import { findLastStationsData } from "../../redux/actions/stationsActions";
@@ -69,6 +70,7 @@ import SolarEmploymentChart from "../../components/googleNewPieChart";
 import ViewStationModal from "../../components/stationsModalStatus/index";
 import ViewMoreStationModal from "../../components/viewMoreStationModal";
 import { useNavigate } from "react-router-dom";
+import StatisticsLineChart from "../../components/googleLineChart";
 
 const STATISTIC_CARDS_CHUNK = 3;
 const STATISTIC_CARDS_CHUNK_NEXT = 7;
@@ -688,6 +690,7 @@ function OrganizationDashboard() {
     statisticDataForOrganization,
     stationsId,
     loadingStatistic,
+    statisticDataForLineChart,
   } = useSelector((state) => state.dashboard);
   const { totalData, loadingData, firstPieData, secondPieData } = useSelector(
     (state) => state.pie
@@ -717,6 +720,7 @@ function OrganizationDashboard() {
   const [selectedColor, setSelectedColor] = useState("");
   const [oneStationLastData, setOneStationLastData] = useState();
   const [modalOpen, setModalOpen] = useState(false);
+  const [activeSquareButton, setActiveSquareButton] = useState(0);
 
   const regionId = Cookies.get("regionId");
   const token = localStorage.getItem("access_token");
@@ -757,6 +761,7 @@ function OrganizationDashboard() {
             getStatisticsDashboardForOrganization(regionId, lang, token)
           ),
           dispatch(findLastStationsData(lang, token)),
+          dispatch(getVolumeAndEnergyDataByGroupStation(lang, token, "today")),
           // dispatch(getAllStationsId(lang, token)),
           // dispatch(findTodayStatisticData(lang, token)),
         ]);
@@ -956,6 +961,118 @@ function OrganizationDashboard() {
 
   const handleOpenModal = (id) => {
     navigate(`/all/data/infos/${id}`);
+  };
+
+  const handleVolumeAndEnergyDataByGroupStation = (key) => {
+    switch (key) {
+      case 0:
+        dispatch(
+          getVolumeAndEnergyDataByGroupStation(i18n.language, token, "today")
+        );
+        break;
+      case 1:
+        dispatch(
+          getVolumeAndEnergyDataByGroupStation(
+            i18n.language,
+            token,
+            "yesterday"
+          )
+        );
+        break;
+      case 2:
+        dispatch(
+          getVolumeAndEnergyDataByGroupStation(i18n.language, token, "week")
+        );
+        break;
+      case 3:
+        dispatch(
+          getVolumeAndEnergyDataByGroupStation(i18n.language, token, "month")
+        );
+        break;
+      case 4:
+        dispatch(
+          getVolumeAndEnergyDataByGroupStation(i18n.language, token, "year")
+        );
+        break;
+      default:
+        break;
+    }
+  };
+
+  const sortDataLineChart = (data) => {
+    const date = [];
+    const dataVolume = [];
+    const dataEnergyActive = [];
+    const months = {
+      uz: [
+        "Yanvar",
+        "Fevral",
+        "Mart",
+        "Aprel",
+        "May",
+        "Iyun",
+        "Iyul",
+        "Avgust",
+        "Sentabr",
+        "Oktabr",
+        "Noyabr",
+        "Dekabr",
+        "hafta",
+      ],
+      en: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+        "week",
+      ],
+      ru: [
+        "Январь",
+        "Февраль",
+        "Март",
+        "Апрель",
+        "Май",
+        "Июнь",
+        "Июль",
+        "Август",
+        "Сентябрь",
+        "Октябрь",
+        "Ноябрь",
+        "Декабрь",
+        "неделя",
+      ],
+    };
+
+    data.forEach((e) => {
+      if (activeSquareButton == 0) {
+        date.push(typeof e?.date != "number" ? e?.date?.split(" ")[1] : "");
+      } else if (activeSquareButton == 1) {
+        date.push(typeof e?.date != "number" ? e?.date?.split(" ")[1] : "");
+      } else if (activeSquareButton == 2) {
+        date.push(typeof e?.date != "number" ? e?.date?.split("T")[0] : "");
+      } else if (activeSquareButton == 3) {
+        date.push(typeof e?.date != "number" ? e?.date?.split("T")[0] : "");
+      } else if (activeSquareButton == 4) {
+        date.push(months[i18n.language][e.date - 1]);
+      }
+
+      dataVolume.push(Number(e.volume).toFixed(2) * 1);
+      dataEnergyActive.push(Number(e.energyActive).toFixed(2) * 1);
+    });
+
+    return {
+      date: date,
+      volume: dataVolume,
+      energyActive: dataEnergyActive,
+    };
   };
 
   return (
@@ -1506,7 +1623,7 @@ function OrganizationDashboard() {
           padding: "10px",
         }}
       >
-        <h2>Jami tuman stansiyalari</h2>
+        <h2>{t("layoutData.dashboardOrgTitle")}</h2>
 
         <div className="dashboard_wrapper_districts_items">
           {statisticDataForOrganization.districts?.map((e, i) => {
@@ -1514,15 +1631,17 @@ function OrganizationDashboard() {
               <div
                 className="dashboard_wrapper_districts_list_card"
                 style={{
-                 background: colors.layoutBackground,
-                 color: colors.text
+                  background: colors.layoutBackground,
+                  color: colors.text,
                 }}
                 key={i}
                 onClick={() => setIsDistrictId(e.id)}
               >
-                <h3 style={{
-                 color: colors.text
-                }}>
+                <h3
+                  style={{
+                    color: colors.text,
+                  }}
+                >
                   <EnvironmentOutlined style={{ fontSize: "22px" }} />
                   <span>Tuman:</span>
                   <span>{e.name}</span>
@@ -1769,6 +1888,68 @@ function OrganizationDashboard() {
               );
             })}
         </div>
+      </div>
+
+      <div
+        className="dashboard_statistic_datas"
+        style={{
+          background: colors.layoutBackground,
+        }}
+      >
+        {loadingData || isPending ? (
+          <Card
+            style={{
+              width: "100%",
+              height: 700,
+            }}
+            loading={loadingData}
+          />
+        ) : (
+          <>
+            <div
+              className="filter_container_dashboard"
+              style={{
+                marginBottom: "50px",
+              }}
+            >
+              <h1>
+                {t("dashboardPageData.lineChartDataHeadingForOrg")}{" "}
+                {String(
+                  t("dashboardPageData.filterTitle2", { returnObjects: true })[
+                    activeSquareButton
+                  ]?.title
+                ).toLowerCase()}
+              </h1>
+
+              <div className="filter_select_box">
+                {t("dashboardPageData.filterCardData", {
+                  returnObjects: true,
+                }).map((item, index) => {
+                  return (
+                    <Button
+                      key={index}
+                      type={activeSquareButton == index ? "primary" : "default"}
+                      size="large"
+                      onClick={() => {
+                        handleVolumeAndEnergyDataByGroupStation(index);
+                        setActiveSquareButton(index);
+                      }}
+                    >
+                      {item.title}
+                    </Button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="">
+              <StatisticsLineChart
+                theme={colors}
+                data={sortDataLineChart(statisticDataForLineChart)}
+              />
+            </div>
+          </>
+        )}
       </div>
 
       {/* <div

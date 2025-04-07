@@ -13,7 +13,7 @@ export const getAllDistrictData = (lang, token) => async (dispatch) => {
     const res = await getDataApi(`districts/getAll?page=1&perPage=65&lang=${lang}`, token);
 
     console.log(res.data.data.data);
-    
+
 
     dispatch({
       type: DISTRICT_TYPES.GET_ALL_DISTRICT,
@@ -40,11 +40,11 @@ export const getAllDistrictData = (lang, token) => async (dispatch) => {
 
 export const getByRegionIdData = (lang, token, id) => async (dispatch) => {
   try {
-    const res = await getDataApi(`districts/getByRegionId?regionId=${id}&lang=${lang}`, token)
+    const res = await getDataApi(`stations/findStationCountByGroupRegionId?regionId=${id}&lang=${lang}`, token)
 
     dispatch({
       type: DISTRICT_TYPES.GET_BY_REGION_ID,
-      payload: res.data.data
+      payload: res.data.data.data
     })
   } catch (err) {
     if (!err.response) {

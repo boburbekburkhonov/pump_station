@@ -47,6 +47,7 @@
     "navLink17": "Barcha ma'lumotlar",
     "navLink18": "Sozlamalar",
     "navLink19": "Hammasini ko‘rib chiqdim",
+    "dashboardOrgTitle": "Stansiya tumanlari bo'yicha statistikasi",
     "notifTitle": "Xabarlar",
     "chooseStation": "Stansiya tanlang",
     "rus": "Rus",
@@ -321,7 +322,7 @@
         "title": "Yillik ma'lumotlar"
       }
     ],
-    "filterTitle": "Tanlangan stansiya so'ngi ma'lumotlari",
+    "filterTitle": "Tanlangan stansiyalarning so'ngi ma'lumotlari",
     "tooltipName": "Suv hajmi",
     "tooltipName2": "Sariflangan quvat",
     "statisticsTitle1": "Stansiyalarning suv hajmi statistikasi",
@@ -345,6 +346,7 @@
       }
     ],
     "lineChartDataHeading": "Tuman bo'yicha umumiy",
+    "lineChartDataHeadingForOrg": "Stansiya tumanlari bo'yicha umumiy",
     "lastStationsData": {
       "locations": "Viloyat",
       "locations2": "Tashkilot",

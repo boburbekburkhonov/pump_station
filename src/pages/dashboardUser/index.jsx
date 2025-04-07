@@ -1054,8 +1054,8 @@ function UserDashboard() {
       } else if (activeSquareButton == 4) {
         date.push(months[i18n.language][e.date - 1]);
       }
-      dataVolume.push(e.volume);
-      dataEnergyActive.push(e.energyActive);
+      dataVolume.push(Number(e.volume).toFixed(2) * 1);
+      dataEnergyActive.push(Number(e.energyActive).toFixed(2) * 1);
     });
 
     return {

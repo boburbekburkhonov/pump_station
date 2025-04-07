@@ -47,6 +47,7 @@
     "navLink17": "Вся информация",
     "navLink18": "Настройки",
     "navLink19": "Я все просмотрел",
+    "dashboardOrgTitle": "Статистика станции по округам",
     "notifTitle": "Уведомления",
     "chooseStation": "Выбор станции",
     "rus": "Русский",
@@ -319,7 +320,7 @@
         "title": "Это годовые данные"
       }
     ],
-    "filterTitle": "Информация о выбранной станции",
+    "filterTitle": "Последние данные с выбранных станций",
     "tooltipName": "Объем воды",
     "tooltipName2": "Заряженная мощность",
     "statisticsTitle1": "Статистика объёма воды станций",
@@ -343,6 +344,7 @@
       }
     ],
     "lineChartDataHeading": "Всего по округам",
+    "lineChartDataHeadingForOrg": "Всего по станционному округу",
     "lastStationsData": {
       "locations": "Viloyat",
       "locations2": "Tashkilot",

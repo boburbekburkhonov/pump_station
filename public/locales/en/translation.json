@@ -47,6 +47,7 @@
     "navLink17": "All data",
     "navLink18": "Settings",
     "navLink19": "I have looked at everything.",
+    "dashboardOrgTitle": "Station statistics by district",
     "notifTitle": "Notifications",
     "chooseStation": "Station selection",
     "rus": "Russian",
@@ -319,7 +320,7 @@
         "title": "This year data"
       }
     ],
-    "filterTitle": "Selected station's last data",
+    "filterTitle": "Latest data from selected stations",
     "tooltipName": "Water volume",
     "tooltipName2": "Rated power",
     "statisticsTitle1": "Water volume statistics of stations",
@@ -343,6 +344,7 @@
       }
     ],
     "lineChartDataHeading": "Total by district",
+    "lineChartDataHeadingForOrg": "Total by station district",
     "lastStationsData": {
       "locations": "Viloyat",
       "locations2": "Tashkilot",
