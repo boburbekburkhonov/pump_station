@@ -1996,15 +1996,7 @@ function OrganizationDashboard() {
             marginBottom: "50px",
           }}
         >
-          <h1>
-            {/* {t("dashboardPageData.lineChartDataHeadingForOrg")}{" "}
-                {String(
-                  t("dashboardPageData.filterTitle2", { returnObjects: true })[
-                    activeSquareButton
-                  ]?.title
-                ).toLowerCase()} */}{" "}
-            2222
-          </h1>
+          <h1>{t("layoutData.dashboardOrgTitleForCard")}</h1>
 
           <div className="filter_select_box">
             {t("dashboardPageData.filterCardData", {
@@ -2029,9 +2021,10 @@ function OrganizationDashboard() {
           </div>
         </div>
 
-        <div className={loading ? 'volume-and-energy-spinner-wrapper' : ''}
+        <div
+          className={loading ? "volume-and-energy-spinner-wrapper" : ""}
           style={{
-            paddingBottom:'20px'
+            paddingBottom: "30px",
           }}
         >
           {loading ? (
@@ -2040,34 +2033,69 @@ function OrganizationDashboard() {
             </div>
           ) : (
             <div className="stats-container-volume-energy">
-              <div className="stats-container-volume-energy-stat-item">
-                <div className="stats-container-volume-energy-icon-box stats-container-volume-energy-water">
-                  💧
-                </div>
-                <div className="stats-container-volume-energy-stat-content">
-                  <div className="stats-container-volume-energy-stat-label">
-                    {t("dashboardPageData.buttonAggregate")} (m³)
+              <div className="stats-container-volume-energy-card">
+                <div className="stats-container-volume-energy-card-content">
+                  <div className="stats-container-volume-energy-icon stats-container-volume-energy-water">
+                    💧
                   </div>
-                  <div className="stats-container-volume-energy-stat-value">
-                    {Number(volumeAndEnergyData.volume).toFixed(2)}
+                  <div>
+                    <div className="stats-container-volume-energy-text-label">
+                      {t("dashboardPageData.buttonAggregate")} (m³)
+                    </div>
+                    <div className="stats-container-volume-energy-value">
+                      {Number(volumeAndEnergyData.volume).toFixed(2)}
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="stats-container-volume-energy-stat-item">
-                <div className="stats-container-volume-energy-icon-box stats-container-volume-energy-energy">
-                  ⚡
-                </div>
-                <div className="stats-container-volume-energy-stat-content">
-                  <div className="stats-container-volume-energy-stat-label">
-                    {t("dataPagesInformation.allStationsElektrActiveEnergy")} (
-                    {t("dashboardPageData.lastStationsData.energyValueView")})
+
+              <div className="stats-container-volume-energy-card">
+                <div className="stats-container-volume-energy-card-content">
+                  <div className="stats-container-volume-energy-icon stats-container-volume-energy-energy">
+                    ⚡
                   </div>
-                  <div className="stats-container-volume-energy-stat-value">
-                    {Number(volumeAndEnergyData.energyActive).toFixed(2)}
+                  <div>
+                    <div className="stats-container-volume-energy-text-label">
+                      {t("dataPagesInformation.allStationsElektrActiveEnergy")}{" "}
+                      ({t("dashboardPageData.lastStationsData.energyValueView")}
+                      )
+                    </div>
+                    <div className="stats-container-volume-energy-value">
+                      {Number(volumeAndEnergyData.energyActive).toFixed(2)}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+            // <div className="stats-container-volume-energy">
+            //   <div className="stats-container-volume-energy-stat-item">
+            //     <div className="stats-container-volume-energy-icon-box stats-container-volume-energy-water">
+            //       💧
+            //     </div>
+            //     <div className="stats-container-volume-energy-stat-content">
+            //       <div className="stats-container-volume-energy-stat-label">
+            //         {t("dashboardPageData.buttonAggregate")} (m³)
+            //       </div>
+            //       <div className="stats-container-volume-energy-stat-value">
+            //         {Number(volumeAndEnergyData.volume).toFixed(2)}
+            //       </div>
+            //     </div>
+            //   </div>
+            //   <div className="stats-container-volume-energy-stat-item">
+            //     <div className="stats-container-volume-energy-icon-box stats-container-volume-energy-energy">
+            //       ⚡
+            //     </div>
+            //     <div className="stats-container-volume-energy-stat-content">
+            //       <div className="stats-container-volume-energy-stat-label">
+            //         {t("dataPagesInformation.allStationsElektrActiveEnergy")} (
+            //         {t("dashboardPageData.lastStationsData.energyValueView")})
+            //       </div>
+            //       <div className="stats-container-volume-energy-stat-value">
+            //         {Number(volumeAndEnergyData.energyActive).toFixed(2)}
+            //       </div>
+            //     </div>
+            //   </div>
+            // </div>
           )}
         </div>
       </div>
