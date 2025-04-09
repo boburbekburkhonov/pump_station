@@ -49,7 +49,7 @@ const MapWithPolygon = memo(({ data, onClickMyLocations, stationData }) => {
     return (
       <div style={{ textAlign: "center", padding: "20px" }}>Loading...</div>
     );
-
+// "41.085802175946" "69.02544718911534"
   return (
     <GoogleMap
       mapContainerStyle={{ width: "100%", height: "100%" }}

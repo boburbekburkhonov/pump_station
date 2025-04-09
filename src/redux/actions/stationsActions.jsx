@@ -13,6 +13,7 @@ export const STATIONS_TYPES = {
   FIND_MAPS_LAST_DATA: "FIND_MAPS_LAST_DATA",
   FIND_MAPS_LAST_DATA_BY_DISTRICT_ID: "FIND_MAPS_LAST_DATA_BY_DISTRICT_ID",
   FIND_MY_LOCATIONS_POLYGONE: "FIND_MY_LOCATIONS_POLYGONE",
+  FIND_MY_LOCATIONS_POLYGONE_BY_REGION_ID: "FIND_MY_LOCATIONS_POLYGONE_BY_REGION_ID",
   FIND_LAST_DATA_LOADING: "FIND_LAST_DATA_LOADING",
   FIND_SELECTED_STATIONS_ID: "FIND_SELECTED_STATIONS_ID",
 };
@@ -434,10 +435,49 @@ export const findMyLocationsPolygon = (lang, id, token) => async (dispatch) => {
       `districts/getById?lang=${lang}&id=${id}`,
       token
     );
-    console.log(res.data.data);
 
     dispatch({
       type: STATIONS_TYPES.FIND_MY_LOCATIONS_POLYGONE,
+      payload: res.data.data,
+    });
+  } catch (err) {
+    if (!err.response) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: "Network Error",
+        },
+      });
+    } else {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: err.response.data.message || err.response.statusText,
+        },
+      });
+    }
+  } finally {
+    dispatch({
+      type: STATIONS_TYPES.FIND_LAST_DATA_LOADING,
+      payload: false,
+    });
+  }
+};
+
+export const findMyLocationsPolygonByRegionId = (lang, id, token) => async (dispatch) => {
+  try {
+    dispatch({
+      type: STATIONS_TYPES.FIND_LAST_DATA_LOADING,
+      payload: true,
+    });
+
+    const res = await getDataApi(
+      `regions/getById?lang=${lang}&id=${id}`,
+      token
+    );
+
+    dispatch({
+      type: STATIONS_TYPES.FIND_MY_LOCATIONS_POLYGONE_BY_REGION_ID,
       payload: res.data.data,
     });
   } catch (err) {

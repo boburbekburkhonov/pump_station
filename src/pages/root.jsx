@@ -10,14 +10,18 @@ const pages = {
   RegionDashboard: lazy(() => import("./dashboardRegion")),
   Stations: lazy(() => import("./stations")),
   StationsOrganization: lazy(() => import("./stationsOrganization")),
+  StationsRegion: lazy(() => import("./stationsRegion")),
   StationsWithUser: lazy(() => import("./stationsWithUser")),
   StationsInformations: lazy(() => import("./stationsInfo")),
   MapsPage: lazy(() => import("./maps")),
+  RegionMapsPage: lazy(() => import("./mapsRegion")),
   ProfilePage: lazy(() => import("./profilePage")),
   DataPage: lazy(() => import("./data")),
   DataPageOrganization: lazy(() => import("./dataOrganization")),
+  DataPageRegion: lazy(() => import("./dataRegion")),
   ElectrPage: lazy(() => import("./electrydata")),
   ElectrPageOrganization: lazy(() => import("./electrydataOrganization")),
+  ElectrPageRegion: lazy(() => import("./electrydataRegion")),
   Users: lazy(() => import("./users")),
   RolePage: lazy(() => import("./role")),
   Reports: lazy(() => import("./reports")),
@@ -34,6 +38,7 @@ const pages = {
   NotFound: lazy(() => import("./notFound")),
   AllDataPage: lazy(() => import("./allDataPage")),
   AllDataPageOrganization: lazy(() => import("./allDataPageOrganization")),
+  AllDataPageRegion: lazy(() => import("./allDataPageRegion")),
   MoreAllDataPage: lazy(() => import("./aggregateAndElectricalMoreDataPage")),
   Settings: lazy(() => import("./settingsPage")),
 };
@@ -71,11 +76,6 @@ function Root() {
           )
         }
       />
-      {/* <Route
-        path="/stations"
-        element={isAdmin() ? <pages.Stations /> : <pages.StationsWithUser />}
-      /> */}
-
       <Route
         path="/stations"
         element={
@@ -85,16 +85,32 @@ function Root() {
             <pages.StationsWithUser />
           ) : checkRole() == "organization" ? (
             <pages.StationsOrganization />
+          ) : checkRole() == "region" ? (
+            <pages.StationsRegion />
           ) : (
             ""
           )
         }
       />
-
       <Route path="/notification" element={<pages.Notifications />} />
       <Route path="/notification/:id" element={<pages.NotificationsInfo />} />
       <Route path="/stations/:id" element={<pages.StationsInformations />} />
-      <Route path="/maps" element={<pages.MapsPage />} />
+      <Route
+        path="/maps"
+        element={
+          checkRole() == "root" ? (
+            <pages.MapsPage />
+          ) : checkRole() == "district" ? (
+            <pages.MapsPage />
+          ) : checkRole() == "organization" ? (
+            <pages.MapsPage />
+          ) : checkRole() == "region" ? (
+            <pages.RegionMapsPage />
+          ) : (
+            ""
+          )
+        }
+      />
       <Route path="/profile" element={<pages.ProfilePage />} />
       <Route
         path="/data"
@@ -105,6 +121,8 @@ function Root() {
             <pages.DataPage />
           ) : checkRole() == "organization" ? (
             <pages.DataPageOrganization />
+          ) : checkRole() == "region" ? (
+            <pages.DataPageRegion />
           ) : (
             ""
           )
@@ -119,6 +137,8 @@ function Root() {
             <pages.ElectrPage />
           ) : checkRole() == "organization" ? (
             <pages.ElectrPageOrganization />
+          ) : checkRole() == "region" ? (
+            <pages.ElectrPageRegion />
           ) : (
             ""
           )
@@ -134,8 +154,10 @@ function Root() {
             <pages.AllDataPage />
           ) : checkRole() == "organization" ? (
             <pages.AllDataPageOrganization />
+          ) : checkRole() == "region" ? (
+            <pages.AllDataPageRegion />
           ) : (
-            ""
+            ''
           )
         }
       />

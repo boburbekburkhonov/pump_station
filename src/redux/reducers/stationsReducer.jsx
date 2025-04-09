@@ -8,6 +8,7 @@ const initialState = {
     stationsMap: [],
     stationsMapByDistrictId: [],
     stationsPolygon: {},
+    stationsPolygonByRegionId: {},
     stationsId: []
 }
 
@@ -52,6 +53,11 @@ const stationsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 stationsPolygon: action.payload
+            };
+        case STATIONS_TYPES.FIND_MY_LOCATIONS_POLYGONE_BY_REGION_ID:
+            return {
+                ...state,
+                stationsPolygonByRegionId: action.payload
             };
         case STATIONS_TYPES.FIND_SELECTED_STATIONS_ID:
             return {
