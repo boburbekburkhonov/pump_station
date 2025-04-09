@@ -314,12 +314,13 @@ export const findLastStationsData = (lang, token) => async (dispatch) => {
         },
       });
     } else {
-      dispatch({
-        type: GLOBALTYPES.ALERT,
-        payload: {
-          error: err.response.data.message || err.response.statusText,
-        },
-      });
+      console.log(err.response);
+      // dispatch({
+      //   type: GLOBALTYPES.ALERT,
+      //   payload: {
+      //     error: err.response.data.message || err.response.statusText,
+      //   },
+      // });
     }
   } finally {
     dispatch({

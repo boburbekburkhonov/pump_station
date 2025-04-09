@@ -7,6 +7,7 @@ const pages = {
   Home: lazy(() => import("./dashboard/home")),
   UserDashboard: lazy(() => import("./dashboardUser")),
   OrganizationDashboard: lazy(() => import("./dashboardOrganization")),
+  RegionDashboard: lazy(() => import("./dashboardRegion")),
   Stations: lazy(() => import("./stations")),
   StationsOrganization: lazy(() => import("./stationsOrganization")),
   StationsWithUser: lazy(() => import("./stationsWithUser")),
@@ -46,6 +47,8 @@ const checkRole = () => {
     return "district";
   } else if (localStorage.getItem("roles") === "678a3a7a271c9b956e44441b") {
     return "organization";
+  } else if (localStorage.getItem("roles") === "678a3a3e271c9b956e444415") {
+    return "region";
   }
 };
 
@@ -61,6 +64,8 @@ function Root() {
             <pages.UserDashboard />
           ) : checkRole() == "organization" ? (
             <pages.OrganizationDashboard />
+          ) : checkRole() == "region" ? (
+            <pages.RegionDashboard />
           ) : (
             ""
           )

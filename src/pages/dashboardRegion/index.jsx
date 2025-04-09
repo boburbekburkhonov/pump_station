@@ -687,7 +687,7 @@ const ViewMoreLastData = memo(
   }
 );
 
-function OrganizationDashboard() {
+function RegionDashboard() {
   const dispatch = useDispatch();
   const { i18n, t } = useTranslation();
   const { colors } = useSelector((state) => state.theme);
@@ -1967,7 +1967,7 @@ function OrganizationDashboard() {
         >
           {loading ? (
             <div className="s">
-              <div class="spinner"></div>
+              <div className="spinner"></div>
             </div>
           ) : (
             <div className="stats-container-volume-energy">
@@ -2265,4 +2265,4 @@ function OrganizationDashboard() {
   );
 }
 
-export default OrganizationDashboard;
+export default RegionDashboard;
