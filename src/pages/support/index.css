@@ -1,0 +1,105 @@
+.header_support {
+  background-color: #0077cc;
+  color: white;
+  padding: 30px;
+  text-align: center;
+}
+
+.container_support {
+  max-width: 1000px;
+  margin: auto;
+  padding: 30px;
+}
+
+
+.faq-item_support {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.contact-form_support {
+  background-color: white;
+  padding: 25px;
+  margin-top: 40px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.contact-form_support label {
+  display: block;
+  margin-bottom: 8px;
+  margin-top: 15px;
+}
+
+.contact-form_support input,
+.contact-form_support textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.contact-form_support button {
+  margin-top: 20px;
+  padding: 12px 25px;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.contact-info_support {
+  background-color: white;
+  padding: 30px;
+  margin-top: 40px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.info-item_support {
+  margin: 10px 0;
+  font-size: 18px;
+}
+
+.info-item_support img {
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.social-links_support {
+  margin-top: 25px;
+}
+
+.social-links_support img {
+  width: 32px;
+  margin: 0 10px;
+  transition: transform 0.3s;
+}
+
+.social-links_support img:hover {
+  transform: scale(1.1);
+}
+
+.footer_support {
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+  color: #777;
+  margin-top: 50px;
+}
+
+@media (max-width: 600px) {
+  .container_support {
+    padding: 15px;
+  }
+
+  .social-links_support img {
+    width: 28px;
+    margin: 0 6px;
+  }
+}

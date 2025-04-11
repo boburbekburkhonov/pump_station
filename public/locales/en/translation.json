@@ -61,6 +61,24 @@
     "successProfile": "Your information has been successfully changed.",
     "successPassword": "Your password has been successfully changed."
   },
+  "support": {
+    "item1": "Welcome to the Smart Pump Station help page.",
+    "item2": "We are ready to help you!",
+    "item3": "Frequently asked questions:",
+    "item4": "1. What is a Smart Pump Station?",
+    "item5": "Smart Pump Station is a software developed to monitor the volume of water output and electricity consumption of pumping stations. The software allows you to monitor and analyze data from the stations in real time. It allows the user to generate daily, monthly and annual reports. It also sends warning messages about malfunctions or deviations in the operation of the station. This system helps to increase the efficiency of pumping stations and rational use of resources.",
+    "item6": "2. How do I log in?",
+    "item7": "You can log in with your username and password. If you are not registered, click the (Register) button.",
+    "item8": "3. I forgot my password, what should I do?",
+    "item9": "On the login page, click the (Forgot your password?) link and enter your email.",
+    "item10": "Contact us",
+    "item11": "Your name:",
+    "item12": "Your email address:",
+    "item13": "Your message:",
+    "item14": "Send message",
+    "item15": "Contact information",
+    "item16": "All rights reserved for the Smart Pump Station platform."
+  },
   "stationsPageData": {
     "createStationsButton": "Create station",
     "stationsDataHeader": "Station information",

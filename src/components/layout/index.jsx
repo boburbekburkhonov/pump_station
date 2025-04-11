@@ -42,6 +42,8 @@ import "./index.css";
 import Logo from "../../assets/output-onlinepngtools-removebg-preview.png";
 import Logo2 from "../../assets/output-onlinepngtools__1_-removebg-preview.png";
 import { logoutAction } from "../../redux/actions/authActions";
+import SecurityPage from '../../pages/security'
+import SupportPage from '../../pages/support'
 import {
   deleteNotification,
   getAllNotifications,
@@ -85,6 +87,8 @@ const LayoutComponent = memo(({ childrenComponent }) => {
   const location = useLocation();
   const { i18n, t } = useTranslation();
   const navigate = useNavigate();
+  const { hash, pathname, search } = location;
+  ("");
   const isAuthenticated = localStorage.getItem("roles");
   const isToken = localStorage.getItem("access_token");
   const nameUser = localStorage.getItem("name");
@@ -450,7 +454,9 @@ const LayoutComponent = memo(({ childrenComponent }) => {
     return dayjs(dateString).fromNow();
   }
 
-  return (
+  return pathname == "/security" ? (
+    <SecurityPage />
+  ) : pathname == "/support" ? <SupportPage /> : (
     <ConfigProvider
       renderEmpty={customizeRenderEmpty}
       theme={{
@@ -616,7 +622,10 @@ const LayoutComponent = memo(({ childrenComponent }) => {
                 />
               </div>
 
-              <div className="header_badge_container" style={{marginRight: '15px'}}>
+              <div
+                className="header_badge_container"
+                style={{ marginRight: "15px" }}
+              >
                 <Badge
                   onClick={showDrawer}
                   count={countNotif}
@@ -684,7 +693,11 @@ const LayoutComponent = memo(({ childrenComponent }) => {
                   <div style={{ display: "flex" }}>
                     <img
                       className="mt-2"
-                      style={{ marginTop: "10px", filter: theme === "dark" ? "invert(1) brightness(10)" : ""}}
+                      style={{
+                        marginTop: "10px",
+                        filter:
+                          theme === "dark" ? "invert(1) brightness(10)" : "",
+                      }}
                       src={imageNotification}
                       alt="messageRead"
                       width={28}
@@ -697,7 +710,11 @@ const LayoutComponent = memo(({ childrenComponent }) => {
                     </p>
                     <p
                       className="notification-wrapper-item-time"
-                      style={{ margin: "0", marginTop: "8px", color: colors.text }}
+                      style={{
+                        margin: "0",
+                        marginTop: "8px",
+                        color: colors.text,
+                      }}
                     >
                       {timeAgo(e?.createdAt, i18n.language)}
                     </p>

@@ -5,6 +5,7 @@ import { Routes, Route } from "react-router-dom";
 
 const pages = {
   Home: lazy(() => import("./dashboard/home")),
+  Security: lazy(() => import("./security")),
   UserDashboard: lazy(() => import("./dashboardUser")),
   OrganizationDashboard: lazy(() => import("./dashboardOrganization")),
   RegionDashboard: lazy(() => import("./dashboardRegion")),
@@ -76,6 +77,12 @@ function Root() {
           )
         }
       />
+
+      <Route
+        path="/security"
+        element={<pages.Security />}
+      />
+
       <Route
         path="/stations"
         element={
@@ -182,7 +189,7 @@ function Root() {
           <Route path="/user/join" element={<pages.UserJoin />} />
         </>
       )}
-      <Route path="*" element={<pages.NotFound />} />
+      {/* <Route path="*" element={<pages.NotFound />} /> */}
     </Routes>
   );
 }

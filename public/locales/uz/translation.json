@@ -61,6 +61,24 @@
     "successProfile": "Ma'lumotlaringiz muvaffaqqiyatli o'zgartirildi",
     "successPassword": "Parolingiz muvaffaqqiyatli o'zgartirildi"
   },
+  "support": {
+    "item1": "Smart Pump Station ning yordam berish sahifasiga hush kelibsiz.",
+    "item2": "Biz sizga yordam berishga tayyormiz!",
+    "item3": "Tez-tez so'raladigan savollar:",
+    "item4": "1. Smart Pump Station nima?",
+    "item5": "Smart Pump Station — bu nasos stansiyalarining chiqayotgan suv hajmi va sarflayotgan elektr energiyasini monitoring qilish uchun ishlab chiqilgan dasturdir. Dastur yordamida stansiyalardan olingan maʼlumotlarni real vaqt rejimida kuzatish va tahlil qilish mumkin. U foydalanuvchiga kunlik, oylik va yillik hisobotlarni shakllantirish imkonini beradi. Shuningdek, stansiya faoliyatidagi nosozliklar yoki meʼyordan og‘ishlar bo‘yicha ogohlantirish xabarlari yuboriladi. Bu tizim nasos stansiyalarining samaradorligini oshirish va resurslardan oqilona foydalanishga xizmat qiladi.",
+    "item6": "2. Qanday tizimga kiraman?",
+    "item7": "Login va parolingiz bilan tizimga kirishingiz mumkin. Ro‘yxatdan o‘tmagan bo‘lsangiz, “Ro‘yxatdan o‘tish” tugmasini bosing.",
+    "item8": "3. Parolimni unutdim, nima qilay?",
+    "item9": "Login sahifasida “Parolni unutdingizmi?” havolasini bosing va elektron pochtangizni kiriting.",
+    "item10": "Biz bilan bog‘laning",
+    "item11": "Ismingiz:",
+    "item12": "Email manzilingiz:",
+    "item13": "Xabaringiz:",
+    "item14": "Xabarni yuborish",
+    "item15": "Aloqa ma'lumotlari",
+    "item16": "Smart Pump Station platformasining barcha huquqlar himoyalangan."
+  },
   "stationsPageData": {
     "createStationsButton": "Stansiya yaratish",
     "stationsDataHeader": "Stansiya ma'lumotlari",
