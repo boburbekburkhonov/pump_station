@@ -189,7 +189,7 @@ function Root() {
           <Route path="/user/join" element={<pages.UserJoin />} />
         </>
       )}
-      {/* <Route path="*" element={<pages.NotFound />} /> */}
+      <Route path="*" element={<pages.NotFound />} />
     </Routes>
   );
 }

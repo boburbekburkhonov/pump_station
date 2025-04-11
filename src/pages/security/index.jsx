@@ -102,11 +102,11 @@ const index = () => {
           <p>{t("settingNavbar.privacy.item29")}</p>
           <p>
             <strong>{t("settingNavbar.privacy.item30")}</strong>{" "}
-            {t("settingNavbar.privacy.item31")}
+            sss.ird@mail.ru
           </p>
           <p>
             <strong>{t("settingNavbar.privacy.item32")}</strong>{" "}
-            {t("settingNavbar.privacy.item33")}
+            +998 55 506-00-64
           </p>
           <p>
             <strong>{t("settingNavbar.privacy.item34")}</strong>{" "}
