@@ -63,9 +63,9 @@ export const getStatisticsDashboard =
       const data = res.data.data;
 
       const newData = [
-        data.countStations,
-        data.countActiveStations,
-        data.countInactiveStations,
+        data.totalStations,
+        data.totalActiveStations,
+        data.totalInactiveStations,
         data.aggregate.countAggregate,
         data.aggregate.countWorking,
         data.aggregate.countDefection,
