@@ -4,6 +4,7 @@ import { REGION_TYPES } from "../actions/regionActions";
 
 const initialState = {
   regions: [],
+  regionsForRegion: [],
 };
 
 const regionReducer = (state = initialState, action) => {
@@ -12,6 +13,11 @@ const regionReducer = (state = initialState, action) => {
       return {
         ...state,
         regions: action.payload,
+      };
+    case REGION_TYPES.GET_ALL_REGIONS_FOR_REGION:
+      return {
+        ...state,
+        regionsForRegion: action.payload,
       };
     default:
       return state;

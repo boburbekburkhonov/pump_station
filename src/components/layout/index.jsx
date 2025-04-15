@@ -155,6 +155,14 @@ const LayoutComponent = memo(({ childrenComponent }) => {
       label: <p className="link_new_text_style">{t("layoutData.navLink3")}</p>,
       children: [
         {
+          key: "all/data",
+          label: (
+            <Link className="layout_links" to="/all/data">
+              {t("layoutData.navLink17")}
+            </Link>
+          ),
+        },
+        {
           key: "data",
           label: (
             <Link className="layout_links" to="/data">

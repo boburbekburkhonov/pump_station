@@ -716,6 +716,7 @@ function ElectrPage() {
                 className="all_stations_data_main_section"
                 gutter={[16, 16]}
                 justify="start"
+                style={{marginBottom: '25px'}}
               >
                 {stationsMap?.data?.map((item, index) => {
                   const allElectrData = item.electricalEnergyLastData?.reduce(
