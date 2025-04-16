@@ -103,6 +103,19 @@
     "item10": "Tuman nomi",
     "item11": "Viloyatni tanlang"
   },
+  "organization": {
+    "item1": "Tashkilotlar ro'yxati",
+    "item2": "Tashkilot yaratish",
+    "item3": "Viloyat nomi",
+    "item4": "Tashkilot kengligi",
+    "item5": "Tashkilot uzunligi",
+    "item6": "Tashkilotni o‘chirish",
+    "item7": "o‘chirishga ishonchingiz komilmi?",
+    "item8": "Keyinchalik bu tashkilotni qayta tiklab bo‘lmaydi.",
+    "item9": "O'chirish",
+    "item10": "Tashkilot nomi",
+    "item11": "Viloyatni tanlang"
+  },
   "stationsPageData": {
     "createStationsButton": "Stansiya yaratish",
     "stationsDataHeader": "Stansiya ma'lumotlari",

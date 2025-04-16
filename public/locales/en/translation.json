@@ -103,6 +103,19 @@
     "item10": "District name",
     "item11": "Select a region"
   },
+  "organization": {
+    "item1": "List of organizations",
+    "item2": "Creating an organization",
+    "item3": "Province name",
+    "item4": "Organizational breadth",
+    "item5": "Organization length",
+    "item6": "Delete organization",
+    "item7": "are you sure you want to delete?",
+    "item8": "This organization cannot be restored later.",
+    "item9": "Delete",
+    "item10": "Organization name",
+    "item11": "Select a region"
+  },
   "stationsPageData": {
     "createStationsButton": "Create station",
     "stationsDataHeader": "Station information",
