@@ -177,30 +177,6 @@ function RegionPages() {
 
   const handleEditClick = async (item) => {
     setOneRegionForUpdate(item);
-    // const regionId = getIdByName(item.region, regions);
-    // const districtId = await getRegionIdName(regionId, item.district);
-    // const organizationId = getIdByName(item.organization, organizations);
-
-    // const updatedData = {
-    //   id: item.key,
-    //   name: item.name,
-    //   location: item.location,
-    //   devicePhoneNum: item.devicePhoneNum,
-    //   isIntegration: item.isIntegration,
-    //   haveElectricalEnergy: item.haveElectricalEnergy,
-    //   regionId,
-    //   districtId,
-    //   organizationId,
-    // };
-
-    // openModal(
-    //   { data: updatedData, isEdit: true },
-    //   setStationData,
-    //   setIsModalVisible,
-    //   setIsUpdating
-    // );
-
-    // form.setFieldsValue(updatedData);
   };
 
   const handleEditClickForDelete = async (item) => {
@@ -209,19 +185,19 @@ function RegionPages() {
 
   const columns = [
     {
-      title: "Viloyat nomi",
+      title: t("region.item3"),
       dataIndex: "name",
       key: "name",
       align: "center",
     },
     {
-      title: "Viloyat kengligi",
+      title: t("region.item4"),
       dataIndex: "latitude",
       key: "latitude",
       align: "center",
     },
     {
-      title: "Viloyat uzunligi",
+      title: t("region.item5"),
       dataIndex: "longitude",
       key: "longitude",
       align: "center",
@@ -291,7 +267,7 @@ function RegionPages() {
         >
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label>Viloyat nomi (uz)</label>
+              <label>{t("region.item3")} (uz)</label>
               <div className="modal_region-input-icon">
                 <span>🇺🇿</span>
                 <input
@@ -303,7 +279,7 @@ function RegionPages() {
               </div>
             </div>
             <div className="modal_region-form-group">
-              <label>Viloyat nomi (en)</label>
+              <label>{t("region.item3")} (en)</label>
               <div className="modal_region-input-icon">
                 <span>EN</span>
                 <input
@@ -318,7 +294,7 @@ function RegionPages() {
 
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label>Viloyat nomi (ru)</label>
+              <label>{t("region.item3")} (ru)</label>
               <div className="modal_region-input-icon">
                 <span>🇷🇺</span>
                 <input
@@ -330,7 +306,7 @@ function RegionPages() {
               </div>
             </div>
             <div className="modal_region-form-group">
-              <label>Longitude</label>
+              <label>{t("region.item5")}</label>
               <div className="modal_region-input-icon">
                 <span>🧭</span>
                 <input
@@ -345,7 +321,7 @@ function RegionPages() {
 
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label>Latitude</label>
+              <label>{t("region.item4")}</label>
               <div className="modal_region-input-icon">
                 <span>🧭</span>
                 <input
@@ -398,7 +374,7 @@ function RegionPages() {
         >
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label>Viloyat nomi (uz)</label>
+              <label>{t("region.item3")} (uz)</label>
               <div className="modal_region-input-icon">
                 <span>🇺🇿</span>
                 <input
@@ -412,7 +388,7 @@ function RegionPages() {
               </div>
             </div>
             <div className="modal_region-form-group">
-              <label>Viloyat nomi (en)</label>
+              <label>{t("region.item3")} (en)</label>
               <div className="modal_region-input-icon">
                 <span>EN</span>
                 <input
@@ -427,7 +403,7 @@ function RegionPages() {
 
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label>Viloyat nomi (ru)</label>
+              <label>{t("region.item3")} (ru)</label>
               <div className="modal_region-input-icon">
                 <span>🇷🇺</span>
                 <input
@@ -439,7 +415,7 @@ function RegionPages() {
               </div>
             </div>
             <div className="modal_region-form-group">
-              <label>Longitude</label>
+              <label>{t("region.item5")}</label>
               <div className="modal_region-input-icon">
                 <span>🧭</span>
                 <input
@@ -456,7 +432,7 @@ function RegionPages() {
 
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label>Latitude</label>
+              <label>{t("region.item4")}</label>
               <div className="modal_region-input-icon">
                 <span>🧭</span>
                 <input
@@ -506,21 +482,21 @@ function RegionPages() {
               src="https://cdn-icons-png.flaticon.com/512/463/463612.png"
               alt="warning"
             />
-            <h2>Viloyatni o‘chirish</h2>
+            <h2>{t("region.item6")}</h2>
           </div>
           <div className="modal_delete-body">
             <p>
-              <strong>{oneRegionForDelete.name} o‘chirishga ishonchingiz komilmi?</strong>
+              <strong>{oneRegionForDelete.name} {t("region.item7")}</strong>
             </p>
             <p className="modal_delete-warning">
-              ⚠ Bu amalni qayta tiklab bo‘lmaydi.
+              ⚠ {t("region.item8")}
             </p>
           </div>
           <div className="modal_delete-footer">
             <button className="modal_delete-cancel" onClick={() => {
                 setOpenResponsiveForDelete(false);
               }}>{t("stationsPageData.cancelButtonModal")}</button>
-            <button className="modal_delete-confirm" onClick={() => deleteRegion()}>O'chirish</button>
+            <button className="modal_delete-confirm" onClick={() => deleteRegion()}> {t("region.item9")}</button>
           </div>
         </div>
       </Modal>

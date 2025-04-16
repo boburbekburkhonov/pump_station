@@ -79,6 +79,17 @@
     "item15": "Contact information",
     "item16": "All rights reserved for the Smart Pump Station platform."
   },
+  "region": {
+    "item1": "List of regions",
+    "item2": "Create a region",
+    "item3": "Province name",
+    "item4": "Regional latitude",
+    "item5": "Length of the province",
+    "item6": "Delete region",
+    "item7": "are you sure you want to delete?",
+    "item8": "This region cannot be restored later.",
+    "item9": "Delete"
+  },
   "stationsPageData": {
     "createStationsButton": "Create station",
     "stationsDataHeader": "Station information",
