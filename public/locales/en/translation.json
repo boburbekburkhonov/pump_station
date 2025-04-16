@@ -90,6 +90,19 @@
     "item8": "This region cannot be restored later.",
     "item9": "Delete"
   },
+  "district": {
+    "item1": "List of districts",
+    "item2": "Creating a district",
+    "item3": "Province name",
+    "item4": "District width",
+    "item5": "Fog length",
+    "item6": "Clear the fog",
+    "item7": "are you sure you want to delete?",
+    "item8": "This district cannot be rebuilt later.",
+    "item9": "Удалить",
+    "item10": "District name",
+    "item11": "Select a region"
+  },
   "stationsPageData": {
     "createStationsButton": "Create station",
     "stationsDataHeader": "Station information",

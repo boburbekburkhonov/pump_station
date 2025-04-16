@@ -5,19 +5,23 @@ import { GLOBALTYPES } from "./globalTypes";
 
 export const DISTRICT_TYPES = {
   GET_ALL_DISTRICT: "GET_ALL_DISTRICT",
+  GET_ALL_DISTRICT_FOR_DISTRICT: "GET_ALL_DISTRICT_FOR_DISTRICT",
   GET_BY_REGION_ID: "GET_BY_REGION_ID"
 };
 
-export const getAllDistrictData = (lang, token) => async (dispatch) => {
+export const getAllDistrictData = (lang, token, page, perPage) => async (dispatch) => {
   try {
-    const res = await getDataApi(`districts/getAll?page=1&perPage=65&lang=${lang}`, token);
-
-    console.log(res.data.data.data);
+    const res = await getDataApi(`districts/getAll?page=${page != undefined ? page : "1"}&perPage=${perPage != undefined ? perPage : "65"}&lang=${lang}`, token);
 
 
     dispatch({
       type: DISTRICT_TYPES.GET_ALL_DISTRICT,
       payload: res.data.data.data,
+    });
+
+    dispatch({
+      type: DISTRICT_TYPES.GET_ALL_DISTRICT_FOR_DISTRICT,
+      payload: res.data.data,
     });
   } catch (err) {
     if (!err.response) {

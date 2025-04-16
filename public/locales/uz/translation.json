@@ -90,6 +90,19 @@
     "item8": "Keyinchalik bu viloyatni qayta tiklab bo‘lmaydi.",
     "item9": "O'chirish"
   },
+  "district": {
+    "item1": "Tumanlar ro'yxati",
+    "item2": "Tuman yaratish",
+    "item3": "Viloyat nomi",
+    "item4": "Tuman kengligi",
+    "item5": "Tuman uzunligi",
+    "item6": "Tumanni o‘chirish",
+    "item7": "o‘chirishga ishonchingiz komilmi?",
+    "item8": "Keyinchalik bu tumanni qayta tiklab bo‘lmaydi.",
+    "item9": "O'chirish",
+    "item10": "Tuman nomi",
+    "item11": "Viloyatni tanlang"
+  },
   "stationsPageData": {
     "createStationsButton": "Stansiya yaratish",
     "stationsDataHeader": "Stansiya ma'lumotlari",

@@ -267,7 +267,7 @@ function RegionPages() {
         >
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label>{t("region.item3")} (uz)</label>
+              <label style={{color: colors.text}}>{t("region.item3")} (uz)</label>
               <div className="modal_region-input-icon">
                 <span>🇺🇿</span>
                 <input
@@ -279,7 +279,7 @@ function RegionPages() {
               </div>
             </div>
             <div className="modal_region-form-group">
-              <label>{t("region.item3")} (en)</label>
+              <label style={{color: colors.text}}>{t("region.item3")} (en)</label>
               <div className="modal_region-input-icon">
                 <span>EN</span>
                 <input
@@ -294,7 +294,7 @@ function RegionPages() {
 
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label>{t("region.item3")} (ru)</label>
+              <label style={{color: colors.text}}>{t("region.item3")} (ru)</label>
               <div className="modal_region-input-icon">
                 <span>🇷🇺</span>
                 <input
@@ -306,7 +306,7 @@ function RegionPages() {
               </div>
             </div>
             <div className="modal_region-form-group">
-              <label>{t("region.item5")}</label>
+              <label style={{color: colors.text}}>{t("region.item5")}</label>
               <div className="modal_region-input-icon">
                 <span>🧭</span>
                 <input
@@ -321,7 +321,7 @@ function RegionPages() {
 
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label>{t("region.item4")}</label>
+              <label style={{color: colors.text}}>{t("region.item4")}</label>
               <div className="modal_region-input-icon">
                 <span>🧭</span>
                 <input
@@ -374,7 +374,7 @@ function RegionPages() {
         >
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label>{t("region.item3")} (uz)</label>
+              <label style={{color: colors.text}}>{t("region.item3")} (uz)</label>
               <div className="modal_region-input-icon">
                 <span>🇺🇿</span>
                 <input
@@ -388,7 +388,7 @@ function RegionPages() {
               </div>
             </div>
             <div className="modal_region-form-group">
-              <label>{t("region.item3")} (en)</label>
+              <label style={{color: colors.text}}>{t("region.item3")} (en)</label>
               <div className="modal_region-input-icon">
                 <span>EN</span>
                 <input
@@ -403,7 +403,7 @@ function RegionPages() {
 
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label>{t("region.item3")} (ru)</label>
+              <label style={{color: colors.text}}>{t("region.item3")} (ru)</label>
               <div className="modal_region-input-icon">
                 <span>🇷🇺</span>
                 <input
@@ -415,7 +415,7 @@ function RegionPages() {
               </div>
             </div>
             <div className="modal_region-form-group">
-              <label>{t("region.item5")}</label>
+              <label style={{color: colors.text}}>{t("region.item5")}</label>
               <div className="modal_region-input-icon">
                 <span>🧭</span>
                 <input
@@ -432,7 +432,7 @@ function RegionPages() {
 
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label>{t("region.item4")}</label>
+              <label style={{color: colors.text}}>{t("region.item4")}</label>
               <div className="modal_region-input-icon">
                 <span>🧭</span>
                 <input
