@@ -4,6 +4,7 @@ import { USER_ACTIONS_TYPES } from "../actions/userActions";
 
 const initialState = {
   myProfileData: {},
+  allUsers: {},
 };
 
 const userReducer = (state = initialState, action) => {
@@ -12,6 +13,11 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         myProfileData: action.payload,
+      };
+    case USER_ACTIONS_TYPES.GET_ALL_USERS:
+      return {
+        ...state,
+        allUsers: action.payload,
       };
     default:
       return state;
