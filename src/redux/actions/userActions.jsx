@@ -6,6 +6,7 @@ import { GLOBALTYPES } from "./globalTypes";
 export const USER_ACTIONS_TYPES = {
   GET_MY_PROFILE: "GET_MY_PROFILE",
   GET_ALL_USERS: "GET_ALL_USERS",
+  GET_ALL_ROLES: "GET_ALL_ROLES",
 };
 
 export const getMyProfileData = (token) => async (dispatch) => {
@@ -45,6 +46,38 @@ export const getAllUsers =
 
       dispatch({
         type: USER_ACTIONS_TYPES.GET_ALL_USERS,
+        payload: res.data.data,
+      });
+
+    } catch (err) {
+      if (!err.response) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: "Network Error",
+          },
+        });
+      } else {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            error: err.response.data.message || err.response.message,
+          },
+        });
+      }
+    }
+  };
+
+  export const getRoles =
+  (lang, token) => async (dispatch) => {
+    try {
+      const res = await getDataApi(
+        `roles/findAll?lang=${lang}`,
+        token
+      );
+
+      dispatch({
+        type: USER_ACTIONS_TYPES.GET_ALL_ROLES,
         payload: res.data.data,
       });
 

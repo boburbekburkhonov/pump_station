@@ -5,6 +5,7 @@ import { GLOBALTYPES } from "./globalTypes";
 
 export const DISTRICT_TYPES = {
   GET_ALL_DISTRICT: "GET_ALL_DISTRICT",
+  GET_ALL_DISTRICT_BY_REGIOND_ID: "GET_ALL_DISTRICT_BY_REGIOND_ID",
   GET_ALL_DISTRICT_FOR_DISTRICT: "GET_ALL_DISTRICT_FOR_DISTRICT",
   GET_BY_REGION_ID: "GET_BY_REGION_ID"
 };
@@ -21,6 +22,33 @@ export const getAllDistrictData = (lang, token, page, perPage) => async (dispatc
 
     dispatch({
       type: DISTRICT_TYPES.GET_ALL_DISTRICT_FOR_DISTRICT,
+      payload: res.data.data,
+    });
+  } catch (err) {
+    if (!err.response) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: "Network Error",
+        },
+      });
+    } else {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: err.response.data.message || err.response.message,
+        },
+      });
+    }
+  }
+};
+
+export const getAllDistrictDataByRegionId = (lang, token, regionId) => async (dispatch) => {
+  try {
+    const res = await getDataApi(`districts/getByRegionId?regionId=${regionId}&lang=${lang}`, token);
+
+    dispatch({
+      type: DISTRICT_TYPES.GET_ALL_DISTRICT_BY_REGIOND_ID,
       payload: res.data.data,
     });
   } catch (err) {

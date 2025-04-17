@@ -1,4 +1,4 @@
-import { Button, Modal, Table } from "antd";
+import { Button, Modal, Select, Table } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,12 +6,20 @@ import { getAllRegionId } from "../../redux/actions/regionActions";
 import {
   DeleteOutlined,
   EditOutlined,
+  GlobalOutlined,
+  GoogleOutlined,
+  LockOutlined,
+  PhoneOutlined,
   PlusSquareOutlined,
+  UsergroupAddOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import "./index.css";
 import { postDataApi } from "../../utils";
 import { GLOBALTYPES } from "../../redux/actions/globalTypes";
-import { getAllUsers } from "../../redux/actions/userActions";
+import { getAllUsers, getRoles } from "../../redux/actions/userActions";
+import { getAllDistrictDataByRegionId } from "../../redux/actions/districtActions";
+import { getAllOrganizationsDataByRegionId } from "../../redux/actions/organizationActions";
 
 function Users() {
   const dispatch = useDispatch();
@@ -19,7 +27,12 @@ function Users() {
   const { colors } = useSelector((state) => state.theme);
   const { loading } = useSelector((state) => state.alert);
   const token = localStorage.getItem("access_token");
-  const { allUsers } = useSelector((state) => state.user);
+  const { allUsers, allRoles } = useSelector((state) => state.user);
+  const { regions } = useSelector((state) => state.region);
+  const { districtsByRegionId } = useSelector((state) => state.district);
+  const { organizationsByRegionId } = useSelector(
+    (state) => state.organization
+  );
   const [openResponsive, setOpenResponsive] = useState(false);
   const [oneRegionForUpdate, setOneRegionForUpdate] = useState({});
   const [oneRegionForDelete, setOneRegionForDelete] = useState({});
@@ -28,16 +41,26 @@ function Users() {
   const [regionNameUz, setRegionNameUz] = useState("");
   const [regionLon, setRegionLon] = useState("");
   const [regionLang, setRegionLang] = useState("");
+  const [selectRegionId, setSelectRegionId] = useState(0);
+  const [selectRoleId, setSelectRoleId] = useState(0);
+  const [selectDistrictId, setSelectDistrictId] = useState(0);
+  const [selectOrganizationId, setSelectOrganizationId] = useState(0);
   const [pageData, setPageData] = useState({
     page: 1,
     perPage: 10,
   });
   const [count, setCount] = useState(0);
+  const [userName, setUserName] = useState("");
+  const [userUsername, setUserUsername] = useState("");
+  const [userPhone, setUserPhone] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   const fetchAllData = useCallback(() => {
     const lang = i18n.language;
 
     dispatch(getAllUsers(lang, token, pageData.page, pageData.perPage));
+    dispatch(getAllRegionId(lang, token, 1, 20));
+    dispatch(getRoles(lang, token));
   }, [dispatch, token, i18n.language, pageData, count]);
 
   useEffect(() => {
@@ -48,10 +71,34 @@ function Users() {
   }, [fetchAllData, i18n, count]);
 
   useEffect(() => {
+    const lang = i18n.language;
+
+    dispatch(
+      getAllDistrictDataByRegionId(
+        lang,
+        token,
+        regions[selectRegionId]?.id == undefined
+          ? 1
+          : regions[selectRegionId]?.id
+      )
+    );
+    dispatch(
+      getAllOrganizationsDataByRegionId(
+        lang,
+        token,
+        regions[selectRegionId]?.id == undefined
+          ? 1
+          : regions[selectRegionId]?.id
+      )
+    );
+  }, [selectRegionId]);
+
+  useEffect(() => {
     if (oneRegionForUpdate) {
-      setRegionNameUz(oneRegionForUpdate.name || "");
-      setRegionLon(oneRegionForUpdate.longitude || "");
-      setRegionLang(oneRegionForUpdate.latitude || "");
+      setUserName(oneRegionForUpdate.name || "");
+      setUserUsername(oneRegionForUpdate.username || "");
+      setUserPhone(oneRegionForUpdate.phone || "");
+      setUserEmail(oneRegionForUpdate.email || "");
     }
   }, [oneRegionForUpdate]);
 
@@ -67,21 +114,25 @@ function Users() {
 
     const form = e.target;
     const formData = new FormData(form);
+    const regionId = regions[selectRegionId]?.id;
+    const districtId = districtsByRegionId[selectDistrictId]?.id;
+    const organizationId = organizationsByRegionId[selectOrganizationId]?.id;
+    const roleId = allRoles[selectRoleId]?.id;
 
     try {
-      const lang = i18n.language;
-
       const data = {
-        name: [
-          { name: formData.get("name_uz"), code: "uz" },
-          { name: formData.get("name_en"), code: "en" },
-          { name: formData.get("name_ru"), code: "ru" },
-        ],
-        latitude: formData.get("latitude"),
-        longitude: formData.get("longitude"),
+        name: formData.get("user_name"),
+        username: formData.get("user_username"),
+        password: formData.get("user_password"),
+        phone: formData.get("user_phone"),
+        roleId: roleId,
+        email: formData.get("user_email"),
+        regionId: regionId,
+        districtId: districtId,
+        organizationId: organizationId,
       };
 
-      const res = await postDataApi(`regions/create?lang=${lang}`, data, token);
+      const res = await postDataApi(`users/create`, data, token);
 
       if (res.status == 201) {
         dispatch({
@@ -91,6 +142,10 @@ function Users() {
           },
         });
         setOpenResponsive(false);
+        setSelectRegionId(0);
+        setSelectRoleId(0);
+        setSelectDistrictId(0);
+        setSelectOrganizationId(0);
         form.reset();
       }
     } catch (err) {
@@ -108,22 +163,25 @@ function Users() {
 
     const form = e.target;
     const formData = new FormData(form);
+    const regionId = regions[selectRegionId]?.id;
+    const districtId = districtsByRegionId[selectDistrictId]?.id;
+    const organizationId = organizationsByRegionId[selectOrganizationId]?.id;
+    const roleId = allRoles[selectRoleId]?.id;
 
     try {
-      const lang = i18n.language;
-
       const data = {
         id: oneRegionForUpdate.id,
-        name: [
-          { name: formData.get("name_uz_for_update"), code: "uz" },
-          { name: formData.get("name_en_for_update"), code: "en" },
-          { name: formData.get("name_ru_for_update"), code: "ru" },
-        ],
-        latitude: formData.get("latitude_for_update"),
-        longitude: formData.get("longitude_for_update"),
+        name: formData.get("user_name_for_update"),
+        username: formData.get("user_username_for_update"),
+        phone: formData.get("user_phone_for_update"),
+        roleId: roleId,
+        email: formData.get("user_email_for_update"),
+        regionId: regionId,
+        districtId: districtId,
+        organizationId: organizationId,
       };
 
-      const res = await postDataApi(`regions/update?lang=${lang}`, data, token);
+      const res = await postDataApi(`users/update`, data, token);
 
       if (res.status == 201) {
         dispatch({
@@ -134,6 +192,10 @@ function Users() {
         });
         setCount(count + 1);
         setOpenResponsiveForUpdata(false);
+        setSelectRegionId(0);
+        setSelectRoleId(0);
+        setSelectDistrictId(0);
+        setSelectOrganizationId(0);
         form.reset();
       }
     } catch (err) {
@@ -178,6 +240,9 @@ function Users() {
 
   const handleEditClick = async (item) => {
     setOneRegionForUpdate(item);
+    const foundRoleIndex = allRoles.findIndex((e) => e.id == item.roleId);
+    setSelectRoleId(foundRoleIndex);
+    setSelectRegionId(item.regionId - 1);
   };
 
   const handleEditClickForDelete = async (item) => {
@@ -186,7 +251,7 @@ function Users() {
 
   const columns = [
     {
-      title: 'Foydalanuvchi nomi',
+      title: "Foydalanuvchi nomi",
       dataIndex: "name",
       key: "name",
       align: "center",
@@ -198,7 +263,7 @@ function Users() {
     //   align: "center",
     // },
     {
-      title: 'Telefon raqam',
+      title: "Telefon raqam",
       dataIndex: "phone",
       key: "phone",
       align: "center",
@@ -210,26 +275,26 @@ function Users() {
     //   align: "center",
     // },
     {
-      title: 'Foydalanuvchi turi',
+      title: "Foydalanuvchi turi",
       dataIndex: "role",
       key: "role",
       align: "center",
       render: (role) => role?.name || "-",
     },
     {
-      title: 'Viloyat nomi',
+      title: "Viloyat nomi",
       dataIndex: "regionName",
       key: "regionName",
       align: "center",
     },
     {
-      title: 'Tuman nomi',
+      title: "Tuman nomi",
       dataIndex: "districtName",
       key: "districtName",
       align: "center",
     },
     {
-      title: 'Tashkilot nomi',
+      title: "Tashkilot nomi",
       dataIndex: "organizationName",
       key: "organizationName",
       align: "center",
@@ -272,7 +337,6 @@ function Users() {
       width: 100,
     },
   ];
-  console.log(allUsers);
 
   return (
     <div
@@ -300,29 +364,26 @@ function Users() {
         >
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>
-                {t("region.item3")} (uz)
-              </label>
+              <label style={{ color: colors.text }}>Foydalanuvchi nomi</label>
               <div className="modal_region-input-icon">
-                <span>🇺🇿</span>
-                <input
-                  name="name_uz"
-                  type="text"
-                  placeholder="Andijon viloyati"
-                  required
-                />
+                <span>
+                  <UserOutlined />
+                </span>
+                <input name="user_name" type="text" placeholder="" required />
               </div>
             </div>
             <div className="modal_region-form-group">
               <label style={{ color: colors.text }}>
-                {t("region.item3")} (en)
+                Foydalanuvchining logini
               </label>
               <div className="modal_region-input-icon">
-                <span>EN</span>
+                <span>
+                  <UserOutlined />
+                </span>
                 <input
-                  name="name_en"
+                  name="user_username"
                   type="text"
-                  placeholder="Andijan region"
+                  placeholder=""
                   required
                 />
               </div>
@@ -332,44 +393,154 @@ function Users() {
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
               <label style={{ color: colors.text }}>
-                {t("region.item3")} (ru)
+                Foydalanuvchining paroli
               </label>
               <div className="modal_region-input-icon">
-                <span>🇷🇺</span>
+                <span>
+                  <LockOutlined />
+                </span>
                 <input
-                  name="name_ru"
+                  name="user_password"
                   type="text"
-                  placeholder="Андижанская область"
+                  placeholder=""
                   required
                 />
               </div>
             </div>
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>{t("region.item5")}</label>
+              <label style={{ color: colors.text }}>
+                Foydalanuvchining telefon raqami
+              </label>
               <div className="modal_region-input-icon">
-                <span>🧭</span>
-                <input
-                  name="longitude"
-                  type="number"
-                  placeholder="72.3258..."
-                  required
-                />
+                <span>
+                  <PhoneOutlined />
+                </span>
+                <input name="user_phone" type="tel" placeholder="" required />
               </div>
             </div>
           </div>
 
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>{t("region.item4")}</label>
+              <label style={{ color: colors.text }}>Foydalanuvchi turi</label>
+
+              <Select
+                key={"selects_name_region"}
+                size="large"
+                style={{
+                  minWidth: 341,
+                }}
+                value={selectRoleId}
+                className="reports_sort_select"
+                options={
+                  allRoles.length != undefined
+                    ? allRoles?.map((item, index) => ({
+                        value: index,
+                        label: item.name,
+                      }))
+                    : ""
+                }
+                onChange={(key, option) => {
+                  setSelectRoleId(key);
+                }}
+              />
+            </div>
+            <div className="modal_region-form-group">
+              <label style={{ color: colors.text }}>Foydalanuvchi email</label>
               <div className="modal_region-input-icon">
-                <span>🧭</span>
-                <input
-                  name="latitude"
-                  type="number"
-                  placeholder="40.7918..."
-                  required
-                />
+                <span>
+                  <GoogleOutlined />
+                </span>
+                <input name="user_email" type="email" placeholder="" required />
               </div>
+            </div>
+          </div>
+
+          <div className="modal_region-form-row">
+            <div className="modal_region-form-group">
+              <label style={{ color: colors.text }}>Viloyat</label>
+
+              <Select
+                key={"selects_name_region"}
+                size="large"
+                style={{
+                  minWidth: 341,
+                }}
+                value={selectRegionId}
+                className="reports_sort_select"
+                options={[
+                  ...regions.map((item, index) => ({
+                    value: index,
+                    label: item.name,
+                  })),
+                ]}
+                onChange={(key, option) => {
+                  setSelectRegionId(key);
+                }}
+              />
+            </div>
+            <div className="modal_region-form-group">
+              <label style={{ color: colors.text }}>Tuman</label>
+
+              <Select
+                key={"selects_name_region"}
+                size="large"
+                style={{
+                  minWidth: 341,
+                }}
+                value={selectDistrictId}
+                className="reports_sort_select"
+                options={
+                  districtsByRegionId.length > 0
+                    ? districtsByRegionId.map((item, index) => ({
+                        value: index,
+                        label: item.name,
+                      }))
+                    : [
+                        {
+                          value: "no_data",
+                          label: "Ma'lumot mavjud emas",
+                          disabled: true,
+                        },
+                      ]
+                }
+                onChange={(key, option) => {
+                  setSelectDistrictId(key);
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="modal_region-form-row">
+            <div className="modal_region-form-group">
+              <label style={{ color: colors.text }}>Tashkilot</label>
+
+              <Select
+                key={"selects_name_region"}
+                size="large"
+                style={{
+                  minWidth: 341,
+                }}
+                value={selectOrganizationId}
+                className="reports_sort_select"
+                options={
+                  organizationsByRegionId.length > 0
+                    ? organizationsByRegionId.map((item, index) => ({
+                        value: index,
+                        label: item.name,
+                      }))
+                    : [
+                        {
+                          value: "no_data",
+                          label: "Ma'lumot mavjud emas",
+                          disabled: true,
+                        },
+                      ]
+                }
+                onChange={(key, option) => {
+                  setSelectOrganizationId(key);
+                }}
+              />
             </div>
             <div className="modal_region-form-group"></div>
           </div>
@@ -380,6 +551,10 @@ function Users() {
               className="modal_region-btn modal_region-btn-cancel"
               onClick={() => {
                 setOpenResponsive(false);
+                setSelectRegionId(0);
+                setSelectRoleId(0);
+                setSelectDistrictId(0);
+                setSelectOrganizationId(0);
               }}
             >
               {t("stationsPageData.cancelButtonModal")}
@@ -413,32 +588,35 @@ function Users() {
         >
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>
-                {t("region.item3")} (uz)
-              </label>
+              <label style={{ color: colors.text }}>Foydalanuvchi nomi</label>
               <div className="modal_region-input-icon">
-                <span>🇺🇿</span>
+                <span>
+                  <UserOutlined />
+                </span>
                 <input
-                  name="name_uz_for_update"
+                  name="user_name_for_update"
                   type="text"
-                  placeholder="Andijon viloyati"
                   required
-                  value={regionNameUz}
-                  onChange={(e) => setRegionNameUz(e.target.value)}
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
                 />
               </div>
             </div>
             <div className="modal_region-form-group">
               <label style={{ color: colors.text }}>
-                {t("region.item3")} (en)
+                Foydalanuvchining logini
               </label>
               <div className="modal_region-input-icon">
-                <span>EN</span>
+                <span>
+                  <UserOutlined />
+                </span>
                 <input
-                  name="name_en_for_update"
+                  name="user_username_for_update"
                   type="text"
-                  placeholder="Andijan region"
+                  placeholder=""
                   required
+                  value={userUsername}
+                  onChange={(e) => setUserUsername(e.target.value)}
                 />
               </div>
             </div>
@@ -446,30 +624,36 @@ function Users() {
 
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>
-                {t("region.item3")} (ru)
-              </label>
+              <label style={{ color: colors.text }}>Foydalanuvchi email</label>
               <div className="modal_region-input-icon">
-                <span>🇷🇺</span>
+                <span>
+                  <GoogleOutlined />
+                </span>
                 <input
-                  name="name_ru_for_update"
-                  type="text"
-                  placeholder="Андижанская область"
+                  name="user_email_for_update"
+                  type="email"
+                  placeholder=""
                   required
+                  value={userEmail}
+                  onChange={(e) => setUserEmail(e.target.value)}
                 />
               </div>
             </div>
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>{t("region.item5")}</label>
+              <label style={{ color: colors.text }}>
+                Foydalanuvchining telefon raqami
+              </label>
               <div className="modal_region-input-icon">
-                <span>🧭</span>
+                <span>
+                  <PhoneOutlined />
+                </span>
                 <input
-                  name="longitude_for_update"
-                  type="number"
-                  placeholder="72.3258..."
+                  name="user_phone_for_update"
+                  type="tel"
+                  placeholder=""
                   required
-                  value={regionLon}
-                  onChange={(e) => setRegionLon(e.target.value)}
+                  value={userPhone}
+                  onChange={(e) => setUserPhone(e.target.value)}
                 />
               </div>
             </div>
@@ -477,20 +661,117 @@ function Users() {
 
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>{t("region.item4")}</label>
-              <div className="modal_region-input-icon">
-                <span>🧭</span>
-                <input
-                  name="latitude_for_update"
-                  type="number"
-                  placeholder="40.7918..."
-                  required
-                  value={regionLang}
-                  onChange={(e) => setRegionLang(e.target.value)}
-                />
-              </div>
+              <label style={{ color: colors.text }}>Foydalanuvchi turi</label>
+
+              <Select
+                key={"selects_name_region"}
+                size="large"
+                style={{
+                  minWidth: 341,
+                }}
+                value={selectRoleId}
+                className="reports_sort_select"
+                options={
+                  allRoles.length != undefined
+                    ? allRoles?.map((item, index) => ({
+                        value: index,
+                        label: item.name,
+                      }))
+                    : ""
+                }
+                onChange={(key, option) => {
+                  setSelectRoleId(key);
+                }}
+              />
             </div>
-            <div className="modal_region-form-group"></div>
+
+            <div className="modal_region-form-group">
+              <label style={{ color: colors.text }}>Viloyat</label>
+
+              <Select
+                key={"selects_name_region"}
+                size="large"
+                style={{
+                  minWidth: 341,
+                }}
+                value={selectRegionId}
+                className="reports_sort_select"
+                options={[
+                  ...regions.map((item, index) => ({
+                    value: index,
+                    label: item.name,
+                  })),
+                ]}
+                onChange={(key, option) => {
+                  setSelectRegionId(key);
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="modal_region-form-row">
+            <div className="modal_region-form-group">
+              <label style={{ color: colors.text }}>Tuman</label>
+
+              <Select
+                key={"selects_name_region"}
+                size="large"
+                style={{
+                  minWidth: 341,
+                }}
+                value={selectDistrictId}
+                className="reports_sort_select"
+                options={
+                  districtsByRegionId.length > 0
+                    ? districtsByRegionId.map((item, index) => ({
+                        value: index,
+                        label: item.name,
+                      }))
+                    : [
+                        {
+                          value: "no_data",
+                          label: "Ma'lumot mavjud emas",
+                          disabled: true,
+                        },
+                      ]
+                }
+                onChange={(key, option) => {
+                  setSelectDistrictId(key);
+                }}
+              />
+            </div>
+
+            <div className="modal_region-form-group">
+              <label style={{ color: colors.text }}>Tashkilot</label>
+
+              <Select
+                key={"selects_name_region"}
+                size="large"
+                style={{
+                  maxWidth: 341,
+                  width: "100%",
+                }}
+                value={selectOrganizationId}
+                className="reports_sort_select"
+                options={
+                  organizationsByRegionId.length > 0
+                    ? organizationsByRegionId.map((item, index) => ({
+                        value: index,
+                        label: item.name,
+                      }))
+                    : [
+                        {
+                          value: "no_data",
+                          label: "Ma'lumot mavjud emas",
+                          disabled: true,
+                        },
+                      ]
+                }
+                onChange={(key, option) => {
+                  setSelectOrganizationId(key);
+                }}
+              />
+            </div>
           </div>
 
           <div className="modal_region-actions">
@@ -499,7 +780,10 @@ function Users() {
               className="modal_region-btn modal_region-btn-cancel"
               onClick={() => {
                 setOpenResponsiveForUpdata(false);
-                setCount(count + 1);
+                setSelectRegionId(0);
+                setSelectRoleId(0);
+                setSelectDistrictId(0);
+                setSelectOrganizationId(0);
               }}
             >
               {t("stationsPageData.cancelButtonModal")}
@@ -565,7 +849,7 @@ function Users() {
           marginBottom: "20px",
         }}
       >
-        <h2>{t("region.item1")}</h2>
+        <h2>Foydalanuvchilar ro'yhati</h2>
 
         <Button
           type="primary"
@@ -573,7 +857,7 @@ function Users() {
           size="large"
           onClick={() => setOpenResponsive(true)}
         >
-          {t("region.item2")}
+          Foydalanuvchi yaratish
         </Button>
       </div>
 

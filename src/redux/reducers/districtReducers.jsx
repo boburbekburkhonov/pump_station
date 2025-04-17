@@ -4,6 +4,7 @@ import { DISTRICT_TYPES } from "../actions/districtActions";
 
 const initialState = {
   districts: [],
+  districtsByRegionId: [],
   districtsForDistrict: [],
   districtByRegionId: []
 };
@@ -14,6 +15,11 @@ const districtReducer = (state = initialState, action) => {
       return {
         ...state,
         districts: action.payload,
+      };
+    case DISTRICT_TYPES.GET_ALL_DISTRICT_BY_REGIOND_ID:
+      return {
+        ...state,
+        districtsByRegionId: action.payload,
       };
     case DISTRICT_TYPES.GET_ALL_DISTRICT_FOR_DISTRICT:
       return {
