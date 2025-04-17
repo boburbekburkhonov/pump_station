@@ -116,6 +116,25 @@
     "item10": "Tashkilot nomi",
     "item11": "Viloyatni tanlang"
   },
+  "users": {
+    "item1": "Foydalanuvchilar ro'yhati",
+    "item2": "Foydalanuvchi yaratish",
+    "item3": "Foydalanuvchi nomi",
+    "item4": "Telefon raqam",
+    "item5": "Foydalanuvchi turi",
+    "item6": "Viloyat nomi",
+    "item7": "Tuman nomi",
+    "item8": "Tashkilot nomi",
+    "item9": "O'chirish",
+    "item10": "Foydalanuvchining logini",
+    "item11": "Foydalanuvchining paroli",
+    "item12": "Foydalanuvchining telefon raqami",
+    "item13": "Foydalanuvchi email",
+    "item14": "Viloyat",
+    "item15": "Tuman",
+    "item16": "Tashkilot",
+    "item17": "Keyinchalik bu userni qayta tiklab bo‘lmaydi."
+  },
   "stationsPageData": {
     "createStationsButton": "Stansiya yaratish",
     "stationsDataHeader": "Stansiya ma'lumotlari",

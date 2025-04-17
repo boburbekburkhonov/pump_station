@@ -116,6 +116,25 @@
     "item10": "Organization name",
     "item11": "Select a region"
   },
+  "users": {
+    "item1": "Users list",
+    "item2": "Create a user",
+    "item3": "Username",
+    "item4": "Phone number",
+    "item5": "User role",
+    "item6": "Province name",
+    "item7": "District name",
+    "item8": "Organization name",
+    "item9": "Delete",
+    "item10": "User login",
+    "item11": "User password",
+    "item12": "User's phone number",
+    "item13": "User email",
+    "item14": "Province",
+    "item15": "District",
+    "item16": "Organization",
+    "item17": "This user cannot be restored later."
+  },
   "stationsPageData": {
     "createStationsButton": "Create station",
     "stationsDataHeader": "Station information",

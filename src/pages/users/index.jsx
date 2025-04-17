@@ -210,13 +210,11 @@ function Users() {
 
   const deleteUser = async () => {
     try {
-      const lang = i18n.language;
-
       const data = {
         id: oneRegionForDelete.id,
       };
 
-      const res = await postDataApi(`regions/delete?lang=${lang}`, data, token);
+      const res = await postDataApi(`users/delete`, data, token);
 
       if (res.status == 201) {
         dispatch({
@@ -364,7 +362,7 @@ function Users() {
         >
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>Foydalanuvchi nomi</label>
+              <label style={{ color: colors.text }}>{t("users.item3")}</label>
               <div className="modal_region-input-icon">
                 <span>
                   <UserOutlined />
@@ -374,7 +372,7 @@ function Users() {
             </div>
             <div className="modal_region-form-group">
               <label style={{ color: colors.text }}>
-                Foydalanuvchining logini
+              {t("users.item10")}
               </label>
               <div className="modal_region-input-icon">
                 <span>
@@ -393,7 +391,7 @@ function Users() {
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
               <label style={{ color: colors.text }}>
-                Foydalanuvchining paroli
+              {t("users.item11")}
               </label>
               <div className="modal_region-input-icon">
                 <span>
@@ -409,7 +407,7 @@ function Users() {
             </div>
             <div className="modal_region-form-group">
               <label style={{ color: colors.text }}>
-                Foydalanuvchining telefon raqami
+              {t("users.item12")}
               </label>
               <div className="modal_region-input-icon">
                 <span>
@@ -422,7 +420,7 @@ function Users() {
 
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>Foydalanuvchi turi</label>
+              <label style={{ color: colors.text }}>{t("users.item5")}</label>
 
               <Select
                 key={"selects_name_region"}
@@ -446,7 +444,7 @@ function Users() {
               />
             </div>
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>Foydalanuvchi email</label>
+              <label style={{ color: colors.text }}>{t("users.item13")}</label>
               <div className="modal_region-input-icon">
                 <span>
                   <GoogleOutlined />
@@ -458,7 +456,7 @@ function Users() {
 
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>Viloyat</label>
+              <label style={{ color: colors.text }}>{t("users.item14")}</label>
 
               <Select
                 key={"selects_name_region"}
@@ -480,7 +478,7 @@ function Users() {
               />
             </div>
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>Tuman</label>
+              <label style={{ color: colors.text }}>{t("users.item15")}</label>
 
               <Select
                 key={"selects_name_region"}
@@ -513,7 +511,7 @@ function Users() {
 
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>Tashkilot</label>
+              <label style={{ color: colors.text }}>{t("users.item16")}</label>
 
               <Select
                 key={"selects_name_region"}
@@ -588,7 +586,7 @@ function Users() {
         >
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>Foydalanuvchi nomi</label>
+              <label style={{ color: colors.text }}>{t("users.item3")}</label>
               <div className="modal_region-input-icon">
                 <span>
                   <UserOutlined />
@@ -604,7 +602,7 @@ function Users() {
             </div>
             <div className="modal_region-form-group">
               <label style={{ color: colors.text }}>
-                Foydalanuvchining logini
+              {t("users.item10")}
               </label>
               <div className="modal_region-input-icon">
                 <span>
@@ -624,7 +622,7 @@ function Users() {
 
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>Foydalanuvchi email</label>
+              <label style={{ color: colors.text }}>{t("users.item13")}</label>
               <div className="modal_region-input-icon">
                 <span>
                   <GoogleOutlined />
@@ -641,7 +639,7 @@ function Users() {
             </div>
             <div className="modal_region-form-group">
               <label style={{ color: colors.text }}>
-                Foydalanuvchining telefon raqami
+              {t("users.item12")}
               </label>
               <div className="modal_region-input-icon">
                 <span>
@@ -661,7 +659,7 @@ function Users() {
 
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>Foydalanuvchi turi</label>
+              <label style={{ color: colors.text }}>{t("users.item5")}</label>
 
               <Select
                 key={"selects_name_region"}
@@ -686,7 +684,7 @@ function Users() {
             </div>
 
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>Viloyat</label>
+              <label style={{ color: colors.text }}>{t("users.item14")}</label>
 
               <Select
                 key={"selects_name_region"}
@@ -711,7 +709,7 @@ function Users() {
 
           <div className="modal_region-form-row">
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>Tuman</label>
+              <label style={{ color: colors.text }}>{t("users.item15")}</label>
 
               <Select
                 key={"selects_name_region"}
@@ -742,7 +740,7 @@ function Users() {
             </div>
 
             <div className="modal_region-form-group">
-              <label style={{ color: colors.text }}>Tashkilot</label>
+              <label style={{ color: colors.text }}>{t("users.item16")}</label>
 
               <Select
                 key={"selects_name_region"}
@@ -819,7 +817,7 @@ function Users() {
                 {oneRegionForDelete.name} {t("region.item7")}
               </strong>
             </p>
-            <p className="modal_delete-warning">⚠ {t("region.item8")}</p>
+            <p className="modal_delete-warning">⚠ {t("users.item17")}</p>
           </div>
           <div className="modal_delete-footer">
             <button
@@ -849,7 +847,7 @@ function Users() {
           marginBottom: "20px",
         }}
       >
-        <h2>Foydalanuvchilar ro'yhati</h2>
+        <h2>{t("users.item1")}</h2>
 
         <Button
           type="primary"
@@ -857,7 +855,7 @@ function Users() {
           size="large"
           onClick={() => setOpenResponsive(true)}
         >
-          Foydalanuvchi yaratish
+          {t("users.item2")}
         </Button>
       </div>
 
