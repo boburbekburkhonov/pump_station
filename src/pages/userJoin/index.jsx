@@ -1,4 +1,4 @@
-import { Button, Modal, Select, Table } from "antd";
+import { Button, Input, Modal, Select, Table } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +11,7 @@ import {
   LockOutlined,
   PhoneOutlined,
   PlusSquareOutlined,
+  SearchOutlined,
   UsergroupAddOutlined,
   UserOutlined,
 } from "@ant-design/icons";
@@ -21,6 +22,7 @@ import { getAllUsers, getRoles } from "../../redux/actions/userActions";
 import { getAllDistrictDataByRegionId } from "../../redux/actions/districtActions";
 import { getAllOrganizationsDataByRegionId } from "../../redux/actions/organizationActions";
 import { getAllStationsData } from "../../redux/actions/stationsActions";
+import EmptyCard from "../../components/emptyCard";
 
 function UserJoin() {
   const dispatch = useDispatch();
@@ -51,6 +53,7 @@ function UserJoin() {
     page: 1,
     perPage: 10,
   });
+  const [searchText, setSearchText] = useState("");
   const [count, setCount] = useState(0);
   const [userName, setUserName] = useState("");
   const [userUsername, setUserUsername] = useState("");
@@ -200,34 +203,6 @@ function UserJoin() {
     }
   };
 
-  const deleteUser = async () => {
-    try {
-      const data = {
-        id: oneRegionForDelete.id,
-      };
-
-      const res = await postDataApi(`users/delete`, data, token);
-
-      if (res.status == 201) {
-        dispatch({
-          type: GLOBALTYPES.ALERT,
-          payload: {
-            success: res.data.message,
-          },
-        });
-        setCount(count + 1);
-        setOpenResponsiveForDelete(false);
-      }
-    } catch (err) {
-      dispatch({
-        type: GLOBALTYPES.ALERT,
-        payload: {
-          error: err.response.data.message,
-        },
-      });
-    }
-  };
-
   const handleEditClick = async (item) => {
     setOneRegionForUpdate(item);
     const foundRoleIndex = allRoles.findIndex((e) => e.id == item.roleId);
@@ -235,8 +210,22 @@ function UserJoin() {
     setSelectRegionId(item.regionId - 1);
   };
 
-  const handleEditClickForDelete = async (item) => {
-    setOneRegionForDelete(item);
+  const handleSearchUser = () => {
+    const lang = i18n.language;
+
+    if (searchText.length != 0) {
+
+      // dispatch(
+      //   findInMapsLastData(
+      //     lang,
+      //     token,
+      //     undefined,
+      //     undefined,
+      //     searchText,
+      //     status
+      //   ) dispatch(getAllUsers(lang, token, pageData.page, pageData.perPage));
+      // );
+    }
   };
 
   const columns = [
@@ -285,8 +274,6 @@ function UserJoin() {
     },
   ];
 
-  console.log(stationsData);
-
   return (
     <div
       style={{
@@ -301,10 +288,20 @@ function UserJoin() {
         footer={null}
         className="modal_regions"
         closable={true}
-        onCancel={() => setOpenResponsiveForUpdata(false)}
+        onCancel={() => {
+          setOpenResponsiveForUpdata(false);
+          setSelectRegionId(0);
+        }}
       >
-        <h2 style={{marginTop: '30px', paddingBottom: '10px', borderBottom: '2px solid #405FF2', textAlign: 'center'}}>
-        {oneRegionForUpdate.name}
+        <h2
+          style={{
+            marginTop: "30px",
+            paddingBottom: "10px",
+            borderBottom: "2px solid #405FF2",
+            textAlign: "center",
+          }}
+        >
+          {oneRegionForUpdate.name}
         </h2>
 
         <form
@@ -323,7 +320,7 @@ function UserJoin() {
                 key={"selects_name_region"}
                 size="large"
                 style={{
-                  width: '100%'
+                  width: "100%",
                 }}
                 value={selectRegionId}
                 className="reports_sort_select"
@@ -343,14 +340,27 @@ function UserJoin() {
           <div className="station-group">
             <div className="station-group-title">Stansiyalar ro'yhati:</div>
             <div className="station-list">
-              {stationsData.data?.map((e, i) => {
-                return (
-                  <label className="station-card">
-                    <input type="checkbox" name="stations" value={e.id} />
-                    {e.name}
-                  </label>
-                );
-              })}
+              {stationsData.data?.length == 0 ? (
+                <div
+                  style={{
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <EmptyCard />
+                </div>
+              ) : (
+                stationsData.data?.map((e, i) => {
+                  return (
+                    <label className="station-card">
+                      <input type="checkbox" name="stations" value={e.id} />
+                      {e.name}
+                    </label>
+                  );
+                })
+              )}
             </div>
           </div>
 
@@ -363,21 +373,39 @@ function UserJoin() {
       <div
         style={{
           display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
+          // alignItems: "center",
+          // justifyContent: "space-between",
+          flexDirection: 'column',
           marginBottom: "20px",
         }}
       >
         <h2>{t("users.item1")}</h2>
-        {/*
-        <Button
-          type="primary"
-          icon={<PlusSquareOutlined />}
-          size="large"
-          onClick={() => setOpenResponsive(true)}
+
+        <form
+          style={{
+            maxWidth: "480px",
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            paddingTop: "10px",
+          }}
+          onSubmit={handleSearchUser}
         >
-          {t("users.item2")}
-        </Button> */}
+          <Input
+            addonBefore={<SearchOutlined />}
+            placeholder="Qidirish..."
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+
+          <Button
+            style={{ marginLeft: "10px" }}
+            type="primary"
+            // onClick={() => handleSearchUser()}
+          >
+            Qidirish
+          </Button>
+        </form>
       </div>
 
       <Table
