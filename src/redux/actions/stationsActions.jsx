@@ -45,12 +45,12 @@ export const getAllStationsData = (data, token) => async (dispatch) => {
       payload: res.data.data,
     });
 
-    dispatch({
-      type: GLOBALTYPES.ALERT,
-      payload: {
-        success: res.data.message,
-      },
-    });
+    // dispatch({
+    //   type: GLOBALTYPES.ALERT,
+    //   payload: {
+    //     success: res.data.message,
+    //   },
+    // });
   } catch (err) {
     if (!err.response) {
       dispatch({
