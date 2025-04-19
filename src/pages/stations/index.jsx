@@ -21,10 +21,16 @@ import {
 } from "../../redux/actions/stationsActions";
 import Loading from "../../components/loading";
 import { getAllRegionId } from "../../redux/actions/regionActions";
-import { getByRegionIdData } from "../../redux/actions/districtActions";
-import { getAllOrganizationsData } from "../../redux/actions/organizationActions";
+import {
+  getAllDistrictDataByRegionId,
+  getByRegionIdData,
+} from "../../redux/actions/districtActions";
+import {
+  getAllOrganizationsData,
+  getAllOrganizationsDataByRegionId,
+} from "../../redux/actions/organizationActions";
 import { GLOBALTYPES } from "../../redux/actions/globalTypes";
-import { getDataApi } from "../../utils";
+import { getDataApi, postDataApi } from "../../utils";
 import {
   handleCheckboxChange,
   handleInputChange,
@@ -74,8 +80,10 @@ const Stations = memo(() => {
   const { colors } = useSelector((state) => state.theme);
   const { stationsData } = useSelector((state) => state.stations);
   const { regions } = useSelector((state) => state.region);
-  const { districtByRegionId } = useSelector((state) => state.district);
-  const { organizations } = useSelector((state) => state.organization);
+  const { districtsByRegionId } = useSelector((state) => state.district);
+  const { organizations, organizationsByRegionId } = useSelector(
+    (state) => state.organization
+  );
 
   const token = localStorage.getItem("access_token");
 
@@ -94,7 +102,7 @@ const Stations = memo(() => {
 
     dispatch(getAllStationsData(stationParams, token));
     dispatch(getAllRegionId(lang, token));
-    dispatch(getAllOrganizationsData(lang, token));
+    // dispatch(getAllOrganizationsData(lang, token));
   }, [dispatch, token, currentPage, pageSize, i18n.language]);
 
   useEffect(() => {
@@ -105,10 +113,29 @@ const Stations = memo(() => {
   }, [fetchAllData, i18n]);
 
   useEffect(() => {
-    if (stationData.regionId) {
-      dispatch(getByRegionIdData(i18n.language, token, stationData.regionId));
-    }
-  }, [stationData.regionId, i18n.language, dispatch, token]);
+    const lang = i18n.language;
+
+    dispatch(
+      getAllDistrictDataByRegionId(
+        lang,
+        token,
+        stationData.regionId == null ? "1" : stationData.regionId
+      )
+    );
+    dispatch(
+      getAllOrganizationsDataByRegionId(
+        lang,
+        token,
+        stationData.regionId == null ? "1" : stationData.regionId
+      )
+    );
+  }, [stationData.regionId]);
+
+  // useEffect(() => {
+  //   if (stationData.regionId) {
+  //     dispatch(getByRegionIdData(i18n.language, token, stationData.regionId));
+  //   }
+  // }, [stationData.regionId, i18n.language, dispatch, token]);
 
   useEffect(() => {
     if (stationsData?.data) {
@@ -146,113 +173,140 @@ const Stations = memo(() => {
     setCurrentPage(page);
   };
 
-  const getIdByName = useCallback((name, list) => {
-    if (!name || !list?.length) return 0;
-    const item = list.find(
-      (item) => item.name.toLowerCase() === name.toLowerCase()
-    );
-    return item?.id || 0;
-  }, []);
+  // const getIdByName = useCallback((name, list) => {
+  //   if (!name || !list?.length) return 0;
+  //   const item = list.find(
+  //     (item) => item.name.toLowerCase() === name.toLowerCase()
+  //   );
+  //   return item?.id || 0;
+  // }, []);
 
-  const getRegionIdName = useCallback(
-    async (regionId, name) => {
-      if (!regionId || !name) return 0;
+  // const getRegionIdName = useCallback(
+  //   async (regionId, name) => {
+  //     if (!regionId || !name) return 0;
 
-      try {
-        const response = await getDataApi(
-          `districts/getByRegionId?regionId=${regionId}&lang=${i18n.language}`
-        );
+  //     try {
+  //       const response = await getDataApi(
+  //         `districts/getByRegionId?regionId=${regionId}&lang=${i18n.language}`
+  //       );
 
-        const district = response.data.data.find(
-          (item) => item.name.toLowerCase() === name.toLowerCase()
-        );
-        return district?.id || 0;
-      } catch (error) {
-        const errorMessage =
-          error.response?.message || t("error.fetchDistricts");
-        dispatch({
-          type: GLOBALTYPES.ALERT,
-          payload: { error: errorMessage },
-        });
-        return 0;
-      }
-    },
-    [dispatch, i18n.language]
-  );
+  //       const district = response.data.data.find(
+  //         (item) => item.name.toLowerCase() === name.toLowerCase()
+  //       );
+  //       return district?.id || 0;
+  //     } catch (error) {
+  //       const errorMessage =
+  //         error.response?.message || t("error.fetchDistricts");
+  //       dispatch({
+  //         type: GLOBALTYPES.ALERT,
+  //         payload: { error: errorMessage },
+  //       });
+  //       return 0;
+  //     }
+  //   },
+  //   [dispatch, i18n.language]
+  // );
 
   const clearFormFileds = () => {
     form.resetFields();
   };
 
-  const handleSubmit = useCallback(
-    (sendData) => {
-      if (
-        !isFormValid({
-          data: sendData,
-          requiredFields: [
-            "name",
-            "regionId",
-            "districtId",
-            "organizationId",
-            "location",
-            "devicePhoneNum",
-          ],
-        })
-      ) {
+  const createStation = async () => {
+    const lang = i18n.language;
+    try {
+      const res = await postDataApi(`stations/create?lang=${lang}`, stationData, token);
+
+      if (res.status == 201) {
+        console.log(res , 1);
+
         dispatch({
           type: GLOBALTYPES.ALERT,
-          payload: { error: t("stationsPageData.validInputs") },
+          payload: {
+            success: res.data.message,
+          },
         });
-        return;
+        setIsModalVisible(false);
+        clearFormFileds();
       }
-
-      if (isUpdating) {
-        dispatch(updateStationsData(sendData, token, i18n.language));
-      } else {
-        dispatch(createStationsData(sendData, token, i18n.language));
-      }
-
-      closeModal(
-        { data: initialStationData },
-        setStationData,
-        setIsModalVisible,
-        setIsUpdating,
-        clearFormFileds
-      );
-    },
-    [aggregateUpdate, isUpdating, dispatch, token, i18n.language, closeModal]
-  );
-
-  const onClickPhoneNumber = useCallback(() => {
-    setStationData((prevData) => ({ ...prevData, devicePhoneNum: "+998" }));
-  }, []);
-
-  const handleEditClick = async (item) => {
-    const regionId = getIdByName(item.region, regions);
-    const districtId = await getRegionIdName(regionId, item.district);
-    const organizationId = getIdByName(item.organization, organizations);
-
-    const updatedData = {
-      id: item.key,
-      name: item.name,
-      location: item.location,
-      devicePhoneNum: item.devicePhoneNum,
-      isIntegration: item.isIntegration,
-      haveElectricalEnergy: item.haveElectricalEnergy,
-      regionId,
-      districtId,
-      organizationId,
-    };
-
-    openModal(
-      { data: updatedData, isEdit: true },
-      setStationData,
-      setIsModalVisible,
-      setIsUpdating
-    );
-
-    form.setFieldsValue(updatedData);
+    } catch (err) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: err.response?.data.message,
+        },
+      });
+    }
   };
+
+  // const handleSubmit = useCallback(
+  //   (sendData) => {
+  //     if (
+  //       !isFormValid({
+  //         data: sendData,
+  //         requiredFields: [
+  //           "name",
+  //           "regionId",
+  //           "districtId",
+  //           "organizationId",
+  //           "location",
+  //           "devicePhoneNum",
+  //         ],
+  //       })
+  //     ) {
+  //       dispatch({
+  //         type: GLOBALTYPES.ALERT,
+  //         payload: { error: t("stationsPageData.validInputs") },
+  //       });
+  //       return;
+  //     }
+
+  //     if (isUpdating) {
+  //       dispatch(updateStationsData(sendData, token, i18n.language));
+  //     } else {
+  //       dispatch(createStationsData(sendData, token, i18n.language));
+  //     }
+
+  //     closeModal(
+  //       { data: initialStationData },
+  //       setStationData,
+  //       setIsModalVisible,
+  //       setIsUpdating,
+  //       clearFormFileds
+  //     );
+  //   },
+  //   [aggregateUpdate, isUpdating, dispatch, token, i18n.language, closeModal]
+  // );
+
+  // const onClickPhoneNumber = useCallback(() => {
+  //   setStationData((prevData) => ({ ...prevData, devicePhoneNum: "+998" }));
+  // }, []);
+
+  // const handleEditClick = async (item) => {
+  //   const regionId = getIdByName(item.region, regions);
+  //   const districtId = await getRegionIdName(regionId, item.district);
+  //   const organizationId = getIdByName(item.organization, organizations);
+
+  //   const updatedData = {
+  //     id: item.key,
+  //     name: item.name,
+  //     location: item.location,
+  //     devicePhoneNum: item.devicePhoneNum,
+  //     isIntegration: item.isIntegration,
+  //     haveElectricalEnergy: item.haveElectricalEnergy,
+  //     regionId,
+  //     districtId,
+  //     organizationId,
+  //   };
+
+  //   openModal(
+  //     { data: updatedData, isEdit: true },
+  //     setStationData,
+  //     setIsModalVisible,
+  //     setIsUpdating
+  //   );
+
+  //   form.setFieldsValue(updatedData);
+  // };
 
   const columns = useMemo(
     () => [
@@ -292,7 +346,7 @@ const Stations = memo(() => {
         align: "center",
         render: (_, key) => (
           <Button
-            type='primary'
+            type="primary"
             icon={<EyeFilled />}
             onClick={() => navigate(`/statetions/${key.key}`)}
             style={{ boxShadow: "none" }}
@@ -307,7 +361,7 @@ const Stations = memo(() => {
         align: "center",
         render: (_, key) => (
           <Button
-            type='primary'
+            type="primary"
             icon={<PlusSquareOutlined />}
             onClick={() =>
               openModal(
@@ -332,7 +386,7 @@ const Stations = memo(() => {
         align: "center",
         render: (_, key) => (
           <Button
-            type='primary'
+            type="primary"
             icon={<PlusSquareOutlined />}
             onClick={() =>
               openModal(
@@ -355,7 +409,7 @@ const Stations = memo(() => {
         align: "center",
         render: (_, key) => (
           <Button
-            type='primary'
+            type="primary"
             icon={<EditOutlined />}
             onClick={async () => handleEditClick(key)}
             style={{ boxShadow: "none" }}
@@ -371,7 +425,7 @@ const Stations = memo(() => {
         render: (_, key) => (
           <Button
             onClick={() => dispatch(deleteStationsData({ id: key.key }, token))}
-            type='primary'
+            type="primary"
             danger
             icon={<DeleteOutlined />}
             style={{ boxShadow: "none" }}
@@ -387,7 +441,6 @@ const Stations = memo(() => {
       setAggregateData,
       setAggregateModal,
       setAggregateUpdate,
-      handleEditClick,
       dispatch,
       deleteStationsData,
       token,
@@ -395,14 +448,14 @@ const Stations = memo(() => {
   );
 
   return (
-    <section className='stations_sections'>
+    <section className="stations_sections">
       {loading ? (
         <Loading />
       ) : (
         <>
-          <div className='stations_header_container'>
+          <div className="stations_header_container">
             <Button
-              type='primary'
+              type="primary"
               onClick={() =>
                 openModal(
                   { data: initialStationData, isEdit: false },
@@ -417,7 +470,8 @@ const Stations = memo(() => {
                 fontWeight: "bold",
                 border: "none",
                 boxShadow: `0 2px 0 ${colors.boxShadow}`,
-              }}>
+              }}
+            >
               {t("stationsPageData.createStationsButton")}
             </Button>
           </div>
@@ -427,8 +481,9 @@ const Stations = memo(() => {
               style={{
                 background: colors.layoutBackground,
               }}
-              className='stations_body_container'>
-              <div className='stations_header_title '>
+              className="stations_body_container"
+            >
+              <div className="stations_header_title ">
                 <h1>{t("stationsPageData.stationsDataHeader")}</h1>
               </div>
 
@@ -446,7 +501,7 @@ const Stations = memo(() => {
       )}
 
       <Modal
-        key='stations_modal'
+        key="stations_modal"
         title={
           isUpdating
             ? t("stationsPageData.stationsUpdateHeaderModal")
@@ -463,160 +518,144 @@ const Stations = memo(() => {
             clearFormFileds
           )
         }
-        onOk={() => handleSubmit(stationData, "stations")}
+        // onOk={() => handleSubmit(stationData, "stations")}
         confirmLoading={loading}
-        footer={[
-          <Button
-            key='back'
-            danger
-            type='primary'
-            onClick={() =>
-              closeModal(
-                { data: initialStationData },
-                setStationData,
-                setIsModalVisible,
-                setIsUpdating,
-                clearFormFileds
-              )
-            }>
-            {t("stationsPageData.cancelButtonModal")}
-          </Button>,
-
-          <Button
-            key='submit'
-            type='primary'
-            onClick={() => handleSubmit(stationData, "stations")}
-            loading={loading}>
-            {t("stationsPageData.submitButtonModal")}
-          </Button>,
-        ]}
+        footer={[]}
         style={{
           color: colors.textColor,
         }}
-        className='modal_stations'>
-        <div className='modal_body_container'>
+        className="modal_stations"
+      >
+        <div className="modal_body_container">
           <Form
             form={form}
             key={stationData.id || "new"}
-            className='create_stations_form'
-            name='station_form'
-            layout='inline'
-            requiredMark='optional'
-            onFinish={handleSubmit}>
+            className="create_stations_form"
+            name="station_form"
+            layout="inline"
+            requiredMark="optional"
+            onFinish={createStation}
+          >
             <Form.Item
-              name='name'
-              rules={[{ required: true, message: "Write full name" }]}>
+              name="name"
+              rules={[{ required: true, message: "Write full name" }]}
+            >
               <Input
-                className='stations_inputs'
-                name='name'
+                className="stations_inputs"
+                name="name"
                 value={stationData.name}
                 onChange={(e) => handleInputChange(e, setStationData)}
                 placeholder={t("stationsPageData.stationsInputName")}
-                size='large'
+                required
+                size="large"
               />
             </Form.Item>
 
             <Form.Item
-              name='location'
-              rules={[{ required: true, message: "Write location" }]}>
+              name="location"
+              rules={[{ required: true, message: "Write location" }]}
+            >
               <Input
-                name='location'
-                className='stations_inputs'
+                name="location"
+                className="stations_inputs"
                 value={stationData.location}
                 onChange={(e) => handleInputChange(e, setStationData)}
-                placeholder='40.297929-67.948570'
-                size='large'
+                placeholder="40.297929-67.948570"
+                size="large"
               />
             </Form.Item>
 
             <Form.Item
-              name='devicePhoneNum'
-              rules={[{ required: true, message: "Write Phone number" }]}>
+              name="devicePhoneNum"
+              rules={[{ required: true, message: "Write Phone number" }]}
+            >
               <Input
-                name='devicePhoneNum'
-                className='stations_inputs'
+                name="devicePhoneNum"
+                className="stations_inputs"
                 value={stationData.devicePhoneNum}
                 onChange={(e) => handleInputChange(e, setStationData)}
-                onClick={onClickPhoneNumber}
-                placeholder='+(998)99-999-99-99'
-                size='large'
+                // onClick={onClickPhoneNumber}
+                placeholder="+(998)99-999-99-99"
+                size="large"
               />
             </Form.Item>
 
             <Form.Item
-              name='regionId'
-              rules={[{ required: true, message: "Select Region" }]}>
+              name="regionId"
+              rules={[{ required: true, message: "Select Region" }]}
+            >
               <Select
-                size='large'
+                size="large"
                 value={stationData.regionId}
                 showSearch
-                className='select_input_stations'
+                className="select_input_stations"
                 placeholder={t("stationsPageData.stationsInputRegion")}
                 options={renderOptions(regions)}
                 onChange={(value, option) =>
-                  handleSelectChange(value, { name: "regionId" })
-                }
-                filterSort={(optionA, optionB) =>
-                  (optionA?.label ?? "")
-                    .toLowerCase()
-                    .localeCompare((optionB?.label ?? "").toLowerCase())
+                  handleSelectChange(
+                    value,
+                    { name: "regionId" },
+                    setStationData
+                  )
                 }
               />
             </Form.Item>
 
             <Form.Item
-              name='districtId'
-              rules={[{ required: true, message: "Select District" }]}>
+              name="districtId"
+              rules={[{ required: true, message: "Select District" }]}
+            >
               <Select
-                size='large'
+                size="large"
                 value={stationData.districtId}
                 showSearch
-                className='select_input_stations'
+                className="select_input_stations"
                 placeholder={t("stationsPageData.stationsInputDestrict")}
-                disabled={!stationData.regionId}
-                options={renderOptions(districtByRegionId)}
+                options={renderOptions(districtsByRegionId)}
                 onChange={(value, option) =>
-                  handleSelectChange(value, { name: "districtId" })
-                }
-                filterSort={(optionA, optionB) =>
-                  (optionA?.label ?? "")
-                    .toLowerCase()
-                    .localeCompare((optionB?.label ?? "").toLowerCase())
+                  handleSelectChange(
+                    value,
+                    { name: "districtId" },
+                    setStationData
+                  )
                 }
               />
             </Form.Item>
 
             <Form.Item
-              name='organizationId'
-              rules={[{ required: true, message: "Select Organizations" }]}>
+              name="organizationId"
+              rules={[{ required: true, message: "Select Organizations" }]}
+            >
               <Select
-                size='large'
+                size="large"
                 value={stationData.organizationId}
                 showSearch
-                className='select_input_stations'
+                className="select_input_stations"
                 placeholder={t("stationsPageData.stationsInputOrganizations")}
-                options={renderOptions(organizations)}
+                options={renderOptions(organizationsByRegionId)}
                 onChange={(value, option) =>
-                  handleSelectChange(value, { name: "organizationId" })
-                }
-                filterSort={(optionA, optionB) =>
-                  (optionA?.label ?? "")
-                    .toLowerCase()
-                    .localeCompare((optionB?.label ?? "").toLowerCase())
+                  handleSelectChange(
+                    value,
+                    { name: "organizationId" },
+                    setStationData
+                  )
                 }
               />
             </Form.Item>
 
             <Form.Item>
               <div
-                className='electrical_box'
+                className="electrical_box"
                 style={{
                   border: `2px solid ${colors.textLight}`,
-                }}>
+                }}
+              >
                 <Checkbox
-                  onChange={handleCheckboxChange}
-                  name='isIntegration'
-                  checked={stationData.isIntegration}>
+                  onChange={(value, option) =>
+                    handleCheckboxChange(value, setStationData)
+                  }
+                  name="isIntegration"
+                >
                   {t("stationsPageData.stationsCheckboxIntegration")}
                 </Checkbox>
               </div>
@@ -624,24 +663,55 @@ const Stations = memo(() => {
 
             <Form.Item>
               <div
-                className='electrical_box'
+                className="electrical_box"
                 style={{
                   border: `2px solid ${colors.textLight}`,
-                }}>
+                }}
+              >
                 <Checkbox
-                  onChange={handleCheckboxChange}
-                  name='haveElectricalEnergy'
-                  checked={stationData.haveElectricalEnergy}>
+                  onChange={(value, option) =>
+                    handleCheckboxChange(value, setStationData)
+                  }
+                  name="haveElectricalEnergy"
+                >
                   {t("stationsPageData.stationsCheckboxEnergy")}
                 </Checkbox>
               </div>
             </Form.Item>
+
+            <div style={{ marginLeft: "auto", marginTop: "10px" }}>
+              <Button
+                key="back"
+                danger
+                type="primary"
+                onClick={() =>
+                  closeModal(
+                    { data: initialStationData },
+                    setStationData,
+                    setIsModalVisible,
+                    setIsUpdating,
+                    clearFormFileds
+                  )
+                }
+              >
+                {t("stationsPageData.cancelButtonModal")}
+              </Button>
+              <Button
+                style={{ marginLeft: "10px" }}
+                htmlType="submit"
+                type="primary"
+                // onClick={() => createStation()}
+                loading={loading}
+              >
+                {t("stationsPageData.submitButtonModal")}
+              </Button>
+            </div>
           </Form>
         </div>
       </Modal>
 
       <Modal
-        key='energy_modal'
+        key="energy_modal"
         title={t("stationsPageData.energyStations")}
         open={aggregateModal}
         centered
@@ -658,9 +728,9 @@ const Stations = memo(() => {
         confirmLoading={loading}
         footer={[
           <Button
-            key='back'
+            key="back"
             danger
-            type='primary'
+            type="primary"
             onClick={() =>
               closeModal(
                 initialAggregate,
@@ -669,35 +739,39 @@ const Stations = memo(() => {
                 setAggregateUpdate,
                 false
               )
-            }>
+            }
+          >
             {t("stationsPageData.cancelButtonModal")}
           </Button>,
 
           <Button
-            key='submit'
-            type='primary'
+            key="submit"
+            type="primary"
             onClick={() => handleSubmit(aggregateData, "")}
-            loading={loading}>
+            loading={loading}
+          >
             {t("stationsPageData.submitButtonModal")}
           </Button>,
         ]}
         style={{
           color: colors.textColor,
         }}
-        className='modal_stations'>
-        <div className='modal_body_container'>
+        className="modal_stations"
+      >
+        <div className="modal_body_container">
           <Form
-            key='aggegate_create'
-            className='create_stations_form'
-            name='electrical_form'
+            key="aggegate_create"
+            className="create_stations_form"
+            name="electrical_form"
             initialValues={aggregateData}
-            layout='inline'
-            requiredMark='optional'>
+            layout="inline"
+            requiredMark="optional"
+          >
             <Form.Item>
               <Input
-                size='large'
-                className='stations_inputs'
-                name='name'
+                size="large"
+                className="stations_inputs"
+                name="name"
                 onChange={(e) => handleInputChange(e, setAggregateData)}
                 placeholder={t("stationsPageData.stationsEnergyNameInput")}
                 value={aggregateData.name}
@@ -706,9 +780,9 @@ const Stations = memo(() => {
 
             <Form.Item>
               <Input
-                size='large'
-                className='stations_inputs'
-                name='code'
+                size="large"
+                className="stations_inputs"
+                name="code"
                 onChange={(e) => handleInputChange(e, setAggregateData)}
                 placeholder={t("stationsPageData.stationsEnerdyCode")}
                 value={aggregateData.code}
