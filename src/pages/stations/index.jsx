@@ -50,7 +50,7 @@ const initialStationData = {
   organizationId: null,
   location: "",
   devicePhoneNum: "",
-  isIntegration: true,
+  isIntegration: false,
   haveElectricalEnergy: false,
 };
 
@@ -62,6 +62,7 @@ const initialAggregate = {
 
 const Stations = memo(() => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisibleForUpdate, setIsModalVisibleForUpdate] = useState(false);
   const [stationData, setStationData] = useState(initialStationData);
   const [isUpdating, setIsUpdating] = useState(false);
   const [dataSource, setDataSource] = useState([]);
@@ -84,6 +85,11 @@ const Stations = memo(() => {
   const { organizations, organizationsByRegionId } = useSelector(
     (state) => state.organization
   );
+  const [oneStationForUpdate, setOneStationForUpdate] = useState({});
+  const [stationName, setStationName] = useState("");
+  const [stationLatAndLong, setStationLatAndLong] = useState("");
+  const [stationPhone, setStationPhone] = useState("");
+  const [formDataForUpdate, setFormDataForUpdate] = useState({});
 
   const token = localStorage.getItem("access_token");
 
@@ -214,10 +220,14 @@ const Stations = memo(() => {
   const createStation = async () => {
     const lang = i18n.language;
     try {
-      const res = await postDataApi(`stations/create?lang=${lang}`, stationData, token);
+      const res = await postDataApi(
+        `stations/create?lang=${lang}`,
+        stationData,
+        token
+      );
 
       if (res.status == 201) {
-        console.log(res , 1);
+        console.log(res, 1);
 
         dispatch({
           type: GLOBALTYPES.ALERT,
@@ -226,6 +236,46 @@ const Stations = memo(() => {
           },
         });
         setIsModalVisible(false);
+        clearFormFileds();
+      }
+    } catch (err) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: {
+          error: err.response?.data.message,
+        },
+      });
+    }
+  };
+
+  const updateStation = async () => {
+    const lang = i18n.language;
+    const data = {
+      id: oneStationForUpdate.key,
+      name: formDataForUpdate.name,
+      regionId: stationData.regionId,
+      districtId: stationData.districtId,
+      organizationId: stationData.organizationId,
+      location: formDataForUpdate.location,
+      devicePhoneNum: formDataForUpdate.devicePhoneNum,
+      isIntegration: stationData.isIntegration,
+      haveElectricalEnergy: stationData.haveElectricalEnergy,
+    };
+
+    try {
+      const res = await postDataApi(
+        `stations/update?lang=${lang}`,
+        data,
+        token
+      );
+      if (res.status == 201) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: {
+            success: res.data.message,
+          },
+        });
+        setIsModalVisibleForUpdate(false);
         clearFormFileds();
       }
     } catch (err) {
@@ -308,6 +358,27 @@ const Stations = memo(() => {
   //   form.setFieldsValue(updatedData);
   // };
 
+  const handleEditClick = async (item) => {
+    setOneStationForUpdate(item);
+
+    stationData.haveElectricalEnergy = item.haveElectricalEnergy
+    stationData.isIntegration = item.isIntegration
+
+    setFormDataForUpdate({
+      name: item.name,
+      location: item.location,
+      devicePhoneNum: item.devicePhoneNum,
+    });
+  };
+
+  const handleInputChangeForUpdate = (e) => {
+    const { name, value } = e.target;
+    setFormDataForUpdate((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const columns = useMemo(
     () => [
       {
@@ -348,7 +419,7 @@ const Stations = memo(() => {
           <Button
             type="primary"
             icon={<EyeFilled />}
-            onClick={() => navigate(`/statetions/${key.key}`)}
+            onClick={() => navigate(`/stations/${key.key}`)}
             style={{ boxShadow: "none" }}
           />
         ),
@@ -411,7 +482,10 @@ const Stations = memo(() => {
           <Button
             type="primary"
             icon={<EditOutlined />}
-            onClick={async () => handleEditClick(key)}
+            onClick={() => {
+              handleEditClick(key);
+              setIsModalVisibleForUpdate(true);
+            }}
             style={{ boxShadow: "none" }}
           />
         ),
@@ -701,6 +775,190 @@ const Stations = memo(() => {
                 htmlType="submit"
                 type="primary"
                 // onClick={() => createStation()}
+                loading={loading}
+              >
+                {t("stationsPageData.submitButtonModal")}
+              </Button>
+            </div>
+          </Form>
+        </div>
+      </Modal>
+
+      {/* MODAL FOR UPDATE */}
+      <Modal
+        key="stations_modal_for_update"
+        title={oneStationForUpdate.name}
+        open={isModalVisibleForUpdate}
+        centered
+        onCancel={() => setIsModalVisibleForUpdate(false)}
+        // onOk={() => handleSubmit(stationData, "stations")}
+        confirmLoading={loading}
+        footer={[]}
+        style={{
+          color: colors.textColor,
+        }}
+        className="modal_stations"
+      >
+        <div className="modal_body_container">
+          <Form
+            form={form}
+            key={stationData.id || "new"}
+            className="create_stations_form"
+            name="station_form"
+            layout="inline"
+            requiredMark="optional"
+            onFinish={updateStation}
+          >
+            <Form.Item rules={[{ required: true, message: "Write full name" }]}>
+              <Input
+                className="stations_inputs"
+                name="name"
+                size="large"
+                value={formDataForUpdate.name}
+                onChange={handleInputChangeForUpdate}
+              />
+            </Form.Item>
+
+            <Form.Item rules={[{ required: true, message: "Write location" }]}>
+              <Input
+                name="location"
+                className="stations_inputs"
+                size="large"
+                value={formDataForUpdate.location}
+                onChange={handleInputChangeForUpdate}
+              />
+            </Form.Item>
+
+            <Form.Item
+              rules={[{ required: true, message: "Write Phone number" }]}
+            >
+              <Input
+                name="devicePhoneNum"
+                className="stations_inputs"
+                value={formDataForUpdate.devicePhoneNum}
+                onChange={handleInputChangeForUpdate}
+                size="large"
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="regionId"
+              rules={[{ required: true, message: "Select Region" }]}
+            >
+              <Select
+                size="large"
+                value={stationData.regionId}
+                showSearch
+                className="select_input_stations"
+                placeholder={t("stationsPageData.stationsInputRegion")}
+                options={renderOptions(regions)}
+                onChange={(value, option) => {
+                  handleSelectChange(
+                    value,
+                    { name: "regionId" },
+                    setStationData
+                  );
+                }}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="districtId"
+              rules={[{ required: true, message: "Select District" }]}
+            >
+              <Select
+                size="large"
+                value={stationData.districtId}
+                showSearch
+                className="select_input_stations"
+                placeholder={t("stationsPageData.stationsInputDestrict")}
+                options={renderOptions(districtsByRegionId)}
+                onChange={(value, option) =>
+                  handleSelectChange(
+                    value,
+                    { name: "districtId" },
+                    setStationData
+                  )
+                }
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="organizationId"
+              rules={[{ required: true, message: "Select Organizations" }]}
+            >
+              <Select
+                size="large"
+                value={stationData.organizationId}
+                showSearch
+                className="select_input_stations"
+                placeholder={t("stationsPageData.stationsInputOrganizations")}
+                options={renderOptions(organizationsByRegionId)}
+                onChange={(value, option) =>
+                  handleSelectChange(
+                    value,
+                    { name: "organizationId" },
+                    setStationData
+                  )
+                }
+              />
+            </Form.Item>
+
+            <Form.Item>
+              <div
+                className="electrical_box"
+                style={{
+                  border: `2px solid ${colors.textLight}`,
+                }}
+              >
+                <Checkbox
+                  onChange={(value, option) =>
+                    handleCheckboxChange(value, setStationData)
+                  }
+                  name="isIntegration"
+                  checked={stationData.isIntegration}
+                >
+                  {t("stationsPageData.stationsCheckboxIntegration")}
+                </Checkbox>
+              </div>
+            </Form.Item>
+
+            <Form.Item>
+              <div
+                className="electrical_box"
+                style={{
+                  border: `2px solid ${colors.textLight}`,
+                }}
+              >
+                <Checkbox
+                  onChange={(value, option) =>
+                    handleCheckboxChange(value, setStationData)
+                  }
+                  name="haveElectricalEnergy"
+                  checked={stationData.haveElectricalEnergy}
+                >
+                  {t("stationsPageData.stationsCheckboxEnergy")}
+                </Checkbox>
+              </div>
+            </Form.Item>
+
+            <div style={{ marginLeft: "auto", marginTop: "10px" }}>
+              <Button
+                key="back"
+                danger
+                type="primary"
+                onClick={() => {
+                  setFormDataForUpdate({});
+                  setIsModalVisibleForUpdate(false);
+                  clearFormFileds();
+                }}
+              >
+                {t("stationsPageData.cancelButtonModal")}
+              </Button>
+              <Button
+                style={{ marginLeft: "10px" }}
+                htmlType="submit"
+                type="primary"
                 loading={loading}
               >
                 {t("stationsPageData.submitButtonModal")}
